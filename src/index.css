@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Chewy&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-chewy: "Chewy", system-ui;
+  --default-font-family: "Open Sans", sans-serif;
+}
 
 :root {
   font-synthesis: none;
