@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
 import MainLayout from "./layouts/MainLayout";
 
 function App() {
@@ -12,8 +11,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />}></Route>
         </Route>
-          <Route path="/login" element={<Home />}></Route>
-          <Route path="/register" element={<Home />}></Route>
+          <Route path="/login" element={<Login />}></Route>
       </Routes>
     </>
   );
