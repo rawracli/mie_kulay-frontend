@@ -4,7 +4,7 @@ import logo from "../../assets/Login/logo.png";
 
 function Login() {
   return (
-    <div className="flex h-screen relative">
+    <div className="flex max-md:flex-col h-screen relative">
       {/* Logo di kiri atas */}
       <div className="absolute top-6 left-6">
         <img src={logo} alt="Logo" className="w-[59px] h-[59px] mt-[0.10px]" />
@@ -12,7 +12,7 @@ function Login() {
 
       {/* Kolom kiri: Form Login */}
       <div className="flex flex-1 items-center justify-center bg-white">
-        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 rounded-md w-[503px] h-[547px] ">
+        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 rounded-md lg:w-[503px] lg:h-[547px] lg:mt- max-sm:w-[322px] max-sm:h-[377px] ">
           <h2 className="text-4xl font-bold text-center mb-6 mt-[2.50rem] ml-[0.10rem]">
             Login
           </h2>
