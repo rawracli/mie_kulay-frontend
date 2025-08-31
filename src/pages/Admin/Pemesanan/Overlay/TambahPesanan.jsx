@@ -4,7 +4,7 @@ import Arrow from "../../../../assets/Admin/arrow.svg";
 import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
 
-function TambahPesanan({ isOpen, setIsOpen, setData, editIndex, setEditIndex }) {
+function TambahPesanan({ isAddOpen, setIsAddOpen, setData, editIndex, setEditIndex, setFormData, setHighlightedRow, data }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All menu");
 
@@ -38,25 +38,31 @@ function TambahPesanan({ isOpen, setIsOpen, setData, editIndex, setEditIndex }) 
   }, {});
 
   const chooseData = (selectedData) => {
-    if (editIndex || editIndex === 0) {
-      setData((prevData) => prevData.map((item, i) => editIndex == i ? {nama: selectedData.name, jumlah: item.jumlah, harga: selectedData.harga} : item))
-      setEditIndex(null)
-    } else { 
-    setData((prevData) => [
-      ...prevData,
-      {nama:  selectedData.name, jumlah: 1, harga: 34000},
-    ]); 
-  }
-    setIsOpen(false);
-  }
+    if (editIndex !== null) {
+      setFormData((prev) => ({
+        ...prev,
+        nama: selectedData.name,
+        harga: selectedData.harga,
+      }));
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        { nama: selectedData.name, jumlah: 1, harga: selectedData.harga },
+      ]);
+      setHighlightedRow(data.length)
+      setTimeout(() => setHighlightedRow(null), 200)
+    }
+    setIsAddOpen(false);
+  };
+
   return (
     <div
       className={`${
-        isOpen ? "translate-x-0" : "translate-x-[110%]"
-      } transition-all duration-300 fixed top-0 right-0 w-[429px] shadow-[-4px_4px_14.6px_rgba(0,0,0,0.25)] bg-[#FEFEFE] h-screen overflow-y-auto pl-[22px] pb-[24px] pt-[46px]`}
+        isAddOpen ? "translate-x-0" : "translate-x-[110%]"
+      } z-10 transition-all duration-300 fixed top-0 right-0 w-[429px] shadow-[-4px_4px_14.6px_rgba(0,0,0,0.25)] bg-[#FEFEFE] h-screen overflow-y-auto pl-[22px] pb-[24px] pt-[46px]`}
     >
       <div
-        onClick={() => {setIsOpen(false), setEditIndex(null)}}
+        onClick={() => {setIsAddOpen(false); setEditIndex(null);}}
         className="absolute top-[15px] right-[24px] cursor-pointer"
       >
         <img src={Close} alt="Close icon" />
@@ -76,7 +82,7 @@ function TambahPesanan({ isOpen, setIsOpen, setData, editIndex, setEditIndex }) 
             className="absolute left-4 top-1/2 -translate-y-1/2"
           />
         </div>
-        <div className="flex">
+        <div className="flex justify-end">
           <div className="relative">
             <select
               name="menu"
