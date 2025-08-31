@@ -105,8 +105,8 @@
           </div>
         </div>
 
-        <div className="bg-[#F5F5F5] flex-1 grid grid-cols-[1fr_198px] overflow-hidden">
-          <div className="relative shadow-[0px_2px_6px_rgba(156,156,156,0.25)] border border-[#959595] h-full">
+        <div className="flex-1 grid grid-cols-[1fr_198px] overflow-hidden">
+          <div className="relative shadow-[0px_2px_6px_rgba(156,156,156,0.25)] bg-[#F5F5F5] border border-[#959595] h-full">
             <div className={`absolute inset-0 grid grid-cols-[44.92%_14.89%_21.93%_18.25%] pointer-events-none ${data.length === 0 && "invisible"}`}>
               <div className="border-r border-[#959595]"></div>
               <div className="border-r border-[#959595]"></div>
