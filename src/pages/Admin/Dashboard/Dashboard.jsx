@@ -46,7 +46,7 @@ function Dashboard() {
         {/* Filter */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium mb-1 mt-[11px] -translate-x-[4.6px]">
+            <label className="block text-1xl font-medium mb-1 mt-[11px] -translate-x-[4.6px]">
               Tanggal Awal
             </label>
             <input
@@ -56,11 +56,11 @@ function Dashboard() {
                 setTanggalAwal(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-3 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
+              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1 mt-[11px] ml-[10px]">
+            <label className="block text-1xl font-medium mb-1 mt-[11px] ml-[10px]">
               Tanggal Akhir
             </label>
             <input
@@ -70,16 +70,18 @@ function Dashboard() {
                 setTanggalAkhir(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-3 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
+              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
             />
           </div>
         </div>
         <button
           onClick={() => setCurrentPage(1)}
-          className="w-[987px] h-[42px] bg-[#FFBA00] hover:bg-yellow-500 text-white font-semibold py-2 px-6 rounded-md mb-6 -translate-x-[4.6px]"
+          className="w-[987px] h-[42px] bg-[#FFBA00] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2"
         >
-          Filter
+          <img src="#" alt="Filter" className="w-4 h-4" />
+          <span>Filter</span>
         </button>
+
 
         {/* Search & entries per page */}
         <div className="flex items-center justify-between mb-[20px] mt-[10px]">
@@ -125,12 +127,12 @@ function Dashboard() {
           <table className="w-full border-collapse border border-gray-500">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#FFBA00] text-left h-[28px]">
-                <th className="border border-gray-300 text-center py-[6px]">Tanggal</th>
-                <th className="border border-gray-300 text-center py-[6px]">Id</th>
-                <th className="border border-gray-300 text-center py-[6px]">Total Pembayaran</th>
-                <th className="border border-gray-300 text-center py-[6px]">Metode Pembayaran</th>
-                <th className="border border-gray-300 text-center py-[6px]">Status</th>
-                <th className="border border-gray-300 text-center py-[6px]">Aksi</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Tanggal</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Id</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Total Pembayaran</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Metode Pembayaran</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Status</th>
+                <th className="border border-gray-300 text-center font-semibold py-[6px]">Aksi</th>
               </tr>
             </thead>
 
