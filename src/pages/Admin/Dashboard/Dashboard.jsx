@@ -3,11 +3,11 @@ import React, { useState, useMemo } from "react";
 function Dashboard() {
   // Dummy data transaksi
   const transactionsData = [
-    { id: "#1001", tanggal: "2025-08-26", total: 105000, metode: "E-Wallet", status: "Selesai", },
+    { id: "#1001", tanggal: "2025-08-26", total: 105000, metode: "E-Wallet", status: "Selesai" },
     { id: "#1002", tanggal: "2025-08-26", total: 105000, metode: "Cash", status: "Belum selesai" },
     { id: "#1003", tanggal: "2025-08-27", total: 50000, metode: "Transfer Bank", status: "Selesai" },
     { id: "#1004", tanggal: "2025-08-28", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
-    { id: "#2007", tanggal: "2007-11-29", total: 120000, metode: "Cash", status: "Belum Selesai"},
+  
   ];
 
   // State
@@ -40,7 +40,7 @@ function Dashboard() {
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
   return (
-    <div className=" bg-gray-200 h-[calc(100vh-92px)] w-full flex  justify-center">
+    <div className="bg-gray-200 h-[calc(100vh-92px)] w-full flex justify-center">
       <div className="bg-white rounded-[10px] shadow-lg p-6 w-[1027px] h-[478px] mt-[16px]">
         
         {/* Filter */}
@@ -96,49 +96,66 @@ function Dashboard() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto -translate-x-[4.6px] ">
-          <table className="w-full border border-gray-200">
-            <thead>
-              <tr className="bg-[#FFBA00] text-left h-[33px]">
-                <th className="border text-center h-[46px]">Tanggal</th>
-                <th className="border text-center h-[56px]">Id</th>
-                <th className="border text-center h-[46px]">Total Pembayaran</th>
-                <th className="border text-center h-[46px]">Metode Pembayaran</th>
-                <th className="border text-center h-[46px]">Status</th>
-                <th className="border text-center h-[46px]">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((t) => (
-                <tr 
-                  key={t.id} 
-                  className={`h-[33px] ${t.status === "Belum selesai" ? "bg-gray-200" : ""}`}
+        <div className="overflow-x-auto -translate-x-[4.6px]">
+  <div className="max-h-[160px] overflow-y-auto"> {/* 4 baris x ±40px */}
+    <table className="w-full border border-gray-200">
+      <thead className="sticky top-0 z-10">
+        <tr className="bg-[#FFBA00] text-left h-[33px]">
+          <th className="border text-center h-[46px]">Tanggal</th>
+          <th className="border text-center h-[56px]">Id</th>
+          <th className="border text-center h-[46px]">Total Pembayaran</th>
+          <th className="border text-center h-[46px]">Metode Pembayaran</th>
+          <th className="border text-center h-[46px]">Status</th>
+          <th className="border text-center h-[46px]">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {paginatedData.length > 0 ? (
+          paginatedData.map((t, ind) => (
+            <tr
+              key={ind}
+              className={`text-[14px] ${
+                t.status.toLowerCase() === "belum selesai" ? "bg-gray-200" : ""
+              }`}
+            >
+              <td className="border text-center h-[33px]">{t.tanggal}</td>
+              <td className="border text-center h-[33px]">{t.id}</td>
+              <td className="border text-center h-[33px]">
+                Rp. {t.total.toLocaleString("id-ID")}
+              </td>
+              <td className="border text-center h-[33px]">{t.metode}</td>
+              <td className="border text-center h-[33px]">
+                <span
+                  className={`${
+                    t.status.toLowerCase() === "selesai"
+                      ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white"
+                  } text-xs px-2 py-[1px] rounded`}
                 >
-                  <td className="border text-center h-[33px]">{t.tanggal}</td>
-                  <td className="border text-center h-[33px]">{t.id}</td>
-                  <td className="border text-center h-[33px]">Rp. {t.total.toLocaleString("id-ID")}</td>
-                  <td className="border text-center h-[33px]">{t.metode}</td>
-                  <td className="border text-center h-[33px]">
-                    <span className={`${t.status === "Selesai" ? "bg-green-500" : "bg-red-500"} text-white text-xs px-2 py-[1px] rounded`}>
-                      {t.status}
-                    </span>
-                  </td>
-                  <td className="border px-2 h-[33px]">
-                    <button className="justify items-center bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs justify-center">
-                      Lihat Detail
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center py-3 text-gray-500 italic">Tidak ada data</td>
-              </tr>
-            )}
-          </tbody>
-          </table>
-        </div>
+                  {t.status}
+                </span>
+              </td>
+              <td className="border px-2 h-[33px]">
+                <button className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs">
+                  Lihat Detail
+                </button>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td
+              colSpan="6"
+              className="text-center py-3 text-gray-500 italic"
+            >
+              Tidak ada data
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
         
         {/* Pagination */}
         <div className="flex items-center justify-between mt-4 text-sm">
@@ -155,7 +172,7 @@ function Dashboard() {
               <button
                 key={n}
                 onClick={() => setCurrentPage(n)}
-                className={`px-3 py-1  ${n === currentPage ? "bg-[#ffffff]" : ""}`}
+                className={`px-3 py-1 ${n === currentPage ? "bg-[#ffffff]" : ""}`}
               >
                 {n}
               </button>
