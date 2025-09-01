@@ -7,6 +7,7 @@ function Dashboard() {
     { id: "#1002", tanggal: "2025-08-26", total: 105000, metode: "Cash", status: "Belum selesai" },
     { id: "#1003", tanggal: "2025-08-27", total: 50000, metode: "Transfer Bank", status: "Selesai" },
     { id: "#1004", tanggal: "2025-08-28", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
+    { id: "#2007", tanggal: "2007-11-29", total: 120000, metode: "Cash", status: "Belum Selesai"},
   ];
 
   // State
@@ -108,31 +109,34 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.length > 0 ? (
-                paginatedData.map((t) => (
-                  <tr key={t.id} className="h-[33px] ">
-                    <td className="border text-center h-[33px]">{t.tanggal}</td>
-                    <td className="border text-center h-[33px]">{t.id}</td>
-                    <td className="border text-center h-[33px]">Rp. {t.total.toLocaleString("id-ID")}</td>
-                    <td className="border text-center h-[33px]">{t.metode}</td>
-                    <td className="border text-center h-[33px]">
-                      <span className={`${t.status === "Selesai" ? "bg-green-500" : "bg-red-500"} text-white text-xs px-2 py-[1px] rounded`}>
-                        {t.status}
-                      </span>
-                    </td>
-                    <td className="border px-2 h-[33px]">
-                      <button className="justify items-center bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs  justify-center">
-                        Lihat Detail
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-3 text-gray-500 italic">Tidak ada data</td>
+            {paginatedData.length > 0 ? (
+              paginatedData.map((t) => (
+                <tr 
+                  key={t.id} 
+                  className={`h-[33px] ${t.status === "Belum selesai" ? "bg-gray-200" : ""}`}
+                >
+                  <td className="border text-center h-[33px]">{t.tanggal}</td>
+                  <td className="border text-center h-[33px]">{t.id}</td>
+                  <td className="border text-center h-[33px]">Rp. {t.total.toLocaleString("id-ID")}</td>
+                  <td className="border text-center h-[33px]">{t.metode}</td>
+                  <td className="border text-center h-[33px]">
+                    <span className={`${t.status === "Selesai" ? "bg-green-500" : "bg-red-500"} text-white text-xs px-2 py-[1px] rounded`}>
+                      {t.status}
+                    </span>
+                  </td>
+                  <td className="border px-2 h-[33px]">
+                    <button className="justify items-center bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs justify-center">
+                      Lihat Detail
+                    </button>
+                  </td>
                 </tr>
-              )}
-            </tbody>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center py-3 text-gray-500 italic">Tidak ada data</td>
+              </tr>
+            )}
+          </tbody>
           </table>
         </div>
         
