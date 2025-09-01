@@ -207,7 +207,7 @@ const filteredData = transactionsData.filter((item) => {
                 key={n}
                 onClick={() => setCurrentPage(n)}
                 className={`px-3 py-1 cursor-pointer ${
-                  n === currentPage ? "bg-gray-300 text-black rounded" : ""
+                  n === currentPage ? " text-black rounded" : ""
                 }`}
               >
                 {n}
