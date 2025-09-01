@@ -4,40 +4,54 @@ import Icon from "../../../assets/Dashboard/icon.png";
 function Dashboard() {
   // Dummy data transaksi
   const transactionsData = [
-    { id: "#1001", tanggal: "2025-08-26", total: 105000, metode: "E-Wallet", status: "Selesai" },
-    { id: "#1002", tanggal: "2025-08-26", total: 105000, metode: "Cash", status: "Belum selesai" },
-    { id: "#1003", tanggal: "2025-08-27", total: 50000, metode: "Transfer Bank", status: "Selesai" },
-    { id: "#1004", tanggal: "2025-08-28", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
-    { id: "#1005", tanggal: "2025-08-27", total: 50000, metode: "Transfer Bank", status: "Selesai" },
-    { id: "#1006", tanggal: "2025-08-28", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
+    { id: "#1001", tanggal: "20-08-2025", total: 105000, metode: "E-Wallet", status: "Selesai" },
+    { id: "#1002", tanggal: "21-08-2025", total: 105000, metode: "Cash", status: "Belum selesai" },
+    { id: "#1003", tanggal: "22-08-2025", total: 50000, metode: "Transfer Bank", status: "Selesai" },
+    { id: "#1004", tanggal: "23-08-2025", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
+    { id: "#1005", tanggal: "24-08-2025", total: 50000, metode: "Transfer Bank", status: "Selesai" },
+    { id: "#1006", tanggal: "25-08-2025", total: 75000, metode: "E-Wallet", status: "Belum selesai" },
   ];
 
-  // State
+  // State input (sementara)
+  const [tanggalAwalInput, setTanggalAwalInput] = useState("");
+  const [tanggalAkhirInput, setTanggalAkhirInput] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+
+  // State filter aktif
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
   const [search, setSearch] = useState("");
-  const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter data
-  const filteredData = useMemo(() => {
-    return transactionsData.filter((t) => {
-      if (tanggalAwal && new Date(t.tanggal) < new Date(tanggalAwal)) return false;
-      if (tanggalAkhir && new Date(t.tanggal) > new Date(tanggalAkhir)) return false;
-      if (search) {
-        const keyword = search.toLowerCase();
-        return (
-          t.id.toLowerCase().includes(keyword) ||
-          t.metode.toLowerCase().includes(keyword) ||
-          t.status.toLowerCase().includes(keyword)
-        );
-      }
-      return true;
-    });
-  }, [tanggalAwal, tanggalAkhir, search]);
+  // 🔹 Tambahkan state pagination
+  const [entriesPerPage, setEntriesPerPage] = useState(4);
+  const [currentPage, setCurrentPage] = useState(1);
+// Fungsi bantu untuk parsing tanggal dd-MM-yyyy → Date object
+const parseDate = (dateStr) => {
+  const [day, month, year] = dateStr.split("-");
+  return new Date(`${year}-${month}-${day}`);
+};
+
+// Filter data
+const filteredData = transactionsData.filter((item) => {
+  const itemDate = parseDate(item.tanggal);
+
+  const isDateInRange =
+    (!tanggalAwal || itemDate >= new Date(tanggalAwal)) &&
+    (!tanggalAkhir || itemDate <= new Date(tanggalAkhir));
+
+  const isSearchMatch =
+    !search ||
+    item.id.toLowerCase().includes(search.toLowerCase()) ||
+    item.metode.toLowerCase().includes(search.toLowerCase()) ||
+    item.status.toLowerCase().includes(search.toLowerCase()) ||
+    item.total.toString().includes(search);
+
+  return isDateInRange && isSearchMatch;
+});
+
 
   // Pagination
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+  const totalPages = Math.ceil(filteredData.length / entriesPerPage) || 1;
   const startIndex = (currentPage - 1) * entriesPerPage;
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
@@ -52,11 +66,8 @@ function Dashboard() {
             </label>
             <input
               type="date"
-              value={tanggalAwal}
-              onChange={(e) => {
-                setTanggalAwal(e.target.value);
-                setCurrentPage(1);
-              }}
+              value={tanggalAwalInput}
+              onChange={(e) => setTanggalAwalInput(e.target.value)}
               className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
             />
           </div>
@@ -66,23 +77,24 @@ function Dashboard() {
             </label>
             <input
               type="date"
-              value={tanggalAkhir}
-              onChange={(e) => {
-                setTanggalAkhir(e.target.value);
-                setCurrentPage(1);
-              }}
+              value={tanggalAkhirInput}
+              onChange={(e) => setTanggalAkhirInput(e.target.value)}
               className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
             />
           </div>
         </div>
         <button
-          onClick={() => setCurrentPage(1)}
+          onClick={() => {
+            setTanggalAwal(tanggalAwalInput);
+            setTanggalAkhir(tanggalAkhirInput);
+            setSearch(searchInput);
+            setCurrentPage(1);
+          }}
           className="w-[987px] h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2 cursor-pointer"
         >
           <img src={Icon} alt="Filter" className="w-4 h-4" />
           <span>Filter</span>
         </button>
-
 
 
         {/* Search & entries per page */}
@@ -102,19 +114,14 @@ function Dashboard() {
               <option value={10}>10</option>
               <option value={20}>20</option>
             </select>
-
-
             <span className="ml-2 text-sm">Entries per page</span>
           </div>
           <div>
             <label className="mr-2 text-sm">Search:</label>
             <input
               type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setCurrentPage(1);
-              }}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="bg-gray-100 border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
             />
           </div>
@@ -130,33 +137,30 @@ function Dashboard() {
           <table className="w-full border-collapse border border-gray-700">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#FFB300] text-left h-[28px]">
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Tanggal</th>
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Id</th>
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Total Pembayaran</th>
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Metode Pembayaran</th>
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Status</th>
-                <th className="border border-gray-400 text-center font-semibold py-[6px]">Aksi</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Tanggal</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Id</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Total Pembayaran</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Metode Pembayaran</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Status</th>
+                <th className="border border-gray-600 text-center font-semibold py-[6px]">Aksi</th>
               </tr>
             </thead>
-
             <tbody>
               {paginatedData.length > 0 ? (
                 paginatedData.map((t, ind) => (
                   <tr
                     key={ind}
                     className={`text-[14px] ${
-                      t.status.toLowerCase() === "belum selesai"
-                        ? "bg-gray-200"
-                        : "bg-white"
+                      t.status.toLowerCase() === "belum selesai" ? "bg-gray-200" : "bg-white"
                     }`}
                   >
-                    <td className="border border-gray-400 text-center h-[33px]">{t.tanggal}</td>
-                    <td className="border border-gray-400 text-center h-[33px]">{t.id}</td>
-                    <td className="border border-gray-400 text-center h-[33px]">
+                    <td className="border border-gray-600 text-center h-[33px]">{t.tanggal}</td>
+                    <td className="border border-gray-600 text-center h-[33px]">{t.id}</td>
+                    <td className="border border-gray-600 text-center h-[33px]">
                       Rp. {t.total.toLocaleString("id-ID")}
                     </td>
-                    <td className="border border-gray-400 text-center h-[33px]">{t.metode}</td>
-                    <td className="border border-gray-400 text-center h-[33px]">
+                    <td className="border border-gray-600 text-center h-[33px]">{t.metode}</td>
+                    <td className="border border-gray-600 text-center h-[33px]">
                       <span
                         className={`${
                           t.status.toLowerCase() === "selesai"
@@ -167,14 +171,10 @@ function Dashboard() {
                         {t.status}
                       </span>
                     </td>
-                    {/* Aksi rata tengah */}
-                    <td className="border border-gray-400 text-center h-[33px]">
-                      <button
-                        className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs cursor-pointer"
-                      >
+                    <td className="border border-gray-600 text-center h-[33px]">
+                      <button className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs cursor-pointer">
                         Lihat Detail
                       </button>
-
                     </td>
                   </tr>
                 ))
@@ -192,26 +192,26 @@ function Dashboard() {
         {/* Pagination */}
         <div className="flex items-center justify-between mt-5 text-sm">
           <p>
-            Page {currentPage} of {totalPages || 1} entries
+            Page {currentPage} of {totalPages}
           </p>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-2 py-1  rounded disabled:opacity-50"
+              className="px-2 py-1 rounded disabled:opacity-50 cursor-pointer"
             >
               &lt;
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
               <button
+                key={n}
                 onClick={() => setCurrentPage(n)}
                 className={`px-3 py-1 cursor-pointer ${
-                  n === currentPage ? "bg-transparent text-black" : ""
+                  n === currentPage ? "bg-gray-300 text-black rounded" : ""
                 }`}
               >
                 {n}
               </button>
-
             ))}
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
@@ -220,7 +220,6 @@ function Dashboard() {
             >
               &gt;
             </button>
-
           </div>
         </div>
       </div>
