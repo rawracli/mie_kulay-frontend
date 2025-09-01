@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import Icon from "../../../assets/Dashboard/icon.png";
 
 function Dashboard() {
   // Dummy data transaksi
@@ -56,7 +57,7 @@ function Dashboard() {
                 setTanggalAwal(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
+              className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
             />
           </div>
           <div>
@@ -70,17 +71,18 @@ function Dashboard() {
                 setTanggalAkhir(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-[475px] h-[35px] bg-gray-200 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
+              className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
             />
           </div>
         </div>
         <button
           onClick={() => setCurrentPage(1)}
-          className="w-[987px] h-[42px] bg-[#FFBA00] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2"
+          className="w-[987px] h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2 cursor-pointer"
         >
-          <img src="#" alt="Filter" className="w-4 h-4" />
+          <img src={Icon} alt="Filter" className="w-4 h-4" />
           <span>Filter</span>
         </button>
+
 
 
         {/* Search & entries per page */}
@@ -92,7 +94,7 @@ function Dashboard() {
                 setEntriesPerPage(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="border border-gray-300 rounded-[2px]  w-[46px] h-[32px]"
+              className="bg-gray-100 border border-gray-300 rounded-[2px] w-[46px] h-[32px] cursor-pointer"
             >
               <option value={4}>4</option>
               <option value={5}>5</option>
@@ -100,6 +102,7 @@ function Dashboard() {
               <option value={10}>10</option>
               <option value={20}>20</option>
             </select>
+
 
             <span className="ml-2 text-sm">Entries per page</span>
           </div>
@@ -112,7 +115,7 @@ function Dashboard() {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
+              className="bg-gray-100 border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
             />
           </div>
         </div>
@@ -124,15 +127,15 @@ function Dashboard() {
           }`}
           style={{ maxHeight: "170px" }}
         >
-          <table className="w-full border-collapse border border-gray-500">
+          <table className="w-full border-collapse border border-gray-700">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#FFBA00] text-left h-[28px]">
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Tanggal</th>
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Id</th>
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Total Pembayaran</th>
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Metode Pembayaran</th>
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Status</th>
-                <th className="border border-gray-300 text-center font-semibold py-[6px]">Aksi</th>
+              <tr className="bg-[#FFB300] text-left h-[28px]">
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Tanggal</th>
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Id</th>
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Total Pembayaran</th>
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Metode Pembayaran</th>
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Status</th>
+                <th className="border border-gray-400 text-center font-semibold py-[6px]">Aksi</th>
               </tr>
             </thead>
 
@@ -147,13 +150,13 @@ function Dashboard() {
                         : "bg-white"
                     }`}
                   >
-                    <td className="border border-gray-300 text-center h-[33px]">{t.tanggal}</td>
-                    <td className="border border-gray-300 text-center h-[33px]">{t.id}</td>
-                    <td className="border border-gray-300 text-center h-[33px]">
+                    <td className="border border-gray-400 text-center h-[33px]">{t.tanggal}</td>
+                    <td className="border border-gray-400 text-center h-[33px]">{t.id}</td>
+                    <td className="border border-gray-400 text-center h-[33px]">
                       Rp. {t.total.toLocaleString("id-ID")}
                     </td>
-                    <td className="border border-gray-300 text-center h-[33px]">{t.metode}</td>
-                    <td className="border border-gray-300 text-center h-[33px]">
+                    <td className="border border-gray-400 text-center h-[33px]">{t.metode}</td>
+                    <td className="border border-gray-400 text-center h-[33px]">
                       <span
                         className={`${
                           t.status.toLowerCase() === "selesai"
@@ -165,10 +168,13 @@ function Dashboard() {
                       </span>
                     </td>
                     {/* Aksi rata tengah */}
-                    <td className="border border-gray-300 text-center h-[33px]">
-                      <button className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs">
+                    <td className="border border-gray-400 text-center h-[33px]">
+                      <button
+                        className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs cursor-pointer"
+                      >
                         Lihat Detail
                       </button>
+
                     </td>
                   </tr>
                 ))
@@ -198,22 +204,23 @@ function Dashboard() {
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
               <button
-                key={n}
                 onClick={() => setCurrentPage(n)}
-                className={`px-3 py-1  ${
+                className={`px-3 py-1 cursor-pointer ${
                   n === currentPage ? "bg-transparent text-black" : ""
                 }`}
               >
                 {n}
               </button>
+
             ))}
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-2 py-1 rounded disabled:opacity-50"
+              className="px-2 py-1 rounded disabled:opacity-50 cursor-pointer"
             >
               &gt;
             </button>
+
           </div>
         </div>
       </div>
