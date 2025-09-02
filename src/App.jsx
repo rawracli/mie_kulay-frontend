@@ -5,7 +5,6 @@ import Login from "./pages/Login/Login";
 import MainLayout from "./layouts/MainLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Admin/Dashboard/Dashboard";
-import Detail from "./pages/Admin/Dashboard/Overlay/Detail" ;
 import Pemesanan from "./pages/Admin/Pemesanan/Pemesanan";
 import Stok from "./pages/Admin/Stok/Stok";
 import LogAktivitas from "./pages/Admin/LogAktivitas/LogAktivitas";
@@ -19,7 +18,6 @@ function App() {
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/detail" element={<Detail />}></Route>
           <Route path="/pemesanan" element={<Pemesanan />}></Route>
           <Route path="/stok" element={<Stok />}></Route>
           <Route path="/log-aktivitas" element={<LogAktivitas />}></Route>
