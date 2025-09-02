@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import Icon from "../../../assets/Dashboard/icon.png";
 
 function Dashboard() {
