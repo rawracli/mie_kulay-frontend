@@ -9,6 +9,7 @@
   import Credit from "../../../assets/Admin/credit.svg";
   import TambahPesanan from "./Overlay/TambahPesanan";
   import EditMenu from "./Overlay/EditMenu";
+import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 
   function Pemesanan() {
     const [data, setData] = useState([
@@ -20,9 +21,11 @@
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [editIndex, setEditIndex] = useState(null)
+    const [deleteIndex, setDeleteIndex] = useState(null)
     const [paymentMethod, setPaymentMethod] = useState(null)
     const [formData, setFormData] = useState(null);
     const [highlightedRow, setHighlightedRow] = useState(null)
+    const [skipConfirm, setSkipConfirm] = useState(false)
 
     //format tanggal
     const currentDate = new Date();
@@ -65,7 +68,13 @@
 
     //btn delete
     const onDelete = (index) => {
-      setData((prevData) => prevData.filter((_, i) => i !== index));
+      if (skipConfirm) {
+        // Langsung hapus tanpa modal (hanya berlaku selama session ini)
+        setData((prevData) => prevData.filter((_, i) => i !== index));
+      } else {
+        // Tampilkan modal
+        setDeleteIndex(index);
+      }
     }
 
     //btn edit
@@ -201,7 +210,7 @@
             Selesai
           </button>
         </div>
-        <div className={`${isEditOpen ? "" : "hidden"} bg-black/50 fixed inset-0 h-full w-full`}></div>
+        <div onClick={()=>{setIsEditOpen(false); setDeleteIndex(null)}} className={`${isEditOpen || deleteIndex !== null ? "" : "hidden"} bg-black/50 fixed inset-0 h-full w-full`}></div>
         <TambahPesanan
           isAddOpen={isAddOpen}
           setIsAddOpen={setIsAddOpen}
@@ -225,6 +234,14 @@
             formData={formData}
             setFormData={setFormData}
             setHighlightedRow={setHighlightedRow}
+          />
+        )}
+        {deleteIndex !== null && (
+          <ConfirmDelete
+            setData={setData}
+            deleteIndex={deleteIndex}
+            setDeleteIndex={setDeleteIndex}
+            setSkipConfirm={setSkipConfirm}
           />
         )}
       </div>
