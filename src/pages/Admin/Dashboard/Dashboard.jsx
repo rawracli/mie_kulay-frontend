@@ -439,8 +439,8 @@ const getPages = (totalPages, currentPage) => {
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
   return (
-    <div className="bg-gray-200 w-full flex justify-center py-6">
-      <div className="bg-white rounded-[10px] shadow-lg p-6 w-[1020px]">
+     <div className="bg-gray-200 w-full min-h-full flex justify-center py-6">
+      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1020px]">
         {/* Filter */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
