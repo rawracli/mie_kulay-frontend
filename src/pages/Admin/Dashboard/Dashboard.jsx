@@ -697,7 +697,7 @@ const getPages = (totalPages, currentPage) => {
                   </span>
                 </p>
 
-                <div className="my-[20px] border-t border-dashed w-[180px] my-3"></div>
+                <div className="my-[20px] border-t border-dashed w-[180px]"></div>
 
                 {/* Daftar item */}
                 {selectedTransaction.items?.map((item, idx) => (
@@ -709,7 +709,7 @@ const getPages = (totalPages, currentPage) => {
                   </div>
                 ))}
 
-                <div className="my-[20px] border-t border-dashed w-[180px] my-3"></div>
+                <div className="my-[20px] border-t border-dashed w-[180px] "></div>
 
                 <p className="flex justify-between font-semibold">
                   <span>Total Pembayaran :</span>
