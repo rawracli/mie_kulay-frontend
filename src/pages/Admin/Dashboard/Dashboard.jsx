@@ -99,7 +99,6 @@ const filteredData = transactionsData.filter((item) => {
           onClick={() => {
             setTanggalAwal(tanggalAwalInput);
             setTanggalAkhir(tanggalAkhirInput);
-            setSearch(searchInput);
             setCurrentPage(1);
           }}
           className="w-[987px] h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2 cursor-pointer"
@@ -132,8 +131,8 @@ const filteredData = transactionsData.filter((item) => {
             <label className="mr-2 text-sm">Search:</label>
             <input
               type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="bg-gray-100 border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
             />
           </div>
