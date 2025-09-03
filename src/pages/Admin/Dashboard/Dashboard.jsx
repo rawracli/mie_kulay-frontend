@@ -3,8 +3,274 @@ import Icon from "../../../assets/Dashboard/icon.png";
 import Close from "../../../assets/Dashboard/close.png";
 
 function Dashboard() {
+  // Helper: buat array halaman dengan titik-titik
+const getPages = (totalPages, currentPage) => {
+  const delta = 2; // jumlah halaman sekitar current
+  const range = [];
+  const rangeWithDots = [];
+  let l;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
+      range.push(i);
+    }
+  }
+
+  for (let i of range) {
+    if (l) {
+      if (i - l === 2) {
+        rangeWithDots.push(l + 1);
+      } else if (i - l !== 1) {
+        rangeWithDots.push("...");
+      }
+    }
+    rangeWithDots.push(i);
+    l = i;
+  }
+
+  return rangeWithDots;
+};
+
   // Dummy data transaksi
   const transactionsData = [
+    {
+      id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0002", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0003", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0004", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0005", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0006", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0007", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0008", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0009", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0010", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0011", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0012", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0013", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0014", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },{
+      id: "#0015", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0002", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0003", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0004", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0005", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0006", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0007", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0008", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0009", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0010", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0011", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0012", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0013", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
+    {
+      id: "#0014", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },{
+      id: "#0015", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
+      items: [
+        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
+        { name: "Sosis Sapi", qty: 5, price: 35000 },
+        { name: "Ice Kopi", qty: 1, price: 35000 },
+      ],
+    },
     {
       id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
       items: [
@@ -273,9 +539,9 @@ function Dashboard() {
                       <span
                         className={`${
                           t.status.toLowerCase() === "selesai"
-                            ? "bg-green-500 text-white"
-                            : "bg-red-500 text-white"
-                        } text-xs px-2 py-[1px] rounded`}
+                            ? "bg-[#44962D] text-white text-[14px]"
+                            : "bg-red-500 text-white text-[14px]"
+                        } text-[14px] px-3 py-[2px] rounded-2xl w-fit h-[26px]`}
                       >
                         {t.status}
                       </span>
@@ -283,7 +549,7 @@ function Dashboard() {
                     <td className="border border-gray-600 text-center h-[33px]">
                       <button
                         onClick={() => setSelectedTransaction(t)}
-                        className="bg-blue-500 text-white px-2 py-[1px] rounded hover:bg-blue-600 text-xs cursor-pointer"
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
                       >
                         Lihat Detail
                       </button>
@@ -301,39 +567,82 @@ function Dashboard() {
           </table>
         </div>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-between mt-5 text-sm">
-          <p>
-            Page {currentPage} of {totalPages}
-          </p>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-2 py-1 rounded disabled:opacity-50 cursor-pointer"
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                onClick={() => setCurrentPage(n)}
-                className={`px-3 py-1 cursor-pointer ${
-                  n === currentPage ? " text-black rounded" : ""
-                }`}
-              >
-                {n}
-              </button>
-            ))}
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="px-2 py-1 rounded disabled:opacity-50 cursor-pointer"
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
+       {/* Pagination */}
+<div className="flex items-center justify-between mt-5 text-sm">
+  <p>
+    Page {currentPage} of {totalPages || 1} entries
+  </p>
+  <div className="flex items-center space-x-[18px]">
+    {/* Tombol prev */}
+    <button
+      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+      disabled={currentPage === 1}
+      className={`${
+        currentPage === 1 ? "cursor-default" : "cursor-pointer"
+      } text-yellow-300 py-1 rounded disabled:opacity-50`}
+    >
+      <svg
+        width="11"
+        height="14"
+        viewBox="0 0 11 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M8.07608 14.0094L0.0429428 7.04744L8.00962 0.009545L10.0179 1.75003L4.0429 7.02845L10.0678 12.2499L8.07608 14.0094Z"
+          fill="black"
+        />
+      </svg>
+    </button>
+
+    {/* Nomor halaman */}
+    <div className="flex gap-[18px]">
+      {getPages(totalPages, currentPage).map((n, index) =>
+        n === "..." ? (
+          <span key={index} className="py-1">
+            ...
+          </span>
+        ) : (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(n)}
+            className={`py-1 cursor-pointer ${n === currentPage ? "underline" : ""}`}
+          >
+            {n}
+          </button>
+        )
+      )}
+    </div>
+
+    {/* Tombol next */}
+    <button
+      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      disabled={currentPage === totalPages}
+      className={`${
+        currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+      } py-1 rounded disabled:opacity-50`}
+    >
+      <svg
+        width="11"
+        height="15"
+        viewBox="0 0 11 15"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M2.00084 0.115846L10.1014 6.99927L2.20357 14.1144L0.178438 12.3935L6.10178 7.05719L0.0263892 1.89462L2.00084 0.115846Z"
+          fill="black"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+
+        
       </div>
 
       {/* Overlay Detail */}
