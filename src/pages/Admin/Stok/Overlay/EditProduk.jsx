@@ -8,28 +8,30 @@ function EditProduk({
   setEditId,
   setStockTable,
 }) {
+  const defaultValue = stockTable.filter((val) => editId === val.id);
+
   const onSubmit = (formData) => {
-    const index = `IDX${Math.floor(Math.random() * 100000)}`;
-    setStockTable((prevData) => [
-      ...prevData,
-      {
-        id: index,
-        produk: formData.get("produk"),
-        stok: formData.get("stok"),
-      },
-    ]);
-    setHighlightedRow(index);
+    setStockTable((prevData) =>
+      prevData.map((item) =>
+        item.id === defaultValue[0].id
+          ? {
+              ...item,
+              produk: formData.get("produk"),
+              stok: formData.get("stok"),
+              kategori: formData.get("kategori"),
+            }
+          : item
+      )
+    );
+    setHighlightedRow(defaultValue[0].id);
     setTimeout(() => setHighlightedRow(null), 200);
     setEditId(null);
   };
 
-  const defaultValue = stockTable.filter((val) => editId === val.id)
 
-  console.log(defaultValue)
+  console.log(defaultValue);
   return (
-    <div
-      className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}
-    >
+    <div className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}>
       <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <div
           onClick={() => {
@@ -48,7 +50,7 @@ function EditProduk({
             <label htmlFor="Id">Id</label>
             <input
               type="text"
-              name="produk"
+              name="Id"
               defaultValue={defaultValue[0].id}
               readOnly
               className="cursor-default caret-transparent text-[#575757] bg-[#E8E8E8] w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"

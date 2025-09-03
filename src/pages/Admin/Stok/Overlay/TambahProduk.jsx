@@ -5,6 +5,7 @@ function TambahProduk({
   setIsAddOpen,
   setStockTable,
   setHighlightedRow,
+  stockData,
 }) {
   const onSubmit = (formData) => {
     const index = `IDX${Math.floor(Math.random() * 100000)}`;
@@ -14,7 +15,7 @@ function TambahProduk({
         id: index,
         produk: formData.get("produk"),
         kategori: formData.get("kategori"),
-        stok: formData.get("stok"),
+        stok: Number(formData.get("stok")),
       },
     ]);
     setHighlightedRow(index);
@@ -23,9 +24,7 @@ function TambahProduk({
   };
 
   return (
-    <div
-      className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}
-    >
+    <div className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}>
       <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <div
           onClick={() => {
@@ -51,12 +50,13 @@ function TambahProduk({
           </div>
           <div>
             <label htmlFor="Kategori">Kategori</label>
-            <input
-              type="text"
-              name="kategori"
-              required
-              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
-            />
+            <select name="kategori" id="" className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none" required>
+              {stockData.map((item, idx) => (
+                <option key={idx} value={item.nama}>
+                  {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label htmlFor="Stok">Stok</label>
