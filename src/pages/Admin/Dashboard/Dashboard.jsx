@@ -27,7 +27,6 @@ function Dashboard() {
   // State input (sementara)
   const [tanggalAwalInput, setTanggalAwalInput] = useState("");
   const [tanggalAkhirInput, setTanggalAkhirInput] = useState("");
-  const [searchInput, setSearchInput] = useState("");
 
   // State filter aktif
   const [tanggalAwal, setTanggalAwal] = useState("");
