@@ -1,39 +1,51 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
-import PlusGreen from "../../../assets/Admin/plusGreen.svg";
-import MinRed from "../../../assets/Admin/minRed.svg";
 import Plus from "../../../assets/Admin/plus.svg";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
+import TambahAkun from "./Overlay/TambahAkun";
 function ManajemenAkun() {
   const [userData, setUserData] = useState([
-    { id: "IDX00001", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
-    { id: "IDX00002", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
-    { id: "IDX00003", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
-    { id: "IDX00004", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
-    { id: "IDX00005", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
-    { id: "IDX00006", nama: "Bang Deer", email: "Deerking@gmail.com", password: "Deer10230", role: "Staf" },
+    {
+      id: "IDX00001",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
+    {
+      id: "IDX00002",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
+    {
+      id: "IDX00003",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
+    {
+      id: "IDX00004",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
+    {
+      id: "IDX00005",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
+    {
+      id: "IDX00006",
+      nama: "Bang Deer",
+      email: "Deerking@gmail.com",
+      password: "Deer10230",
+    },
   ]);
-  const stockData = useMemo(() => {
-    const grouped = userData.reduce((acc, item) => {
-      if (!acc[item.kategori]) {
-        acc[item.kategori] = 0;
-      }
-      acc[item.kategori] += item.stok;
-      return acc;
-    }, {});
-
-    // ubah jadi array biar gampang di-map
-    return Object.entries(grouped).map(([nama, stok]) => ({
-      nama,
-      stok,
-    }));
-  }, [userData]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
@@ -47,8 +59,7 @@ function ManajemenAkun() {
         t.id.toLowerCase().includes(keyword) ||
         t.nama.toLowerCase().includes(keyword) ||
         t.email.toString().includes(keyword) ||
-        t.password.toString().includes(keyword) ||
-        t.role.toString().includes(keyword);
+        t.password.toString().includes(keyword);
 
       // Hasil akhir: dua-duanya harus true
       return matchSearch;
@@ -65,9 +76,7 @@ function ManajemenAkun() {
   //btn delete
   const onDelete = (idIndex) => {
     if (skipConfirm) {
-      setUserData((prevData) =>
-        prevData.filter((item) => item.id !== idIndex)
-      );
+      setUserData((prevData) => prevData.filter((item) => item.id !== idIndex));
     } else {
       setDeleteId(idIndex);
     }
@@ -121,15 +130,15 @@ function ManajemenAkun() {
 
   return (
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pb-[0.5rem]">
-        <div className="flex items-center justify-end    py-[13px]">
-          <button
-            onClick={() => setIsAddOpen(true)}
-            className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
-          >
-            <img src={Plus} alt="plus" />
-            <p className="text-[14px] font-bold text-white">Tambah Akun</p>
-          </button>
-        </div>
+      <div className="flex items-center justify-end py-[13px]">
+        <button
+          onClick={() => setIsAddOpen(true)}
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+        >
+          <img src={Plus} alt="plus" />
+          <p className="text-[14px] font-bold text-white">Tambah Akun</p>
+        </button>
+      </div>
       <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 pb-[1.375rem] space-y-[0.9375rem]">
@@ -177,22 +186,19 @@ function ManajemenAkun() {
               <table className="w-full font-semibold border-collapse border border-[#959595]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
-                    <th className="border border-[#959595] text-center w-[10.23%]">
+                    <th className="border border-[#959595] text-center w-[15.50%]">
                       Id
                     </th>
-                    <th className="border border-[#959595] text-center w-[18.44%]">
+                    <th className="border border-[#959595] text-center w-[19.46%]">
                       Nama
                     </th>
-                    <th className="border border-[#959595] text-center w-[21.48%]">
+                    <th className="border border-[#959595] text-center w-[26.65%]">
                       Email
                     </th>
-                    <th className="border border-[#959595] text-center w-[22.29%]">
+                    <th className="border border-[#959595] text-center w-[24.82%]">
                       Password
                     </th>
-                    <th className="border border-[#959595] text-center w-[11.55%]">
-                      Role
-                    </th>
-                    <th className="border border-[#959595] text-center w-[16.01%]">
+                    <th className="border border-[#959595] text-center w-[13.58%]">
                       Aksi
                     </th>
                   </tr>
@@ -220,18 +226,8 @@ function ManajemenAkun() {
                         <td className="border-r border-[#959595] pl-[10.5px]">
                           {t.password}
                         </td>
-                        <td className="border-r border-[#959595] flex items-center justify-center">
-                          {t.role}
-                        </td>
                         <td>
                           <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
-                            <button
-                              onClick={() => setEditId(t.id)}
-                              className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
-                            >
-                              <img src={Pencil} alt="" />
-                              Edit
-                            </button>
                             <button
                               onClick={() => onDelete(t.id)}
                               className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
@@ -333,34 +329,13 @@ function ManajemenAkun() {
           </div>
         </div>
       </div>
-      <div
-        onClick={() => {
-          setIsAddOpen(false);
-          setEditId(null);
-          setDeleteId(null);
-        }}
-        className={`${
-          editId || isAddOpen || deleteId ? "" : "hidden"
-        } bg-black/50 fixed inset-0 h-full w-full`}
-      ></div>
-      {isAddOpen && (
-        <TambahProduk
-          isAddOpen={isAddOpen}
-          setHighlightedRow={setHighlightedRow}
-          setIsAddOpen={setIsAddOpen}
-          setUserData={setUserData}
-          stockData={stockData}
-        />
-      )}
-      {editId !== null && (
-        <EditProduk
-          userData={userData}
-          editId={editId}
-          setHighlightedRow={setHighlightedRow}
-          setEditId={setEditId}
-          setUserData={setUserData}
-        />
-      )}
+      <TambahAkun
+        data={userData}
+        setData={setUserData}
+        isAddOpen={isAddOpen}
+        setIsAddOpen={setIsAddOpen}
+        setHighlightedRow={setHighlightedRow}
+      />
       {deleteId !== null && (
         <ConfirmDelete
           deleteId={deleteId}
