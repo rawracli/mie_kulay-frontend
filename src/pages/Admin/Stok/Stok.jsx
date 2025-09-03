@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -8,17 +8,12 @@ import TambahProduk from "./Overlay/TambahProduk";
 import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
-const stockData = [
-  { nama: "Stok Mie", jumlahBesar: 50 },
-  { nama: "Stok Topping", jumlahBesar: 150 },
-  { nama: "Stok Minuman", jumlahBesar: 30 },
-];
 function Stok() {
   const [stockTable, setStockTable] = useState([
     { id: "IDX26521", produk: "Mie", stok: 50, kategori: "makanan" },
     { id: "IDX26522", produk: "Mie", stok: 50, kategori: "makanan" },
     { id: "IDX26523", produk: "Drink", stok: 50, kategori: "minuman" },
-    { id: "IDX26524", produk: "Mie", stok: 50, kategori: "makanan" },
+    { id: "IDX26524", produk: "Dronk", stok: 50, kategori: "minuman" },
     { id: "IDX26525", produk: "Mie", stok: 50, kategori: "makanan" },
     { id: "IDX26526", produk: "Mie", stok: 50, kategori: "makanan" },
     { id: "IDX26527", produk: "Mie", stok: 50, kategori: "makanan" },
@@ -45,6 +40,21 @@ function Stok() {
     { id: "IDX26594", produk: "Mie", stok: 50, kategori: "makanan" },
     { id: "IDX26504", produk: "Mie", stok: 50, kategori: "makanan" },
   ]);
+  const stockData = useMemo(() => {
+    const grouped = stockTable.reduce((acc, item) => {
+      if (!acc[item.kategori]) {
+        acc[item.kategori] = 0;
+      }
+      acc[item.kategori] += item.stok;
+      return acc;
+    }, {});
+
+    // ubah jadi array biar gampang di-map
+    return Object.entries(grouped).map(([nama, stok]) => ({
+      nama,
+      stok,
+    }));
+  }, [stockTable]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [category, setCategory] = useState("all");
@@ -56,21 +66,27 @@ function Stok() {
   const [skipConfirm, setSkipConfirm] = useState(false);
   const filteredData = useMemo(() => {
     return stockTable.filter((t) => {
-      if (category && category !== "all") {
-        const selected = category.toLocaleLowerCase();
-        return t.kategori.toLocaleLowerCase().includes(selected);
-      }
-      if (search) {
-        const keyword = search.toLowerCase();
-        return (
-          t.id.toLowerCase().includes(keyword) ||
-          t.produk.toLowerCase().includes(keyword) ||
-          t.stok.toString().includes(keyword)
-        );
-      }
-      return true;
+      const selectedCategory = category?.toLowerCase();
+      const keyword = search?.toLowerCase();
+
+      // Filter kategori
+      const matchCategory =
+        !category || category === "all"
+          ? true
+          : t.kategori.toLowerCase().includes(selectedCategory);
+
+      // Filter search
+      const matchSearch =
+        !keyword ||
+        t.id.toLowerCase().includes(keyword) ||
+        t.produk.toLowerCase().includes(keyword) ||
+        t.stok.toString().includes(keyword);
+
+      // Hasil akhir: dua-duanya harus true
+      return matchCategory && matchSearch;
     });
   }, [search, stockTable, category]);
+
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
   const paginatedData = filteredData.slice(
@@ -177,8 +193,14 @@ function Stok() {
     return pageList;
   }, [currentPage, totalPages]);
 
+  useEffect(() => {
+    currentPage >= totalPages && setCurrentPage(totalPages);
+    currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+  console.log(currentPage);
+  console.log(totalPages);
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[1rem] pb-[0.75rem]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[1rem] pb-[0.5rem]">
       <div className="min-h-[32.0625rem] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
         <div className="ml-auto w-fit pt-[9px] pb-[14px]">
           <button
@@ -214,7 +236,6 @@ function Stok() {
                   <option value={5}>5</option>
                   <option value={6}>6</option>
                   <option value={10}>10</option>
-                  <option value={20}>20</option>
                 </select>
                 <p className="ml-2 text-sm">Entries per page</p>
                 <select
@@ -223,9 +244,11 @@ function Stok() {
                   className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-[28px] h-[32px] cursor-pointer"
                 >
                   <option value="all">All</option>
-                  <option value="makanan">Makanan</option>
-                  <option value="minuman">Minuman</option>
-                  <option value="topping">Topping</option>
+                  {stockData.map((item, idx) => (
+                    <option key={idx} value={item.nama}>
+                      {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -269,7 +292,7 @@ function Stok() {
                           highlightedRow === t.id
                             ? "bg-[#AFCFFF]"
                             : "even:bg-[#DCDCDC]"
-                        } text-[14px] [&>td]:h-[34px]`}
+                        } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
                       >
                         <td className="border-r border-[#959595] pl-[10.5px]">
                           {t.id}
@@ -424,10 +447,13 @@ function Stok() {
               {stockData.map((items, index) => (
                 <div key={index}>
                   <div className="bg-[#FFB300] border border-[#959595] pl-[0.9375rem] pr-[1.25rem] w-full h-[2.75rem] flex items-center">
-                    <h3>{items.nama}</h3>
+                    <h3>
+                      {items.nama.slice(0, 1).toUpperCase() +
+                        items.nama.slice(1)}
+                    </h3>
                   </div>
                   <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                    <h4>{items.jumlahBesar}</h4>
+                    <h4>{items.stok}</h4>
                   </div>
                 </div>
               ))}
@@ -438,10 +464,7 @@ function Stok() {
                   Total Stok :
                 </h3>
                 <h4>
-                  {stockData.reduce(
-                    (total, item) => total + item.jumlahBesar,
-                    0
-                  )}
+                  {stockData.reduce((total, item) => total + item.stok, 0)}
                 </h4>
               </div>
             </div>
@@ -464,6 +487,7 @@ function Stok() {
           setHighlightedRow={setHighlightedRow}
           setIsAddOpen={setIsAddOpen}
           setStockTable={setStockTable}
+          stockData={stockData}
         />
       )}
       {editId !== null && (
