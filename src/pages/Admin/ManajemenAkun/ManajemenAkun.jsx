@@ -329,6 +329,15 @@ function ManajemenAkun() {
           </div>
         </div>
       </div>
+      <div
+        onClick={() => {
+          setIsAddOpen(false);
+          setDeleteId(null);
+        }}
+        className={`${
+          isAddOpen || deleteId ? "" : "hidden"
+        } ${deleteId && "bg-black/50"} fixed inset-0 h-full w-full`}
+      ></div>
       <TambahAkun
         data={userData}
         setData={setUserData}
