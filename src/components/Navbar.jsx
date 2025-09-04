@@ -68,7 +68,7 @@ function Navbar() {
                   key={item.to}
                   to={item.to}
                   onClick={() => window.scrollTo(0, 0)}
-                  className={({ isActive }) => `hover:text-[#FFD358] focus:text-[#FFB300] ${isActive && "text-[#FFB300]"}`}
+                  className={({ isActive }) => `hover:text-[#FFD358] focus:text-[#FFB300] font-chewy ${isActive && "text-[#FFB300]"}`}
                 >
                   {item.name}
                 </NavLink>
