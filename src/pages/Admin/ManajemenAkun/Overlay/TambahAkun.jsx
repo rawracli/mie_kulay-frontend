@@ -18,7 +18,7 @@ function TambahAkun({isAddOpen, setIsAddOpen, setData, setHighlightedRow}) {
     setIsAddOpen(false);
       };
   return (
-    <div className={`${isAddOpen ? "translate-x-0" : "translate-x-[110%]"} transition fixed shadow-[0px_2px_6px_rgba(0,0,0,0.25)] top-[92px] right-0 bg-[#FEFEFE] h-[calc(100svh-92px)] w-[25.75rem]`}>
+    <div className={`${isAddOpen ? "translate-x-0" : "translate-x-[110%]"} duration-300 transition fixed shadow-[0px_2px_6px_rgba(0,0,0,0.25)] top-[92px] right-0 bg-[#FEFEFE] h-[calc(100svh-92px)] w-[25.75rem]`}>
       <button className="p-[10px] absolute top-[11px] right-[12px] cursor-pointer" onClick={()=>setIsAddOpen(false)}>
         <img src={Close} alt="X" />
       </button>
