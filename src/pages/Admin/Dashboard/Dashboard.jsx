@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Icon from "../../../assets/Dashboard/icon.png";
 import Close from "../../../assets/Dashboard/close.png";
+import FavoriteMenuChart from "../../../utils/Dashboard/FavoriteMenu.jsx";
+import MonthlyEarningsChart from "../../../utils/Dashboard/MonthlyEarningsChart.jsx";
+import MonthlyExpensesChart from "../../../utils/Dashboard/MonthlyExpensesChart.jsx";
+import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx";
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
@@ -319,78 +323,6 @@ const getPages = (totalPages, currentPage) => {
         { name: "Ice Kopi", qty: 1, price: 35000 },
       ],
     },
-    {
-      id: "#0007", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0008", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0009", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0010", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0011", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0012", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0013", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0014", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },{
-      id: "#0015", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    
   ];
 
   // State input (sementara)
@@ -439,8 +371,55 @@ const getPages = (totalPages, currentPage) => {
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
   return (
-    <div className="bg-gray-200 w-full min-h-full flex justify-center py-6">
-      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1020px]">
+    <div className="bg-gray-200 w-full min-h-full flex flex-col items-center justify-center">
+      {/* Analytics Data */}
+      <div className="flex flex-row rounded-[10px] h-fit w-[1260px] mt-8 justify-center">
+        {/* Information Priority */}
+        <div className="flex flex-col w-200">
+         <div className="grid grid-cols-3 gap-3 h-50">
+          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
+            <h1 className="text-[20px] font-semibold px-4">Total Orders</h1>
+            <hr className="text-gray-400 mx-auto w-[95%]" />
+            <h5 className="my-auto text-center text-4xl font-semibold">500</h5>
+          </div>
+          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
+            <h1 className="text-[20px] font-semibold px-4">Profit</h1>
+            <hr className="text-gray-400 mx-auto w-[95%]" />
+            <h5 className="my-auto text-center text-4xl font-semibold">Rp. 10,5JT</h5>
+          </div>
+          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
+            <h1 className="text-[20px] font-semibold px-4">Pengeluaran</h1>
+            <hr className="text-gray-400 mx-auto w-[95%]" />
+            <h5 className="my-auto text-center text-4xl font-semibold">Rp. 100K</h5>
+          </div>
+         </div>
+         {/* Monthly Earnings and Expenses */}
+         <div className="flex flex-col w-full h-full">
+          <div className="bg-white mt-3 w-full h-1/2 shadow-lg">
+            <MonthlyEarningsChart />
+          </div>
+          <div className="bg-white mt-3 w-full h-1/2 shadow-lg rounded-bl-[10px]">
+            <MonthlyExpensesChart />
+          </div>
+         </div>
+        </div>
+        {/* Top Menu & Monthly Orders... (Statistics) */}
+        <div className="pl-3 w-116">
+          <div className="bg-white w-full h-auto rounded-tr-[10px] flex justify-center items-center shadow-lg">
+            <div className="w-[400px] mx-auto">
+              <FavoriteMenuChart />
+            </div>
+          </div>
+          <div className="bg-white w-full h-122.5 mt-3 rounded-br-[10px] shadow-lg">
+            <MonthlyOrdersChart />
+          </div>
+        </div>
+      </div>
+      {/* Detail Pemesanan || Laporan Pemesanan */}
+      <div className="w-[1270px] flex justify-start">
+        <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">Detail Pemesanan</h1>
+      </div>
+      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1260px] mt-3 mb-24">
         {/* Filter */}
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
