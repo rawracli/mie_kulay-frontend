@@ -9,6 +9,7 @@ import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
+import TambahPengeluaran from "./Overlay/TambahPengeluaran";
 
 function Stok() {
   const [stockTable, setStockTable] = useState([
@@ -56,13 +57,14 @@ function Stok() {
       nama,
       stok,
     }));
-  }, [stockTable]); 
+  }, [stockTable]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [category, setCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isAddKategori, setIsAddKategori] = useState(false);
+  const [isAddPengeluaran, setIsAddPengeluaran] = useState(false);
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
@@ -218,6 +220,24 @@ function Stok() {
         >
           <img src={Plus} alt="plus" />
           <p className="text-[14px] font-bold text-white">Tambah Kategori</p>
+        </button>
+        <button
+          onClick={() => setIsAddPengeluaran(true)}
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+        >
+          <svg
+            width="11"
+            height="19"
+            viewBox="0 0 11 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.63555 18.25V16.1C3.75221 15.9 2.98988 15.5167 2.34855 14.95C1.70721 14.3833 1.23621 13.5833 0.935547 12.55L2.78555 11.8C3.03555 12.6 3.40655 13.2083 3.89855 13.625C4.39055 14.0417 5.03621 14.25 5.83555 14.25C6.51888 14.25 7.09821 14.096 7.57355 13.788C8.04888 13.48 8.28621 13.0007 8.28555 12.35C8.28555 11.7667 8.10221 11.3043 7.73555 10.963C7.36888 10.6217 6.51888 10.234 5.18555 9.8C3.75221 9.35 2.76888 8.81267 2.23555 8.188C1.70221 7.56333 1.43555 6.80067 1.43555 5.9C1.43555 4.81667 1.78555 3.975 2.48555 3.375C3.18555 2.775 3.90221 2.43333 4.63555 2.35V0.25H6.63555V2.35C7.46888 2.48333 8.15655 2.78767 8.69855 3.263C9.24055 3.73833 9.63621 4.31733 9.88555 5L8.03555 5.8C7.83555 5.26667 7.55221 4.86667 7.18555 4.6C6.81888 4.33333 6.31888 4.2 5.68555 4.2C4.95221 4.2 4.39388 4.36267 4.01055 4.688C3.62721 5.01333 3.43555 5.41733 3.43555 5.9C3.43555 6.45 3.68555 6.88333 4.18555 7.2C4.68555 7.51667 5.55221 7.85 6.78555 8.2C7.93555 8.53333 8.80655 9.06267 9.39855 9.788C9.99055 10.5133 10.2862 11.3507 10.2855 12.3C10.2855 13.4833 9.93555 14.3833 9.23555 15C8.53555 15.6167 7.66888 16 6.63555 16.15V18.25H4.63555Z"
+              fill="white"
+            />
+          </svg>
+          <p className="text-[14px] font-bold text-white">Tambah Pengeluaran</p>
         </button>
       </div>
       <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
@@ -489,7 +509,7 @@ function Stok() {
           setIsAddKategori(false);
         }}
         className={`${
-          editId || isAddOpen || deleteId || isAddKategori ? "" : "hidden"
+          editId || isAddOpen || deleteId || isAddKategori || isAddPengeluaran ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
       {isAddOpen && (
@@ -518,11 +538,8 @@ function Stok() {
           setSkipConfirm={setSkipConfirm}
         />
       )}
-      {isAddKategori && (
-        <TambahKategori
-          setIsAddKategori={setIsAddKategori}
-        />
-      )}
+      {isAddKategori && <TambahKategori setIsAddKategori={setIsAddKategori} />}
+      {isAddPengeluaran && <TambahPengeluaran setIsAddPengeluaran={setIsAddPengeluaran}/>}
     </div>
   );
 }
