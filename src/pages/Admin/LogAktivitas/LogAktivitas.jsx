@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // Dummy data log aktivitas
 const logsData = [
-  { id: 1, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
+  { id: 1, user: "Staf 1", action: "Menambah pesanan [IDX1000009]", type: "Menambah", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
   { id: 2, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
   { id: 3, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
   { id: 4, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
@@ -52,6 +52,7 @@ const logsData = [
   { id: 48, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
   { id: 49, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
   { id: 50, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
+  // ... data lainnya tetap
 ];
 
 function LogAktivitas() {
@@ -63,6 +64,8 @@ function LogAktivitas() {
 
   // ✅ State modal
   const [selectedLog, setSelectedLog] = useState(null);
+  // ✅ State highlight row terakhir
+  const [highlightedRow, setHighlightedRow] = useState(null);
 
   // Filter + Search
   const filteredLogs = useMemo(() => {
@@ -85,6 +88,24 @@ function LogAktivitas() {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredLogs.slice(start, start + itemsPerPage);
   }, [filteredLogs, currentPage, itemsPerPage]);
+
+  // Reset highlight otomatis setelah beberapa detik
+  useEffect(() => {
+    if (highlightedRow !== null) {
+      const timer = setTimeout(() => {
+        setHighlightedRow(null);
+      }, 3000); // 3 detik
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedRow]);
+
+  // Close modal + tandai row
+  const handleCloseModal = () => {
+    if (selectedLog) {
+      setHighlightedRow(selectedLog.id);
+    }
+    setSelectedLog(null);
+  };
 
   // Generate halaman
   function getPages(totalPages, currentPage) {
@@ -152,6 +173,7 @@ function LogAktivitas() {
             <option value="Membuat">Membuat</option>
             <option value="Mengubah">Mengubah</option>
             <option value="Menghapus">Menghapus</option>
+            <option value="Menambah">Menambah</option>
           </select>
 
           <label className="text text-[18px] font-semibold">Filter Logs by :</label>
@@ -180,7 +202,14 @@ function LogAktivitas() {
             <tbody>
               {paginatedLogs.length > 0 ? (
                 paginatedLogs.map((log) => (
-                  <tr key={log.id} className="odd:bg-gray-200 h-[33px]">
+                  <tr
+                    key={log.id}
+                    className={`h-[33px] ${
+                      highlightedRow === log.id
+                        ? "bg-blue-200 animate-pulse"
+                        : "odd:bg-gray-200"
+                    }`}
+                  >
                     <td className="border border-gray-400 text-center truncate">{log.user}</td>
                     <td className="p-1 border border-gray-400 text-sm truncate">{log.action}</td>
                     <td className="border border-gray-400 text-center">
@@ -197,10 +226,12 @@ function LogAktivitas() {
                         month: "short",
                         year: "numeric",
                       })}{" "}
-                      {new Date(log.date).toLocaleTimeString("id-ID", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <span className="text-blue-500 font-semibold">
+                        {new Date(log.date).toLocaleTimeString("id-ID", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
                     </td>
                   </tr>
                 ))
@@ -214,7 +245,7 @@ function LogAktivitas() {
             </tbody>
           </table>
         </div>
-
+        
         {/* Pagination */}
         <div className="flex items-center justify-between mt-5 text-sm">
           <p>
@@ -284,21 +315,22 @@ function LogAktivitas() {
           </div>
         </div>
 
+
         {/* Overlay Modal */}
         {selectedLog && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
-            onClick={() => setSelectedLog(null)} // klik area luar modal -> close
+            onClick={handleCloseModal}
           >
             <div
               className="bg-white rounded-[5px] w-[666px] h-[272px]"
-              onClick={(e) => e.stopPropagation()} // biar klik dalam modal tidak close
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="bg-[#3578DC] text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
                 <h3 className="font-bold">{selectedLog.user}</h3>
                 <button
                   className="absolute top-58 right-80 hover:text-black cursor-pointer"
-                  onClick={() => setSelectedLog(null)}
+                  onClick={handleCloseModal}
                 >
                   ✕
                 </button>
