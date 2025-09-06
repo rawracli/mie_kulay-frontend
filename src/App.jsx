@@ -8,6 +8,7 @@ import Dashboard from "./pages/Admin/Dashboard/Dashboard";
 import Pemesanan from "./pages/Admin/Pemesanan/Pemesanan";
 import Stok from "./pages/Admin/Stok/Stok";
 import LogAktivitas from "./pages/Admin/LogAktivitas/LogAktivitas";
+import Pengeluaran from "./pages/Admin/Pengeluaran/Pengeluaran";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/pemesanan" element={<Pemesanan />}></Route>
           <Route path="/stok" element={<Stok />}></Route>
           <Route path="/log-aktivitas" element={<LogAktivitas />}></Route>
+          <Route path="/pengeluaran" element={<Pengeluaran />}></Route>
         </Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Home />}></Route>
