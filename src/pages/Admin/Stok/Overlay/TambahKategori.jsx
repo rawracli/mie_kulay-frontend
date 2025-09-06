@@ -3,6 +3,7 @@ import Close from "../../../../assets/Admin/x.svg";
 import useOverflow from "../../../../hooks/useOverflow";
 import Login from "../../../../assets/Login/login.png";
 import TambahMenu from "./TambahMenu";
+import ConfirmDelete from "../../../../components/Admin/ConfirmDelete";
 
 function TambahKategori({ setIsAddKategori }) {
   const [kategoriData, setKategoriData] = useState([
@@ -39,8 +40,10 @@ function TambahKategori({ setIsAddKategori }) {
 
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
+  const [deleteIndex, setDeleteIndex] = useState(null);
   const [formNamaKategori, setFormNamaKategori] = useState("");
   const [isTambahMenuOpen, setIsTambahMenuOpen] = useState(false);
+  const [skipConfirm, setSkipConfirm] = useState(false);
 
   const rightPanelRef = useRef(null);
 
@@ -59,17 +62,19 @@ function TambahKategori({ setIsAddKategori }) {
     setActiveMenuIndex((prev) => (prev === idx ? null : idx));
   };
 
-  const handleDelete = (idx) => {
-    if (!confirm("Yakin ingin menghapus kategori ini?")) return;
-    setKategoriData((prev) => prev.filter((_, i) => i !== idx));
-    if (editIndex === idx) {
-      setEditIndex(null);
-      setFormNamaKategori("");
-    } else if (editIndex !== null && idx < editIndex) {
-      // adjust editIndex kalau index yang dihapus lebih kecil
-      setEditIndex((prev) => prev - 1);
-    }
+  const onDelete = (idx) => {
     setActiveMenuIndex(null);
+    if (skipConfirm) {
+      setKategoriData((prev) => prev.filter((_, i) => i !== idx));
+      if (editIndex === idx) {
+        setEditIndex(null);
+        setFormNamaKategori("");
+      } else if (editIndex !== null && idx < editIndex) {
+        setEditIndex((prev) => prev - 1);
+      }
+    } else {
+      setDeleteIndex(idx);
+    }
   };
 
   const handleClickEditBtn = (idx, e) => {
@@ -139,8 +144,13 @@ function TambahKategori({ setIsAddKategori }) {
       {/* Kiri */}
       <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
-          onClick={() => setEditIndex(null)}
-          className={`cursor-pointer absolute py-[15px] px-[11px] left-0 top-0 ${editIndex === null && "hidden"}`}
+          onClick={() => {
+            setEditIndex(null);
+            setFormNamaKategori("");
+          }}
+          className={`cursor-pointer absolute py-[15px] px-[11px] left-0 top-0 ${
+            editIndex === null && "hidden"
+          }`}
         >
           <svg
             width="25"
@@ -249,7 +259,7 @@ function TambahKategori({ setIsAddKategori }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDelete(idx);
+                      onDelete(idx);
                     }}
                     className="text-[#A01515] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
                   >
@@ -290,12 +300,35 @@ function TambahKategori({ setIsAddKategori }) {
           ))}
         </div>
       </div>
-
+      <div
+        onClick={() => setDeleteIndex(null)}
+        className={`${
+          deleteIndex !== null ? "" : "hidden"
+        } bg-black/50 fixed inset-0 h-full w-full rounded-[5px]`}
+      ></div>
       {/* TambahMenu overlay */}
       {isTambahMenuOpen && (
         <TambahMenu
           onClose={() => setIsTambahMenuOpen(false)}
           onAdd={(menuObj) => handleAddMenuToCategory(menuObj)}
+        />
+      )}
+      {deleteIndex !== null && (
+        <ConfirmDelete
+          deleteIndex={deleteIndex}
+          setDeleteIndex={setDeleteIndex}
+          setData={setKategoriData}
+          setSkipConfirm={setSkipConfirm}
+          onAfterDelete={(deletedIdx) => {
+            if (editIndex === deletedIdx) {
+              setEditIndex(null);
+              setFormNamaKategori("");
+            } else if (editIndex !== null && deletedIdx < editIndex) {
+              // adjust editIndex kalau index yang dihapus lebih kecil
+              setEditIndex((prev) => prev - 1);
+            }
+            setActiveMenuIndex(null);
+          }}
         />
       )}
     </div>
