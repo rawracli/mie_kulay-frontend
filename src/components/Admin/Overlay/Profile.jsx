@@ -1,0 +1,86 @@
+import React, { useState } from "react";
+
+function Profile({ userData, setUserData }) {
+  const [isEdit, setIsEdit] = useState(false);
+
+  return (
+    <div className="fixed font-semibold right-0 top-[92px] flex flex-col z-10 h-[calc(100%-92px)] w-100 bg-white">
+      <div className="h-[261px] w-full">
+        {/* sementara, diganti image */}
+        <div className="size-full flex items-end bg-[#D9D9D9] relative">
+          <svg
+            className="mx-auto"
+            width="171"
+            height="191"
+            viewBox="0 0 171 191"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M85.4997 105.958C114.38 105.958 137.791 82.5466 137.791 53.6667C137.791 24.7868 114.38 1.375 85.4997 1.375C56.6198 1.375 33.208 24.7868 33.208 53.6667C33.208 82.5466 56.6198 105.958 85.4997 105.958Z"
+              stroke="#737373"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M169.166 189.625C169.166 167.435 160.351 146.154 144.661 130.464C128.97 114.773 107.689 105.958 85.4997 105.958C63.3099 105.958 42.029 114.773 26.3384 130.464C10.6479 146.154 1.83301 167.435 1.83301 189.625"
+              stroke="#737373"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <div className="absolute bg-[linear-gradient(359.42deg,rgba(0,0,0,0.44)_0.72%,rgba(255,255,255,0)_71.46%,rgba(255,255,255,0)_99.72%)] flex justify-between items-end size-full ">
+            <h4 className="text-white text-[32px] pl-[16px] pb-[12px]">
+              {userData.nama}
+            </h4>
+            <button className="bg-white hover:bg-gray-100 active:bg-gray-200 cursor-pointer shadow-[1.5px_1.5px_0_0_#FFB300] size-[54px] rounded-full mb-[6.5px] mr-[10.5px]">
+              <svg
+                className="m-auto"
+                width="26"
+                height="27"
+                viewBox="0 0 26 27"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.6683 9.1897L17 10.5214L4.13667 23.3564H2.83333V22.053L15.6683 9.1897ZM20.7683 0.689697C20.4142 0.689697 20.0458 0.831364 19.7767 1.10053L17.1842 3.69303L22.4967 9.00553L25.0892 6.41303C25.6417 5.86053 25.6417 4.9397 25.0892 4.41553L21.7742 1.10053C21.4908 0.817197 21.1367 0.689697 20.7683 0.689697ZM15.6683 5.20886L0 20.8772V26.1897H5.3125L20.9808 10.5214L15.6683 5.20886Z"
+                  fill="black"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="pl-[19px] pr-[12px] flex-1 flex flex-col pt-[10px] pb-[33px] border-[#959595] border-[0.5px]">
+        <div className="flex justify-between pt-[16px] pb-[13px] border-b-1 border-[#D9D9D9]">
+          <h5 className="text-[20px]">Id</h5>
+          <p className="text-[#959595]">{userData.id}</p>
+        </div>
+        <div className="flex justify-between pt-[16px] pb-[13px] border-b-1 border-[#D9D9D9]">
+          <h5 className="text-[20px]">Role</h5>
+          <p className="text-[#959595]">{userData.role}</p>
+        </div>
+        <div className="flex justify-between pt-[16px] pb-[13px] border-b-1 border-[#D9D9D9]">
+          <h5 className="text-[20px]">Email</h5>
+          <p className="text-[#959595]">{userData.email}</p>
+        </div>
+        <div className="flex justify-between pt-[16px] pb-[13px] border-b-1 border-[#D9D9D9]">
+          <h5 className="text-[20px]">Password</h5>
+          <p className="text-[#959595]">
+            {"*".repeat(userData.password.length)}
+          </p>
+        </div>
+        <button
+          onClick={() => setIsEdit(true)}
+          className="text-white cursor-pointer w-[115px] h-[37px] rounded-[10px] mt-[45px] self-end bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501]"
+        >
+          {isEdit ? "Simpan" : "Edit"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Profile;
