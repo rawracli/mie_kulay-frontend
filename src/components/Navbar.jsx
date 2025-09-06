@@ -5,7 +5,7 @@ import useScrollBehaviour from "../hooks/useScrollBehaviour";
 
 const navItems = [
   { name: "Home", to: "/" },
-  { name: "Tentang", to: "/tentang-kami" },
+  { name: "Tentang", to: "/tentang" },
   { name: "Menu", to: "/menu" },
   { name: "Kontak", to: "/kontak" },
 ];
@@ -18,7 +18,7 @@ function Navbar() {
     <>
       <nav className="relative w-full font-chewy">
         <div
-          className={`z-40 fixed w-full flex items-center justify-center transition-all duration-300 font-semibold ${
+          className={`z-40 w-full flex items-center justify-center transition-all duration-300 font-semibold ${
             isVisible ? "translate-y-0" : "-translate-y-[110%]"
           } ${
             isOnTop
