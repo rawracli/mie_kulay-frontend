@@ -1,32 +1,34 @@
 import React, { useState } from "react";
 import Alert from "../../assets/Admin/alert.png";
 
-function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, deleteIndex, setDeleteIndex, setData }) {
-const [dontShowAgain, setDontShowAgain] = useState(false);
+function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, deleteIndex, setDeleteIndex, setData, onAfterDelete }) {
+  const [dontShowAgain, setDontShowAgain] = useState(false);
 
   const onDelete = () => {
-if (dontShowAgain && setSkipConfirm) {
-      setSkipConfirm(true); // Set state parent untuk skip modal selanjutnya (selama session ini)
+    if (dontShowAgain && setSkipConfirm) {
+      setSkipConfirm(true);
     }
-   if (deleteIndex != null) { 
-  // menangani kasus index
-  setData((prevData) => prevData.filter((_, i) => i !== deleteIndex));
-  setDeleteIndex(null);
-} else if (deleteId != null) {
-  // menangani kasus id
-  setData((prevData) => prevData.filter((item) => item.id !== deleteId));
-  setDeleteId(null);
-}
+    if (deleteIndex != null) { 
+      // menangani index
+      setData((prevData) => prevData.filter((_, i) => i !== deleteIndex));
+      setDeleteIndex(null);
+      if (onAfterDelete) onAfterDelete(deleteIndex);
+    } else if (deleteId != null) {
+      // menangani id
+      setData((prevData) => prevData.filter((item) => item.id !== deleteId));
+      setDeleteId(null);
+      if (onAfterDelete) onAfterDelete(deleteId);
+    }
 
   };
     
-const onCancel = () => {
-  if (deleteIndex != null) {
-    setDeleteIndex(null);
-  } else {
-    setDeleteId(null);
-  }
-};
+  const onCancel = () => {
+    if (deleteIndex != null) {
+      setDeleteIndex(null);
+    } else {
+      setDeleteId(null);
+    }
+  };
 
 
   return (
