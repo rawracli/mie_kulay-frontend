@@ -94,7 +94,7 @@ function LogAktivitas() {
     if (highlightedRow !== null) {
       const timer = setTimeout(() => {
         setHighlightedRow(null);
-      }, 3000); // 3 detik
+      }, 200); // 3 detik
       return () => clearTimeout(timer);
     }
   }, [highlightedRow]);
@@ -204,10 +204,10 @@ function LogAktivitas() {
                 paginatedLogs.map((log) => (
                   <tr
                     key={log.id}
-                    className={`h-[33px] ${
+                    className={`h-[33px] transition ease-initial duration-300 ${
                       highlightedRow === log.id
-                        ? "bg-blue-200 animate-pulse"
-                        : "odd:bg-gray-200"
+                        ? "bg-[#AFCFFF]"
+                        : "even:bg-gray-200"
                     }`}
                   >
                     <td className="border border-gray-400 text-center truncate">{log.user}</td>
