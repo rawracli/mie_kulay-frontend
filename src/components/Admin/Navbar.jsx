@@ -48,6 +48,14 @@ function Navbar() {
           />
         </button>
       </div>
+      <div
+        onClick={() => {
+          setIsProfileOpen(false);
+        }}
+        className={`${
+          isProfileOpen ? "" : "hidden"
+        } fixed inset-0 h-full w-full`}
+      ></div>
       {isProfileOpen && (
         <Profile userData={userData} setUserData={setUserData} />
       )}
