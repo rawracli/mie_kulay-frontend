@@ -8,6 +8,7 @@ import Dashboard from "./pages/Admin/Dashboard/Dashboard";
 import Pemesanan from "./pages/Admin/Pemesanan/Pemesanan";
 import Stok from "./pages/Admin/Stok/Stok";
 import LogAktivitas from "./pages/Admin/LogAktivitas/LogAktivitas";
+import ManajemenAkun from "./pages/Admin/ManajemenAkun/ManajemenAkun";
 import Pengeluaran from "./pages/Admin/Pengeluaran/Pengeluaran";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/pemesanan" element={<Pemesanan />}></Route>
           <Route path="/stok" element={<Stok />}></Route>
           <Route path="/log-aktivitas" element={<LogAktivitas />}></Route>
+          <Route path="/manajemen-akun" element={<ManajemenAkun />}></Route>
           <Route path="/pengeluaran" element={<Pengeluaran />}></Route>
         </Route>
           <Route path="/login" element={<Login />}></Route>
