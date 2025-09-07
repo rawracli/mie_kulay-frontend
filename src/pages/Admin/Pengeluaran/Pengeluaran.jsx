@@ -485,14 +485,17 @@ function Pengeluaran() {
           setDeleteId(null);
         }}
         className={`${
-          editId || isAddOpen || deleteId ? "" : "hidden"
+          editId !== null || isAddOpen || deleteId ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
-      {isAddOpen && (
+      {(isAddOpen || editId !== null) && (
         <TambahPengeluaran
           setIsAddOpen={setIsAddOpen}
           dataPengeluaran={dataPengeluaran}
           setDataPengeluaran={setDataPengeluaran}
+          editId={editId}
+          setEditId={setEditId}
+          setHighlightedRow={setHighlightedRow}
         />
       )}
       
