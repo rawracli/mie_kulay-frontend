@@ -6,6 +6,7 @@ function MainLayout() {
   return (
     <>
       <Navbar />
+      <div className="h-[104px]"></div>
       <main>
         <Outlet />
       </main>
