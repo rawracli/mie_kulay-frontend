@@ -5,6 +5,7 @@ import FavoriteMenuChart from "../../../utils/Dashboard/FavoriteMenu.jsx";
 import MonthlyEarningsChart from "../../../utils/Dashboard/MonthlyEarningsChart.jsx";
 import MonthlyExpensesChart from "../../../utils/Dashboard/MonthlyExpensesChart.jsx";
 import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx";
+import "./Dashboard.css"
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
@@ -371,257 +372,258 @@ const getPages = (totalPages, currentPage) => {
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
   return (
-    <div className="bg-gray-200 w-full min-h-full flex flex-col items-center justify-center">
+    <div className="bg-gray-200 w-full min-h-[calc(100vh-92px)] flex flex-col items-center pl-[11px] pr-[20px]">
       {/* Analytics Data */}
-      <div className="flex flex-row rounded-[10px] h-fit w-[1260px] mt-8 justify-center">
+      <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center">
         {/* Information Priority */}
-        <div className="flex flex-col w-200">
-         <div className="grid grid-cols-3 gap-3 h-50">
-          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
-            <h1 className="text-[20px] font-semibold px-4">Total Orders</h1>
+        <div className="flex flex-col w-full">
+         <div className="grid grid-cols-3 gap-[9px]">
+          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Total Orders</h1>
             <hr className="text-gray-400 mx-auto w-[95%]" />
-            <h5 className="my-auto text-center text-4xl font-semibold">500</h5>
+            <h5 className="my-auto text-center text-5xl font-semibold">500</h5>
           </div>
-          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
-            <h1 className="text-[20px] font-semibold px-4">Profit</h1>
+          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Profit</h1>
             <hr className="text-gray-400 mx-auto w-[95%]" />
             <h5 className="my-auto text-center text-4xl font-semibold">Rp. 10,5JT</h5>
           </div>
-          <div className="bg-white col-span-1 rounded-[8px] flex flex-col shadow-lg">
-            <h1 className="text-[20px] font-semibold px-4">Pengeluaran</h1>
+          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Pengeluaran</h1>
             <hr className="text-gray-400 mx-auto w-[95%]" />
             <h5 className="my-auto text-center text-4xl font-semibold">Rp. 100K</h5>
           </div>
          </div>
          {/* Monthly Earnings and Expenses */}
-         <div className="flex flex-col w-full h-full">
-          <div className="bg-white mt-3 w-full h-1/2 shadow-lg">
+         <div className="flex flex-col w-full">
+          <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
             <MonthlyEarningsChart />
           </div>
-          <div className="bg-white mt-3 w-full h-1/2 shadow-lg rounded-bl-[10px]">
+          <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg rounded-bl-[10px]">
             <MonthlyExpensesChart />
           </div>
          </div>
         </div>
         {/* Top Menu & Monthly Orders... (Statistics) */}
-        <div className="pl-3 w-116">
-          <div className="bg-white w-full h-auto rounded-tr-[10px] flex justify-center items-center shadow-lg">
+        <div className="pl-[9px] w-[330px]">
+          <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
             <div className="w-[400px] mx-auto">
               <FavoriteMenuChart />
             </div>
           </div>
-          <div className="bg-white w-full h-122.5 mt-3 rounded-br-[10px] shadow-lg">
+          <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
             <MonthlyOrdersChart />
           </div>
         </div>
       </div>
-      {/* Detail Pemesanan || Laporan Pemesanan */}
-      <div className="w-[1270px] flex justify-start">
-        <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">Detail Pemesanan</h1>
-      </div>
-      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1260px] mt-3 mb-24">
-        {/* Filter */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-1xl font-medium mb-1 mt-[11px] -translate-x-[4.6px]">
-              Tanggal Awal
-            </label>
-            <input
-              type="date"
-              value={tanggalAwalInput}
-              onChange={(e) => setTanggalAwalInput(e.target.value)}
-              className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 -translate-x-[4.6px]"
-            />
-          </div>
-          <div>
-            <label className="block text-1xl font-medium mb-1 mt-[11px] ml-[10px]">
-              Tanggal Akhir
-            </label>
-            <input
-              type="date"
-              value={tanggalAkhirInput}
-              onChange={(e) => setTanggalAkhirInput(e.target.value)}
-              className="w-[475px] h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400 translate-x-[10.5px]"
-            />
-          </div>
+      {/* Detail Pemesanan */}
+      <div className="size-full">
+        {/* Detail Pemesanan || Laporan Pemesanan */}
+        <div className="w-full flex justify-start">
+          <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">Detail Pemesanan</h1>
         </div>
-        <button
-          onClick={() => {
-            setTanggalAwal(tanggalAwalInput);
-            setTanggalAkhir(tanggalAkhirInput);
-            setCurrentPage(1);
-          }}
-          className="w-[987px] h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 -translate-x-[4.6px] flex items-center justify-center gap-2 cursor-pointer"
-        >
-          <img src={Icon} alt="Filter" className="w-4 h-4" />
-          <span>Filter</span>
-        </button>
-
-        {/* Search & entries per page */}
-        <div className="flex items-center justify-between mb-[20px] mt-[10px]">
-          <div>
-            <select
-              value={entriesPerPage}
-              onChange={(e) => {
-                setEntriesPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="bg-gray-100 border border-gray-300 rounded-[2px] w-[46px] h-[32px] cursor-pointer"
-            >
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={10}>10</option>
-            </select>
-            <span className="ml-2 text-sm">Entries per page</span>
+        <div className="bg-white rounded-[10px] h-fit shadow-lg pt-[37px] pb-[19px] px-6 w-full mt-3 mb-24">
+          {/* Filter */}
+          <div className="grid grid-cols-2 gap-[29px] mb-4">
+            <div>
+              <label className="block text-1xl font-medium mb-1 mt-[11px]">
+                Tanggal Awal
+              </label>
+              <input
+                type="date"
+                value={tanggalAwalInput}
+                onChange={(e) => setTanggalAwalInput(e.target.value)}
+                className="w-full h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+            <div>
+              <label className="block text-1xl font-medium mb-1 mt-[11px]">
+                Tanggal Akhir
+              </label>
+              <input
+                type="date"
+                value={tanggalAkhirInput}
+                onChange={(e) => setTanggalAkhirInput(e.target.value)}
+                className="w-full h-[35px] bg-gray-100 border border-gray-300 rounded-[2px] px-5 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
           </div>
-          <div>
-            <label className="mr-2 text-sm">Search:</label>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-gray-100 border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
-            />
-          </div>
-        </div>
+          <button
+            onClick={() => {
+              setTanggalAwal(tanggalAwalInput);
+              setTanggalAkhir(tanggalAkhirInput);
+              setCurrentPage(1);
+            }}
+            className="w-full h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <img src={Icon} alt="Filter" className="w-4 h-4" />
+            <span>Filter</span>
+          </button>
 
-        {/* Table */}
-        <div className="-translate-x-[3.6px]">
-          <table className="w-full border-collapse border border-gray-700">
-            <thead className="bg-[#FFB300] text-left h-[28px]">
-              <tr>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Tanggal</th>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Id</th>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Total Pembayaran</th>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Metode Pembayaran</th>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Status</th>
-                <th className="border border-gray-600 text-center font-semibold py-[6px]">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedData.length > 0 ? (
-                paginatedData.map((t, ind) => (
-                  <tr
-                    key={ind}
-                    className={`text-[14px] ${
-                      t.status.toLowerCase() === "belum selesai" ? "bg-gray-200" : "bg-white"
-                    }`}
-                  >
-                    <td className="border border-gray-600 text-center h-[33px]">{t.tanggal}</td>
-                    <td className="border border-gray-600 text-center h-[33px]">{t.id}</td>
-                    <td className="border border-gray-600 text-center h-[33px]">
-                      Rp. {t.total.toLocaleString("id-ID")}
-                    </td>
-                    <td className="border border-gray-600 text-center h-[33px]">{t.metode}</td>
-                    <td className="border border-gray-600 text-center h-[33px]">
-                      <span
-                        className={`${
-                          t.status.toLowerCase() === "selesai"
-                            ? "bg-[#44962D] text-white text-[14px]"
-                            : "bg-red-500 text-white text-[14px]"
-                        } text-[14px] px-3 py-[2px] rounded-2xl w-fit h-[26px]`}
-                      >
-                        {t.status}
-                      </span>
-                    </td>
-                    <td className="border border-gray-600 text-center h-[33px]">
-                      <button
-                        onClick={() => setSelectedTransaction(t)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
-                      >
-                        Lihat Detail
-                      </button>
+          {/* Search & entries per page */}
+          <div className="flex items-center justify-between mb-[15px] mt-[10px]">
+            <div>
+              <select
+                value={entriesPerPage}
+                onChange={(e) => {
+                  setEntriesPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-100 border border-gray-300 px-2 rounded-[2px] w-[46px] h-[32px] cursor-pointer"
+              >
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+                <option value={6}>6</option>
+                <option value={10}>10</option>
+              </select>
+              <span className="ml-2 text-sm">Entries per page</span>
+            </div>
+            <div>
+              <label className="mr-2 text-sm">Search:</label>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="bg-gray-100 border border-gray-300 rounded-[2px] px-2 py-1 w-[159px] h-[31px]"
+              />
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="-translate-x-[3.6px]">
+            <table className="w-full border-collapse border border-gray-700">
+              <thead className="bg-[#FFB300] text-left h-[28px]">
+                <tr>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Tanggal</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Id</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Total Pembayaran</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Metode Pembayaran</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Status</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((t, ind) => (
+                    <tr
+                      key={ind}
+                      className={`text-[14px] ${
+                        t.status.toLowerCase() === "belum selesai" ? "bg-gray-200" : "bg-white"
+                      }`}
+                    >
+                      <td className="border border-gray-600 text-center h-[33px]">{t.tanggal}</td>
+                      <td className="border border-gray-600 text-center h-[33px]">{t.id}</td>
+                      <td className="border border-gray-600 text-center h-[33px]">
+                        Rp. {t.total.toLocaleString("id-ID")}
+                      </td>
+                      <td className="border border-gray-600 text-center h-[33px]">{t.metode}</td>
+                      <td className="border border-gray-600 text-center h-[33px]">
+                        <span
+                          className={`${
+                            t.status.toLowerCase() === "selesai"
+                              ? "bg-[#44962D] text-white text-[14px]"
+                              : "bg-red-500 text-white text-[14px]"
+                          } text-[14px] px-3 py-[2px] rounded-2xl w-fit h-[26px]`}
+                        >
+                          {t.status}
+                        </span>
+                      </td>
+                      <td className="border border-gray-600 text-center h-[33px]">
+                        <button
+                          onClick={() => setSelectedTransaction(t)}
+                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                        >
+                          Lihat Detail
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-3 text-gray-500 italic">
+                      Tidak ada data
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-3 text-gray-500 italic">
-                    Tidak ada data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+         {/* Pagination */}
+          <div className="flex items-center justify-between mt-5 text-sm">
+            <p>
+              Page {currentPage} of {totalPages || 1} entries
+            </p>
+            <div className="flex items-center space-x-[18px]">
+              {/* Tombol prev */}
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className={`${
+                  currentPage === 1 ? "cursor-default" : "cursor-pointer"
+                } text-yellow-300 py-1 rounded disabled:opacity-50`}
+              >
+                <svg
+                  width="11"
+                  height="14"
+                  viewBox="0 0 11 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M8.07608 14.0094L0.0429428 7.04744L8.00962 0.009545L10.0179 1.75003L4.0429 7.02845L10.0678 12.2499L8.07608 14.0094Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+              
+              {/* Nomor halaman */}
+              <div className="flex gap-[18px]">
+                {getPages(totalPages, currentPage).map((n, index) =>
+                  n === "..." ? (
+                    <span key={index} className="py-1">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPage(n)}
+                      className={`py-1 cursor-pointer ${n === currentPage ? "underline" : ""}`}
+                    >
+                      {n}
+                    </button>
+                  )
+                )}
+              </div>
+              
+              {/* Tombol next */}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className={`${
+                  currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+                } py-1 rounded disabled:opacity-50`}
+              >
+                <svg
+                  width="11"
+                  height="15"
+                  viewBox="0 0 11 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M2.00084 0.115846L10.1014 6.99927L2.20357 14.1144L0.178438 12.3935L6.10178 7.05719L0.0263892 1.89462L2.00084 0.115846Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-
-       {/* Pagination */}
-<div className="flex items-center justify-between mt-5 text-sm">
-  <p>
-    Page {currentPage} of {totalPages || 1} entries
-  </p>
-  <div className="flex items-center space-x-[18px]">
-    {/* Tombol prev */}
-    <button
-      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-      disabled={currentPage === 1}
-      className={`${
-        currentPage === 1 ? "cursor-default" : "cursor-pointer"
-      } text-yellow-300 py-1 rounded disabled:opacity-50`}
-    >
-      <svg
-        width="11"
-        height="14"
-        viewBox="0 0 11 14"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M8.07608 14.0094L0.0429428 7.04744L8.00962 0.009545L10.0179 1.75003L4.0429 7.02845L10.0678 12.2499L8.07608 14.0094Z"
-          fill="black"
-        />
-      </svg>
-    </button>
-
-    {/* Nomor halaman */}
-    <div className="flex gap-[18px]">
-      {getPages(totalPages, currentPage).map((n, index) =>
-        n === "..." ? (
-          <span key={index} className="py-1">
-            ...
-          </span>
-        ) : (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(n)}
-            className={`py-1 cursor-pointer ${n === currentPage ? "underline" : ""}`}
-          >
-            {n}
-          </button>
-        )
-      )}
-    </div>
-
-    {/* Tombol next */}
-    <button
-      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-      disabled={currentPage === totalPages}
-      className={`${
-        currentPage === totalPages ? "cursor-default" : "cursor-pointer"
-      } py-1 rounded disabled:opacity-50`}
-    >
-      <svg
-        width="11"
-        height="15"
-        viewBox="0 0 11 15"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M2.00084 0.115846L10.1014 6.99927L2.20357 14.1144L0.178438 12.3935L6.10178 7.05719L0.0263892 1.89462L2.00084 0.115846Z"
-          fill="black"
-        />
-      </svg>
-    </button>
-  </div>
-</div>
-
-        
       </div>
 
       {/* Overlay Detail */}

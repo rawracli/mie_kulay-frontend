@@ -17,19 +17,15 @@ const data = [
 
 export default function MonthlyExpensesChart() {
   return (
-    <div className="p-4 w-full h-full">
-      <h2 className="text-lg font-semibold mb-2">Pengeluaran bulanan</h2>
-      <ResponsiveContainer width="100%" height={250}>
+    <div className="w-full h-full">
+      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">Pengeluaran bulanan</h2>
+      <hr className="text-[#959595] mx-[8px]"/>
+      <ResponsiveContainer width="100%" height={180} className={"pr-[34px] mt-[16px]"}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <CartesianGrid stroke="#959595" strokeDasharray={8} vertical={false} />
           <XAxis dataKey="month" />
           <YAxis
-            label={{
-              value: "JT",
-              angle: -90,
-              position: "insideLeft",
-              offset: -5,
-            }}
+            label
             domain={[0, 12]}
           />
           <Tooltip />
