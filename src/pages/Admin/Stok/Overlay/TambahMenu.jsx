@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from "react";
+import Close from "../../../../assets/Admin/x.svg";
+import Login from "../../../../assets/Login/login.png";
+
+
+function TambahMenu({ onClose, onAdd }) {
+  const [filePreview, setFilePreview] = useState(null);
+  const [file, setFile] = useState(null);
+  const [nama, setNama] = useState("");
+  const [harga, setHarga] = useState(1);
+
+  // buat preview ketika file dipilih
+  useEffect(() => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setFilePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  const handleFileChange = (e) => {
+    const f = e.target.files?.[0];
+    if (f) setFile(f);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!nama.trim()) return alert("Nama menu harus diisi.");
+    const foto = filePreview || Login; // kalau nggak pilih gambar, pakai placeholder (Login)
+    const newMenu = { foto, nama: nama.trim(), harga: Number(harga) || 1 };
+    onAdd(newMenu);
+    // reset
+    setFile(null);
+    setFilePreview(null);
+    setNama("");
+    setHarga(1);
+    onClose();
+  };
+
+  return (
+    <div className={`fixed top-1/2 -translate-y-1/2 -right-63 flex h-[577px] z-50`}>
+      <div className="bg-white pl-[27px] pr-[32px] pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
+        <div
+          onClick={onClose}
+          className="absolute top-[18px] right-[22px] cursor-pointer"
+        >
+          <img src={Close} alt="X" />
+        </div>
+        <h2 className="font-semibold text-2xl">Tambah Menu</h2>
+
+        <form onSubmit={handleSubmit} className="mt-[41px] h-full space-y-[20px] flex flex-col">
+          <div>
+            <label htmlFor="foto">Foto</label>
+            <div className="relative w-full h-[131px] mt-[7px] bg-gray-200 rounded-[4px] cursor-pointer overflow-hidden">
+              {filePreview ? (
+                <img src={filePreview} alt="preview" className="w-full h-full object-cover" />
+              ) : (
+                <svg
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                  width="54"
+                  height="63"
+                  viewBox="0 0 54 63"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M53.2031 29.125V58.375C53.2031 59.5063 52.7537 60.5913 51.9538 61.3912C51.1538 62.1912 50.0688 62.6406 48.9375 62.6406H5.0625C3.93119 62.6406 2.84621 62.1912 2.04625 61.3912C1.24629 60.5913 0.796875 59.5063 0.796875 58.375V29.125C0.796875 27.9937 1.24629 26.9087 2.04625 26.1087C2.84621 25.3088 3.93119 24.8594 5.0625 24.8594H12.375C12.8598 24.8594 13.3248 25.052 13.6677 25.3948C14.0105 25.7376 14.2031 26.2026 14.2031 26.6875C14.2031 27.1723 14.0105 27.6373 13.6677 27.9802C13.3248 28.323 12.8598 28.5156 12.375 28.5156H5.0625C4.90088 28.5156 4.74589 28.5798 4.63161 28.6941C4.51733 28.8084 4.45312 28.9634 4.45312 29.125V58.375C4.45312 58.5366 4.51733 58.6916 4.63161 58.8059C4.74589 58.9202 4.90088 58.9844 5.0625 58.9844H48.9375C49.0991 58.9844 49.2541 58.9202 49.3684 58.8059C49.4827 58.6916 49.5469 58.5366 49.5469 58.375V29.125C49.5469 28.9634 49.4827 28.8084 49.3684 28.6941C49.2541 28.5798 49.0991 28.5156 48.9375 28.5156H41.625C41.1402 28.5156 40.6752 28.323 40.3323 27.9802C39.9895 27.6373 39.7969 27.1723 39.7969 26.6875C39.7969 26.2026 39.9895 25.7376 40.3323 25.3948C40.6752 25.052 41.1402 24.8594 41.625 24.8594H48.9375C50.0688 24.8594 51.1538 25.3088 51.9538 26.1087C52.7537 26.9087 53.2031 27.9937 53.2031 29.125ZM16.1044 15.7919L25.1719 6.7274V36.4375C25.1719 36.9223 25.3645 37.3873 25.7073 37.7302C26.0502 38.073 26.5152 38.2656 27 38.2656C27.4848 38.2656 27.9498 38.073 28.2927 37.7302C28.6355 37.3873 28.8281 36.9223 28.8281 36.4375V6.7274L37.8956 15.7919C38.063 15.9715 38.2648 16.1155 38.4891 16.2154C38.7133 16.3154 38.9554 16.3691 39.2009 16.3734C39.4463 16.3778 39.6901 16.3326 39.9178 16.2407C40.1454 16.1487 40.3522 16.0119 40.5258 15.8383C40.6994 15.6647 40.8362 15.4579 40.9282 15.2302C41.0201 15.0026 41.0653 14.7588 41.0609 14.5133C41.0566 14.2679 41.0029 14.0258 40.903 13.8015C40.803 13.5773 40.659 13.3755 40.4794 13.2081L28.2919 1.0206C27.9491 0.678255 27.4845 0.485962 27 0.485962C26.5155 0.485962 26.0509 0.678255 25.7081 1.0206L13.5206 13.2081C13.341 13.3755 13.197 13.5773 13.097 13.8015C12.9971 14.0258 12.9434 14.2679 12.9391 14.5133C12.9347 14.7588 12.9799 15.0026 13.0718 15.2302C13.1638 15.4579 13.3006 15.6647 13.4742 15.8383C13.6478 16.0119 13.8546 16.1487 14.0822 16.2407C14.3099 16.3326 14.5537 16.3778 14.7991 16.3734C15.0446 16.3691 15.2867 16.3154 15.5109 16.2154C15.7352 16.1155 15.937 15.9715 16.1044 15.7919Z"
+                    fill="#999999"
+                  />
+                </svg>
+              )}
+              <input
+                type="file"
+                id="foto"
+                name="foto"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full h-full opacity-0 cursor-pointer absolute top-0 left-0"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="Menu">Nama Menu</label>
+            <input
+              type="text"
+              name="menu"
+              required
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="Harga">Harga</label>
+            <input
+              type="number"
+              name="harga"
+              min={1}
+              required
+              value={harga}
+              onChange={(e) => setHarga(e.target.value)}
+              className="appearance-none w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer"
+          >
+            Simpan
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default TambahMenu;
