@@ -5,7 +5,7 @@ import useScrollBehaviour from "../hooks/useScrollBehaviour";
 
 const navItems = [
   { name: "Home", to: "/" },
-  { name: "Tentang", to: "/tentang-kami" },
+  { name: "Tentang", to: "/tentang" },
   { name: "Menu", to: "/menu" },
   { name: "Kontak", to: "/kontak" },
 ];
