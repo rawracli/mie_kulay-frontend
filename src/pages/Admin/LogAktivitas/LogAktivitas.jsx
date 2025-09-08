@@ -61,6 +61,7 @@ function LogAktivitas() {
   const [search, ] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [month, setMonth] = useState();
 
   // ✅ State modal
   const [selectedLog, setSelectedLog] = useState(null);
@@ -138,10 +139,27 @@ function LogAktivitas() {
     return pages;
   }
 
+useEffect(() => {
+  let date;
+
+  if (filterDate === "") {
+    date = new Date();
+  } else {
+    date = new Date(filterDate);
+  }
+  const formatted = date.toLocaleDateString("id-ID", {
+    month: "long",
+    year: "numeric",
+  });
+
+  setMonth(formatted);
+}, [filterDate]);
+
+
   return (
     <div className="bg-gray-200 w-full min-h-full flex justify-center py-6">
-      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1030px]">
-        <h2 className="text-2xl font-bold mb-4">Agustus 2025</h2>
+      <div className="bg-white rounded-[10px] h-fit shadow-lg px-[18px] pt-[11px] pb-[38px] w-full mx-[9px]">
+        <h2 className="text-[36px] font-semibold mb-4">{month}</h2>
 
         {/* Filter + Search */}
         <div className="flex justify-between items-center mb-4 gap-4">
@@ -160,43 +178,45 @@ function LogAktivitas() {
             </select>
             <span>Entries per page</span>
           </label>
-
-          <select
-            value={filterType}
-            onChange={(e) => {
-              setFilterType(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-gray-100 border border-gray-300 p-1 rounded-[5px] w-[164px] h-[35px] ml-58 text font-semibold"
-          >
-            <option value="All">All</option>
-            <option value="Membuat">Membuat</option>
-            <option value="Mengubah">Mengubah</option>
-            <option value="Menghapus">Menghapus</option>
-            <option value="Menambah">Menambah</option>
-          </select>
-
-          <label className="text text-[18px] font-semibold">Filter Logs by :</label>
-          <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => {
-              setFilterDate(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] w-[234px] h-[32px] "
-          />
+          <div>
+            <select
+              value={filterType}
+              onChange={(e) => {
+                setFilterType(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-gray-100 border border-gray-300 p-1 rounded-[5px] w-[164px] h-[35px] text font-semibold"
+            >
+              <option value="All">All</option>
+              <option value="Membuat">Membuat</option>
+              <option value="Mengubah">Mengubah</option>
+              <option value="Menghapus">Menghapus</option>
+              <option value="Menambah">Menambah</option>
+            </select>
+            
+            <label className="text text-[18px] ml-[26px] font-semibold">Filter Logs by :</label>
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => {
+                setFilterDate(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] ml-[15px] w-[234px] h-[32px] "
+            />
+          </div>
         </div>
+
 
         {/* Tabel */}
         <div className="overflow-x-auto text font-semibold">
           <table className="w-full table-fixed border border-gray-400">
             <thead>
               <tr className="bg-[#FFB300] text-center h-[47px]">
-                <th className="p-2 border border-gray-400 w-[180px]">User</th>
-                <th className="p-2 border border-gray-400 w-[300px]">Aksi</th>
-                <th className="p-2 border border-gray-400 w-[200px]">Aktivitas</th>
-                <th className="p-2 border border-gray-400 w-[180px]">Tanggal</th>
+                <th className="p-2 border border-gray-400 w-[17.77%]">User</th>
+                <th className="p-2 border border-gray-400 w-[35.34%]">Aksi</th>
+                <th className="p-2 border border-gray-400 w-[25.30%]">Aktivitas</th>
+                <th className="p-2 border border-gray-400 w-[24.10%]">Tanggal</th>
               </tr>
             </thead>
             <tbody>
@@ -326,10 +346,10 @@ function LogAktivitas() {
               className="bg-white rounded-[5px] w-[666px] h-[272px]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-[#3578DC] text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
+              <div className="bg-[#3578DC] relative text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
                 <h3 className="font-bold">{selectedLog.user}</h3>
                 <button
-                  className="absolute top-58 right-80 hover:text-black cursor-pointer"
+                  className="absolute top-[10px] right-[22px] hover:text-black cursor-pointer"
                   onClick={handleCloseModal}
                 >
                   ✕
