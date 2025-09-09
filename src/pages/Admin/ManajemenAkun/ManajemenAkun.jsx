@@ -211,7 +211,7 @@ function ManajemenAkun() {
                         className={`${
                           highlightedRow === t.id
                             ? "bg-[#AFCFFF]"
-                            : "even:bg-[#DCDCDC]"
+                            : "even:bg-gray-200"
                         } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
                       >
                         <td className="border-r border-[#959595] pl-[10.5px]">

@@ -372,7 +372,7 @@ const getPages = (totalPages, currentPage) => {
   const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
 
   return (
-    <div className="bg-gray-200 w-full min-h-[calc(100vh-92px)] flex flex-col items-center pl-[11px] pr-[20px]">
+    <div className="bg-[#EDF0F2] w-full min-h-[calc(100vh-92px)] flex flex-col items-center pl-[11px] pr-[20px]">
       {/* Analytics Data */}
       <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center">
         {/* Information Priority */}

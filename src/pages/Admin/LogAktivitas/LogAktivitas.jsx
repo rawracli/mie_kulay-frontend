@@ -157,12 +157,12 @@ useEffect(() => {
 
 
   return (
-    <div className="bg-gray-200 w-full min-h-full flex justify-center py-6">
+    <div className="bg-gray-200 w-full min-h-full flex justify-center py-[8px]">
       <div className="bg-white rounded-[10px] h-fit shadow-lg px-[18px] pt-[11px] pb-[38px] w-full mx-[9px]">
         <h2 className="text-[36px] font-semibold mb-4">{month}</h2>
 
         {/* Filter + Search */}
-        <div className="flex justify-between items-center mb-4 gap-4">
+        <div className="flex justify-between items-center mb-[14px] gap-4">
           <label className="flex items-center gap-2">
             <select
               value={itemsPerPage}
@@ -170,7 +170,7 @@ useEffect(() => {
                 setItemsPerPage(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-300 p-1 rounded-[2px] w-[47px] h-[32px]"
+              className="bg-gray-100 border border-gray-300 p-1 pl-[8px] rounded-[2px] w-[47px] h-[32px]"
             >
               <option value={4}>4</option>
               <option value={8}>8</option>
@@ -185,7 +185,7 @@ useEffect(() => {
                 setFilterType(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-300 p-1 rounded-[5px] w-[164px] h-[35px] text font-semibold"
+              className="bg-gray-100 border border-gray-300 p-1 pl-[17px] rounded-[5px] w-[164px] h-[35px] text font-semibold"
             >
               <option value="All">All</option>
               <option value="Membuat">Membuat</option>
@@ -202,7 +202,7 @@ useEffect(() => {
                 setFilterDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] ml-[15px] w-[234px] h-[32px] "
+              className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] ml-[15px] w-[234px] h-[35px] "
             />
           </div>
         </div>
@@ -231,10 +231,10 @@ useEffect(() => {
                     }`}
                   >
                     <td className="border border-gray-400 text-center truncate">{log.user}</td>
-                    <td className="p-1 border border-gray-400 text-sm truncate">{log.action}</td>
+                    <td className="p-1 border border-gray-400 text-sm truncate pl-[24px]">{log.action}</td>
                     <td className="border border-gray-400 text-center">
                       <button
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                        className="bg-[#3578DC] text-white px-[6.5px] py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
                         onClick={() => setSelectedLog(log)}
                       >
                         Lihat Keterangan

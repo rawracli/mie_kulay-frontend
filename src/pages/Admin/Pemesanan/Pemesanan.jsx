@@ -95,7 +95,7 @@ import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 
     return (
       <div className="bg-[#EDF0F2] flex flex-col min-h-[calc(100vh-92px)] pt-[4px] pl-[13px] pr-[8px] pb-[8px] font-sans text-gray-800">
-        <div className="grid grid-cols-[377px_1fr] gap-x-3 overflow-hidden mb-4 max-h-[141px]">
+        <div className="grid grid-cols-[381px_1fr] gap-x-3 overflow-hidden mb-[9px] max-h-[141px]">
           <div className="bg-white flex flex-col shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
             <h3 className="text-[#FFB300] pt-[6px] pl-[30px] font-bold uppercase text-[20px]">
               Tanggal
@@ -135,7 +135,7 @@ import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
               {data.length !== 0 ? data.map((val, ind) => (
                   <tr
                     key={ind}
-                    className={`${highlightedRow === ind ? 'bg-[#AFCFFF]' : 'even:bg-[#DCDCDC]'} transition-colors ease-initial duration-300 [&_td]:h-[33px] [&_td]:border-r [&_td]:border-[#959595] text-[14px] font-semibold`}
+                    className={`${highlightedRow === ind ? 'bg-[#AFCFFF]' : 'even:bg-gray-200'} transition-colors ease-initial duration-300 [&_td]:h-[33px] [&_td]:border-r [&_td]:border-[#959595] text-[14px] font-semibold`}
                   >
                     <td className="pl-[21px] ">{val.nama}</td>
                     <td>
