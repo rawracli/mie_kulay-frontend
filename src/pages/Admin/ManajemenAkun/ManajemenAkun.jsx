@@ -3,45 +3,10 @@ import Sampah from "../../../assets/Admin/sampah.svg";
 import Plus from "../../../assets/Admin/plus.svg";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahAkun from "./Overlay/TambahAkun";
+import { getUsers } from "../../../controllers/AuthController.js";
+
 function ManajemenAkun() {
-  const [userData, setUserData] = useState([
-    {
-      id: "IDX00001",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-    {
-      id: "IDX00002",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-    {
-      id: "IDX00003",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-    {
-      id: "IDX00004",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-    {
-      id: "IDX00005",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-    {
-      id: "IDX00006",
-      nama: "Bang Deer",
-      email: "Deerking@gmail.com",
-      password: "Deer10230",
-    },
-  ]);
+  const [userData, setUserData] = useState([]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,6 +14,20 @@ function ManajemenAkun() {
   const [deleteId, setDeleteId] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await getUsers();
+        setUserData(users);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   const filteredData = useMemo(() => {
     return userData.filter((t) => {
       const keyword = search?.toLowerCase();
@@ -57,9 +36,8 @@ function ManajemenAkun() {
       const matchSearch =
         !keyword ||
         t.id.toLowerCase().includes(keyword) ||
-        t.nama.toLowerCase().includes(keyword) ||
-        t.email.toString().includes(keyword) ||
-        t.password.toString().includes(keyword);
+        t.name.toLowerCase().includes(keyword) ||
+        t.email.toString().includes(keyword);
 
       // Hasil akhir: dua-duanya harus true
       return matchSearch;
@@ -195,9 +173,6 @@ function ManajemenAkun() {
                     <th className="border border-[#959595] text-center w-[26.65%]">
                       Email
                     </th>
-                    <th className="border border-[#959595] text-center w-[24.82%]">
-                      Password
-                    </th>
                     <th className="border border-[#959595] text-center w-[13.58%]">
                       Aksi
                     </th>
@@ -218,13 +193,10 @@ function ManajemenAkun() {
                           {t.id}
                         </td>
                         <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.nama}
+                          {t.name}
                         </td>
                         <td className="border-r border-[#959595] pl-[10.5px]">
                           {t.email}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.password}
                         </td>
                         <td>
                           <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
