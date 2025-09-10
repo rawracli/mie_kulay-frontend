@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Eskopi from "../../assets/Menu/es.png";
-import Line from "../../assets/Menu/line.png";
 import Bg from "../../assets/Menu/bg.jpg";
+import Hero from "../../components/Hero";
 
 // Data menu
 const menuData = [
@@ -138,26 +138,7 @@ function MenuPage() {
 
   return (
     <div className="w-full pt-25">
-      {/* Heading Menu Kami */}
-      <div className="relative bg-[#FFB300] py-8 flex items-center justify-center overflow-hidden h-[129px]">
-        {/* Garis melengkung */}
-        <img
-          src={Line}
-          alt="garis melengkung"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[100%] h-auto"
-        />
-        <img
-          src={Line}
-          alt="garis melengkung"
-          className="absolute top-[45PX] left-1/2 -translate-x-1/2 -translate-y-1/3 w-[100%] h-auto"
-        />
-
-        {/* Tombol merah */}
-        <div className="relative z-10 bg-red-600 text-white px-10 py-2 rounded-full text-[35px] font-bold shadow-md w-[381PX] h-[72px] text-center pt-2">
-          Menu Kami
-        </div>
-      </div>
-
+      <Hero text={"Menu Kami"}/>
       <div className="flex p-[13px] pl-[20px]">
         <div className="flex flex-col">
           <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">Filter</h2>
