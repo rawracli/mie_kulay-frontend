@@ -10,6 +10,7 @@ import Stok from "./pages/Admin/Stok/Stok";
 import LogAktivitas from "./pages/Admin/LogAktivitas/LogAktivitas";
 import ManajemenAkun from "./pages/Admin/ManajemenAkun/ManajemenAkun";
 import Pengeluaran from "./pages/Admin/Pengeluaran/Pengeluaran";
+import Menu from "./pages/Menu/Menu";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/menu" element={<Menu />}></Route>
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
