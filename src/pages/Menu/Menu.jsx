@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Eskopi from "../../assets/Menu/es.png";
 import Bg from "../../assets/Menu/bg.jpg";
 import Hero from "../../components/Hero";
+import useScrollBehaviour from "../../hooks/useScrollBehaviour";
 
 // Data menu
 const menuData = [
@@ -123,7 +124,7 @@ const menuData = [
 function MenuPage() {
   // ubah dari array → string (satu kategori saja)
   const [selectedCategory, setSelectedCategory] = useState("");
-
+  const { isVisible } = useScrollBehaviour();
   const handleCategoryChange = (category) => {
     if (selectedCategory === category) {
       // kalau klik lagi kategori yang sama → kosong (deselect)
@@ -137,24 +138,32 @@ function MenuPage() {
   const shownCategories = selectedCategory ? [selectedCategory] : categories;
   return (
     <div className="w-full pt-25 relative">
-    <Hero text={"Menu Kami"} />
-    <div className="flex p-[13px] pl-[20px]">
+      <Hero text={"Menu Kami"} />
+      <div className="flex p-[13px] pl-[20px]">
         <div className="flex flex-col">
-          <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">Filter</h2>
-          {/* Filter */}
-          <div className="w-[241px] h-[263px] bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px] sticky top-[20px] opacity-100">
-            <p className="font-semibold mb-2">Kategori</p>
-            <div className="space-y-2">
-              {categories.map((cat) => (
-                <label key={cat} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategory === cat}
-                    onChange={() => handleCategoryChange(cat)}
-                  />
-                  <span className="ml-[20px]">{cat}</span>
-                </label>
-              ))}
+          <div
+            className={`sticky transition-all duration-300 ${
+              isVisible ? "top-10" : "-top-15"
+            }`}
+          >
+            <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">
+              Filter
+            </h2>
+            {/* Filter */}
+            <div className="w-[241px] h-[263px] bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px]  opacity-100">
+              <p className="font-semibold mb-2">Kategori</p>
+              <div className="space-y-2">
+                {categories.map((cat) => (
+                  <label key={cat} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategory === cat}
+                      onChange={() => handleCategoryChange(cat)}
+                    />
+                    <span className="ml-[20px]">{cat}</span>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -178,37 +187,35 @@ function MenuPage() {
             style={{ backgroundImage: `url(${Bg})` }}
           ></div>
           {shownCategories.map((cat, index) => (
-  <div key={cat} className={index !== 0 ? "pt-[85px]" : ""}>
-    <h2 className="text-[36px] font-bold mb-4">{cat}</h2>
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
-      {menuData
-        .filter((item) => item.category === cat)
-        .map((item) => (
-          <div
-            key={item.id}
-            className="relative rounded-lg shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-[207px] h-[272px] bg-white"
-          >
-            {/* Konten Card */}
-            <div className="relative z-10">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-[155px] object-cover"
-              />
-              <div className="p-2 flex flex-col h-[117px] justify-between">
-                <h3 className="font-bold text-[20px]">{item.name}</h3>
-                <p className="text-black text-[28px] text-start">
-                  Rp.{item.price}
-                </p>
+            <div key={cat} className={index !== 0 ? "pt-[85px]" : ""}>
+              <h2 className="text-[36px] font-bold mb-4">{cat}</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+                {menuData
+                  .filter((item) => item.category === cat)
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="relative rounded-lg shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-[207px] h-[272px] bg-white"
+                    >
+                      {/* Konten Card */}
+                      <div className="relative z-10">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-[155px] object-cover"
+                        />
+                        <div className="p-2 flex flex-col h-[117px] justify-between">
+                          <h3 className="font-bold text-[20px]">{item.name}</h3>
+                          <p className="text-black text-[28px] text-start">
+                            Rp.{item.price}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
-          </div>
-        ))}
-    </div>
-  </div>
-))}
-
-
+          ))}
         </div>
       </div>
     </div>
