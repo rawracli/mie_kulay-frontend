@@ -1,113 +1,138 @@
 import React from "react";
 import "./home.css";
+import { Link } from "react-router-dom";
+import Papan from "../../assets/User/papan.png";
+import Mie from "../../assets/User/mie.png";
+import Bumbu from "../../assets/User/bumbu.png";
+import Pangsit from "../../assets/User/pangsit.png";
+import Resto from "../../assets/Home/resto.png";
+import Talk from "../../assets/Home/talk.png";
+import SelamatDatang from "../../assets/Home/selamatDatang.png";
+import Transition from "../../assets/Home/transition.png";
+import Saus from "../../assets/Home/saus.png";
+import Mie2 from "../../assets/Home/mie.png";
+import Mie3 from "../../assets/Home/mieManis.png";
+import Sosis from "../../assets/Home/sosis.png";
+import Minum from "../../assets/Home/minum.png";
 
 export default function HeroSection() {
   return (
     <>
-      <div className="flex flex-col md:flex-row items-center justify-between px-10 min-h-[calc(100svh-104px)] bg-white">
-        {/* Bagian Kiri - Teks */}
-        <div className="md:w-1/2 space-y-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-            MIE KULAY SUKABUMI
-          </h1>
-          <p className="text-gray-700 leading-relaxed">
-            Mie Kulay hadir dengan cita rasa khas yang melekat di hati. Dengan
-            tekstur mie yang kenyal dan bumbu racikan yang pas, setiap suapan
-            menghadirkan kehangatan yang cocok dinikmati kapan saja. Baik makan
-            santai bersama keluarga maupun hangout bareng teman, Mie Kulay
-            selalu jadi pilihan tepat.
-          </p>
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-6 py-3 rounded-md shadow-md transition duration-200">
-            Lihat Menu
-          </button>
-        </div>
-
-        {/* Bagian Kanan - Gambar */}
-        <div className="md:w-1/2 flex justify-center mt-10 md:mt-0">
-          <img
-            src="/mie.png"
-            alt="Mie Kulay"
-            className="max-w-sm rounded-lg shadow-lg"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col items-center justify-center px-10 py-10 bg-white">
-        {/* Teks melengkung */}
-        <div className="font-bold text-center font-chewy tracking-widest">
-          <svg
-            width="800"
-            height="300"
-            viewBox="0 0 800 200"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Jalur kurva (landai) */}
-            <path
-              id="curve"
-              d="M 100 200 Q 400 80 700 200"
-              fill="transparent"
-            />
-
-            {/* Teks */}
-            <text
-              fill="black"
-              fontSize="90"
-              fontWeight="bold"
-              textAnchor="middle"
-              letterSpacing="5"
+      <div className="overflow-x-hidden">
+        {/* HERO SECTION */}
+        <div className="relative min-h-[600px] flex">
+          <div className="z-10 flex flex-col justify-center ml-[70px] w-1/2 gap-[10px] -translate-y-1">
+            <h1 className="font-boogaloo text-[70px]">MIE KULAY SUKABUMI</h1>
+            <p className="font-baloo-2 text-[24px] leading-[35px]">
+              Mie Kulay hadir dengan cita rasa khas yang melekat di hati. Dengan
+              tekstur mie yang kenyal dan bumbu racikan yang pas, setiap suapan
+              menghadirkan kehangatan yang cocok dinikmati kapan saja. Baik
+              makan santai bersama keluarga maupun hangout bareng teman, Mie
+              Kulay selalu jadi pilihan tepat.
+            </p>
+            <Link
+              to="/menu"
+              className="mt-2 bg-[#FFB300] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
             >
-              <textPath href="#curve" startOffset="50%">
-                SELAMAT DATANG
-              </textPath>
-            </text>
-          </svg>
-        </div>
-
-        {/* Teks lurus */}
-        <h1 className="font-bold text-center font-chewy text-[90px] text-[#FFB300]">
-          DI MIE KULAY
-        </h1>
-      </div>
-<div className="flex flex-col md:flex-row items-center justify-between px-10 py-16 bg-white">
-      {/* Bagian Kiri - Gambar */}
-      <div className="flex flex-col md:flex-row gap-6 md:w-1/2 justify-center">
-        {/* Gambar 1 */}
-        <div className="transform rotate-[-5deg] border-[15px] border-red-600">
+              Lihat Menu
+            </Link>
+          </div>
           <img
-            src="/img1.jpg"
-            alt="Suasana Makan"
-            className="w-72 h-56 object-cover"
+            src={Papan}
+            alt="Papan"
+            className="absolute -right-[475px] -top-[60px] -rotate-[38.03deg]"
+          />
+          <img
+            src={Pangsit}
+            alt="Pangsit"
+            className="absolute right-[27px] top-[31px]"
+          />
+          <img
+            src={Mie}
+            alt="Mie"
+            className="absolute right-[23px] top-[90px]"
+          />
+          <img
+            src={Bumbu}
+            alt="Bumbu"
+            className="absolute -right-[10px] top-[173.68px] rotate-[22.45deg]"
           />
         </div>
 
-        {/* Gambar 2 */}
-        <div className="transform rotate-[5deg] border-[15px] border-blue-600 mt-6 md:mt-12">
-          <img
-            src="/img2.jpg"
-            alt="Makan Bersama"
-            className="w-72 h-56 object-cover"
-          />
+        {/* SELAMAT DATANG SECTION */}
+        <div className="flex flex-col items-center py-[70px]">
+          <img src={SelamatDatang} alt="Selamat Datang" className="w-[850px]" />
+          <h2 className="font-chewy text-[80px] text-[#FFB300]">
+            DI MIE KULAY
+          </h2>
+        </div>
+
+        {/* RASA YANG MENYATUKAN SETIAP MOMEN SECTION */}
+        <div className="flex justify-between mb-2 min-h-[580px]">
+          <div className="flex-1 relative">
+            <img
+              src={Resto}
+              alt="Restoran"
+              className="absolute left-[70.72px] -rotate-[11.16deg] border-x-[24.9px] border-y-[27.2px] border-[#D72629]"
+            />
+            <img
+              src={Talk}
+              alt="Talk"
+              className="absolute left-[208.71px] translate-y-[155px] -rotate-[6.96deg] border-x-[18.24px] border-y-[17.32px] border-[#1554B4]"
+            />
+          </div>
+          <div className="z-10 flex flex-col justify-center w-[45%] mt-12 gap-[30px] -translate-y-1">
+            <h2 className="font-boogaloo text-[60px] leading-[68px]">
+              Rasa yang Menyatukan Setiap Momen
+            </h2>
+            <p className="font-baloo-2 text-[24px] leading-[35px] pr-2">
+              Sejak awal, kami berkomitmen menyajikan pengalaman kuliner terbaik
+              melalui cita rasa autentik, bahan segar pilihan, dan pelayanan
+              yang tulus. Bagi kami, setiap hidangan adalah karya yang diracik
+              dengan penuh perhatian, agar setiap kunjungan Anda menjadi
+              pengalaman yang istimewa
+            </p>
+            <Link
+              to="/menu"
+              className="mt-2 bg-[#FFB300] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
+            >
+              Read More..
+            </Link>
+          </div>
+        </div>
+
+        {/* Transition & Saatnya Menjelajah Rasa section */}
+        <div className="relative overflow-hidden">
+          <img src={Transition} alt="" className="w-full h-[389px]" />
+          <div className="bg-[#FFB300] relative flex items-center min-h-[calc(100svh-70px)]">
+            <div className="z-10 flex flex-col justify-center ml-[79px] w-1/2 pb-10">
+              <h2 className="font-boogaloo text-[60px] pb-[20px]">
+                Saatnya Menjelajah Rasa
+              </h2>
+              <p className="font-baloo-2 text-[24px] leading-[35px] text-balance pb-[30px]">
+                Setiap hidangan kami diracik dengan penuh perhatian,
+                menghadirkan cita rasa yang istimewa di setiap suapan. Dari
+                pilihan menu favorit hingga sajian andalan, semua dibuat untuk
+                menemani momen hangat bersama keluarga dan teman.
+              </p>
+
+              <Link
+                to="/menu"
+                className="bg-[#D72629] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
+              >
+                Lihat Menu
+              </Link>
+            </div>
+            <>
+              <img src={Saus} alt="saus" className="absolute right-0 bottom-0"/>
+              <img src={Mie2} alt="mie" className="absolute right-[10px] bottom-[182px] -rotate-[4.93deg]"/>
+              <img src={Minum} alt="minum" className="absolute right-[410px] bottom-[401px] -rotate-[8.87deg]"/>
+              <img src={Mie3} alt="mie" className="absolute right-[375px] bottom-[37px] rotate-[13.42deg]"/>
+              <img src={Sosis} alt="sosis" className="absolute right-[6.5px] bottom-[490px] rotate-[21.45deg]"/>
+            </>
+          </div>
         </div>
       </div>
-
-      {/* Bagian Kanan - Teks */}
-      <div className="md:w-1/2 mt-10 md:mt-0 md:pl-10">
-        <h2 className="text-3xl md:text-4xl font-extrabold font-chewy text-gray-900 mb-6">
-          Rasa yang Menyatukan <br /> Setiap Momen
-        </h2>
-        <p className="text-gray-700 leading-relaxed mb-6">
-          Sejak awal, kami berkomitmen menyajikan pengalaman kuliner terbaik
-          melalui cita rasa autentik, bahan segar pilihan, dan pelayanan yang
-          tulus. Bagi kami, setiap hidangan adalah karya yang diracik dengan
-          penuh perhatian, agar setiap kunjungan Anda menjadi pengalaman yang
-          istimewa.
-        </p>
-        <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-6 py-3 rounded-md shadow-md transition duration-200">
-          Read More..
-        </button>
-      </div>
-    </div>
-
     </>
   );
 }
