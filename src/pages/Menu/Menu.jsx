@@ -150,7 +150,7 @@ function MenuPage() {
               Filter
             </h2>
             {/* Filter */}
-            <div className="w-[241px] h-[263px] bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px]  opacity-100">
+            <div className="w-[241px] h-[263px]  shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px]">
               <p className="font-semibold mb-2">Kategori</p>
               <div className="space-y-2">
                 {categories.map((cat) => (
