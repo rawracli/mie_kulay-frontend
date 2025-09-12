@@ -3,6 +3,10 @@ import React, {  } from "react";
 import Eskopi from "../../assets/Menu/es.png";
 import Bg from "../../assets/Menu/bg.jpg";
 import Hero from "../../components/Hero";
+import Papan from "../../assets/User/papan.png";
+import Mie from "../../assets/User/mie.png";
+import Bumbu from "../../assets/User/bumbu.png";
+import Pangsit from "../../assets/User/pangsit.png";
 
 
 function Tentang() {
@@ -22,7 +26,26 @@ function Tentang() {
           </p>
         </div>
         <div>
-          <img src={Eskopi} alt="Mie Kulay" className="rounded-lg shadow-lg" />
+                    <img
+                      src={Papan}
+                      alt="Papan"
+                      className="absolute -right-[475px] -top-[60px] -rotate-[38.03deg]"
+                    />
+                    <img
+                      src={Pangsit}
+                      alt="Pangsit"
+                      className="absolute right-[27px] top-[31px]"
+                    />
+                    <img
+                      src={Mie}
+                      alt="Mie"
+                      className="absolute right-[23px] top-[90px]"
+                    />
+                    <img
+                      src={Bumbu}
+                      alt="Bumbu"
+                      className="absolute -right-[10px] top-[173.68px] rotate-[22.45deg]"
+                    />
         </div>
       </div>
 
