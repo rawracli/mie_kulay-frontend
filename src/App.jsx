@@ -11,6 +11,7 @@ import LogAktivitas from "./pages/Admin/LogAktivitas/LogAktivitas";
 import ManajemenAkun from "./pages/Admin/ManajemenAkun/ManajemenAkun";
 import Pengeluaran from "./pages/Admin/Pengeluaran/Pengeluaran";
 import Menu from "./pages/Menu/Menu";
+import Tentang from "./pages/Tentang/Tentang";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/menu" element={<Menu />}></Route>
+          <Route path="/tentang-kami" element={<Tentang />}></Route>
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
