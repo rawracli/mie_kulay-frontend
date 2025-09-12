@@ -29,7 +29,11 @@ function Navbar() {
           <div className="flex items-center justify-center w-full mx-[78px]">
             <div className="w-full h-full  items-center">
               <Link className="flex items-center w-fit" to="/">
-                <img src={Logo} alt="Logo" className="sm:size-[45px] md:size-[81px]" />
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  className="sm:size-[45px] md:size-[81px]"
+                />
               </Link>
             </div>
             <div className="md:hidden flex items-center">
@@ -68,7 +72,11 @@ function Navbar() {
                   key={item.to}
                   to={item.to}
                   onClick={() => window.scrollTo(0, 0)}
-                  className={({ isActive }) => `hover:text-[#FFD358] focus:text-[#FFB300] font-chewy ${isActive && "text-[#FFB300]"}`}
+                  className={({ isActive }) =>
+                    `hover:text-[#FFD358] focus:text-[#FFB300] font-chewy ${
+                      isActive && "text-[#FFB300]"
+                    }`
+                  }
                 >
                   {item.name}
                 </NavLink>

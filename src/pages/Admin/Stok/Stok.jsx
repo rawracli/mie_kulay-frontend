@@ -200,8 +200,8 @@ function Stok() {
     currentPage >= totalPages && setCurrentPage(totalPages);
     currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
-  console.log(currentPage);
-  console.log(totalPages);
+  // console.log(currentPage);
+  // console.log(totalPages);
   return (
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
       <div className="flex items-center gap-[16px] justify-end pb-[13px]">
@@ -210,7 +210,9 @@ function Stok() {
           className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Produk</p>
+          <p className="text-[14px] font-bold text-white">
+            Tambah Bahan Mentah
+          </p>
         </button>
         <button
           onClick={() => setIsAddKategori(true)}
@@ -283,7 +285,7 @@ function Stok() {
                       Id
                     </th>
                     <th className="border border-[#959595] text-center w-[32.42%]">
-                      Produk
+                      Bahan Mentah
                     </th>
                     <th className="border border-[#959595] text-center w-[25.07%]">
                       Stok

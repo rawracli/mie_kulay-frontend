@@ -1,26 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Close from "../../../../assets/Admin/x.svg";
+import { tambahBahan } from "../../../../controllers/Bahan";
+import { getCategories } from "../../../../controllers/Category";
 
-function TambahProduk({
-  setIsAddOpen,
-  setStockTable,
-  setHighlightedRow,
-  stockData,
-}) {
-  const onSubmit = (formData) => {
-    const index = `IDX${Math.floor(Math.random() * 100000)}`;
-    setStockTable((prevData) => [
-      ...prevData,
-      {
-        id: index,
-        produk: formData.get("produk"),
-        kategori: formData.get("kategori"),
-        stok: Number(formData.get("stok")),
-      },
-    ]);
-    setHighlightedRow(index);
-    setTimeout(() => setHighlightedRow(null), 200);
-    setIsAddOpen(false);
+function TambahProduk({ setIsAddOpen, setStockTable }) {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchCategories();
+  }, []);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const dataToSend = {
+      nama_bahan: formData.get("nama_bahan"),
+      kategori_id: formData.get("kategori_id"),
+      stok: Number(formData.get("stok")),
+    };
+
+    try {
+      const result = await tambahBahan(dataToSend);
+      console.log("Bahan berhasil ditambahkan:", result);
+
+      setStockTable((prev) => [
+        ...prev,
+        {
+          id: result.id,
+          produk: result.nama_bahan,
+          kategori:
+            categories.find((c) => c.id == result.kategori_id)
+              ?.jenis_hidangan || "Unknown",
+          stok: result.stok,
+        },
+      ]);
+
+      setIsAddOpen(false);
+    } catch (error) {
+      alert(error.message || "Terjadi kesalahan saat menambahkan bahan.");
+    }
   };
 
   return (
@@ -34,26 +60,32 @@ function TambahProduk({
         >
           <img src={Close} alt="X" />
         </div>
-        <h2 className="font-semibold text-2xl">Tambah Produk</h2>
+        <h2 className="font-semibold text-2xl">Tambah Bahan Mentah</h2>
         <form
-          action={onSubmit}
+          onSubmit={onSubmit}
           className="mt-[41px] h-full space-y-[20px] flex flex-col"
         >
           <div>
-            <label htmlFor="Produk">Produk</label>
+            <label htmlFor="nama_bahan">Nama Bahan</label>
             <input
               type="text"
-              name="produk"
+              name="nama_bahan"
               required
               className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
             />
           </div>
           <div>
             <label htmlFor="Kategori">Kategori</label>
-            <select name="kategori" id="" className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none" required>
-              {stockData.map((item, idx) => (
-                <option key={idx} value={item.nama}>
-                  {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+            <select
+              name="kategori_id"
+              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              required
+            >
+              <option value="">-- Pilih Jenis Hidangan --</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.jenis_hidangan.charAt(0).toUpperCase() +
+                    cat.jenis_hidangan.slice(1)}
                 </option>
               ))}
             </select>

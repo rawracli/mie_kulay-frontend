@@ -17,6 +17,42 @@ const registerUser = async (data) => {
   return result;
 };
 
+const loginUser = async (data) => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Login gagal, periksa email dan password.");
+  }
+
+  return result;
+};
+
+const getCurrentUser = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/user`, {
+    headers: {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Gagal mengambil data user login");
+  }
+
+  return await response.json();
+};
+
 const getUsers = async () => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
     headers: {
@@ -31,4 +67,26 @@ const getUsers = async () => {
   return await response.json();
 };
 
-export { registerUser, getUsers };
+const updateProfile = async (formData) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/updateProfile`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Gagal update profile");
+  }
+
+  return result;
+};
+
+
+export { loginUser, registerUser, getCurrentUser, getUsers, updateProfile };
