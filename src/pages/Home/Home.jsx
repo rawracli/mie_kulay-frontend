@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./home.css";
 import { Link } from "react-router-dom";
 import Papan from "../../assets/User/papan.png";
@@ -14,6 +14,8 @@ import Mie2 from "../../assets/Home/mie.png";
 import Mie3 from "../../assets/Home/mieManis.png";
 import Sosis from "../../assets/Home/sosis.png";
 import Minum from "../../assets/Home/minum.png";
+import allMenu from "../../assets/Home/allMenu.png";
+import Menu from "./Section/Menu";
 
 export default function HeroSection() {
   return (
@@ -124,12 +126,41 @@ export default function HeroSection() {
               </Link>
             </div>
             <>
-              <img src={Saus} alt="saus" className="absolute right-0 bottom-0"/>
-              <img src={Mie2} alt="mie" className="absolute right-[10px] bottom-[182px] -rotate-[4.93deg]"/>
-              <img src={Minum} alt="minum" className="absolute right-[410px] bottom-[401px] -rotate-[8.87deg]"/>
-              <img src={Mie3} alt="mie" className="absolute right-[375px] bottom-[37px] rotate-[13.42deg]"/>
-              <img src={Sosis} alt="sosis" className="absolute right-[6.5px] bottom-[490px] rotate-[21.45deg]"/>
+              <img
+                src={Saus}
+                alt="saus"
+                className="absolute right-0 bottom-0"
+              />
+              <img
+                src={Mie2}
+                alt="mie"
+                className="absolute right-[10px] bottom-[182px] -rotate-[4.93deg]"
+              />
+              <img
+                src={Minum}
+                alt="minum"
+                className="absolute right-[410px] bottom-[401px] -rotate-[8.87deg]"
+              />
+              <img
+                src={Mie3}
+                alt="mie"
+                className="absolute right-[375px] bottom-[37px] rotate-[13.42deg]"
+              />
+              <img
+                src={Sosis}
+                alt="sosis"
+                className="absolute right-[6.5px] bottom-[490px] rotate-[21.45deg]"
+              />
             </>
+          </div>
+        </div>
+
+        {/* BG MIE KULAY */}
+        <div className="h-[1416px]">
+          {/* ALL MENU CUMAN 5000 AJA */}
+          <div className="min-h-1/2 w-full gap-[127px] pt-[84px] flex flex-col justify-center items-center">
+            <img src={allMenu} alt="ALL MENU CUMAN 5000 AJA !!" className="w-[1082px]"/>
+            <Menu />
           </div>
         </div>
       </div>
