@@ -1,330 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "../../../assets/Dashboard/icon.png";
 import Close from "../../../assets/Dashboard/close.png";
 import FavoriteMenuChart from "../../../utils/Dashboard/FavoriteMenu.jsx";
 import MonthlyEarningsChart from "../../../utils/Dashboard/MonthlyEarningsChart.jsx";
 import MonthlyExpensesChart from "../../../utils/Dashboard/MonthlyExpensesChart.jsx";
 import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx";
-import "./Dashboard.css"
+import "./Dashboard.css";
+import { getPemesanan } from "../../../controllers/Pemesanan.js";
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
-const getPages = (totalPages, currentPage) => {
-  const delta = 2; // jumlah halaman sekitar current
-  const range = [];
-  const rangeWithDots = [];
-  let l;
+  const getPages = (totalPages, currentPage) => {
+    const delta = 2; // jumlah halaman sekitar current
+    const range = [];
+    const rangeWithDots = [];
+    let l;
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
-      range.push(i);
-    }
-  }
-
-  for (let i of range) {
-    if (l) {
-      if (i - l === 2) {
-        rangeWithDots.push(l + 1);
-      } else if (i - l !== 1) {
-        rangeWithDots.push("...");
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        range.push(i);
       }
     }
-    rangeWithDots.push(i);
-    l = i;
-  }
 
-  return rangeWithDots;
-};
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push("...");
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
 
-  // Dummy data transaksi
-  const transactionsData = [
-    {
-      id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0002", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0003", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0004", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0005", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0006", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0007", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0008", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0009", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0010", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0011", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0012", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0013", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0014", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },{
-      id: "#0015", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0002", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0003", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0004", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0005", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0006", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0007", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0008", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0009", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0010", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0011", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0012", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0013", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0014", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },{
-      id: "#0015", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0001", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0002", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0003", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0004", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0005", tanggal: "26/08/2025", total: 105000, metode: "Tunai", status: "selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-    {
-      id: "#0006", tanggal: "26/08/2025", total: 105000, metode: "e-Walet", status: "Belum selesai",
-      items: [
-        { name: "Mie Kulay Pedas Gurih", qty: 5, price: 35000 },
-        { name: "Sosis Sapi", qty: 5, price: 35000 },
-        { name: "Ice Kopi", qty: 1, price: 35000 },
-      ],
-    },
-  ];
+    return rangeWithDots;
+  };
+
+  const [transactionsData, setTransactionsData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPemesanan();
+      const formattedData = data.map((p) => ({
+        id: p.id,
+        tanggal: new Date(p.created_at).toLocaleDateString("id-ID"),
+        total: p.total_pesanan || 0,
+        metode: p.pembayaran,
+        items:
+          p.pesanan_detail?.map((d) => ({
+            name: d.nama_hidangan || "-",
+            qty: d.jumlah || 0,
+            price: d.harga_satuan || 0,
+          })) || [],
+      }));
+      console.log(data);
+      setTransactionsData(formattedData);
+    };
+
+    fetchData();
+  }, []);
 
   // State input (sementara)
   const [tanggalAwalInput, setTanggalAwalInput] = useState("");
@@ -360,7 +98,6 @@ const getPages = (totalPages, currentPage) => {
       !search ||
       item.id.toLowerCase().includes(search.toLowerCase()) ||
       item.metode.toLowerCase().includes(search.toLowerCase()) ||
-      item.status.toLowerCase().includes(search.toLowerCase()) ||
       item.total.toString().includes(search);
 
     return isDateInRange && isSearchMatch;
@@ -369,7 +106,10 @@ const getPages = (totalPages, currentPage) => {
   // Pagination
   const totalPages = Math.ceil(filteredData.length / entriesPerPage) || 1;
   const startIndex = (currentPage - 1) * entriesPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + entriesPerPage);
+  const paginatedData = filteredData.slice(
+    startIndex,
+    startIndex + entriesPerPage
+  );
 
   return (
     <div className="bg-[#EDF0F2] w-full min-h-[calc(100vh-92px)] flex flex-col items-center pl-[11px] pr-[20px]">
@@ -377,32 +117,44 @@ const getPages = (totalPages, currentPage) => {
       <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center">
         {/* Information Priority */}
         <div className="flex flex-col w-full">
-         <div className="grid grid-cols-3 gap-[9px]">
-          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Total Orders</h1>
-            <hr className="text-gray-400 mx-auto w-[95%]" />
-            <h5 className="my-auto text-center text-5xl font-semibold">500</h5>
+          <div className="grid grid-cols-3 gap-[9px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+                Total Orders
+              </h1>
+              <hr className="text-gray-400 mx-auto w-[95%]" />
+              <h5 className="my-auto text-center text-5xl font-semibold">
+                500
+              </h5>
+            </div>
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+                Profit
+              </h1>
+              <hr className="text-gray-400 mx-auto w-[95%]" />
+              <h5 className="my-auto text-center text-4xl font-semibold">
+                Rp. 10,5JT
+              </h5>
+            </div>
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+                Pengeluaran
+              </h1>
+              <hr className="text-gray-400 mx-auto w-[95%]" />
+              <h5 className="my-auto text-center text-4xl font-semibold">
+                Rp. 100K
+              </h5>
+            </div>
           </div>
-          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Profit</h1>
-            <hr className="text-gray-400 mx-auto w-[95%]" />
-            <h5 className="my-auto text-center text-4xl font-semibold">Rp. 10,5JT</h5>
+          {/* Monthly Earnings and Expenses */}
+          <div className="flex flex-col w-full">
+            <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
+              <MonthlyEarningsChart />
+            </div>
+            <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg rounded-bl-[10px]">
+              <MonthlyExpensesChart />
+            </div>
           </div>
-          <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-            <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">Pengeluaran</h1>
-            <hr className="text-gray-400 mx-auto w-[95%]" />
-            <h5 className="my-auto text-center text-4xl font-semibold">Rp. 100K</h5>
-          </div>
-         </div>
-         {/* Monthly Earnings and Expenses */}
-         <div className="flex flex-col w-full">
-          <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
-            <MonthlyEarningsChart />
-          </div>
-          <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg rounded-bl-[10px]">
-            <MonthlyExpensesChart />
-          </div>
-         </div>
         </div>
         {/* Top Menu & Monthly Orders... (Statistics) */}
         <div className="pl-[9px] w-[330px]">
@@ -420,7 +172,9 @@ const getPages = (totalPages, currentPage) => {
       <div className="size-full">
         {/* Detail Pemesanan || Laporan Pemesanan */}
         <div className="w-full flex justify-start">
-          <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">Detail Pemesanan</h1>
+          <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">
+            Detail Pemesanan
+          </h1>
         </div>
         <div className="bg-white rounded-[10px] h-fit shadow-lg pt-[37px] pb-[19px] px-6 w-full mt-3 mb-24">
           {/* Filter */}
@@ -494,39 +248,38 @@ const getPages = (totalPages, currentPage) => {
             <table className="w-full border-collapse border border-gray-700">
               <thead className="bg-[#FFB300] text-left h-[28px]">
                 <tr>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Tanggal</th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Id</th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Total Pembayaran</th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Metode Pembayaran</th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Status</th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">Aksi</th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
+                    Tanggal
+                  </th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
+                    Id
+                  </th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
+                    Total Pembayaran
+                  </th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
+                    Metode Pembayaran
+                  </th>
+                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedData.length > 0 ? (
-                  paginatedData.map((t, ind) => (
-                    <tr
-                      key={ind}
-                      className={`text-[14px] ${
-                        t.status.toLowerCase() === "belum selesai" ? "bg-gray-200" : "bg-white"
-                      }`}
-                    >
-                      <td className="border border-gray-600 text-center h-[33px]">{t.tanggal}</td>
-                      <td className="border border-gray-600 text-center h-[33px]">{t.id}</td>
+                  paginatedData.map((t) => (
+                    <tr>
+                      <td className="border border-gray-600 text-center h-[33px]">
+                        {t.tanggal}
+                      </td>
+                      <td className="border border-gray-600 text-center h-[33px]">
+                        {t.id}
+                      </td>
                       <td className="border border-gray-600 text-center h-[33px]">
                         Rp. {t.total.toLocaleString("id-ID")}
                       </td>
-                      <td className="border border-gray-600 text-center h-[33px]">{t.metode}</td>
                       <td className="border border-gray-600 text-center h-[33px]">
-                        <span
-                          className={`${
-                            t.status.toLowerCase() === "selesai"
-                              ? "bg-[#44962D] text-white text-[14px]"
-                              : "bg-red-500 text-white text-[14px]"
-                          } text-[14px] px-3 py-[2px] rounded-2xl w-fit h-[26px]`}
-                        >
-                          {t.status}
-                        </span>
+                        {t.metode}
                       </td>
                       <td className="border border-gray-600 text-center h-[33px]">
                         <button
@@ -540,7 +293,10 @@ const getPages = (totalPages, currentPage) => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="text-center py-3 text-gray-500 italic">
+                    <td
+                      colSpan="6"
+                      className="text-center py-3 text-gray-500 italic"
+                    >
                       Tidak ada data
                     </td>
                   </tr>
@@ -549,7 +305,7 @@ const getPages = (totalPages, currentPage) => {
             </table>
           </div>
 
-         {/* Pagination */}
+          {/* Pagination */}
           <div className="flex items-center justify-between mt-5 text-sm">
             <p>
               Page {currentPage} of {totalPages || 1} entries
@@ -578,7 +334,7 @@ const getPages = (totalPages, currentPage) => {
                   />
                 </svg>
               </button>
-              
+
               {/* Nomor halaman */}
               <div className="flex gap-[18px]">
                 {getPages(totalPages, currentPage).map((n, index) =>
@@ -590,20 +346,26 @@ const getPages = (totalPages, currentPage) => {
                     <button
                       key={index}
                       onClick={() => setCurrentPage(n)}
-                      className={`py-1 cursor-pointer ${n === currentPage ? "underline" : ""}`}
+                      className={`py-1 cursor-pointer ${
+                        n === currentPage ? "underline" : ""
+                      }`}
                     >
                       {n}
                     </button>
                   )
                 )}
               </div>
-              
+
               {/* Tombol next */}
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
                 disabled={currentPage === totalPages}
                 className={`${
-                  currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+                  currentPage === totalPages
+                    ? "cursor-default"
+                    : "cursor-pointer"
                 } py-1 rounded disabled:opacity-50`}
               >
                 <svg
@@ -627,92 +389,81 @@ const getPages = (totalPages, currentPage) => {
       </div>
 
       {/* Overlay Detail */}
-        {selectedTransaction && (
+      {selectedTransaction && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+          onClick={() => setSelectedTransaction(null)} // klik area luar = close
+        >
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
-            onClick={() => setSelectedTransaction(null)} // klik area luar = close
+            className="bg-white rounded-[5px] shadow-lg w-[358px] h-[612px] cursor-default"
+            onClick={(e) => e.stopPropagation()} // cegah close kalau klik di dalam card
           >
-            <div
-              className="bg-white rounded-[5px] shadow-lg w-[358px] h-[612px] cursor-default"
-              onClick={(e) => e.stopPropagation()} // cegah close kalau klik di dalam card
-            >
-              {/* Header */}
-              <div className="relative bg-[#FFB300] text-center py-3 rounded-t-[5px]">
-                <h2 className="text-lg font-bold text-black">
-                  DETAIL PEMESANAN <br />
-                  {selectedTransaction.id}
-                </h2>
+            {/* Header */}
+            <div className="relative bg-[#FFB300] text-center py-3 rounded-t-[5px]">
+              <h2 className="text-lg font-bold text-black">
+                DETAIL PEMESANAN <br />
+                {selectedTransaction.id}
+              </h2>
 
-                {/* Tombol Tutup (icon X) */}
-                <button
-                  onClick={() => setSelectedTransaction(null)}
-                  className="absolute top-2 right-3 hover:text-black cursor-pointer"
-                >
-                  <img
-                    src={Close} // path icon X kamu
-                    alt="Close"
-                    className="w-5 h-5"
-                  />
-                </button>
-              </div>
+              {/* Tombol Tutup (icon X) */}
+              <button
+                onClick={() => setSelectedTransaction(null)}
+                className="absolute top-2 right-3 hover:text-black cursor-pointer"
+              >
+                <img
+                  src={Close} // path icon X kamu
+                  alt="Close"
+                  className="w-5 h-5"
+                />
+              </button>
+            </div>
 
-              {/* Body */}
-              <div className="p-6 text-1xl space-y-[10px]">
-                <p>
-                  <span className="font-semibold">Tanggal :</span>{" "}
-                  {selectedTransaction.tanggal}
-                </p>
-                <p>
-                  <span className="font-semibold">Id :</span> {selectedTransaction.id}
-                </p>
-                <p className="mb-5">
-                  <span className="font-semibold">Status :</span>{" "}
-                  <span
-                    className={`px-2 py-1 rounded-4xl text-white text-sm ${
-                      selectedTransaction.status.toLowerCase() === "selesai"
-                        ? "bg-[#44962D]"
-                        : "bg-red-500"
-                    }`}
-                  >
-                    {selectedTransaction.status}
-                  </span>
-                </p>
+            {/* Body */}
+            <div className="p-6 text-1xl space-y-[10px]">
+              <p>
+                <span className="font-semibold">Tanggal :</span>{" "}
+                {selectedTransaction.tanggal}
+              </p>
+              <p>
+                <span className="font-semibold">Id :</span>{" "}
+                {selectedTransaction.id}
+              </p>
 
-                <div className="my-[20px] border-t border-dashed w-[180px] "></div>
+              <div className="my-[20px] border-t border-dashed w-[180px] "></div>
 
-                {/* Daftar item */}
-                {selectedTransaction.items?.map((item, idx) => (
-                  <div key={idx} className="flex justify-between">
-                    <span>
-                      {item.name} x{item.qty}
-                    </span>
-                    <span>Rp {item.price.toLocaleString("id-ID")}</span>
-                  </div>
-                ))}
-
-                <div className="my-[20px] border-t border-dashed w-[180px] "></div>
-
-                <p className="flex justify-between font-semibold">
-                  <span>Total Pembayaran :</span>
+              {/* Daftar item */}
+              {selectedTransaction.items?.map((item, idx) => (
+                <div key={idx} className="flex justify-between">
                   <span>
-                    Rp {selectedTransaction.total.toLocaleString("id-ID")}
+                    {item.name} x{item.qty}
                   </span>
-                </p>
-                <p className="flex justify-between font-semibold">
-                  <span className="font-semibold">Metode Pembayaran :</span>{" "}
-                  {selectedTransaction.metode}
-                </p>
-                <div className="my-[50px]">
-                  <div className="border-t border-dashed"></div>
-                  <div className="border-t border-dashed my-[2px]"></div>
+                  <span>Rp {item.price.toLocaleString("id-ID")}</span>
                 </div>
-                <p className="text-center text-[16px] text-gray-500 my-10">
-                  @Mie Kulay
-                </p>
+              ))}
+
+              <div className="my-[20px] border-t border-dashed w-[180px] "></div>
+
+              <p className="flex justify-between font-semibold">
+                <span>Total Pembayaran :</span>
+                <span>
+                  Rp {selectedTransaction.total.toLocaleString("id-ID")}
+                </span>
+              </p>
+              <p className="flex justify-between font-semibold">
+                <span className="font-semibold">Metode Pembayaran :</span>{" "}
+                {selectedTransaction.metode}
+              </p>
+              <div className="my-[50px]">
+                <div className="border-t border-dashed"></div>
+                <div className="border-t border-dashed my-[2px]"></div>
               </div>
+              <p className="text-center text-[16px] text-gray-500 my-10">
+                @Mie Kulay
+              </p>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../../../assets/Admin/search.svg";
 import Arrow from "../../../../assets/Admin/arrow.svg";
 import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
+import { getMenu } from "../../../../controllers/Menu";
+import { getCategories } from "../../../../controllers/Category";
 
 function TambahPesanan({
   isAddOpen,
@@ -18,18 +20,43 @@ function TambahPesanan({
   const [selectedCategory, setSelectedCategory] = useState("All menu");
 
   // Data menu dinamis
-  const menuData = [
-    { category: "Mie", name: "Mie pedas", image: Login, harga: 28000 },
-    { category: "Mie", name: "Mie goreng", image: Login, harga: 25000 },
-    { category: "Mie", name: "Mie ayam", image: Login, harga: 27030 },
-    { category: "Topping", name: "Telur", image: Login, harga: 27000 },
-    { category: "Topping", name: "Keju", image: Login, harga: 27000 },
-    { category: "Topping", name: "Keju", image: Login, harga: 27000 },
-    { category: "Topping", name: "Sosis", image: Login, harga: 27000 },
-    { category: "Minuman", name: "Air mineral", image: Login, harga: 27000 },
-    { category: "Minuman", name: "Teh manis", image: Login, harga: 27000 },
-    { category: "Minuman", name: "Kopi", image: Login, harga: 27000 },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [menuData, setMenuData] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const catData = await getCategories();
+        // Tambahkan "All menu" di awal
+        setCategories(["All menu", ...catData.map((c) => c.jenis_hidangan)]);
+      } catch (err) {
+        console.error("Gagal mengambil kategori:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const data = await getMenu();
+        // Map backend field ke front-end
+        const mapped = data.map((item) => ({
+          id: item.id,
+          ...item,
+          category: item.kategori?.jenis_hidangan || "Unknown",
+          image: item.gambar
+            ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}`
+            : Login,
+          name: item.nama_hidangan,
+        }));
+        setMenuData(mapped);
+      } catch (error) {
+        console.error("Gagal mengambil menu:", error);
+      }
+    };
+    fetchMenu();
+  }, []);
 
   // Filter data berdasarkan search dan category
   const filteredData = menuData.filter(
@@ -39,9 +66,7 @@ function TambahPesanan({
   );
 
   const groupedData = filteredData.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
+    if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
     return acc;
   }, {});
@@ -51,12 +76,17 @@ function TambahPesanan({
       setFormData((prev) => ({
         ...prev,
         nama: selectedData.name,
-        harga: selectedData.harga,
+        harga: selectedData.harga_jual,
       }));
     } else {
       setData((prevData) => [
         ...prevData,
-        { nama: selectedData.name, jumlah: 1, harga: selectedData.harga },
+        {
+          id: selectedData.id,
+          nama: selectedData.name,
+          jumlah: 1,
+          harga: selectedData.harga_jual,
+        },
       ]);
       setHighlightedRow(data.length);
       setTimeout(() => setHighlightedRow(null), 200);
@@ -98,14 +128,15 @@ function TambahPesanan({
           <div className="relative">
             <select
               name="menu"
-              className="cursor-pointer bg-right appearance-none group-hover:border-blue-500 border-[1.5px] rounded-[5px] mt-[12px] pr-[45px] pl-[14px] py-[6px] text-sm font-semibold"
+              className="cursor-pointer bg-right appearance-none border-[1.5px] rounded-[5px] mt-[12px] pr-[45px] pl-[14px] py-[6px] text-sm font-semibold"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              <option value="All menu">All menu</option>
-              <option value="Mie">Mie</option>
-              <option value="Topping">Topping</option>
-              <option value="Minuman">Minuman</option>
+              {categories.map((cat, idx) => (
+                <option key={idx} value={cat}>
+                  {cat}
+                </option>
+              ))}
             </select>
             <img
               src={Arrow}
@@ -132,7 +163,7 @@ function TambahPesanan({
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="object-cover"
+                    className="w-full h-[90px] object-cover"
                   />
                 </div>
                 <div className="flex items-center justify-center h-[calc(100%-91px)]">

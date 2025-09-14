@@ -5,6 +5,7 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // menghapus data dari database
   const handleDelete = async () => {
     if (!deleteId || !onDelete) return;
 
@@ -22,6 +23,20 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  // menghapus data tanpa database
+  const handleDeleteNoDB = () => {
+    console.log("Delete clicked for id:", deleteId);
+    if (dontShowAgain && setSkipConfirm) {
+      setSkipConfirm(true);
+    }
+
+    if (onDelete) {
+      onDelete(deleteId);
+    }
+
+    setDeleteId(null);
   };
 
   const onCancel = () => {
@@ -52,7 +67,10 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
         </div>
         <div className="flex gap-[11px] text-white font-semibold">
           <button
-            onClick={handleDelete}
+            onClick={() => {
+              handleDelete();
+              handleDeleteNoDB();
+            }}
             className="bg-[#44962D] w-[89px] h-[32px] rounded-[5px] cursor-pointer"
           >
             {loading ? "Menghapus..." : "Hapus"}
