@@ -23,6 +23,7 @@ function TambahProduk({ setIsAddOpen, setStockTable }) {
 
     const dataToSend = {
       nama_bahan: formData.get("nama_bahan"),
+      harga_beli: Number(formData.get("harga_beli")),
       kategori_id: formData.get("kategori_id"),
       stok: Number(formData.get("stok")),
     };
@@ -36,6 +37,7 @@ function TambahProduk({ setIsAddOpen, setStockTable }) {
         {
           id: result.id,
           produk: result.nama_bahan,
+          harga_beli: result.harga_beli,
           kategori:
             categories.find((c) => c.id == result.kategori_id)
               ?.jenis_hidangan || "Unknown",
@@ -70,6 +72,15 @@ function TambahProduk({ setIsAddOpen, setStockTable }) {
             <input
               type="text"
               name="nama_bahan"
+              required
+              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="nama_bahan">Harga satuan</label>
+            <input
+              type="number"
+              name="harga_beli"
               required
               className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
             />

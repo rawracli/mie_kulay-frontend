@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -9,39 +9,12 @@ import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
+import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
 
 function Stok() {
-  const [stockTable, setStockTable] = useState([
-    { id: "IDX26521", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26522", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26523", produk: "Drink", stok: 50, kategori: "minuman" },
-    { id: "IDX26524", produk: "Dronk", stok: 50, kategori: "minuman" },
-    { id: "IDX26525", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26526", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26527", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26528", produk: "Keju", stok: 0, kategori: "topping" },
-    { id: "IDX26529", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26534", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26544", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26554", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26564", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26575", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26584", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26534", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26544", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26554", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26564", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26575", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26584", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26534", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26544", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26554", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26564", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26575", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26584", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26594", produk: "Mie", stok: 50, kategori: "makanan" },
-    { id: "IDX26504", produk: "Mie", stok: 50, kategori: "makanan" },
-  ]);
+  const [stockTable, setStockTable] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const updateTimeout = useRef({});
   const stockData = useMemo(() => {
     const grouped = stockTable.reduce((acc, item) => {
       if (!acc[item.kategori]) {
@@ -98,59 +71,76 @@ function Stok() {
   );
   // input pake id (id dari stokTable)
   // +
-  const handleIncrement = (idIndex) => {
-    setStockTable((prevData) =>
-      prevData.map((item) =>
-        item.id === idIndex
-          ? {
-              id: item.id,
-              produk: item.produk,
-              stok: item.stok + 1,
-              kategori: item.kategori,
-            }
-          : item
-      )
+  const handleUpdateStok = (id, newStok) => {
+    // update state lokal langsung
+    setStockTable((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, stok: newStok } : item))
     );
-  };
-  // -
-  const handleDecrement = (idIndex) => {
-    setStockTable((prevData) =>
-      prevData.map((item) =>
-        item.id === idIndex && item.stok > 1
-          ? {
-              id: item.id,
-              produk: item.produk,
-              stok: item.stok - 1,
-              kategori: item.kategori,
-            }
-          : item
-      )
-    );
-  };
-  // input jumlah manual
-  const handleInputChange = (idIndex, value) => {
-    const newValue = parseInt(value) || 1; // Default ke 1 jika input tidak valid
-    setStockTable((prevData) =>
-      prevData.map((item) =>
-        item.id === idIndex
-          ? {
-              id: item.id,
-              produk: item.produk,
-              stok: newValue,
-              kategori: item.kategori,
-            }
-          : item
-      )
-    );
+    if (updateTimeout.current[id]) {
+      clearTimeout(updateTimeout.current[id]);
+    }
+
+    // timer biar tidak spam update ke server, sehingga tidak delay saat menambah/mengurangi stok
+    updateTimeout.current[id] = setTimeout(async () => {
+      try {
+        const current = stockTable.find((item) => item.id === id);
+        if (!current) return;
+
+        const updated = await updateBahan(id, {
+          nama_bahan: current.produk,
+          harga_beli: current.harga_beli,
+          stok: newStok,
+          kategori_id: current.kategori_id,
+        });
+
+        console.log("Stok berhasil diupdate:", updated);
+      } catch (err) {
+        console.error("Gagal update stok:", err.message);
+      }
+    }, 300);
   };
 
-  //btn delete
-  const onDelete = (idIndex) => {
+  const handleIncrement = (id) => {
+    const current = stockTable.find((item) => item.id === id);
+    if (!current) return;
+    handleUpdateStok(id, current.stok + 1);
+  };
+
+  // -
+  const handleDecrement = (id) => {
+    const current = stockTable.find((item) => item.id === id);
+    if (!current) return;
+    if (current.stok > 0) {
+      handleUpdateStok(id, current.stok - 1);
+    }
+  };
+  // input jumlah manual
+  const handleInputChange = (id, value) => {
+    const newValue = parseInt(value) || 1;
+    handleUpdateStok(id, newValue);
+  };
+
+  const hapusBahanById = async (id) => {
+    try {
+      await hapusBahan(id); // hapus di server
+      setStockTable((prev) => {
+        const newData = prev.filter((item) => item.id !== id);
+        localStorage.setItem("bahan", JSON.stringify(newData)); // update cache
+        return newData;
+      });
+      console.log("Bahan berhasil dihapus");
+    } catch (err) {
+      console.error("Gagal hapus bahan:", err.message);
+    }
+  };
+
+  // Fungsi yang dipanggil saat klik tombol delete di tabel
+  const onDelete = async (idIndex) => {
     if (skipConfirm) {
-      setStockTable((prevData) =>
-        prevData.filter((item) => item.id !== idIndex)
-      );
+      // jika sudah set skipConfirm, hapus langsung
+      await hapusBahanById(idIndex);
     } else {
+      // buka modal konfirmasi
       setDeleteId(idIndex);
     }
   };
@@ -197,9 +187,35 @@ function Stok() {
   }, [currentPage, totalPages]);
 
   useEffect(() => {
-    currentPage >= totalPages && setCurrentPage(totalPages);
-    currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
-  }, [currentPage, totalPages]);
+    const cached = localStorage.getItem("bahan");
+    if (cached) {
+      setStockTable(JSON.parse(cached));
+      setLoading(false);
+    }
+
+    const fetchBahan = async () => {
+      try {
+        const data = await getBahan();
+        const mapped = data.map((item) => ({
+          id: item.id,
+          produk: item.nama_bahan,
+          harga_beli: item.harga_beli,
+          stok: item.stok,
+          kategori_id: item.kategori_id,
+          kategori: item.kategori?.jenis_hidangan ?? "-",
+        }));
+        setStockTable(mapped);
+        localStorage.setItem("bahan", JSON.stringify(mapped)); // update cache
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBahan();
+  }, []);
+
   // console.log(currentPage);
   // console.log(totalPages);
   return (
@@ -296,7 +312,16 @@ function Stok() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedData.length > 0 ? (
+                  {loading ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="text-center py-3 text-gray-500 italic animate-pulse"
+                      >
+                        Memuat data...
+                      </td>
+                    </tr>
+                  ) : paginatedData.length > 0 ? (
                     paginatedData.map((t, ind) => (
                       <tr
                         key={ind}
@@ -334,6 +359,7 @@ function Stok() {
                                 handleInputChange(t.id, e.target.value)
                               }
                             />
+
                             <button
                               onClick={() => handleIncrement(t.id)}
                               className="group cursor-pointer h-full flex-1 flex justify-center items-center"
@@ -456,19 +482,30 @@ function Stok() {
           </div>
           <div className="w-[21.5rem] pt-[28px] pb-[24px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)]">
             <div className="space-y-[27.45px] px-[0.875rem]">
-              {stockData.map((items, index) => (
-                <div key={index}>
-                  <div className="bg-[#FFB300] border border-[#959595] pl-[0.9375rem] pr-[1.25rem] w-full h-[2.75rem] flex items-center">
-                    <h3>
-                      {items.nama.slice(0, 1).toUpperCase() +
-                        items.nama.slice(1)}
-                    </h3>
+              {loading ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-3 text-gray-500 italic animate-pulse"
+                  >
+                    Memuat data...
+                  </td>
+                </tr>
+              ) : (
+                stockData.map((items, index) => (
+                  <div key={index}>
+                    <div className="bg-[#FFB300] border border-[#959595] pl-[0.9375rem] pr-[1.25rem] w-full h-[2.75rem] flex items-center">
+                      <h3>
+                        {items.nama.slice(0, 1).toUpperCase() +
+                          items.nama.slice(1)}
+                      </h3>
+                    </div>
+                    <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
+                      <h4>{items.stok}</h4>
+                    </div>
                   </div>
-                  <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                    <h4>{items.stok}</h4>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
             <div className="px-[2.0938rem] w-full h-[2.5rem] mt-[0.875rem]">
               <div className="flex pl-[1.3125rem] pr-[2.0625rem] items-center text-[#FFB300] justify-between border-[0.5px] border-[#959595] h-[40px] bg-white">
@@ -476,7 +513,18 @@ function Stok() {
                   Total Stok :
                 </h3>
                 <h4>
-                  {stockData.reduce((total, item) => total + item.stok, 0)}
+                  {loading ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="text-center py-3 text-gray-500 italic animate-pulse"
+                      >
+                        Memuat data...
+                      </td>
+                    </tr>
+                  ) : (
+                    stockData.reduce((total, item) => total + item.stok, 0)
+                  )}
                 </h4>
               </div>
             </div>
@@ -517,6 +565,7 @@ function Stok() {
           deleteId={deleteId}
           setDeleteId={setDeleteId}
           setData={setStockTable}
+          onDelete={hapusBahanById}
           setSkipConfirm={setSkipConfirm}
         />
       )}
