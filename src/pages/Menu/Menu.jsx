@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Eskopi from "../../assets/Menu/es.png";
 import Bg from "../../assets/Menu/bg.jpg";
 import Hero from "../../components/Hero";
+import useScrollBehaviour from "../../hooks/useScrollBehaviour";
 
 // Data menu
 const menuData = [
@@ -121,41 +122,48 @@ const menuData = [
 ];
 
 function MenuPage() {
-  const [selectedCategories, setSelectedCategories] = useState([]);
-
+  // ubah dari array → string (satu kategori saja)
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const { isVisible } = useScrollBehaviour();
   const handleCategoryChange = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    if (selectedCategory === category) {
+      // kalau klik lagi kategori yang sama → kosong (deselect)
+      setSelectedCategory("");
     } else {
-      setSelectedCategories([...selectedCategories, category]);
+      setSelectedCategory(category);
     }
   };
 
   const categories = ["Makanan", "Topping", "Minuman"];
-  const shownCategories = selectedCategories.length
-    ? selectedCategories
-    : categories;
-
+  const shownCategories = selectedCategory ? [selectedCategory] : categories;
   return (
-    <div className="w-full pt-25">
-      <Hero text={"Menu Kami"}/>
+    <div className="w-full pt-25 relative">
+      <Hero text={"Menu Kami"} />
       <div className="flex p-[13px] pl-[20px]">
         <div className="flex flex-col">
-          <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">Filter</h2>
-          {/* Filter */}
-          <div className="w-[241px] h-[263px] bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px] ">
-            <p className="font-semibold mb-2">Kategori</p>
-            <div className="space-y-2">
-              {categories.map((cat) => (
-                <label key={cat} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(cat)}
-                    onChange={() => handleCategoryChange(cat)}
-                  />
-                  <span>{cat}</span>
-                </label>
-              ))}
+          <div
+            className={`sticky transition-all duration-300 ${
+              isVisible ? "top-10" : "-top-15"
+            }`}
+          >
+            <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">
+              Filter
+            </h2>
+            {/* Filter */}
+            <div className="w-[241px] h-[263px]  shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px]">
+              <p className="font-semibold mb-2">Kategori</p>
+              <div className="space-y-2">
+                {categories.map((cat) => (
+                  <label key={cat} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategory === cat}
+                      onChange={() => handleCategoryChange(cat)}
+                    />
+                    <span className="ml-[20px]">{cat}</span>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -178,8 +186,8 @@ function MenuPage() {
             className="absolute inset-0 bg-cover bg-center w-[505px] h-[505px] mt-[1900px]  opacity-9 "
             style={{ backgroundImage: `url(${Bg})` }}
           ></div>
-          {shownCategories.map((cat) => (
-            <div key={cat}>
+          {shownCategories.map((cat, index) => (
+            <div key={cat} className={index !== 0 ? "pt-[85px]" : ""}>
               <h2 className="text-[36px] font-bold mb-4">{cat}</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
                 {menuData
