@@ -143,14 +143,14 @@ function MenuPage() {
         <div className="flex flex-col">
           <div
             className={`sticky transition-all duration-300 ${
-              isVisible ? "top-10" : "-top-15"
+              isVisible ? "top-10" : "-top-[1px]"
             }`}
           >
-            <h2 className="font-bold text-[28px]  mt-[77px] ml-[60px]">
+            <h2 className="font-bold text-[36px]  mt-[30px] ml-[60px]">
               Filter
             </h2>
             {/* Filter */}
-            <div className="w-[241px] h-[263px]  shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[59px] mt-[13px]">
+            <div className="w-[241px] h-[263px]  shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
               <p className="font-semibold mb-2">Kategori</p>
               <div className="space-y-2">
                 {categories.map((cat) => (
@@ -169,7 +169,7 @@ function MenuPage() {
         </div>
 
         {/* Menu per kategori */}
-        <div className="flex-1 space-y-10 pr-[211px] pl-[81px] mt-21">
+        <div className="flex-1 space-y-10 pr-[211px] pl-[81px] mt-[30px]">
           <div
             className="absolute inset-0 bg-cover bg-left w-[505px] h-[505px] mt-[230px] ml-[748px] opacity-9 "
             style={{ backgroundImage: `url(${Bg})` }}
@@ -187,7 +187,7 @@ function MenuPage() {
             style={{ backgroundImage: `url(${Bg})` }}
           ></div>
           {shownCategories.map((cat, index) => (
-            <div key={cat} className={index !== 0 ? "pt-[85px]" : ""}>
+            <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
               <h2 className="text-[36px] font-bold mb-4">{cat}</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
                 {menuData
@@ -206,7 +206,7 @@ function MenuPage() {
                         />
                         <div className="p-2 flex flex-col h-[117px] justify-between">
                           <h3 className="font-bold text-[20px]">{item.name}</h3>
-                          <p className="text-black text-[28px] text-start">
+                          <p className="text-black text-[24px] text-start">
                             Rp.{item.price}
                           </p>
                         </div>
