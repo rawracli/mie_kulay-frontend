@@ -15,46 +15,35 @@ function Tentang() {
     <div className="w-full">
       <Hero text={"Tentang Kami"}/>
       {/* Sejarah & Latar Belakang */}
-      <div className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-[65%_35%] gap-6 items-center ml-[40px]">
         <div>
-          <h3 className="text-2xl font-bold mb-4">Sejarah & Latar Belakang</h3>
-          <p className="text-gray-700 leading-relaxed">
-            Selamat datang di Kedai Rasa Nusantara ☕✨ <br />
-            Kami hadir untuk menghadirkan cita rasa rumahan dengan sentuhan khas
-            nusantara. Berawal dari resep keluarga sederhana, kami percaya bahwa
-            makanan bukan hanya soal rasa, tapi juga cerita dan kebersamaan.
-          </p>
+          <h3 className="text-[45px] font-boogaloo mt-[80px]">Cerita Di Balik Kedai Mie Kullay</h3>
+          <p className="text-black leading-relaxed text-[24px] mt-[34px] font-baloo-2">
+            Mie Kulay lahir dari ide awal dengan merintis usaha ini 
+            dilakukan dirumah dengan mencoba melalui penjualan aplikasi 
+            online.  Sejak berdiri, Mie Kulay berkomitmen menghadirkan
+            sajian yang berkualitas, bersih, halal, dan terjangkau, agar
+            setiap orang bisa menikmati mie nikmat penuh kehangatan
+            tanpa harus mahal.
+            </p>
         </div>
-        <div>
-                    <img
-                      src={Papan}
-                      alt="Papan"
-                      className="absolute -right-[475px] -top-[60px] -rotate-[38.03deg]"
-                    />
-                    <img
-                      src={Pangsit}
-                      alt="Pangsit"
-                      className="absolute right-[27px] top-[31px]"
-                    />
-                    <img
-                      src={Mie}
-                      alt="Mie"
-                      className="absolute right-[23px] top-[90px]"
-                    />
-                    <img
-                      src={Bumbu}
-                      alt="Bumbu"
-                      className="absolute -right-[10px] top-[173.68px] rotate-[22.45deg]"
-                    />
+
+        <div className="bg-gray-100 p-6 rounded-lg">
+          {/* Kolom kedua bisa isi gambar / konten lain */}
+          <p>Ini kolom kedua</p>
         </div>
       </div>
 
+
       {/* Promo Harga */}
-      <div className="bg-[#FFB300] text-center py-12">
-        <p className="text-black font-bold text-xl max-w-3xl mx-auto">
-          Nikmati mie enak dan berkualitas dengan harga hemat, cuma 5 ribuan
-          saja. Murah meriah, rasa tetap juara!
+      <div className="bg-[#FFB300] mt-[100px] text-left py-12 h-[404px]">
+        <p className="text-black font-boogaloo text-[50px] max-w-3xl ml-[351px]">
+          Nikmati <span className="text-red-600">mie enak</span> dan 
+          <span className="text-blue-600"> berkualitas </span>
+          dengan harga hemat, cuma <span className="text-red-600">5 ribuan</span> saja. 
+          Murah meriah, rasa tetap juara!
         </p>
+
       </div>
 
       {/* Bersih & Terjamin */}
