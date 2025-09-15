@@ -92,12 +92,13 @@ function Kontak() {
           </ul>
         </div>
       </div>
-      <div className="max-w mx-auto mt-10 p-6 flex flex-col md:flex-row gap-6 h-full">
+
+      <div className="max-w mx-auto mt-10 p-6 md:flex-row gap-6 h-full">
 
         {/* Form (lebih sempit) */}
           <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.7483069258947!2d106.92046307900273!3d-6.920663449868827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e684900058502c9%3A0xf601489b114677c5!2sKULAY!5e0!3m2!1sid!2sid!4v1757152455741!5m2!1sid!2sid"
-          width="51%"
+          width="93%"
           height="100%"
           style={{ border: 0 }}
           allowFullScreen=""
@@ -105,30 +106,6 @@ function Kontak() {
           referrerPolicy="no-referrer-when-downgrade"
           className="rounded-lg shadow-[0px_2px_6px_rgba(156,156,156,0.25)] h-[388px] ml-[34px] mr-[22px]"
         ></iframe>
-
-        {/* Info Kontak (lebih lebar) */}
-        <div className="flex-[1.5] p-6 rounded-md shadow-[0px_2px_6px_rgba(156,156,156,0.25)] mr-[57px]">
-          <h2 className="text-2xl font-bold mb-2 font-boogaloo ml-[29px] mr-[168px]">Informasi Kedai</h2>
-          <p className="text-gray-600 mb-4 ml-[29px]">
-            Berikut ini adalah kontak kami yang bisa dihubungi
-          </p>
-          <hr className="my-5 ml-[15px] mr-[21px]"></hr>
-          <div className="grid grid-cols-2 ml-[41px]">
-            <div className="">
-                <h1 className="font-bold">Senin - Jumat</h1>
-                <p className="font-semibold text-[#FFB300]">09.00 am - 08.00 pm</p>
-            </div>
-            <div className="">
-                <h1 className="font-bold">Sabtu</h1>
-                <p className="font-semibold text-[#FFB300]">09.00 am - 08.00 pm</p>
-            </div>
-            <div className=" my-3">
-                <h1 className="font-bold">Minggu</h1>
-                <p className="font-semibold text-[#FFB300]">09.00 am - 08.00 pm</p>
-            </div>
-
-          </div>
-        </div>
       </div>
 
         
