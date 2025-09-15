@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import "./home.css";
 import { Link } from "react-router-dom";
 import Papan from "../../assets/User/papan.png";
@@ -23,7 +23,7 @@ export default function HeroSection() {
       <div className="overflow-x-hidden">
         {/* HERO SECTION */}
         <div className="relative min-h-[600px] flex">
-          <div className="z-10 flex flex-col justify-center ml-[70px] w-1/2 gap-[10px] -translate-y-1">
+          <div className="z-10 flex flex-col justify-center ml-[70px] w-1/2 gap-[10px] -translate-y-5">
             <h1 className="font-boogaloo text-[70px]">MIE KULAY SUKABUMI</h1>
             <p className="font-baloo-2 text-[24px] leading-[35px]">
               Mie Kulay, ,<span className="font-semibold">rasanya</span> bikin
@@ -34,7 +34,7 @@ export default function HeroSection() {
             </p>
             <Link
               to="/menu"
-              className="mt-2 bg-[#FFB300] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
+              className="mt-2 active:shadow-[0px_0px_0px_#DDAB1E] active:translate-y-[6px] transition-all cursor-pointer bg-[#FFB300] w-[181px] h-[50px] rounded-full shadow-[0px_6px_0px_#DDAB1E] text-white font-chewy text-[22px] text-center content-center"
             >
               Lihat Menu
             </Link>
@@ -62,15 +62,15 @@ export default function HeroSection() {
         </div>
 
         {/* SELAMAT DATANG SECTION */}
-        <div className="flex flex-col items-center py-[70px]">
-          <img src={SelamatDatang} alt="Selamat Datang" className="w-[850px] my-0" />
-          <h2 className="font-chewy text-[80px] text-[#FFB300] ">
+        <div className="flex flex-col items-center pt-[70px] pb-[66px]">
+          <img src={SelamatDatang} alt="Selamat Datang" className="w-[1016px] my-0" />
+          <h2 className="font-chewy text-[80px] text-[#FFB300] -translate-y-10">
             DI MIE KULAY
           </h2>
         </div>
 
         {/* RASA YANG MENYATUKAN SETIAP MOMEN SECTION */}
-        <div className="flex justify-between mb-2 min-h-[580px]">
+        <div className="flex justify-between min-h-[490px]">
           <div className="flex-1 relative">
             <img
               src={Resto}
@@ -83,23 +83,15 @@ export default function HeroSection() {
               className="absolute left-[208.71px] translate-y-[155px] -rotate-[6.96deg] border-x-[18.24px] border-y-[17.32px] border-[#1554B4]"
             />
           </div>
-          <div className="z-10 flex flex-col justify-center w-[45%] mt-12 gap-[30px] -translate-y-1">
+          <div className="z-10 flex flex-col justify-center w-[45%] gap-[30px] mb-10">
             <h2 className="font-boogaloo text-[60px] leading-[68px]">
-              Rasa yang Menyatukan Setiap Momen
+              <span className="text-[#FFB300]">Rasa</span> yang Menyatukan <span className="text-[#DC3538]">Setiap Momen</span>
             </h2>
             <p className="font-baloo-2 text-[24px] leading-[35px] pr-2">
-              Sejak awal, kami berkomitmen menyajikan pengalaman kuliner terbaik
-              melalui cita rasa autentik, bahan segar pilihan, dan pelayanan
-              yang tulus. Bagi kami, setiap hidangan adalah karya yang diracik
-              dengan penuh perhatian, agar setiap kunjungan Anda menjadi
-              pengalaman yang istimewa
+              Dari awal, kami selalu fokus nyajiin rasa autentik, bahan segar,
+              dan pelayanan tulus. Buat kami, tiap hidangan itu spesial—diracik
+              penuh perhatian biar setiap kunjungan jadi pengalaman istimewa.
             </p>
-            <Link
-              to="/menu"
-              className="mt-2 bg-[#FFB300] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
-            >
-              Read More..
-            </Link>
           </div>
         </div>
 
@@ -117,13 +109,6 @@ export default function HeroSection() {
                 pilihan menu favorit hingga sajian andalan, semua dibuat untuk
                 menemani momen hangat bersama keluarga dan teman.
               </p>
-
-              <Link
-                to="/menu"
-                className="bg-[#D72629] w-[181px] h-[59px] rounded-[5px] text-white font-chewy text-[22px] text-center content-center"
-              >
-                Lihat Menu
-              </Link>
             </div>
             <>
               <img
