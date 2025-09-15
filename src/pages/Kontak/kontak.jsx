@@ -1,4 +1,5 @@
 import React from "react";
+import 'animate.css';
 import { useState } from "react";
 
 
@@ -27,7 +28,7 @@ function Kontak() {
       {/* Content */}
        <div className="max-w mx-auto mt-10 p-6 flex flex-col md:flex-row gap-6 h-[436px] ">
         {/* Form (lebih sempit) */}
-           <div className="flex-2 py-[27px] rounded-md h-[436px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] ml-[34px] mr-[22px]">
+           <div className="animate__animated animate__slideInLeft flex-2 py-[27px] rounded-md h-[436px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] ml-[34px] mr-[22px]">
       <h2 className="text-2xl font-bold mb-4 font-boogaloo ml-[47px] mr-[45px]">
         Kirimkan Pertanyaan Mu
       </h2>
@@ -60,7 +61,7 @@ function Kontak() {
 
         <button
           type="submit"
-          className="bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold py-2 px-6 rounded-md self-end w-34 h-12"
+          className="animate__animated animate__fadeInUp  bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold py-2 px-6 rounded-md self-end w-34 h-12"
         >
           Kirim
         </button>
@@ -69,7 +70,7 @@ function Kontak() {
 
 
         {/* Info Kontak (lebih lebar) */}
-        <div className="flex-[1.5] h-[436px] rounded-md shadow-[0px_2px_6px_rgba(156,156,156,0.25)] mr-[57px] py-[27px]">
+        <div className="animate__animated animate__slideInRight flex-[1.5] h-[436px] rounded-md shadow-[0px_2px_6px_rgba(156,156,156,0.25)] mr-[57px] py-[27px]">
           <h2 className="text-2xl font-bold mb-2  font-boogaloo ml-[38px] mr-[159px]">Informasi Kontak</h2>
           <p className="text-gray-600 mb-4 ml-[38px]">
             Berikut ini adalah kontak kami yang bisa dihubungi
@@ -93,7 +94,7 @@ function Kontak() {
         </div>
       </div>
 
-      <div className="max-w mx-auto mt-10 p-6 md:flex-row gap-6 h-full">
+      <div className="max-w mx-auto mt-10 p-6 md:flex-row gap-6 h-full animate_animated animate_FadeIn">
 
         {/* Form (lebih sempit) */}
           <iframe
