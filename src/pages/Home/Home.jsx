@@ -26,11 +26,11 @@ export default function HeroSection() {
           <div className="z-10 flex flex-col justify-center ml-[70px] w-1/2 gap-[10px] -translate-y-1">
             <h1 className="font-boogaloo text-[70px]">MIE KULAY SUKABUMI</h1>
             <p className="font-baloo-2 text-[24px] leading-[35px]">
-              Mie Kulay hadir dengan cita rasa khas yang melekat di hati. Dengan
-              tekstur mie yang kenyal dan bumbu racikan yang pas, setiap suapan
-              menghadirkan kehangatan yang cocok dinikmati kapan saja. Baik
-              makan santai bersama keluarga maupun hangout bareng teman, Mie
-              Kulay selalu jadi pilihan tepat.
+              Mie Kulay, ,<span className="font-semibold">rasanya</span> bikin
+              susah <span className="font-semibold">move on!</span> Teksturnya kenyal, gurihnya pas, dan setiap suapan
+              bikin <span className="font-semibold">nagih.</span> Mau makan bareng keluarga, nongkrong sama temen, atau
+              lagi santai sendirian, Mie Kulay selalu siap nemenin momen kamu
+              biar makin <span className="font-semibold">asik.</span>
             </p>
             <Link
               to="/menu"
@@ -63,8 +63,8 @@ export default function HeroSection() {
 
         {/* SELAMAT DATANG SECTION */}
         <div className="flex flex-col items-center py-[70px]">
-          <img src={SelamatDatang} alt="Selamat Datang" className="w-[850px]" />
-          <h2 className="font-chewy text-[80px] text-[#FFB300]">
+          <img src={SelamatDatang} alt="Selamat Datang" className="w-[850px] my-0" />
+          <h2 className="font-chewy text-[80px] text-[#FFB300] ">
             DI MIE KULAY
           </h2>
         </div>
