@@ -52,10 +52,10 @@ function Dashboard() {
         metode: p.pembayaran,
         items:
           p.pesanan_detail?.map((d) => ({
-          name: d.nama_hidangan || "-",
-          qty: d.jumlah || 0,
-          price: d.harga_satuan || 0,
-        })) || [],
+            name: d.nama_hidangan || "-",
+            qty: d.jumlah || 0,
+            price: d.harga_satuan || 0,
+          })) || [],
       }));
       console.log(data);
       setTransactionsData(formattedData);
@@ -413,7 +413,7 @@ function Dashboard() {
             <div className="p-6 text-1xl space-y-[10px]">
               <p>
                 <span className="font-semibold">Tanggal :</span>{" "}
-                {selectedTransaction.tanggal}
+                {selectedTransaction.tanggal.toLocaleDateString("id-ID")}
               </p>
               <p>
                 <span className="font-semibold">Id :</span>{" "}
