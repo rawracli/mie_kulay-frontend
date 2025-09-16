@@ -1,6 +1,6 @@
 import React from "react";
 import Close from "../../../../assets/Admin/x.svg";
-import { registerUser } from '../../../../controllers/AuthController.js'
+import { getUsers, registerUser } from '../../../../controllers/AuthController.js'
 
 function TambahAkun({isAddOpen, setIsAddOpen, setData, setHighlightedRow}) {
   const onSubmit = async (e) => {
@@ -12,7 +12,8 @@ function TambahAkun({isAddOpen, setIsAddOpen, setData, setHighlightedRow}) {
 
   try {
     const newUser = await registerUser({ name, email, password });
-    setData((prev) => [...prev, newUser]);
+    const users = await getUsers();
+    setData(users);
     setHighlightedRow(newUser.id);
     setTimeout(() => setHighlightedRow(null), 200);
 

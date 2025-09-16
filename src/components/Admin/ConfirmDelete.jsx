@@ -5,43 +5,24 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // menghapus data dari database
-  const handleDelete = async () => {
-    if (!deleteId || !onDelete) return;
+  const handleDelete = () => {
+    if (deleteId === null || !onDelete) return;
 
-    if (dontShowAgain && setSkipConfirm) {
-      setSkipConfirm(true);
-    }
+    if (dontShowAgain && setSkipConfirm) setSkipConfirm(true);
 
     setLoading(true);
     try {
-      await onDelete(deleteId); // panggil fungsi hapus dari parent
+      onDelete(deleteId);
       setDeleteId(null);
     } catch (err) {
-      console.error("Gagal hapus data:", err.message);
+      console.error("Gagal hapus:", err.message);
       alert(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // menghapus data tanpa database
-  const handleDeleteNoDB = () => {
-    console.log("Delete clicked for id:", deleteId);
-    if (dontShowAgain && setSkipConfirm) {
-      setSkipConfirm(true);
-    }
-
-    if (onDelete) {
-      onDelete(deleteId);
-    }
-
-    setDeleteId(null);
-  };
-
-  const onCancel = () => {
-    setDeleteId(null);
-  };
+  const onCancel = () => setDeleteId(null);
 
   return (
     <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
@@ -67,10 +48,7 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
         </div>
         <div className="flex gap-[11px] text-white font-semibold">
           <button
-            onClick={() => {
-              handleDelete();
-              handleDeleteNoDB();
-            }}
+            onClick={handleDelete}
             className="bg-[#44962D] w-[89px] h-[32px] rounded-[5px] cursor-pointer"
           >
             {loading ? "Menghapus..." : "Hapus"}

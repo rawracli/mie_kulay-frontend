@@ -5,72 +5,52 @@ import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahPengeluaran from "./Overlay/TambahPengeluaran";
-// import TambahPengeluaran from "./Overlay/TambahPengeluaran";
+import {
+  getPengeluaran,
+  updatePengeluaran,
+  hapusPengeluaran,
+} from "../../../controllers/Pengeluaran";
 
 function Pengeluaran() {
-  const [dataPengeluaran, setDataPengeluaran] = useState([
-    {
-      id: "IDX26021",
-      judul: "Judul",
-      jumlah: 50,
-      catatan: "Menu ID#2 dihapus dari daftar.",
-      tanggal: "2025-08-28T10:20:00",
-    },
-    {
-      id: "IDX26561",
-      judul: "Judul",
-      jumlah: 50,
-      catatan: "Menu ID#2 dihapus dari daftar.",
-      tanggal: "2025-08-27T10:46:00",
-    },
-    {
-      id: "IDX26721",
-      judul: "Judul",
-      jumlah: 50,
-      catatan: "Menu ID#2 dihapus dari daftar.",
-      tanggal: "2025-08-28T10:20:00",
-    },
-    {
-      id: "IDX26821",
-      judul: "Judul",
-      jumlah: 50,
-      catatan: "Menu ID#2 dihapus dari daftar.",
-      tanggal: "2025-08-28T10:20:00",
-    },
-  ]);
+  const [dataPengeluaran, setDataPengeluaran] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [updateTimers, setUpdateTimers] = useState({});
   const [deleteId, setDeleteId] = useState(null);
   const [selectedPengeluaran, setSelectedPengeluaran] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
   const [tanggalInput, setTanggalInput] = useState();
+
   const parseDate = (dateStr) => {
-    return dateStr.split("T")[0];
+    if (!dateStr) return null;
+    const isoStr = dateStr.includes("T") ? dateStr : dateStr.replace(" ", "T");
+    const d = new Date(isoStr);
+    return isNaN(d) ? null : d;
   };
+
   const filteredData = useMemo(() => {
-    return dataPengeluaran.filter((t) => {
-      const itemDate = parseDate(t.tanggal);
-      const inputDate = tanggalInput || "";
-      const keyword = search?.toLowerCase();
-      console.log(tanggalInput);
-      console.log(itemDate);
+   return dataPengeluaran.filter((t) => {
+    const d = new Date(t.tanggal || t.created_at);
+    const itemDateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
-      const matchDate = !inputDate || itemDate === inputDate;
+    const inputDateStr = tanggalInput || "";
+    const keyword = search?.toLowerCase();
 
-      // Filter search
-      const matchSearch =
-        !keyword ||
-        t.id.toLowerCase().includes(keyword) ||
-        t.judul.toLowerCase().includes(keyword) ||
-        t.jumlah.toString().includes(keyword) ||
-        t.tanggal.toString().includes(keyword);
+    const matchDate = !inputDateStr || itemDateStr === inputDateStr;
 
-      return matchDate && matchSearch;
-    });
+    const matchSearch =
+      !keyword ||
+      t.id.toString().includes(keyword) ||
+      t.pengeluaran.toString().includes(keyword) ||
+      (t.tanggal && t.tanggal.toLowerCase().includes(keyword));
+
+    return matchDate && matchSearch;
+   });
   }, [dataPengeluaran, search, tanggalInput]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
@@ -79,6 +59,18 @@ function Pengeluaran() {
     startIndex,
     startIndex + entriesPerPage
   );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getPengeluaran();
+        setDataPengeluaran(data);
+      } catch {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (highlightedRow !== null) {
@@ -99,60 +91,73 @@ function Pengeluaran() {
   // input pake id (id dari stokTable)
   // +
   const handleIncrement = (idIndex) => {
-    setDataPengeluaran((prevData) =>
-      prevData.map((item) =>
-        item.id === idIndex
-          ? {
-              id: item.id,
-              judul: item.judul,
-              jumlah: item.jumlah + 1,
-              catatan: item.catatan,
-              tanggal: item.tanggal,
-            }
-          : item
-      )
-    );
+   setDataPengeluaran((prevData) => {
+    return prevData.map((item) => {
+      if (item.id === idIndex) {
+        const newValue = Number(item.pengeluaran) + 1000;
+        delayedUpdate(idIndex, newValue); // update backend pakai nilai baru
+        return { ...item, pengeluaran: newValue };
+      }
+      return item;
+    });
+   });
   };
+
   // -
   const handleDecrement = (idIndex) => {
-    setDataPengeluaran((prevData) =>
-      prevData.map((item) =>
-        item.id === idIndex && item.jumlah > 1
-          ? {
-              id: item.id,
-              judul: item.judul,
-              jumlah: item.jumlah - 1,
-              catatan: item.catatan,
-              tanggal: item.tanggal,
-            }
-          : item
-      )
-    );
+   setDataPengeluaran((prevData) =>
+     prevData.map((item) =>
+       item.id === idIndex && item.pengeluaran > 1
+         ? { ...item, pengeluaran: item.pengeluaran - 1000 }
+         : item
+     )
+   );
+ 
+   const item = dataPengeluaran.find(d => d.id === idIndex);
+   const newValue = (item?.pengeluaran || 1) - 1;
+   delayedUpdate(idIndex, newValue);
   };
+  
+  const delayedUpdate = (id, newValue) => {
+   if (updateTimers[id]) clearTimeout(updateTimers[id]);
+ 
+   const pengeluaranItem = dataPengeluaran.find(d => d.id === id);
+   if (!pengeluaranItem) return;
+ 
+   const timer = setTimeout(async () => {
+     try {
+       await updatePengeluaran(id, Number(newValue), pengeluaranItem.catatan || "");
+     } catch (err) {
+       console.error(err);
+     }
+   }, 300);
+ 
+   setUpdateTimers(prev => ({ ...prev, [id]: timer }));
+  };
+
   // input jumlah manual
   const handleInputChange = (idIndex, value) => {
-    const newValue = parseInt(value) || 1; // Default ke 1 jika input tidak valid
+    const newValue = parseInt(value) || 1;
     setDataPengeluaran((prevData) =>
       prevData.map((item) =>
-        item.id === idIndex
-          ? {
-              id: item.id,
-              judul: item.judul,
-              jumlah: newValue,
-              catatan: item.catatan,
-              tanggal: item.tanggal,
-            }
-          : item
+        item.id === idIndex ? { ...item, pengeluaran: newValue } : item
       )
     );
+  
+    delayedUpdate(idIndex, newValue);
   };
 
   //btn delete
-  const onDelete = (idIndex) => {
+  const onDelete = async (idIndex) => {
     if (skipConfirm) {
-      setDataPengeluaran((prevData) =>
-        prevData.filter((item) => item.id !== idIndex)
-      );
+      try {
+        await hapusPengeluaran(idIndex);
+        setDataPengeluaran((prevData) =>
+          prevData.filter((item) => item.id !== idIndex)
+        );
+      } catch (err) {
+        console.error("Gagal hapus pengeluaran:", err.message);
+      }
     } else {
       setDeleteId(idIndex);
     }
@@ -260,7 +265,7 @@ function Pengeluaran() {
               </div>
               <div>
                 {/* filter date */}
-              <label className="text-1xl font-semibold mb-1 mt-[11px] mr-[15px]">
+                <label className="text-1xl font-semibold mb-1 mt-[11px] mr-[15px]">
                   Filter logs by:
                 </label>
                 <input
@@ -278,9 +283,6 @@ function Pengeluaran() {
                   <tr className="bg-[#FFB300] h-[49px]">
                     <th className="border border-[#959595] text-center w-[12.01%]">
                       Id
-                    </th>
-                    <th className="border border-[#959595] text-center w-[21.22%]">
-                      Judul
                     </th>
                     <th className="border border-[#959595] text-center w-[18.20%]">
                       Jumlah
@@ -310,16 +312,13 @@ function Pengeluaran() {
                         <td className="border-r border-[#959595] pl-[10.5px]">
                           {t.id}
                         </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.judul}
-                        </td>
                         <td className="border-r border-[#959595]">
                           <div className="text-center flex justify-around items-center h-full">
                             <button
                               onClick={() => {
                                 handleDecrement(t.id);
                               }}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                              className="group cursor-pointer h-full flex-1 flex justify-end pr-5 pl-5 items-center"
                             >
                               <img
                                 src={MinRed}
@@ -329,15 +328,15 @@ function Pengeluaran() {
                             </button>
                             <input
                               type="text"
-                              className="w-10 text-center"
-                              value={t.jumlah}
+                              className="w-30 text-center"
+                              value={t.pengeluaran}
                               onChange={(e) =>
                                 handleInputChange(t.id, e.target.value)
                               }
                             />
                             <button
                               onClick={() => handleIncrement(t.id)}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                              className="group cursor-pointer h-full flex-1 flex justify-start pl-5 pr-5 items-center"
                             >
                               <img
                                 src={PlusGreen}
@@ -356,16 +355,20 @@ function Pengeluaran() {
                           </button>
                         </td>
                         <td className="border-r border-[#959595] text-center">
-                          {new Date(t.tanggal).toLocaleDateString("id-ID", {
+                          {new Date(t.created_at).toLocaleDateString("id-ID", {
                             day: "2-digit",
                             month: "short",
                             year: "numeric",
-                          })}{" "}
+                          })}
+                          <span> </span>
                           <span className="text-blue-500 font-semibold">
-                            {new Date(t.tanggal).toLocaleTimeString("id-ID", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {/* {new Date(t.created_at).toLocaleTimeString(
+                              "id-ID",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )} */}
                           </span>
                         </td>
                         <td>
@@ -498,13 +501,15 @@ function Pengeluaran() {
           setHighlightedRow={setHighlightedRow}
         />
       )}
-      
       {deleteId !== null && (
         <ConfirmDelete
           deleteId={deleteId}
           setDeleteId={setDeleteId}
-          setData={setDataPengeluaran}
           setSkipConfirm={setSkipConfirm}
+          onDelete={async (id) => {
+            await hapusPengeluaran(id);
+            setDataPengeluaran((prev) => prev.filter((item) => item.id !== id));
+          }}
         />
       )}
       {selectedPengeluaran && (
@@ -513,37 +518,34 @@ function Pengeluaran() {
           onClick={handleCloseModal}
         >
           <div
-            className="bg-white rounded-[5px] w-[666px] h-[272px]"
+            className="bg-white rounded-[5px] w-[666px] h-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-[#3578DC] text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
-              <h3 className="font-bold">{selectedPengeluaran.judul}</h3>
               <button
-                className="absolute top-58 right-80 hover:text-black cursor-pointer"
+                className="absolute top-58 right-80 text-white hover:text-gray-300 text-[30px] cursor-pointer"
                 onClick={handleCloseModal}
               >
                 ✕
               </button>
-            </div>
             <div className="p-[31px]">
               <p className="text-gray-800">{selectedPengeluaran.catatan}</p>
-              <p className="text-right text-black font-semibold mt-15 ">
-                {new Date(selectedPengeluaran.tanggal).toLocaleDateString(
-                  "en-US",
-                  {
-                    month: "short",
-                    day: "2-digit",
-                    year: "numeric",
-                  }
-                )}{" "}
-                {new Date(selectedPengeluaran.tanggal).toLocaleTimeString(
-                  "id-ID",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}
+                {(() => {
+                const tanggal = parseDate(selectedPengeluaran.tanggal) || parseDate(selectedPengeluaran.created_at);
+                if (!tanggal) return <p className="text-right text-black font-semibold mt-15">Tanggal tidak tersedia</p>;
+                return (
+                <p className="text-right text-black font-semibold mt-15">
+                  {tanggal.toLocaleDateString("id-ID", {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                })}{" "}
+                {/* {tanggal.toLocaleTimeString("id-ID", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })} */}
               </p>
+             );
+            })()}
             </div>
           </div>
         </div>

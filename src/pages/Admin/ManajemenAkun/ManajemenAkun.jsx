@@ -3,7 +3,7 @@ import Sampah from "../../../assets/Admin/sampah.svg";
 import Plus from "../../../assets/Admin/plus.svg";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahAkun from "./Overlay/TambahAkun";
-import { getUsers } from "../../../controllers/AuthController.js";
+import { getUsers, deleteUser } from "../../../controllers/AuthController.js";
 
 function ManajemenAkun() {
   const [userData, setUserData] = useState([]);
@@ -29,17 +29,15 @@ function ManajemenAkun() {
   }, []);
 
   const filteredData = useMemo(() => {
+    const keyword = search?.toLowerCase().trim();
+  
     return userData.filter((t) => {
-      const keyword = search?.toLowerCase();
-
-      // Filter search
       const matchSearch =
         !keyword ||
-        t.id.toLowerCase().includes(keyword) ||
+        t.id.toString().toLowerCase().includes(keyword) ||
         t.name.toLowerCase().includes(keyword) ||
-        t.email.toString().includes(keyword);
-
-      // Hasil akhir: dua-duanya harus true
+        t.email.toLowerCase().includes(keyword);
+    
       return matchSearch;
     });
   }, [search, userData]);
@@ -51,12 +49,26 @@ function ManajemenAkun() {
     startIndex + entriesPerPage
   );
 
+  // di ManajemenAkun.jsx
+  const handleConfirmDelete = (id) => {
+    deleteUser(id)
+      .then(() => {
+        setUserData((prev) => prev.filter((item) => item.id !== id));
+        console.log("User berhasil dihapus");
+      })
+      .catch((err) => {
+        console.error("Gagal hapus user:", err.message);
+        alert("Gagal hapus user: " + err.message);
+      });
+  };
+
+
   //btn delete
-  const onDelete = (idIndex) => {
+  const onDelete = (id) => {
     if (skipConfirm) {
-      setUserData((prevData) => prevData.filter((item) => item.id !== idIndex));
+      handleConfirmDelete(id); // hapus langsung
     } else {
-      setDeleteId(idIndex);
+      setDeleteId(id); // tampilkan modal
     }
   };
 
@@ -321,8 +333,8 @@ function ManajemenAkun() {
         <ConfirmDelete
           deleteId={deleteId}
           setDeleteId={setDeleteId}
-          setData={setUserData}
           setSkipConfirm={setSkipConfirm}
+          onDelete={handleConfirmDelete}
         />
       )}
     </div>

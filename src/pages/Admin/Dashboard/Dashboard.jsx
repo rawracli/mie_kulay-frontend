@@ -47,15 +47,15 @@ function Dashboard() {
       const data = await getPemesanan();
       const formattedData = data.map((p) => ({
         id: p.id,
-        tanggal: new Date(p.created_at).toLocaleDateString("id-ID"),
+        tanggal: new Date(p.created_at),
         total: p.total_pesanan || 0,
         metode: p.pembayaran,
         items:
           p.pesanan_detail?.map((d) => ({
-            name: d.nama_hidangan || "-",
-            qty: d.jumlah || 0,
-            price: d.harga_satuan || 0,
-          })) || [],
+          name: d.nama_hidangan || "-",
+          qty: d.jumlah || 0,
+          price: d.harga_satuan || 0,
+        })) || [],
       }));
       console.log(data);
       setTransactionsData(formattedData);
@@ -80,26 +80,17 @@ function Dashboard() {
   // Overlay detail
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  // Fungsi parsing tanggal dd-MM-yyyy → Date
-  const parseDate = (dateStr) => {
-    const [day, month, year] = dateStr.split("-");
-    return new Date(`${year}-${month}-${day}`);
-  };
-
   // Filter data
   const filteredData = transactionsData.filter((item) => {
-    const itemDate = parseDate(item.tanggal);
-
     const isDateInRange =
-      (!tanggalAwal || itemDate >= new Date(tanggalAwal)) &&
-      (!tanggalAkhir || itemDate <= new Date(tanggalAkhir));
+      (!tanggalAwal || item.tanggal >= new Date(tanggalAwal)) &&
+      (!tanggalAkhir || item.tanggal <= new Date(tanggalAkhir));
 
     const isSearchMatch =
       !search ||
       item.id.toLowerCase().includes(search.toLowerCase()) ||
       item.metode.toLowerCase().includes(search.toLowerCase()) ||
       item.total.toString().includes(search);
-
     return isDateInRange && isSearchMatch;
   });
 
@@ -270,7 +261,7 @@ function Dashboard() {
                   paginatedData.map((t) => (
                     <tr>
                       <td className="border border-gray-600 text-center h-[33px]">
-                        {t.tanggal}
+                        {t.tanggal.toLocaleDateString("id-ID")}
                       </td>
                       <td className="border border-gray-600 text-center h-[33px]">
                         {t.id}

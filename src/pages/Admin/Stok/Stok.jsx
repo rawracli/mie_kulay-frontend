@@ -41,26 +41,23 @@ function Stok() {
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
   const filteredData = useMemo(() => {
-    return stockTable.filter((t) => {
-      const selectedCategory = category?.toLowerCase();
-      const keyword = search?.toLowerCase();
+   const keyword = search.trim().toLowerCase();
+   const selectedCategory = category?.toLowerCase();
 
-      // Filter kategori
-      const matchCategory =
-        !category || category === "all"
-          ? true
-          : t.kategori.toLowerCase().includes(selectedCategory);
+   return stockTable.filter((t) => {
+    const matchCategory =
+      !category || category === "all"
+        ? true
+        : t.kategori.toLowerCase().includes(selectedCategory);
 
-      // Filter search
-      const matchSearch =
-        !keyword ||
-        t.id.toLowerCase().includes(keyword) ||
-        t.produk.toLowerCase().includes(keyword) ||
-        t.stok.toString().includes(keyword);
+    const matchSearch =
+      !keyword ||
+      t.id.toString().toLowerCase().includes(keyword) ||
+      t.produk.toLowerCase().includes(keyword) //||
+      // t.stok.toString().includes(keyword);
 
-      // Hasil akhir: dua-duanya harus true
-      return matchCategory && matchSearch;
-    });
+    return matchCategory && matchSearch;
+   });
   }, [search, stockTable, category]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);

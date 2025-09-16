@@ -88,5 +88,24 @@ const updateProfile = async (formData) => {
   return result;
 };
 
+const deleteUser = async (id) => {
+  const token = localStorage.getItem("token");
 
-export { loginUser, registerUser, getCurrentUser, getUsers, updateProfile };
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/deleteUser/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Gagal menghapus user");
+  }
+
+  return result;
+};
+
+export { loginUser, registerUser, getCurrentUser, getUsers, updateProfile, deleteUser };
