@@ -27,10 +27,12 @@ export default function HeroSection() {
             <h1 className="font-boogaloo text-[70px]">MIE KULAY SUKABUMI</h1>
             <p className="font-baloo-2 text-[24px] leading-[35px]">
               Mie Kulay, ,<span className="font-semibold">rasanya</span> bikin
-              susah <span className="font-semibold">move on!</span> Teksturnya kenyal, gurihnya pas, dan setiap suapan
-              bikin <span className="font-semibold">nagih.</span> Mau makan bareng keluarga, nongkrong sama temen, atau
-              lagi santai sendirian, Mie Kulay selalu siap nemenin momen kamu
-              biar makin <span className="font-semibold">asik.</span>
+              susah <span className="font-semibold">move on!</span> Teksturnya
+              kenyal, gurihnya pas, dan setiap suapan bikin{" "}
+              <span className="font-semibold">nagih.</span> Mau makan bareng
+              keluarga, nongkrong sama temen, atau lagi santai sendirian, Mie
+              Kulay selalu siap nemenin momen kamu biar makin{" "}
+              <span className="font-semibold">asik.</span>
             </p>
             <Link
               to="/menu"
@@ -63,7 +65,11 @@ export default function HeroSection() {
 
         {/* SELAMAT DATANG SECTION */}
         <div className="flex flex-col items-center pt-[70px] pb-[66px]">
-          <img src={SelamatDatang} alt="Selamat Datang" className="w-[1016px] my-0" />
+          <img
+            src={SelamatDatang}
+            alt="Selamat Datang"
+            className="w-[1016px] my-0"
+          />
           <h2 className="font-chewy text-[80px] text-[#FFB300] -translate-y-10">
             DI MIE KULAY
           </h2>
@@ -85,7 +91,8 @@ export default function HeroSection() {
           </div>
           <div className="z-10 flex flex-col justify-center w-[45%] gap-[30px] mb-10">
             <h2 className="font-boogaloo text-[60px] leading-[68px]">
-              <span className="text-[#FFB300]">Rasa</span> yang Menyatukan <span className="text-[#DC3538]">Setiap Momen</span>
+              <span className="text-[#FFB300]">Rasa</span> yang Menyatukan{" "}
+              <span className="text-[#DC3538]">Setiap Momen</span>
             </h2>
             <p className="font-baloo-2 text-[24px] leading-[35px] pr-2">
               Dari awal, kami selalu fokus nyajiin rasa autentik, bahan segar,
@@ -141,10 +148,14 @@ export default function HeroSection() {
         </div>
 
         {/* BG MIE KULAY */}
-        <div className="h-[1416px]">
+        <div className="min-h-[1416px]">
           {/* ALL MENU CUMAN 5000 AJA */}
-          <div className="min-h-1/2 w-full gap-[127px] pt-[84px] flex flex-col justify-center items-center">
-            <img src={allMenu} alt="ALL MENU CUMAN 5000 AJA !!" className="w-[1082px]"/>
+          <div className="min-h-[calc(1416px/2)] w-full gap-[127px] pt-[84px] flex flex-col justify-center items-center">
+            <img
+              src={allMenu}
+              alt="ALL MENU CUMAN 5000 AJA !!"
+              className="w-[1082px]"
+            />
             <Menu />
           </div>
         </div>
