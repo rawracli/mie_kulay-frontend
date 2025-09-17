@@ -13,6 +13,7 @@ import Rolling from "../../assets/User/rolling.png";
 import Smile from "../../assets/User/smile.png";
 import Toko from "../../assets/User/toko.png";
 import Toko1 from "../../assets/User/toko1.png";
+import Logotr from "../../assets/User/logotr.png";
 
 
 function Tentang() {
@@ -20,39 +21,38 @@ function Tentang() {
   return (
     <div className="w-full">
       <Hero text={"Tentang Kami"}/>
-      {/* Sejarah & Latar Belakang */}
-  {/* Container utama */}
-  <div className="max-w-6xl mx-auto flex px-6 py-12 gap-6 relat mt-[10px]">
-    {/* Kolom 1 (Teks) */}
-    <div className="flex-1 relative">
-      <h3 className="text-[49px] font-boogaloo -mt-12 relative z-10 mt-0.5">
-        Cerita di Balik Kedai Mie Kulay
-      </h3>
-      <p className="text-black leading-relaxed text-[24px] mt-[34px] font-baloo-2">
-        Mie Kulay lahir dari ide awal den7gan merintis usaha ini dilakukan
-        dirumah dengan mencoba melalui penjualan aplikasi online. Sejak
-        berdiri, Mie Kulay berkomitmen menghadirkan sajian yang berkualitas,
-        bersih, halal, dan terjangkau, agar setiap orang bisa menikmati mie
-        nikmat penuh kehangatan tanpa harus mahal.
-      </p>
-    </div>
+      {/* Container utama */}
+      <div className="max-w-6xl mx-auto flex px-6 py-12 gap-6 relat mt-[10px]">
+        {/* Kolom 1 (Teks) */}
+        <div className="flex-1 relative">
+          <h3 className="text-[49px] font-boogaloo relative z-10 mt-0.5">
+            Cerita di Balik Kedai Mie Kulay
+          </h3>
+          <p className="text-black leading-relaxed text-[24px] mt-[34px] font-baloo-2">
+            Mie Kulay lahir dari ide awal den7gan merintis usaha ini dilakukan
+            dirumah dengan mencoba melalui penjualan aplikasi online. Sejak
+            berdiri, Mie Kulay berkomitmen menghadirkan sajian yang berkualitas,
+            bersih, halal, dan terjangkau, agar setiap orang bisa menikmati mie
+            nikmat penuh kehangatan tanpa harus mahal.
+          </p>
+        </div>
 
     {/* Kolom 2 (Gambar menumpuk) */}
     <div className="flex-1 relative h-[500px]">
-      {/* Gambar 1 */}
-      <img
-        src={Toko}
-        alt="Kedai Atas"
-        className="rounded-lg object-cover w-[501px] h-[356px] absolute top-0 right-0 shadow-lg"
-      />
-      {/* Gambar 2 */}
-      <img
-        src={Toko1}
-        alt="Kedai Bawah"
-        className="rounded-lg object-cover w-[372px] h-[217px] absolute -bottom-0 left-0 shadow-lg z-20 "
-      />
+        {/* Gambar 1 */}
+        <img
+          src={Toko}
+          alt="Kedai Atas"
+          className="rounded-lg object-cover w-[501px] h-[356px] absolute top-0 right-0 shadow-lg"
+        />
+        {/* Gambar 2 */}
+        <img
+          src={Toko1}
+          alt="Kedai Bawah"
+          className="rounded-lg object-cover w-[372px] h-[217px] absolute -bottom-0 left-0 shadow-lg z-20 "
+        />
+      </div>
     </div>
-  </div>
 
 
 
@@ -69,20 +69,18 @@ function Tentang() {
 
       {/* Teks sebelah kanan */}
       <div className="ml-[351px] max-w-3xl">
-        <p className="text-black font-boogaloo text-[50px] text-left">
-          Nikmati <span className="text-red-600">mie enak</span> dan
-          <span className="text-blue-600"> berkualitas </span>
-          dengan harga hemat, cuma <span className="text-red-600">5 ribuan</span> saja.
-          Murah meriah, rasa tetap juara!
-        </p>
+          <p className="text-black font-boogaloo text-[50px] text-left">
+            Nikmati <span className="text-red-600">mie enak</span> dan
+            <span className="text-blue-600"> berkualitas </span>
+            dengan harga hemat, cuma <span className="text-red-600">5 ribuan</span> saja.
+            Murah meriah, rasa tetap juara!
+          </p>
+        </div>
       </div>
-    </div>
-
-
-
 
 
       {/* Bersih & Terjamin */}
+      
       <div className="max-w-6xl mx-auto px-6 py-12  gap-8 items-center ml-[534px]">
         <div>
           <h3 className="text-[60px] font-boogaloo mb-4">Bersih & Terjamin</h3>
@@ -101,48 +99,57 @@ function Tentang() {
         <h3 className="text-[60px] font-boogaloo mb-10">
           Keunggulan <span className="text-[#FFB300]">Mie Kulay</span>
         </h3>
-<div className="grid md:grid-cols-3 gap-6 justify-center">
-  {/* Card 1 */}
-  <div className="bg-yellow-400 p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
-    {/* Icon pakai img */}
-    <img src={Vector} alt="Harga Murah" className="w-[102px] h-[100px] mb-4" />
-    {/* Title */}
-    <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-6">
-      Harga Murah Meriah
-    </h3>
-    {/* Text */}
-    <p className="text-white text-[15px] font-baloo-2">
-      Dompet tipis bukan halangan, <br />
-      <span className="text-red-600 text-[15px] font-baloo-2">dengan 5.000</span> kamu udah bisa <br />
-      kenyang di Mie Kulay.
-    </p>
-  </div>
+        {/* Background logo */}
+        <div
+          className="absolute inset-0 bg-cover w-[717px] h-[717px] mt-[1432px] ml-[270px] opacity-5 z-0"
+          style={{ backgroundImage: `url(${Logotr})` }}
+        ></div>
 
-  {/* Card 2 */}
-  <div className="bg-red-500 p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
-    <img src={Rolling} alt="Home Made" className="w-[109px] h-[109px] mb-4" />
-    <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-4">Home Made</h3>
-    <p className="text-white text-[15px] font-baloo-2">
-      Setiap <span className="text-yellow-300 text-[15px] font-baloo-2">Menu</span> di Mie Kulay kami buat <br />
-      dengan tangan sendiri dan <br />
-      <span className="text-yellow-300 text-[15px] font-baloo-2">bukan menggunakan mie instan!</span>
-    </p>
-  </div>
+        {/* Card wrapper */}
+        <div className="relative z-10 flex gap-6 mb-[50px]">
+          {/* Card 1 */}
+          <div className="bg-[#FFB300] p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
+            <img src={Vector} alt="Harga Murah" className="w-[102px] h-[100px] mb-4" />
+            <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-6">
+              Harga Murah Meriah
+            </h3>
+            <span className="font-bold">
+              <p className="text-white text-[15px] font-baloo-2">
+                Dompet tipis bukan halangan, <br />
+                <span className="text-[#DC3538] text-[15px] font-baloo-2">dengan 5.000</span> kamu udah bisa <br />
+                kenyang di Mie Kulay.
+              </p>
+            </span>
+          </div>
 
-  {/* Card 3 */}
-  <div className="bg-blue-600 p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
-    <img src={Smile} alt="Porsi Puas" className="w-[103px] h-[103px] mb-4" />
-    <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-5">Porsi Puas</h3>
-    <p className="text-white text-[15px] font-baloo-2">
-      Harga ramah kantong, semangkuk <br />
-      Mie Kulay <span className="text-yellow-300 text-[15px] font-baloo-2">porsinya pas</span>, bikin <br />
-      kenyang tanpa bikin <span className="text-green-400 text-[15px] font-baloo-2">dompet tipis.</span>
-    </p>
-  </div>
-</div>
+          {/* Card 2 */}
+          <div className="bg-[#D72629] p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
+            <img src={Rolling} alt="Home Made" className="w-[109px] h-[109px] mb-4" />
+            <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-4">Home Made</h3>
+            <span className="font-bold">
+              <p className="text-white text-[14px] font-baloo-2">
+                Setiap <span className="text-[#FFBA00] text-[14px] font-baloo-2">Menu</span> di Mie Kulay kami buat
+                dengan tangan sendiri dan <br />
+                <span className="text-[#FFBA00] text-[14px] font-baloo-2">bukan menggunakan mie instan!</span>
+              </p>
+            </span>
+          </div>
 
+          {/* Card 3 */}
+          <div className="bg-[#1554B4] p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
+            <img src={Smile} alt="Porsi Puas" className="w-[103px] h-[103px] mb-4" />
+            <h3 className="text-white font-boogaloo text-[30px] mb-3 mt-5">Porsi Puas</h3>
+            <p className="text-white text-[14px] font-baloo-2">
+              <span className="font-bold">
+                Harga ramah kantong, semangkuk <br />
+                Mie Kulay <span className="text-[#FFBA00] text-[14px] font-baloo-2">porsinya pas</span>, bikin <br />
+                kenyang tanpa bikin <span className="text-[#FFBA00] text-[14px] font-baloo-2">dompet tipis.</span>
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+      </div>
   );
 }
 
