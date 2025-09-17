@@ -1,0 +1,258 @@
+import React from "react";
+
+function Bahan({
+  entriesPerPage,
+  filteredData,
+  setCurrentPage,
+  currentPage,
+  setEntriesPerPage,
+  category,
+  stockData,
+  setCategory,
+  setSearch,
+  search,
+  paginatedData,
+  highlightedRow,
+  handleDecrement,
+  MinRed,
+  handleInputChange,
+  handleIncrement,
+  PlusGreen,
+  setEditId,
+  Pencil,
+  onDelete,
+  Sampah,
+  totalPages,
+  pages
+}) {
+  return (
+    <div className="flex-1 space-y-[0.9375rem]">
+      {/* search & filter */}
+      <div className="flex items-center justify-between h-[1.9375rem]">
+        <div className="flex items-center">
+          <select
+            value={entriesPerPage}
+            onChange={(e) => {
+              const newEntriesPerPage = Number(e.target.value);
+              const newTotalPages = Math.ceil(
+                filteredData.length / newEntriesPerPage
+              );
+              const newStartIndex = (currentPage - 1) * newEntriesPerPage;
+              // If the current startIndex exceeds the total data length, reset to the last valid page
+              if (newStartIndex >= filteredData.length) {
+                setCurrentPage(newTotalPages || 1); // Ensure at least page 1 if no data
+              }
+              setEntriesPerPage(newEntriesPerPage);
+            }}
+            className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer"
+          >
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+            <option value={6}>6</option>
+            <option value={10}>10</option>
+          </select>
+          <p className="ml-2 text-sm">Entries per page</p>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-[28px] h-[32px] cursor-pointer"
+          >
+            <option value="all">All</option>
+            {stockData.map((item, idx) => (
+              <option key={idx} value={item.nama}>
+                {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="mr-2 text-sm">Search:</label>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+          />
+        </div>
+      </div>
+      {/* data table */}
+      <div className="w-full h-full">
+        <table className="w-full font-semibold border-collapse border border-[#959595]">
+          <thead className="top-0">
+            <tr className="bg-[#FFB300] h-[49px]">
+              <th className="border border-[#959595] text-center w-[18.30%]">
+                Id
+              </th>
+              <th className="border border-[#959595] text-center w-[32.42%]">
+                Produk
+              </th>
+              <th className="border border-[#959595] text-center w-[25.07%]">
+                Stok
+              </th>
+              <th className="border border-[#959595] text-center w-[24.15%]">
+                Aksi
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedData.length > 0 ? (
+              paginatedData.map((t, ind) => (
+                <tr
+                  key={ind}
+                  className={`${
+                    highlightedRow === t.id
+                      ? "bg-[#AFCFFF]"
+                      : "even:bg-[#DCDCDC]"
+                  } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
+                >
+                  <td className="border-r border-[#959595] pl-[10.5px]">
+                    {t.id}
+                  </td>
+                  <td className="border-r border-[#959595] pl-[10.5px]">
+                    {t.produk}
+                  </td>
+                  <td className="border-r border-[#959595]">
+                    <div className="text-center flex justify-around items-center h-full">
+                      <button
+                        onClick={() => {
+                          handleDecrement(t.id);
+                        }}
+                        className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                      >
+                        <img
+                          src={MinRed}
+                          alt=""
+                          className="group-hover:scale-150 group-active:scale-125"
+                        />
+                      </button>
+                      <input
+                        type="text"
+                        className="w-10 text-center"
+                        value={t.stok}
+                        onChange={(e) =>
+                          handleInputChange(t.id, e.target.value)
+                        }
+                      />
+                      <button
+                        onClick={() => handleIncrement(t.id)}
+                        className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                      >
+                        <img
+                          src={PlusGreen}
+                          alt=""
+                          className="group-hover:scale-150 group-active:scale-125"
+                        />
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                      <button
+                        onClick={() => setEditId(t.id)}
+                        className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
+                      >
+                        <img src={Pencil} alt="" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => onDelete(t.id)}
+                        className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                      >
+                        <img src={Sampah} alt="" />
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="text-center py-3 text-gray-500 italic"
+                >
+                  Tidak ada data
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <div className="flex items-center justify-between mt-5 text-sm">
+          <p>
+            Page {currentPage} of {totalPages || 1} entries
+          </p>
+          <div className="flex items-center space-x-[18px]">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className={`${
+                currentPage === 1 ? "cursor-default" : "cursor-pointer"
+              } text-yellow-300 py-1 rounded disabled:opacity-50`}
+            >
+              <svg
+                width="11"
+                height="14"
+                viewBox="0 0 11 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M8.07608 14.0094L0.0429428 7.04744L8.00962 0.009545L10.0179 1.75003L4.0429 7.02845L10.0678 12.2499L8.07608 14.0094Z"
+                  fill="black"
+                />
+              </svg>
+            </button>
+            <div className="flex gap-[18px]">
+              {pages.map((n, index) =>
+                n === "..." ? (
+                  <span key={index} className="py-1">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(n)}
+                    className={`py-1 cursor-pointer ${
+                      n === currentPage ? "underline" : ""
+                    }`}
+                  >
+                    {n}
+                  </button>
+                )
+              )}
+            </div>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className={`${
+                currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+              } py-1 rounded disabled:opacity-50`}
+            >
+              <svg
+                width="11"
+                height="15"
+                viewBox="0 0 11 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M2.00084 0.115846L10.1014 6.99927L2.20357 14.1144L0.178438 12.3935L6.10178 7.05719L0.0263892 1.89462L2.00084 0.115846Z"
+                  fill="black"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Bahan;

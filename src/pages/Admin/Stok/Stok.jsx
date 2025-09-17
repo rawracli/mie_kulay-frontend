@@ -4,11 +4,11 @@ import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
 import Plus from "../../../assets/Admin/plus.svg";
-import TambahProduk from "./Overlay/TambahProduk";
 import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
+import Bahan from "./section/bahan";
 
 function Stok() {
   const [stockTable, setStockTable] = useState([
@@ -206,12 +206,13 @@ function Stok() {
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
       <div className="flex items-center gap-[16px] justify-end pb-[13px]">
         <button
-          onClick={() => setIsAddOpen(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+          onClick={() => setIsAddKategori(true)}
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Produk</p>
+          <p className="text-[14px] font-bold text-white">Lihat Bahan</p>
         </button>
+
         <button
           onClick={() => setIsAddKategori(true)}
           className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
