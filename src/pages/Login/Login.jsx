@@ -1,6 +1,7 @@
 import React from "react";
 import background from "../../assets/Login/login.png";
 import logo from "../../assets/Login/logo.png"; 
+import Bglogin from "../../assets/Login/bglogin.png"; 
 
 function Login() {
   return (
@@ -12,7 +13,7 @@ function Login() {
 
       {/* Kolom kiri: Form Login */}
       <div className="flex flex-1 items-center justify-center bg-white">
-        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 rounded-md lg:w-[503px] lg:h-[547px] lg:mt- max-sm:w-[322px] max-sm:h-[377px] ">
+        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 rounded-md lg:w-[503px] lg:h-[547px] max-sm:w-[323px] max-sm:h-[405px] max-sm:mt-[107px] max-sm:ml-[33px] max-sm:mr-[33px]">
           <h2 className="text-4xl font-bold text-center mb-6 mt-[2.50rem] ml-[0.10rem]">
             Login
           </h2>
@@ -49,7 +50,12 @@ function Login() {
       </div>
 
       {/* Kolom kanan: Ilustrasi */}
-      <div className="flex-1 bg-[#FFBA00] flex items-center justify-center flex-col">
+      <div
+      className="flex-1 flex items-center justify-center flex-col bg-cover bg-center h-full lg:h-screen"
+      style={{
+      backgroundImage: `url(${Bglogin})`,
+      }}
+        >
         <img
           src={background}
           alt="Login Illustration"
