@@ -26,7 +26,7 @@ function Navbar() {
               : "bg-white sm:h-20 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-[#FFD358]"
           }`}
         >
-          <div className="flex items-center w-full mx-[25px]">
+          <div className="flex items-center w-full mx-[70px]">
             <div className="w-full h-full  items-center">
               <Link className="flex items-center  w-fit sm:ml- md:ml-0" to="/">
                 <img src={Logo} alt="Logo" className="size-[42px] sm:size-[45px] sm-m md:size-[81px]" />
@@ -62,13 +62,13 @@ function Navbar() {
                 </div>
               </button>
             </div>
-            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center ml-11 justify-end">
+            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center mr-[41px] justify-end">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   onClick={() => window.scrollTo(0, 0)}
-                  className={({ isActive }) => `hover:text-[#FFD358] focus:text-[#FFB300] font-chewy ${isActive && "text-[#FFB300]"}`}
+                  className={({ isActive }) => `text-[22px] font-chewy ${!isActive && "text-[#FFB300] hover:text-[#FFD358] focus:text-[#FFB300]"}`}
                 >
                   {item.name}
                 </NavLink>
