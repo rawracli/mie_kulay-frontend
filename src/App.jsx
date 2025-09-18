@@ -20,7 +20,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/menu" element={<Menu />}></Route>
-          <Route path="/tentang-kami" element={<Tentang />}></Route>
+          <Route path="/tentang" element={<Tentang />}></Route>
         </Route>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
