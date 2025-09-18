@@ -11,27 +11,27 @@ function Footer() {
     <footer className="relative flex flex-col overflow-hidden min-h-[100svh] sm:min-h-140 lg:min-h-[359px] text-white bg-[#144999]">
       {/* Foreground */}
       <div
-        className="relative flex w-full max-w-[1200px] 
-  pl-[16px] sm:pl-[24px] md:pl-[32px] lg:pl-[90px] 
+        className="relative flex w-full
+  pl-[16px] sm:pl-[24px] md:pl-[32px] lg:pl-[80px] 
   pr-[20px] sm:pr-[40px] md:pr-[60px] lg:pr-[0px] xl:pr-[72px] 
   pt-[20px] sm:pt-[28px] lg:pt-[66px] 
   pb-[24px]"
       >
         <div className="flex flex-row flex-1 pt-3.5 items-center lg:items-start">
-          <div className="hidden sm:block pt-[24px]">
-            <img src={Logo} alt="logo" className="w-[153px]" />
+          <div className="hidden sm:block pt-[17px]">
+            <img src={Logo} alt="logo" className="w-[175px]" />
           </div>
 
           <div className="flex flex-col sm:pl-19 flex-1 gap-9 lg:pl-[100px]">
             <div className="sm:w-49 sm:hidden pt-[24px]">
               <img src={Logo} alt="logo" className="w-45" />
             </div>
-            <nav className="flex lg:justify-center flex-1 gap-[98px]">
+            <nav className="flex lg:justify-center flex-1 gap-[133px]">
               <div className="">
-                <h2 className="font-boogaloo text-[36px] leading-7 mb-[18px]">
+                <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Navigasi
                 </h2>
-                <ul className="gap-1 flex flex-col text-nowrap text-[#DBDBDB] font-baloo-2 text-[24px]">
+                <ul className="gap-[8px] flex flex-col text-nowrap font-baloo-2 text-[18px]">
                   <li>
                     <Link
                       to="/"
@@ -82,7 +82,7 @@ function Footer() {
                 <h2 className="font-boogaloo text-[36px] leading-7 mb-[18px]">
                   Informasi
                 </h2>
-                <ul className="space-y-[27px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
                   <div className="flex gap-[19.5px]">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
                     <p>0838 - 6993 - 1820</p>
@@ -92,7 +92,7 @@ function Footer() {
                     <p>ayuuaulia01@gmail.com</p>
                   </div>
                   <div className="flex gap-[19.5px] items-start">
-                    <img src={Maps} alt="" className=" pt-[16.75px]" />
+                    <img src={Maps} alt="" className=" pt-[5px]" />
                     <p>
                       3WHG+P4G, Jl. Masjid, Gunungparang, Kec. Cikole, Kota
                       Sukabumi, Jawa Barat 43111
@@ -107,6 +107,24 @@ function Footer() {
                 <h2 className="font-boogaloo text-[36px] leading-7 mb-2.5">
                   Informasi
                 </h2>
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                  <div className="flex gap-[19.5px]">
+                    <img src={Phone} alt="Phone" className="w-[24px]" />
+                    <p>0838 - 6993 - 1820</p>
+                  </div>
+                  <div className="flex gap-[19.5px]">
+                    <img src={Email} alt="Email" className="w-[25px]" />
+                    <p>ayuuaulia01@gmail.com</p>
+                  </div>
+                  <div className="flex gap-[19.5px] items-start">
+                    <img src={Maps} alt="" className=" pt-[5px]" />
+                    <p>
+                      3WHG+P4G, Jl. Masjid, Gunungparang, Kec. Cikole, Kota
+                      Sukabumi, Jawa Barat 43111
+                    </p>
+                  </div>
+                  {/* Pemesanan online */}
+                </ul>
               </div>
             </nav>
             <div className="md:hidden max-w-90 sm:w-50 lg:ml-10">
@@ -139,7 +157,7 @@ function Footer() {
                 <img src={Grab} alt="Grab" className="w-[110px] h-[20px]" />
               </a>
             </div>
-            <p className="font-baloo-2 pt-[32px] leading-[19px] text-[14px]">
+            <p className="font-baloo-2 pt-[12px] text-[18px]">
               © Copyright 2025 <span className="font-bold">Mie Kulay</span>. All
               Rights Reserved
             </p>
