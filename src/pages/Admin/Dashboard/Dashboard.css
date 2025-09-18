@@ -1,0 +1,5 @@
+.recharts-wrapper svg polyline,
+.recharts-wrapper svg line,
+.recharts-wrapper svg path {
+  stroke-width: initial !important;
+}

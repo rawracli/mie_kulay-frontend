@@ -1,64 +1,57 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
-import Plus from "../../../assets/Admin/plus.svg";
-import EditProduk from "./Overlay/EditProduk";
-import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
-import TambahKategori from "./Overlay/TambahKategori";
-import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
-import Bahan from "./section/bahan";
+import TambahPengeluaran from "./Overlay/TambahPengeluaran";
+import {
+  getPengeluaran,
+  updatePengeluaran,
+  hapusPengeluaran,
+} from "../../../controllers/Pengeluaran";
 
-function Stok() {
-  const [stockTable, setStockTable] = useState([]);
+function Pengeluaran() {
+  const [dataPengeluaran, setDataPengeluaran] = useState([]);
   const [loading, setLoading] = useState(true);
-  const updateTimeout = useRef({});
-  const stockData = useMemo(() => {
-    const grouped = stockTable.reduce((acc, item) => {
-      if (!acc[item.kategori]) {
-        acc[item.kategori] = 0;
-      }
-      acc[item.kategori] += item.stok;
-      return acc;
-    }, {});
-
-    // ubah jadi array biar gampang di-map
-    return Object.entries(grouped).map(([nama, stok]) => ({
-      nama,
-      stok,
-    }));
-  }, [stockTable]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [category, setCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [isAddKategori, setIsAddKategori] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [updateTimers, setUpdateTimers] = useState({});
   const [deleteId, setDeleteId] = useState(null);
+  const [selectedPengeluaran, setSelectedPengeluaran] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
-  const filteredData = useMemo(() => {
-   const keyword = search.trim().toLowerCase();
-   const selectedCategory = category?.toLowerCase();
+  const [tanggalInput, setTanggalInput] = useState();
 
-   return stockTable.filter((t) => {
-    const matchCategory =
-      !category || category === "all"
-        ? true
-        : t.kategori.toLowerCase().includes(selectedCategory);
+  const parseDate = (dateStr) => {
+    if (!dateStr) return null;
+    const isoStr = dateStr.includes("T") ? dateStr : dateStr.replace(" ", "T");
+    const d = new Date(isoStr);
+    return isNaN(d) ? null : d;
+  };
+
+  const filteredData = useMemo(() => {
+   return dataPengeluaran.filter((t) => {
+    const d = new Date(t.tanggal || t.created_at);
+    const itemDateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+    const inputDateStr = tanggalInput || "";
+    const keyword = search?.toLowerCase();
+
+    const matchDate = !inputDateStr || itemDateStr === inputDateStr;
 
     const matchSearch =
       !keyword ||
-      t.id.toString().toLowerCase().includes(keyword) ||
-      t.produk.toLowerCase().includes(keyword) //||
-      // t.stok.toString().includes(keyword);
+      t.id.toString().includes(keyword) ||
+      t.pengeluaran.toString().includes(keyword) ||
+      (t.tanggal && t.tanggal.toLowerCase().includes(keyword));
 
-    return matchCategory && matchSearch;
+    return matchDate && matchSearch;
    });
-  }, [search, stockTable, category]);
+  }, [dataPengeluaran, search, tanggalInput]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -66,78 +59,106 @@ function Stok() {
     startIndex,
     startIndex + entriesPerPage
   );
-  // input pake id (id dari stokTable)
-  // +
-  const handleUpdateStok = (id, newStok) => {
-    // update state lokal langsung
-    setStockTable((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, stok: newStok } : item))
-    );
-    if (updateTimeout.current[id]) {
-      clearTimeout(updateTimeout.current[id]);
-    }
 
-    // timer biar tidak spam update ke server, sehingga tidak delay saat menambah/mengurangi stok
-    updateTimeout.current[id] = setTimeout(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const current = stockTable.find((item) => item.id === id);
-        if (!current) return;
-
-        const updated = await updateBahan(id, {
-          nama_bahan: current.produk,
-          harga_beli: current.harga_beli,
-          stok: newStok,
-          kategori_id: current.kategori_id,
-        });
-
-        console.log("Stok berhasil diupdate:", updated);
-      } catch (err) {
-        console.error("Gagal update stok:", err.message);
+        const data = await getPengeluaran();
+        setDataPengeluaran(data);
+      } catch {
+        setLoading(false);
       }
-    }, 300);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (highlightedRow !== null) {
+      const timer = setTimeout(() => {
+        setHighlightedRow(null);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedRow]);
+
+  const handleCloseModal = () => {
+    if (selectedPengeluaran) {
+      setHighlightedRow(selectedPengeluaran.id);
+    }
+    setSelectedPengeluaran(null);
   };
 
-  const handleIncrement = (id) => {
-    const current = stockTable.find((item) => item.id === id);
-    if (!current) return;
-    handleUpdateStok(id, current.stok + 1);
+  // input pake id (id dari stokTable)
+  // +
+  const handleIncrement = (idIndex) => {
+   setDataPengeluaran((prevData) => {
+    return prevData.map((item) => {
+      if (item.id === idIndex) {
+        const newValue = Number(item.pengeluaran) + 1000;
+        delayedUpdate(idIndex, newValue); // update backend pakai nilai baru
+        return { ...item, pengeluaran: newValue };
+      }
+      return item;
+    });
+   });
   };
 
   // -
-  const handleDecrement = (id) => {
-    const current = stockTable.find((item) => item.id === id);
-    if (!current) return;
-    if (current.stok > 0) {
-      handleUpdateStok(id, current.stok - 1);
-    }
+  const handleDecrement = (idIndex) => {
+   setDataPengeluaran((prevData) =>
+     prevData.map((item) =>
+       item.id === idIndex && item.pengeluaran > 1
+         ? { ...item, pengeluaran: item.pengeluaran - 1000 }
+         : item
+     )
+   );
+ 
+   const item = dataPengeluaran.find(d => d.id === idIndex);
+   const newValue = (item?.pengeluaran || 1) - 1;
+   delayedUpdate(idIndex, newValue);
   };
+  
+  const delayedUpdate = (id, newValue) => {
+   if (updateTimers[id]) clearTimeout(updateTimers[id]);
+ 
+   const pengeluaranItem = dataPengeluaran.find(d => d.id === id);
+   if (!pengeluaranItem) return;
+ 
+   const timer = setTimeout(async () => {
+     try {
+       await updatePengeluaran(id, Number(newValue), pengeluaranItem.catatan || "");
+     } catch (err) {
+       console.error(err);
+     }
+   }, 300);
+ 
+   setUpdateTimers(prev => ({ ...prev, [id]: timer }));
+  };
+
   // input jumlah manual
-  const handleInputChange = (id, value) => {
+  const handleInputChange = (idIndex, value) => {
     const newValue = parseInt(value) || 1;
-    handleUpdateStok(id, newValue);
+    setDataPengeluaran((prevData) =>
+      prevData.map((item) =>
+        item.id === idIndex ? { ...item, pengeluaran: newValue } : item
+      )
+    );
+  
+    delayedUpdate(idIndex, newValue);
   };
 
-  const hapusBahanById = async (id) => {
-    try {
-      await hapusBahan(id); // hapus di server
-      setStockTable((prev) => {
-        const newData = prev.filter((item) => item.id !== id);
-        localStorage.setItem("bahan", JSON.stringify(newData)); // update cache
-        return newData;
-      });
-      console.log("Bahan berhasil dihapus");
-    } catch (err) {
-      console.error("Gagal hapus bahan:", err.message);
-    }
-  };
-
-  // Fungsi yang dipanggil saat klik tombol delete di tabel
+  //btn delete
   const onDelete = async (idIndex) => {
     if (skipConfirm) {
-      // jika sudah set skipConfirm, hapus langsung
-      await hapusBahanById(idIndex);
+      try {
+        await hapusPengeluaran(idIndex);
+        setDataPengeluaran((prevData) =>
+          prevData.filter((item) => item.id !== idIndex)
+        );
+      } catch (err) {
+        console.error("Gagal hapus pengeluaran:", err.message);
+      }
     } else {
-      // buka modal konfirmasi
       setDeleteId(idIndex);
     }
   };
@@ -150,96 +171,53 @@ function Stok() {
       if (totalPages === 1) pageList.push(1);
       return pageList;
     }
-    // Selalu tambahkan halaman pertama
     pageList.push(1);
-    // Hitung rentang halaman di sekitar currentPage
     let start = Math.max(2, currentPage - delta);
     let end = Math.min(totalPages - 1, currentPage + delta);
-    // Jika di awal, tampilkan lebih banyak ke kanan jika memungkinkan
     if (currentPage <= delta + 1) {
       start = 2;
       end = Math.min(totalPages - 1, delta * 2 + 1);
     }
-    // Jika di akhir, tampilkan lebih banyak ke kiri
     if (currentPage >= totalPages - delta) {
       end = totalPages - 1;
       start = Math.max(2, totalPages - (delta * 2 + 1) + 1);
     }
-    // Tambahkan ellipsis jika start > 2
     if (start > 2) {
       pageList.push("...");
     }
-    // Tambahkan halaman dari start ke end
     for (let i = start; i <= end; i++) {
       pageList.push(i);
     }
-    // Tambahkan ellipsis jika end < totalPages - 1
     if (end < totalPages - 1) {
       pageList.push("...");
     }
-    // Selalu tambahkan halaman terakhir
     pageList.push(totalPages);
 
     return pageList;
   }, [currentPage, totalPages]);
 
   useEffect(() => {
-    const cached = localStorage.getItem("bahan");
-    if (cached) {
-      setStockTable(JSON.parse(cached));
-      setLoading(false);
-    }
-
-    const fetchBahan = async () => {
-      try {
-        const data = await getBahan();
-        const mapped = data.map((item) => ({
-          id: item.id,
-          produk: item.nama_bahan,
-          harga_beli: item.harga_beli,
-          stok: item.stok,
-          kategori_id: item.kategori_id,
-          kategori: item.kategori?.jenis_hidangan ?? "-",
-        }));
-        setStockTable(mapped);
-        localStorage.setItem("bahan", JSON.stringify(mapped)); // update cache
-      } catch (err) {
-        console.error(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBahan();
-  }, []);
-
-  // console.log(currentPage);
-  // console.log(totalPages);
+    currentPage >= totalPages && setCurrentPage(totalPages);
+    currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
   return (
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
-      <div className="flex items-center gap-[16px] justify-end pb-[13px]">
-        <button
-          onClick={() => setIsAddKategori(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
-        >
-          <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">
-            Tambah Bahan Mentah
-          </p>
-        </button>
-
-        <button
-          onClick={() => setIsAddKategori(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
-        >
-          <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Kategori</p>
-        </button>
-      </div>
       <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
             {/* search & filter */}
+            <div className="text-end">
+              <label className="mr-2 text-sm">Search:</label>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+              />
+            </div>
             <div className="flex items-center justify-between h-[1.9375rem]">
               <div className="flex items-center">
                 <select
@@ -264,29 +242,37 @@ function Stok() {
                   <option value={10}>10</option>
                 </select>
                 <p className="ml-2 text-sm">Entries per page</p>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-[28px] h-[32px] cursor-pointer"
+                <button
+                  onClick={() => setIsAddOpen(true)}
+                  className="ml-[20px] pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
                 >
-                  <option value="all">All</option>
-                  {stockData.map((item, idx) => (
-                    <option key={idx} value={item.nama}>
-                      {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
-                    </option>
-                  ))}
-                </select>
+                  <svg
+                    width="11"
+                    height="19"
+                    viewBox="0 0 11 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.63555 18.25V16.1C3.75221 15.9 2.98988 15.5167 2.34855 14.95C1.70721 14.3833 1.23621 13.5833 0.935547 12.55L2.78555 11.8C3.03555 12.6 3.40655 13.2083 3.89855 13.625C4.39055 14.0417 5.03621 14.25 5.83555 14.25C6.51888 14.25 7.09821 14.096 7.57355 13.788C8.04888 13.48 8.28621 13.0007 8.28555 12.35C8.28555 11.7667 8.10221 11.3043 7.73555 10.963C7.36888 10.6217 6.51888 10.234 5.18555 9.8C3.75221 9.35 2.76888 8.81267 2.23555 8.188C1.70221 7.56333 1.43555 6.80067 1.43555 5.9C1.43555 4.81667 1.78555 3.975 2.48555 3.375C3.18555 2.775 3.90221 2.43333 4.63555 2.35V0.25H6.63555V2.35C7.46888 2.48333 8.15655 2.78767 8.69855 3.263C9.24055 3.73833 9.63621 4.31733 9.88555 5L8.03555 5.8C7.83555 5.26667 7.55221 4.86667 7.18555 4.6C6.81888 4.33333 6.31888 4.2 5.68555 4.2C4.95221 4.2 4.39388 4.36267 4.01055 4.688C3.62721 5.01333 3.43555 5.41733 3.43555 5.9C3.43555 6.45 3.68555 6.88333 4.18555 7.2C4.68555 7.51667 5.55221 7.85 6.78555 8.2C7.93555 8.53333 8.80655 9.06267 9.39855 9.788C9.99055 10.5133 10.2862 11.3507 10.2855 12.3C10.2855 13.4833 9.93555 14.3833 9.23555 15C8.53555 15.6167 7.66888 16 6.63555 16.15V18.25H4.63555Z"
+                      fill="white"
+                    />
+                  </svg>
+                  <p className="text-[14px] font-bold text-white">
+                    Tambah Pengeluaran
+                  </p>
+                </button>
               </div>
               <div>
-                <label className="mr-2 text-sm">Search:</label>
+                {/* filter date */}
+                <label className="text-1xl font-semibold mb-1 mt-[11px] mr-[15px]">
+                  Filter logs by:
+                </label>
                 <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+                  type="date"
+                  value={tanggalInput}
+                  onChange={(e) => setTanggalInput(e.target.value)}
+                  className="w-[234px] h-[35px] bg-gray-100 px-2  border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
             </div>
@@ -295,31 +281,25 @@ function Stok() {
               <table className="w-full font-semibold border-collapse border border-[#959595]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
-                    <th className="border border-[#959595] text-center w-[18.30%]">
+                    <th className="border border-[#959595] text-center w-[12.01%]">
                       Id
                     </th>
-                    <th className="border border-[#959595] text-center w-[32.42%]">
-                      Bahan Mentah
+                    <th className="border border-[#959595] text-center w-[18.20%]">
+                      Jumlah
                     </th>
-                    <th className="border border-[#959595] text-center w-[25.07%]">
-                      Stok
+                    <th className="border border-[#959595] text-center w-[16.39%]">
+                      Catatan
                     </th>
-                    <th className="border border-[#959595] text-center w-[24.15%]">
+                    <th className="border border-[#959595] text-center w-[15.57%]">
+                      Tanggal
+                    </th>
+                    <th className="border border-[#959595] text-center w-[16.60%]">
                       Aksi
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic animate-pulse"
-                      >
-                        Memuat data...
-                      </td>
-                    </tr>
-                  ) : paginatedData.length > 0 ? (
+                  {paginatedData.length > 0 ? (
                     paginatedData.map((t, ind) => (
                       <tr
                         key={ind}
@@ -332,16 +312,13 @@ function Stok() {
                         <td className="border-r border-[#959595] pl-[10.5px]">
                           {t.id}
                         </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.produk}
-                        </td>
                         <td className="border-r border-[#959595]">
                           <div className="text-center flex justify-around items-center h-full">
                             <button
                               onClick={() => {
                                 handleDecrement(t.id);
                               }}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                              className="group cursor-pointer h-full flex-1 flex justify-end pr-5 pl-5 items-center"
                             >
                               <img
                                 src={MinRed}
@@ -351,16 +328,15 @@ function Stok() {
                             </button>
                             <input
                               type="text"
-                              className="w-10 text-center"
-                              value={t.stok}
+                              className="w-30 text-center"
+                              value={t.pengeluaran}
                               onChange={(e) =>
                                 handleInputChange(t.id, e.target.value)
                               }
                             />
-
                             <button
                               onClick={() => handleIncrement(t.id)}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                              className="group cursor-pointer h-full flex-1 flex justify-start pl-5 pr-5 items-center"
                             >
                               <img
                                 src={PlusGreen}
@@ -369,6 +345,31 @@ function Stok() {
                               />
                             </button>
                           </div>
+                        </td>
+                        <td className="border-r border-[#959595] text-center">
+                          <button
+                            className="bg-blue-500 text-white px-3 py-1 text rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                            onClick={() => setSelectedPengeluaran(t)}
+                          >
+                            Lihat Keterangan
+                          </button>
+                        </td>
+                        <td className="border-r border-[#959595] text-center">
+                          {new Date(t.created_at).toLocaleDateString("id-ID", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                          <span> </span>
+                          <span className="text-blue-500 font-semibold">
+                            {/* {new Date(t.created_at).toLocaleTimeString(
+                              "id-ID",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )} */}
+                          </span>
                         </td>
                         <td>
                           <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
@@ -478,55 +479,6 @@ function Stok() {
               </div>
             </div>
           </div>
-          <div className="w-[21.5rem] pt-[28px] pb-[24px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)]">
-            <div className="space-y-[27.45px] px-[0.875rem]">
-              {loading ? (
-                <tr>
-                  <td
-                    colSpan="6"
-                    className="text-center py-3 text-gray-500 italic animate-pulse"
-                  >
-                    Memuat data...
-                  </td>
-                </tr>
-              ) : (
-                stockData.map((items, index) => (
-                  <div key={index}>
-                    <div className="bg-[#FFB300] border border-[#959595] pl-[0.9375rem] pr-[1.25rem] w-full h-[2.75rem] flex items-center">
-                      <h3>
-                        {items.nama.slice(0, 1).toUpperCase() +
-                          items.nama.slice(1)}
-                      </h3>
-                    </div>
-                    <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                      <h4>{items.stok}</h4>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            <div className="px-[2.0938rem] w-full h-[2.5rem] mt-[0.875rem]">
-              <div className="flex pl-[1.3125rem] pr-[2.0625rem] items-center text-[#FFB300] justify-between border-[0.5px] border-[#959595] h-[40px] bg-white">
-                <h3 className="uppercase font-bold text-[0.875rem]">
-                  Total Stok :
-                </h3>
-                <h4>
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic animate-pulse"
-                      >
-                        Memuat data...
-                      </td>
-                    </tr>
-                  ) : (
-                    stockData.reduce((total, item) => total + item.stok, 0)
-                  )}
-                </h4>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div
@@ -534,41 +486,71 @@ function Stok() {
           setIsAddOpen(false);
           setEditId(null);
           setDeleteId(null);
-          setIsAddKategori(false);
         }}
         className={`${
-          editId || isAddOpen || deleteId || isAddKategori ? "" : "hidden"
+          editId !== null || isAddOpen || deleteId ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
-      {isAddOpen && (
-        <TambahProduk
-          isAddOpen={isAddOpen}
-          setHighlightedRow={setHighlightedRow}
+      {(isAddOpen || editId !== null) && (
+        <TambahPengeluaran
           setIsAddOpen={setIsAddOpen}
-          setStockTable={setStockTable}
-          stockData={stockData}
-        />
-      )}
-      {editId !== null && (
-        <EditProduk
-          stockTable={stockTable}
+          dataPengeluaran={dataPengeluaran}
+          setDataPengeluaran={setDataPengeluaran}
           editId={editId}
-          setHighlightedRow={setHighlightedRow}
           setEditId={setEditId}
-          setStockTable={setStockTable}
+          setHighlightedRow={setHighlightedRow}
         />
       )}
       {deleteId !== null && (
         <ConfirmDelete
           deleteId={deleteId}
           setDeleteId={setDeleteId}
-          setData={setStockTable}
-          onDelete={hapusBahanById}
           setSkipConfirm={setSkipConfirm}
+          onDelete={async (id) => {
+            await hapusPengeluaran(id);
+            setDataPengeluaran((prev) => prev.filter((item) => item.id !== id));
+          }}
         />
       )}
-      {isAddKategori && <TambahKategori setIsAddKategori={setIsAddKategori} />}
+      {selectedPengeluaran && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+          onClick={handleCloseModal}
+        >
+          <div
+            className="bg-white rounded-[5px] w-[666px] h-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+              <button
+                className="absolute top-58 right-80 text-white hover:text-gray-300 text-[30px] cursor-pointer"
+                onClick={handleCloseModal}
+              >
+                ✕
+              </button>
+            <div className="p-[31px]">
+              <p className="text-gray-800">{selectedPengeluaran.catatan}</p>
+                {(() => {
+                const tanggal = parseDate(selectedPengeluaran.tanggal) || parseDate(selectedPengeluaran.created_at);
+                if (!tanggal) return <p className="text-right text-black font-semibold mt-15">Tanggal tidak tersedia</p>;
+                return (
+                <p className="text-right text-black font-semibold mt-15">
+                  {tanggal.toLocaleDateString("id-ID", {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                })}{" "}
+                {/* {tanggal.toLocaleTimeString("id-ID", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })} */}
+              </p>
+             );
+            })()}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-export default Stok;
+export default Pengeluaran;

@@ -4,37 +4,17 @@ import useOverflow from "../../../../hooks/useOverflow";
 import Login from "../../../../assets/Login/login.png";
 import TambahMenu from "./TambahMenu";
 import ConfirmDelete from "../../../../components/Admin/ConfirmDelete";
+import {
+  getCategories,
+  addCategory,
+  updateCategory,
+  deleteCategory,
+} from "../../../../controllers/Category";
+import { getMenu } from "../../../../controllers/Menu";
 
 function TambahKategori({ setIsAddKategori }) {
-  const [kategoriData, setKategoriData] = useState([
-    {
-      kategori: "makanan",
-      menu: [
-        { foto: Login, nama: "Eskrim", harga: 5005 },
-        { foto: Login, nama: "Eskriem", harga: 5600 },
-        { foto: Login, nama: "Eskerim", harga: 2000 },
-        { foto: Login, nama: "iskrim", harga: 300 },
-      ],
-    },
-    {
-      kategori: "topping",
-      menu: [
-        { foto: Login, nama: "Esrim", harga: 5005 },
-        { foto: Login, nama: "Eskriem", harga: 560 },
-        { foto: Login, nama: "ikrim", harga: 3000 },
-      ],
-    },
-    {
-      kategori: "minuman",
-      menu: [
-        { foto: Login, nama: "Esrim", harga: 505 },
-        { foto: Login, nama: "Eskriem", harga: 5600 },
-        { foto: Login, nama: "Eskem", harga: 200 },
-        { foto: Login, nama: "Eskrim", harga: 2000 },
-        { foto: Login, nama: "isrim", harga: 300 },
-      ],
-    },
-  ]);
+  const [kategoriData, setKategoriData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { refOverflow, isOverflowing } = useOverflow({ direction: "vertical" });
 
@@ -49,28 +29,65 @@ function TambahKategori({ setIsAddKategori }) {
 
   // close dropdown ketika klik di luar panel kanan
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (rightPanelRef.current && !rightPanelRef.current.contains(e.target)) {
-        setActiveMenuIndex(null);
+    const fetchData = async () => {
+      try {
+        const [resKategori, resMenu] = await Promise.all([
+          getCategories(),
+          getMenu(),
+        ]);
+
+        // Gabungkan menu ke dalam kategori sesuai kategori_id
+        const kategoriWithMenu = resKategori.map((cat) => {
+          const menus = resMenu.filter((m) => m.kategori_id === cat.id);
+          return {
+            id: cat.id, // <--- tambahkan ini
+            kategori: cat.jenis_hidangan,
+            menu: menus.map((m) => ({
+              nama: m.nama_hidangan,
+              foto: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${m.gambar}`,
+            })),
+          };
+        });
+
+        setKategoriData(kategoriWithMenu);
+      } catch (err) {
+        console.error("Gagal ambil kategori/menu:", err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    fetchData();
   }, []);
 
   const handleToggleMenu = (idx) => {
     setActiveMenuIndex((prev) => (prev === idx ? null : idx));
   };
 
-  const onDelete = (idx) => {
+  const onDelete = async (idx) => {
     setActiveMenuIndex(null);
+
+    const kategoriToDelete = kategoriData[idx];
+
     if (skipConfirm) {
-      setKategoriData((prev) => prev.filter((_, i) => i !== idx));
-      if (editIndex === idx) {
-        setEditIndex(null);
-        setFormNamaKategori("");
-      } else if (editIndex !== null && idx < editIndex) {
-        setEditIndex((prev) => prev - 1);
+      try {
+        await deleteCategory(kategoriToDelete.id);
+
+        // update state lokal
+        setKategoriData((prev) => prev.filter((_, i) => i !== idx));
+
+        if (editIndex === idx) {
+          setEditIndex(null);
+          setFormNamaKategori("");
+        } else if (editIndex !== null && idx < editIndex) {
+          setEditIndex((prev) => prev - 1);
+        }
+
+        setActiveMenuIndex(null);
+        alert("Kategori berhasil dihapus");
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
       }
     } else {
       setDeleteIndex(idx);
@@ -84,26 +101,47 @@ function TambahKategori({ setIsAddKategori }) {
     setActiveMenuIndex(null);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (formNamaKategori.trim() === "") return;
+
     if (editIndex !== null) {
-      setKategoriData((prev) => {
-        const copy = [...prev];
-        copy[editIndex] = {
-          ...copy[editIndex],
-          kategori: formNamaKategori || copy[editIndex].kategori,
-        };
-        return copy;
-      });
-      setEditIndex(null);
-      setFormNamaKategori("");
+      // Update kategori di server
+      try {
+        const kategoriToUpdate = kategoriData[editIndex];
+        const res = await updateCategory(
+          kategoriToUpdate.id,
+          formNamaKategori.trim()
+        );
+
+        setKategoriData((prev) => {
+          const copy = [...prev];
+          copy[editIndex] = {
+            ...copy[editIndex],
+            kategori: res.data.jenis_hidangan,
+          };
+          return copy;
+        });
+
+        setEditIndex(null);
+        setFormNamaKategori("");
+        alert("Kategori berhasil diperbarui");
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
+      }
     } else {
-      // jika tidak sedang edit → tambah kategori baru (opsional)
-      if (formNamaKategori.trim() !== "") {
+      // Tambah kategori baru
+      try {
+        const res = await addCategory(formNamaKategori.trim());
         setKategoriData((prev) => [
           ...prev,
-          { kategori: formNamaKategori.trim(), menu: [] },
+          { id: res.data.id, kategori: res.data.jenis_hidangan, menu: [] },
         ]);
         setFormNamaKategori("");
+        alert("Kategori berhasil ditambahkan");
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
       }
     }
   };
@@ -224,7 +262,7 @@ function TambahKategori({ setIsAddKategori }) {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <h4 className="text-center px-[7px] font-semibold text-[14px] leading-[17px] m-auto self-center">
+              <h4 className="pl-[4px] font-semibold text-[14px] leading-[17px] m-auto self-center">
                 {m.nama}
               </h4>
             </div>
@@ -249,55 +287,59 @@ function TambahKategori({ setIsAddKategori }) {
         </button>
         <h2>Kategori</h2>
         <div className="space-y-[20px] ml-[3px] my-[26px] text-[13px] overflow-auto h-[calc(100%-28px)]">
-          {kategoriData.map((item, idx) => (
-            <div key={idx} className="relative">
-              {activeMenuIndex === idx && (
-                <div
-                  ref={rightPanelRef}
-                  className="absolute z-10 flex flex-col divide-[#959595] divide-y-[0.5px] divide-solid border-[#959595] border-[0.5px] bg-white h-[46px] w-[95px] right-0 top-4 text-[14px]"
-                >
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete(idx);
-                    }}
-                    className="text-[#A01515] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
+          {isLoading ? (
+            <div className="text-center">Memuat data...</div>
+          ) : (
+            kategoriData.map((item, idx) => (
+              <div key={idx} className="relative">
+                {activeMenuIndex === idx && (
+                  <div
+                    ref={rightPanelRef}
+                    className="absolute z-10 flex flex-col divide-[#959595] divide-y-[0.5px] divide-solid border-[#959595] border-[0.5px] bg-white h-[46px] w-[95px] right-0 top-4 text-[14px]"
                   >
-                    Hapus
-                  </button>
-                  <button
-                    onClick={(e) => handleClickEditBtn(idx, e)}
-                    className="text-[#3578DC] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
-                  >
-                    Edit
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(idx);
+                      }}
+                      className="text-[#A01515] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
+                    >
+                      Hapus
+                    </button>
+                    <button
+                      onClick={(e) => handleClickEditBtn(idx, e)}
+                      className="text-[#3578DC] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                )}
 
-              <div
-                className="flex justify-between items-center cursor-pointer"
-                onClick={() => handleToggleMenu(idx)}
-              >
-                <h3 className="pl-[1px]">{item.kategori}</h3>
-                <svg
-                  width="8"
-                  height="6"
-                  viewBox="0 0 8 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="mr-[7px]"
+                <div
+                  className="flex justify-between items-center cursor-pointer"
+                  onClick={() => handleToggleMenu(idx)}
                 >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M4.00048 5.207L7.85448 1.354L7.14748 0.645996L4.00048 3.793L0.854485 0.645996L0.146484 1.354L4.00048 5.207Z"
-                    fill="black"
-                  />
-                </svg>
+                  <h3 className="pl-[1px]">{item.kategori}</h3>
+                  <svg
+                    width="8"
+                    height="6"
+                    viewBox="0 0 8 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-[7px]"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M4.00048 5.207L7.85448 1.354L7.14748 0.645996L4.00048 3.793L0.854485 0.645996L0.146484 1.354L4.00048 5.207Z"
+                      fill="black"
+                    />
+                  </svg>
+                </div>
+                <hr className="mt-[5px]" />
               </div>
-              <hr className="mt-[5px]" />
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
       <div
@@ -315,19 +357,22 @@ function TambahKategori({ setIsAddKategori }) {
       )}
       {deleteIndex !== null && (
         <ConfirmDelete
-          deleteIndex={deleteIndex}
-          setDeleteIndex={setDeleteIndex}
-          setData={setKategoriData}
+          deleteId={kategoriData[deleteIndex].id} // id kategori
+          setDeleteId={setDeleteIndex}
           setSkipConfirm={setSkipConfirm}
-          onAfterDelete={(deletedIdx) => {
-            if (editIndex === deletedIdx) {
+          onDelete={async (id) => {
+            await deleteCategory(id); // hapus kategori di server
+            setKategoriData((prev) => prev.filter((item) => item.id !== id));
+
+            if (editIndex === deleteIndex) {
               setEditIndex(null);
               setFormNamaKategori("");
-            } else if (editIndex !== null && deletedIdx < editIndex) {
-              // adjust editIndex kalau index yang dihapus lebih kecil
+            } else if (editIndex !== null && deleteIndex < editIndex) {
               setEditIndex((prev) => prev - 1);
             }
+
             setActiveMenuIndex(null);
+            alert("Kategori berhasil dihapus");
           }}
         />
       )}
