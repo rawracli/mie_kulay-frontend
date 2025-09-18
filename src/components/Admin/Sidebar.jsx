@@ -118,7 +118,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         onClick={() => setIsOpen(!isOpen)}
       ></div>
       <div
-        className={`w-[208px] z-20 md:w-[5.5rem] lg:w-[14.375rem] h-svh bg-white max-md:fixed transition-all ${
+        className={`w-[208px] max-md:z-20 md:w-[5.5rem] lg:w-[14.375rem] h-svh bg-white max-md:fixed transition-all ${
           !isOpen && "max-md:-translate-x-[208px]"
         }`}
       >
