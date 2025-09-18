@@ -182,7 +182,7 @@ function MenuPage() {
   };
 
   return (
-    <div className="w-full pt-25 relative">
+    <div className="w-full relative">
       <Hero text={"Menu Kami"} />
       <div className="flex p-[13px] pl-[20px] relative" ref={containerRef}>
         {/* Zigzag Background */}
@@ -194,12 +194,12 @@ function MenuPage() {
               isVisible ? "top-25" : "-top-[1px]"
             }`}
           >
-            <h2 className="font-bold text-[36px] mt-[30px] ml-[60px]">
+            <h2 className="font-bold text-[36px] mt-[30px] ml-[60px] font-boogaloo">
               Filter
             </h2>
             {/* Filter */}
              <div className="w-[241px] h-[263px] shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
-              <p className="font-semibold mb-2">Kategori</p>
+              <p className="font-semibold mb-2 font-baloo-2 text-[28px]">Kategori</p>
               <div className="space-y-2">
                 {categories.map((cat) => (
                   <label key={cat} className="flex items-center">
@@ -208,7 +208,7 @@ function MenuPage() {
                       checked={selectedCategory === cat}
                       onChange={() => handleCategoryChange(cat)}
                     />
-                    <span className="ml-[20px]">{cat}</span>
+                    <span className="ml-[20px] font-baloo-2 text-[28px]">{cat}</span>
                   </label>
                 ))}
               </div>
@@ -220,7 +220,7 @@ function MenuPage() {
         <div className="flex-1 space-y-10 pr-[211px] pl-[81px] mt-[30px]">
           {shownCategories.map((cat, index) => (
             <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
-              <h2 className="text-[36px] font-bold mb-4">{cat}</h2>
+              <h2 className="text-[36px] font-bold mb-4 font-boogaloo">{cat}</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
                 {menuData
                   .filter((item) => item.category === cat)
@@ -237,8 +237,8 @@ function MenuPage() {
                           className="w-full h-[155px] object-cover"
                         />
                         <div className="p-2 flex flex-col h-[117px] justify-between">
-                          <h3 className="font-bold text-[20px]">{item.name}</h3>
-                          <p className="text-black text-[24px] text-start">
+                          <h3 className="font-bold text-[20px] font-boogaloo">{item.name}</h3>
+                          <p className="text-black text-[24px] text-start font-baloo-2">
                             Rp.{item.price}
                           </p>
                         </div>
