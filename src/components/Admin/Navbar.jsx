@@ -49,9 +49,9 @@ function Navbar({ setIsOpen }) {
           />
         </svg>
         <div className="max-md:pl-[30px] ">
-          {!(pathname === "/dashboard") ? (
+          {pathname === "/dashboard" ? (
             <h2>
-              Selamat Datang,{"  "}
+              Selamat Datang,{" "}
               <span className="text-nowrap">{userData?.name || ""} 👋</span>
             </h2>
           ) : (
