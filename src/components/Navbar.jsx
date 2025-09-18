@@ -5,7 +5,7 @@ import useScrollBehaviour from "../hooks/useScrollBehaviour";
 
 const navItems = [
   { name: "Home", to: "/" },
-  { name: "Tentang", to: "/tentang-kami" },
+  { name: "Tentang", to: "/tentang" },
   { name: "Menu", to: "/menu" },
   { name: "Kontak", to: "/kontak" },
 ];
@@ -18,22 +18,18 @@ function Navbar() {
     <>
       <nav className="relative w-full font-chewy">
         <div
-          className={`z-40 fixed w-full flex items-center justify-center transition-all duration-300 font-semibold ${
+          className={`z-40 fixed w-full h-[52px] flex items-center justify-center transition-all font-semibold ${
             isVisible ? "translate-y-0" : "-translate-y-[110%]"
           } ${
-            isOnTop
-              ? "bg-white h-17 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-[#FFD358]"
-              : "bg-white h-17 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-[#FFD358]"
+            isOpen
+              ? "bg-white sm:h-20 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-gray-200"
+              : "bg-white sm:h-20 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-[#FFD358]"
           }`}
         >
-          <div className="flex items-center justify-center w-full mx-[78px]">
+          <div className="flex items-center w-full mx-[70px]">
             <div className="w-full h-full  items-center">
-              <Link className="flex items-center w-fit" to="/">
-                <img
-                  src={Logo}
-                  alt="Logo"
-                  className="sm:size-[45px] md:size-[81px]"
-                />
+              <Link className="flex items-center  w-fit sm:ml- md:ml-0" to="/">
+                <img src={Logo} alt="Logo" className="size-[42px] sm:size-[45px] sm-m md:size-[81px]" />
               </Link>
             </div>
             <div className="md:hidden flex items-center">
@@ -49,34 +45,30 @@ function Navbar() {
               >
                 <div className="w-6 h-6 flex flex-col justify-center items-center cursor-pointer">
                   <span
-                    className={`block h-1 w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out ${
-                      isOpen ? "rotate-45 translate-y-2" : ""
+                    className={`block h-[3px] w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out ${
+                      isOpen ? "rotate-45 translate-y-2.5" : ""
                     }`}
                   ></span>
                   <span
-                    className={`block h-1 w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out my-1 ${
+                    className={`block h-[3px] w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out my-1 ${
                       isOpen ? "opacity-0" : ""
                     }`}
                   ></span>
                   <span
-                    className={`block h-1 w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out ${
-                      isOpen ? "-rotate-45 -translate-y-2" : ""
+                    className={`block h-[3px] w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out ${
+                      isOpen ? "-rotate-45 -translate-y-1" : ""
                     }`}
                   ></span>
                 </div>
               </button>
             </div>
-            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center ml-11 justify-end">
+            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center mr-[41px] justify-end">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   onClick={() => window.scrollTo(0, 0)}
-                  className={({ isActive }) =>
-                    `hover:text-[#FFD358] focus:text-[#FFB300] font-chewy ${
-                      isActive && "text-[#FFB300]"
-                    }`
-                  }
+                  className={({ isActive }) => `text-[22px] font-chewy ${!isActive && "text-[#FFB300] hover:text-[#FFD358] focus:text-[#FFB300]"}`}
                 >
                   {item.name}
                 </NavLink>
@@ -87,8 +79,8 @@ function Navbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="fixed z-20">
-            <div className="fixed top-[68px] left-0 w-full bg-white shadow-lg z-20 px-6 py-4 animate-slide-down md:hidden">
-              {["", "tentang-kami", "layanan", "kontak", "dokumentasi"].map(
+            <div className="fixed top-[68px] left-0 w-full bg-white shadow-lg z-20 px-6 py-9 animate-slide-down md:hidden">
+              {["", "tentang", "menu", "kontak",].map(
                 (value, index) => (
                   <NavLink
                     key={index}
@@ -99,7 +91,7 @@ function Navbar() {
                       window.scrollTo(0, 0);
                     }}
                   >
-                    {["Home", "Tentang", "Menu", "Kontak", "Moments"][index]}
+                    {["Home", "Tentang", "Menu", "Kontak",][index]}
                   </NavLink>
                 )
               )}
@@ -108,7 +100,7 @@ function Navbar() {
                   href="https://wa.me/6281333330073"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full text-center bg-[#A30F00] text-white hover:bg-[#730B00] transition-all py-3 px-5 rounded-lg active:bg-[#600000] transform hover:scale-105 duration-200"
+                  className="block w-full text-center bg-[#FFB300] text-white hover:bg-[#730B00] transition-all py-3 px-5 rounded-lg active:bg-[#600000] transform hover:scale-105 duration-200"
                   onClick={() => setIsOpen(false)}
                 >
                   Pesan Sekarang
