@@ -13,7 +13,7 @@ function Login() {
 
       {/* Kolom kiri: Form Login */}
       <div className="flex flex-1 max-sm:items-start items-center justify-center bg-white">
-        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 max-sm:p-0 rounded-md lg:w-[503px] lg:h-[547px] max-sm:w-[323px] max-sm:h-[405px] max-sm:mt-[107px] max-sm:ml-[33px] max-sm:mr-[33px] max-sm:z-10 bg-white">
+        <div className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 max-sm:p-0 rounded-md lg:w-[503px] lg:h-[547px] max-sm:w-[323px] max-sm:h-[405px] max-sm:mt-[107px] max-sm:ml-[33px] max-sm:mr-[33px] max-sm:z-10 max-md:z-10 bg-white">
           <h2 className="text-[32px] max-sm:text-[24px] font-semibold text-center mb-6 mt-[2.50rem] max-sm:mt-[40px]">
             Login
           </h2>
@@ -51,7 +51,7 @@ function Login() {
       
       {/* Kolom kanan: Ilustrasi */}
       <div
-      className="max-sm:absolute flex-1 flex items-center justify-center flex-col bg-cover bg-[#FBB800] max-sm:bg-transparent max-md:bg-transparent w-full h-full max-sm:w-full max-sm:h-[464px] max-sm:mt-[380px]"
+      className="max-sm:absolute flex-1 flex items-center justify-center flex-col bg-cover bg-[#FBB800] max-sm:bg-transparent max-md:bg-transparent w-full h-full  max-sm:h-[464px] max-sm:mt-[380px] max-md:mt-[250px] max-md:absolute"
       style={{
       backgroundImage: `url(${Bglogin})`,
       }}
