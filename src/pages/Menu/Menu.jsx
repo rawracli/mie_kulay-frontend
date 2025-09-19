@@ -198,7 +198,7 @@ function MenuPage() {
               Filter
             </h2>
             {/* Filter */}
-             <div className="w-[241px] h-[263px] shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
+             <div className="w-[241px] h-[263px] shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[208px] ml-[48px] mt-[13px]">
               <p className="font-semibold mb-2 font-baloo-2 text-[28px]">Kategori</p>
               <div className="space-y-2">
                 {categories.map((cat) => (
@@ -227,7 +227,7 @@ function MenuPage() {
                   .map((item) => (
                     <div
                       key={item.id}
-                      className="relative rounded-lg shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-[207px] h-[272px] bg-white"
+                      className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-[207px] h-[272px] bg-white"
                     >
                       {/* Konten Card */}
                       <div className="relative z-10">
@@ -237,7 +237,7 @@ function MenuPage() {
                           className="w-full h-[155px] object-cover"
                         />
                         <div className="p-2 flex flex-col h-[117px] justify-between">
-                          <h3 className="font-bold text-[20px] font-boogaloo">{item.name}</h3>
+                          <h3 className="font-bold text-[28px] font-boogaloo">{item.name}</h3>
                           <p className="text-black text-[24px] text-start font-baloo-2">
                             Rp.{item.price}
                           </p>
