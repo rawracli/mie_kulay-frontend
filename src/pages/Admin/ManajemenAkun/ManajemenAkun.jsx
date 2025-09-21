@@ -119,17 +119,17 @@ function ManajemenAkun() {
   }, [currentPage, totalPages]);
 
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pb-[0.5rem] max-sm:w-full">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pb-[0.5rem] max-sm:pb-0 max-sm:w-full">
       <div className="flex items-center justify-end py-[13px]">
         <button
           onClick={() => setIsAddOpen(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[30px] max-sm:w-[135px] max-sm:mr-[45px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[30px] max-sm:w-[135px] max-sm:mr-[11px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
           <p className="text-[14px] max-sm:text-[12px] font-bold text-white">Tambah Akun</p>
         </button>
       </div>
-      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem] max-sm:w-[340px]">
+      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-[394px] max-sm:h-[696px]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 pb-[1.375rem] space-y-[0.9375rem]">
             {/* search & filter */}
@@ -149,14 +149,14 @@ function ManajemenAkun() {
                     }
                     setEntriesPerPage(newEntriesPerPage);
                   }}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer"
+                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer max-sm:w-[38px] max-sm:h-[28px] max-sm:text-[14px]"
                 >
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                   <option value={6}>6</option>
                   <option value={10}>10</option>
                 </select>
-                <p className="ml-2 text-sm">Entries per page</p>
+                <p className="ml-2 text-sm max-sm:hidden">Entries per page</p>
               </div>
               <div>
                 <label className="mr-2 text-sm">Search:</label>
@@ -172,7 +172,7 @@ function ManajemenAkun() {
               </div>
             </div>
             {/* data table */}
-            <div className="w-full h-full">
+            <div className="w-full h-full ">
               <table className="w-full font-semibold border-collapse border border-[#959595]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
