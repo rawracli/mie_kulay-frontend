@@ -10,6 +10,7 @@ import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
+import TambahProduk from "./Overlay/TambahProduk";
 import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
 import Bahan from "./section/bahan";
 
@@ -226,6 +227,30 @@ function Stok() {
   const [skipConfirm, setSkipConfirm] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
 
+  // State Edit Menu
+  const [editMenuForm, setEditMenuForm] = useState({
+    nama: "",
+    kategori: "",
+    harga: 0,
+    bahan: []
+  });
+  const [newBahan, setNewBahan] = useState({
+    nama: "",
+    harga: 0
+  });
+
+  // Init form saat menu yang dipilih berubah
+  useEffect(() => {
+    if (selectedMenu) {
+      setEditMenuForm({
+        nama: selectedMenu.nama || "",
+        kategori: selectedMenu.kategori || "",
+        harga: selectedMenu.harga || 0,
+        bahan: selectedMenu.bahan || []
+      });
+    }
+  }, [selectedMenu]);
+
   const filteredData = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     const selectedCategory = category?.toLowerCase();
@@ -336,6 +361,59 @@ function Stok() {
       setDeleteId(idIndex);
     }
   };
+
+  // Edit Menu
+  const handleMenuFormChange = (field, value) => {
+    setEditMenuForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleBahanDelete = (indexToRemove) => {
+    setEditMenuForm(prev => ({
+      ...prev,
+      bahan: prev.bahan.filter((_, index) => index !== indexToRemove)
+    }));
+  };
+
+  const handleNewBahanChange = (field, value) => {
+    setNewBahan(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleAddBahan = () => {
+    if (newBahan.nama && newBahan.harga > 0) {
+      setEditMenuForm(prev => ({
+        ...prev,
+        bahan: [...prev.bahan, { ...newBahan }]
+      }));
+      setNewBahan({ nama: "", harga: 0 });
+    }
+  };
+
+  const handleMenuSave = () => {
+    if (selectedMenu && editMenuForm.nama && editMenuForm.kategori && editMenuForm.harga > 0) {
+      // Update menuData
+      setMenuData(prev => 
+        prev.map(menu => 
+          menu.id === selectedMenu.id 
+            ? { ...menu, ...editMenuForm }
+            : menu
+        )
+      );
+      
+      // Close modal
+      setSelectedMenu(null);
+      
+      console.log("Menu berhasil diupdate:", editMenuForm);
+    } else {
+      alert("Mohon lengkapi semua field yang diperlukan");
+    }
+  };
+  //End edit Menu
 
   // Pagination pages calculation
   const pages = useMemo(() => {
@@ -793,8 +871,9 @@ function Stok() {
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
 
+        {/* INI UNTUK EDIT MENU */}
       {selectedMenu && (
-        <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+        <div className="fixed top-[55%] -translate-y-1/2 left-[47%] -translate-x-1/2">
           <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[26px] pb-[41px] pl-[30px] pr-[27px] w-[702px] h-[539px]">
             <button
               onClick={() => setSelectedMenu(null)}
@@ -810,9 +889,9 @@ function Stok() {
                 <path
                   d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
                   stroke="black"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </button>
@@ -829,8 +908,10 @@ function Stok() {
               <input
                 type="text"
                 name="nama"
+                value={editMenuForm.nama}
+                onChange={(e) => handleMenuFormChange('nama', e.target.value)}
                 className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
-                // value= menuData.nama
+                placeholder="Nama menu..."
               />
               <div className="mt-[21px] flex flex-col">
                 <label htmlFor="kategori" className="mb-[7px]">
@@ -839,14 +920,18 @@ function Stok() {
                 <select
                   name="kategori"
                   id="kategori"
+                  value={editMenuForm.kategori}
+                  onChange={(e) => handleMenuFormChange('kategori', e.target.value)}
                   className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
                 >
-                  <option value="makanan">Makanan</option>
-                  <option value="minuman">Minuman</option>
-                  <option value="topping">Topping</option>
+                  {/* KATEGORI DARI DATABASE */}
+                  <option value="">Pilih kategori...</option>
+                  <option value="Makanan">Makanan</option>
+                  <option value="Minuman">Minuman</option>
+                  <option value="Topping">Topping</option>
                 </select>
               </div>
-              <div className="mt-[21px]  flex flex-col">
+              <div className="mt-[21px] flex flex-col">
                 <label htmlFor="harga" className="mb-[7px]">
                   Harga
                 </label>
@@ -855,24 +940,32 @@ function Stok() {
                   className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
                   name="harga"
                   id="harga"
-                  // value={} menuData.harga
+                  value={editMenuForm.harga}
+                  onChange={(e) => handleMenuFormChange('harga', parseInt(e.target.value) || 0)}
+                  placeholder="Harga menu..."
                 />
               </div>
-              <button className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]">
+              <button 
+                onClick={handleMenuSave}
+                className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
+              >
                 Edit
               </button>
             </div>
             <div className="flex flex-col">
               <h4 className="text-[24px] font-semibold pb-[10px]">Bahan</h4>
-              <div className="w-[273px] h-full bg-[#FFF7DE] rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[10px] pr-[4px] pt-[2px] pb-[2px]">
-                {Array.from({ length: 5 }).map((_, idx) => (
+              <div className="w-[273px] h-full bg-[#FFF7DE] rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[10px] pr-[4px] pt-[2px] pb-[2px] overflow-y-auto">
+                {/* LOOP DARI DATA BAHAN YANG ADA DI MENU */}
+                {editMenuForm.bahan.map((bahan, idx) => (
                   <div key={idx}>
-                    <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
-                      <h5 className="font-semibold">Mie</h5>
+                    <div className="flex pl-[10px] pr-[17px] items-center justify-between h-[45px]">
+                      <h5 className="font-semibold">{bahan.nama}</h5>
                       <div className="flex items-center gap-[41px]">
-                        <h6>Rp. 20.000</h6>
+                        <h6 className="text-start">Rp. {bahan.harga.toLocaleString("id-ID")}</h6>
+                        {/* BTN HAPUS BAHAN */}
                         <svg
-                        className="cursor-pointer"
+                          onClick={() => handleBahanDelete(idx)}
+                          className="cursor-pointer"
                           width="14"
                           height="16"
                           viewBox="0 0 14 16"
@@ -889,8 +982,33 @@ function Stok() {
                     <hr className="w-full h-[0.5px] text-[#737373]" />
                   </div>
                 ))}
+                {/* INI INPUT BARU */}
+                <div>
+                  <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
+                    <input 
+                      className="bg-[#D9D9D9] w-[91px] font-semibold px-2 py-1 rounded text-sm"
+                      placeholder="Nama bahan"
+                      value={newBahan.nama}
+                      onChange={(e) => handleNewBahanChange('nama', e.target.value)}
+                    />
+                    <div className="flex items-center gap-[41px]">
+                      <input 
+                        className="bg-[#D9D9D9] -translate-x-[30px] w-[91px] px-2 py-1 rounded text-sm"
+                        placeholder="Harga"
+                        type="number"
+                        value={newBahan.harga || ''}
+                        onChange={(e) => handleNewBahanChange('harga', parseInt(e.target.value) || 0)}
+                      />
+                    </div>
+                  </div>
+                  <hr className="w-full h-[0.5px] text-[#737373]" />
+                </div>
+                {/* MENAMPILKAN INPUT BARU (DIATAS) */}
                 <div className="flex pl-[10px] pr-[20px] items-center justify-end h-[45px]">
-                  <div className="bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] size-[22px] rounded-full flex items-center justify-center cursor-pointer">
+                  <div 
+                    onClick={handleAddBahan}
+                    className="bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] size-[22px] rounded-full flex items-center justify-center cursor-pointer"
+                  >
                     <svg
                       width="12"
                       height="13"
