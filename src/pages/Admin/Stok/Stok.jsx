@@ -4,6 +4,8 @@ import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
 import Plus from "../../../assets/Admin/plus.svg";
+//!Hapus exampleImage
+import ExampleImage from "../../../assets/Login/login.png";
 import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
@@ -12,24 +14,206 @@ import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
 import Bahan from "./section/bahan";
 
 function Stok() {
-  const [stockTable, setStockTable] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // toggle bahan atau menu
+  const [viewMode, setViewMode] = useState("bahan");
+
+  // Data Bahan (dummy)
+  const [stockTable, setStockTable] = useState([
+    {
+      id: 1,
+      produk: "Mie Kuning",
+      harga_beli: 15000,
+      stok: 20,
+      kategori_id: 1,
+      kategori: "Makanan",
+    },
+    {
+      id: 2,
+      produk: "Ayam Suwir",
+      harga_beli: 30000,
+      stok: 10,
+      kategori_id: 1,
+      kategori: "Makanan",
+    },
+    {
+      id: 3,
+      produk: "Cabe Merah",
+      harga_beli: 8000,
+      stok: 50,
+      kategori_id: 2,
+      kategori: "Bumbu",
+    },
+    {
+      id: 4,
+      produk: "Es Batu",
+      harga_beli: 2000,
+      stok: 200,
+      kategori_id: 3,
+      kategori: "Minuman",
+    },
+    {
+      id: 5,
+      produk: "Plastik Cup",
+      harga_beli: 1000,
+      stok: 500,
+      kategori_id: 4,
+      kategori: "-",
+    },
+  ]);
+
+  // Data Menu (dummy)
+  const [menuData, setMenuData] = useState([
+    {
+      id: 1,
+      nama: "Mie Ayam Special",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 25000,
+      stok: 15,
+      bahan: [
+        { nama: "Mie Kuning", harga: 5000 },
+        { nama: "Ayam Suwir", harga: 10000 },
+        { nama: "Sayuran", harga: 3000 },
+      ],
+    },
+    {
+      id: 2,
+      nama: "Mie Pedas Gurih",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 22000,
+      stok: 20,
+      bahan: [
+        { nama: "Mie Kuning", harga: 5000 },
+        { nama: "Cabe Merah", harga: 2000 },
+        { nama: "Bumbu Pedas", harga: 4000 },
+      ],
+    },
+    {
+      id: 3,
+      nama: "Es Teh Manis",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Minuman",
+      harga: 8000,
+      stok: 50,
+      bahan: [
+        { nama: "Teh", harga: 2000 },
+        { nama: "Gula", harga: 1000 },
+        { nama: "Es Batu", harga: 500 },
+      ],
+    },
+    {
+      id: 4,
+      nama: "Es Jeruk",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Minuman",
+      harga: 10000,
+      stok: 30,
+      bahan: [
+        { nama: "Jeruk", harga: 5000 },
+        { nama: "Gula", harga: 1000 },
+        { nama: "Es Batu", harga: 500 },
+      ],
+    },
+    {
+      id: 5,
+      nama: "Nasi Goreng Special",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 28000,
+      stok: 25,
+      bahan: [
+        { nama: "Nasi", harga: 5000 },
+        { nama: "Telur", harga: 3000 },
+        { nama: "Bumbu", harga: 4000 },
+      ],
+    },
+    {
+      id: 6,
+      nama: "Bakso Kuah",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 20000,
+      stok: 18,
+      bahan: [
+        { nama: "Bakso", harga: 8000 },
+        { nama: "Mie", harga: 3000 },
+        { nama: "Sayuran", harga: 2000 },
+      ],
+    },
+    {
+      id: 7,
+      nama: "Es Kopi Susu",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Minuman",
+      harga: 15000,
+      stok: 40,
+      bahan: [
+        { nama: "Kopi", harga: 5000 },
+        { nama: "Susu", harga: 4000 },
+        { nama: "Es Batu", harga: 500 },
+      ],
+    },
+    {
+      id: 8,
+      nama: "Soto Ayam",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 25000,
+      stok: 22,
+      bahan: [
+        { nama: "Ayam", harga: 10000 },
+        { nama: "Bumbu Soto", harga: 3000 },
+        { nama: "Sayuran", harga: 2000 },
+      ],
+    },
+    {
+      id: 9,
+      nama: "Jus Alpukat",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Minuman",
+      harga: 18000,
+      stok: 15,
+      bahan: [
+        { nama: "Alpukat", harga: 8000 },
+        { nama: "Susu", harga: 3000 },
+        { nama: "Gula", harga: 1000 },
+      ],
+    },
+    {
+      id: 10,
+      nama: "Ayam Bakar",
+      image: "https://via.placeholder.com/165x93",
+      kategori: "Makanan",
+      harga: 35000,
+      stok: 12,
+      bahan: [
+        { nama: "Ayam", harga: 15000 },
+        { nama: "Bumbu Bakar", harga: 5000 },
+        { nama: "Sambal", harga: 2000 },
+      ],
+    },
+  ]);
+
+  const [loading, setLoading] = useState(false);
   const updateTimeout = useRef({});
   const stockData = useMemo(() => {
-    const grouped = stockTable.reduce((acc, item) => {
-      if (!acc[item.kategori]) {
-        acc[item.kategori] = 0;
+    const dataToUse = viewMode === "bahan" ? stockTable : menuData;
+    const grouped = dataToUse.reduce((acc, item) => {
+      const kategoriName = item.kategori || "-";
+      if (!acc[kategoriName]) {
+        acc[kategoriName] = 0;
       }
-      acc[item.kategori] += item.stok;
+      acc[kategoriName] += item.stok;
       return acc;
     }, {});
 
-    // ubah jadi array biar gampang di-map
     return Object.entries(grouped).map(([nama, stok]) => ({
       nama,
       stok,
     }));
-  }, [stockTable]);
+  }, [stockTable, menuData, viewMode]);
+
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [category, setCategory] = useState("all");
@@ -40,25 +224,29 @@ function Stok() {
   const [deleteId, setDeleteId] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState(null);
+
   const filteredData = useMemo(() => {
-   const keyword = search.trim().toLowerCase();
-   const selectedCategory = category?.toLowerCase();
+    const keyword = search.trim().toLowerCase();
+    const selectedCategory = category?.toLowerCase();
+    const dataToFilter = viewMode === "bahan" ? stockTable : menuData;
 
-   return stockTable.filter((t) => {
-    const matchCategory =
-      !category || category === "all"
-        ? true
-        : t.kategori.toLowerCase().includes(selectedCategory);
+    return dataToFilter.filter((t) => {
+      const matchCategory =
+        !category || category === "all"
+          ? true
+          : t.kategori.toLowerCase().includes(selectedCategory);
 
-    const matchSearch =
-      !keyword ||
-      t.id.toString().toLowerCase().includes(keyword) ||
-      t.produk.toLowerCase().includes(keyword) //||
-      // t.stok.toString().includes(keyword);
+      const matchSearch =
+        !keyword ||
+        t.id.toString().toLowerCase().includes(keyword) ||
+        (viewMode === "bahan"
+          ? t.produk.toLowerCase().includes(keyword)
+          : t.nama.toLowerCase().includes(keyword));
 
-    return matchCategory && matchSearch;
-   });
-  }, [search, stockTable, category]);
+      return matchCategory && matchSearch;
+    });
+  }, [search, stockTable, menuData, category, viewMode]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -66,8 +254,16 @@ function Stok() {
     startIndex,
     startIndex + entriesPerPage
   );
-  // input pake id (id dari stokTable)
-  // +
+
+  // Toggle function
+  const handleToggleView = () => {
+    setViewMode((prev) => (prev === "bahan" ? "menu" : "bahan"));
+    setCurrentPage(1);
+    setSearch("");
+    setCategory("all");
+  };
+
+  // Handlers for bahan
   const handleUpdateStok = (id, newStok) => {
     // update state lokal langsung
     setStockTable((prev) =>
@@ -103,7 +299,6 @@ function Stok() {
     handleUpdateStok(id, current.stok + 1);
   };
 
-  // -
   const handleDecrement = (id) => {
     const current = stockTable.find((item) => item.id === id);
     if (!current) return;
@@ -111,7 +306,7 @@ function Stok() {
       handleUpdateStok(id, current.stok - 1);
     }
   };
-  // input jumlah manual
+
   const handleInputChange = (id, value) => {
     const newValue = parseInt(value) || 1;
     handleUpdateStok(id, newValue);
@@ -142,44 +337,35 @@ function Stok() {
     }
   };
 
-  //pagination
+  // Pagination pages calculation
   const pages = useMemo(() => {
     const pageList = [];
-    const delta = 1; // Ubah nilai ini untuk menyesuaikan jumlah halaman yang ditampilkan di sekitar currentPage (2 kiri + 2 kanan + current = 5 angka)
+    const delta = 1;
     if (totalPages <= 1) {
       if (totalPages === 1) pageList.push(1);
       return pageList;
     }
-    // Selalu tambahkan halaman pertama
     pageList.push(1);
-    // Hitung rentang halaman di sekitar currentPage
     let start = Math.max(2, currentPage - delta);
     let end = Math.min(totalPages - 1, currentPage + delta);
-    // Jika di awal, tampilkan lebih banyak ke kanan jika memungkinkan
     if (currentPage <= delta + 1) {
       start = 2;
       end = Math.min(totalPages - 1, delta * 2 + 1);
     }
-    // Jika di akhir, tampilkan lebih banyak ke kiri
     if (currentPage >= totalPages - delta) {
       end = totalPages - 1;
       start = Math.max(2, totalPages - (delta * 2 + 1) + 1);
     }
-    // Tambahkan ellipsis jika start > 2
     if (start > 2) {
       pageList.push("...");
     }
-    // Tambahkan halaman dari start ke end
     for (let i = start; i <= end; i++) {
       pageList.push(i);
     }
-    // Tambahkan ellipsis jika end < totalPages - 1
     if (end < totalPages - 1) {
       pageList.push("...");
     }
-    // Selalu tambahkan halaman terakhir
     pageList.push(totalPages);
-
     return pageList;
   }, [currentPage, totalPages]);
 
@@ -213,18 +399,37 @@ function Stok() {
     fetchBahan();
   }, []);
 
-  // console.log(currentPage);
-  // console.log(totalPages);
   return (
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
       <div className="flex items-center gap-[16px] justify-end pb-[13px]">
         <button
-          onClick={() => setIsAddKategori(true)}
+          onClick={handleToggleView}
+          className="mr-auto pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
+        >
+          <svg
+            width="17"
+            height="20"
+            viewBox="0 0 17 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 20C2.45 20 1.97933 19.8043 1.588 19.413C1.19667 19.0217 1.00067 18.5507 1 18V16H0V14H1V11H0V9H1V6H0V4H1V2C1 1.45 1.196 0.979333 1.588 0.588C1.98 0.196667 2.45067 0.000666667 3 0H15C15.55 0 16.021 0.196 16.413 0.588C16.805 0.98 17.0007 1.45067 17 2V18C17 18.55 16.8043 19.021 16.413 19.413C16.0217 19.805 15.5507 20.0007 15 20H3ZM6.5 15H8V11C8.43333 10.8833 8.79167 10.646 9.075 10.288C9.35833 9.93 9.5 9.52567 9.5 9.075V5H8.5V8.775H7.75V5H6.75V8.775H6V5H5V9.075C5 9.525 5.14167 9.92933 5.425 10.288C5.70833 10.6467 6.06667 10.884 6.5 11V15ZM12 15H13.5V5C12.6667 5 11.9583 5.29167 11.375 5.875C10.7917 6.45833 10.5 7.16667 10.5 8V11H12V15Z"
+              fill="white"
+            />
+          </svg>
+          <p className="text-[14px] font-bold text-white">
+            {viewMode === "bahan" ? "Lihat Menu" : "Lihat Bahan"}
+          </p>
+        </button>
+
+        <button
+          onClick={() => setIsAddOpen(true)}
           className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
         >
           <img src={Plus} alt="plus" />
           <p className="text-[14px] font-bold text-white">
-            Tambah Bahan Mentah
+            {viewMode === "bahan" ? "Tambah Bahan Mentah" : "Tambah Menu"}
           </p>
         </button>
 
@@ -236,10 +441,11 @@ function Stok() {
           <p className="text-[14px] font-bold text-white">Tambah Kategori</p>
         </button>
       </div>
+
       <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
-            {/* search & filter */}
+            {/* Search & Filter */}
             <div className="flex items-center justify-between h-[1.9375rem]">
               <div className="flex items-center">
                 <select
@@ -250,9 +456,8 @@ function Stok() {
                       filteredData.length / newEntriesPerPage
                     );
                     const newStartIndex = (currentPage - 1) * newEntriesPerPage;
-                    // If the current startIndex exceeds the total data length, reset to the last valid page
                     if (newStartIndex >= filteredData.length) {
-                      setCurrentPage(newTotalPages || 1); // Ensure at least page 1 if no data
+                      setCurrentPage(newTotalPages || 1);
                     }
                     setEntriesPerPage(newEntriesPerPage);
                   }}
@@ -261,12 +466,17 @@ function Stok() {
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                   <option value={6}>6</option>
+                  <option value={8}>8</option>
                   <option value={10}>10</option>
+                  <option value={12}>12</option>
                 </select>
                 <p className="ml-2 text-sm">Entries per page</p>
                 <select
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-[28px] h-[32px] cursor-pointer"
                 >
                   <option value="all">All</option>
@@ -287,121 +497,164 @@ function Stok() {
                     setCurrentPage(1);
                   }}
                   className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+                  placeholder={
+                    viewMode === "bahan" ? "Cari bahan..." : "Cari menu..."
+                  }
                 />
               </div>
             </div>
-            {/* data table */}
-            <div className="w-full h-full">
-              <table className="w-full font-semibold border-collapse border border-[#959595]">
-                <thead className="top-0">
-                  <tr className="bg-[#FFB300] h-[49px]">
-                    <th className="border border-[#959595] text-center w-[18.30%]">
-                      Id
-                    </th>
-                    <th className="border border-[#959595] text-center w-[32.42%]">
-                      Bahan Mentah
-                    </th>
-                    <th className="border border-[#959595] text-center w-[25.07%]">
-                      Stok
-                    </th>
-                    <th className="border border-[#959595] text-center w-[24.15%]">
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic animate-pulse"
-                      >
-                        Memuat data...
-                      </td>
-                    </tr>
-                  ) : paginatedData.length > 0 ? (
-                    paginatedData.map((t, ind) => (
-                      <tr
-                        key={ind}
-                        className={`${
-                          highlightedRow === t.id
-                            ? "bg-[#AFCFFF]"
-                            : "even:bg-gray-200"
-                        } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
-                      >
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.id}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.produk}
-                        </td>
-                        <td className="border-r border-[#959595]">
-                          <div className="text-center flex justify-around items-center h-full">
-                            <button
-                              onClick={() => {
-                                handleDecrement(t.id);
-                              }}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
-                            >
-                              <img
-                                src={MinRed}
-                                alt=""
-                                className="group-hover:scale-150 group-active:scale-125"
-                              />
-                            </button>
-                            <input
-                              type="text"
-                              className="w-10 text-center"
-                              value={t.stok}
-                              onChange={(e) =>
-                                handleInputChange(t.id, e.target.value)
-                              }
-                            />
 
-                            <button
-                              onClick={() => handleIncrement(t.id)}
-                              className="group cursor-pointer h-full flex-1 flex justify-center items-center"
-                            >
-                              <img
-                                src={PlusGreen}
-                                alt=""
-                                className="group-hover:scale-150 group-active:scale-125"
-                              />
-                            </button>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
-                            <button
-                              onClick={() => setEditId(t.id)}
-                              className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
-                            >
-                              <img src={Pencil} alt="" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => onDelete(t.id)}
-                              className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
-                            >
-                              <img src={Sampah} alt="" />
-                              Delete
-                            </button>
-                          </div>
+            {/* Data Display */}
+            <div className="w-full h-full">
+              {viewMode === "bahan" ? (
+                // Table View untuk Bahan
+                <table className="w-full font-semibold border-collapse border border-[#959595]">
+                  <thead className="top-0">
+                    <tr className="bg-[#FFB300] h-[49px]">
+                      <th className="border border-[#959595] text-center w-[18.30%]">
+                        Id
+                      </th>
+                      <th className="border border-[#959595] text-center w-[32.42%]">
+                        Bahan Mentah
+                      </th>
+                      <th className="border border-[#959595] text-center w-[25.07%]">
+                        Stok
+                      </th>
+                      <th className="border border-[#959595] text-center w-[24.15%]">
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {loading ? (
+                      <tr>
+                        <td
+                          colSpan="4"
+                          className="py-3 italic text-center text-gray-500 animate-pulse"
+                        >
+                          Memuat data...
                         </td>
                       </tr>
+                    ) : paginatedData.length > 0 ? (
+                      paginatedData.map((t, ind) => (
+                        <tr
+                          key={ind}
+                          className={`${
+                            highlightedRow === t.id
+                              ? "bg-[#AFCFFF]"
+                              : "even:bg-gray-200"
+                          } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
+                        >
+                          <td className="border-r border-[#959595] pl-[10.5px]">
+                            {t.id}
+                          </td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">
+                            {t.produk}
+                          </td>
+                          <td className="border-r border-[#959595]">
+                            <div className="flex items-center justify-around h-full text-center">
+                              <button
+                                onClick={() => handleDecrement(t.id)}
+                                className="flex items-center justify-center flex-1 h-full cursor-pointer group"
+                              >
+                                <img
+                                  src={MinRed}
+                                  alt=""
+                                  className="group-hover:scale-150 group-active:scale-125"
+                                />
+                              </button>
+                              <input
+                                type="text"
+                                className="w-10 text-center"
+                                value={t.stok}
+                                onChange={(e) =>
+                                  handleInputChange(t.id, e.target.value)
+                                }
+                              />
+                              <button
+                                onClick={() => handleIncrement(t.id)}
+                                className="flex items-center justify-center flex-1 h-full cursor-pointer group"
+                              >
+                                <img
+                                  src={PlusGreen}
+                                  alt=""
+                                  className="group-hover:scale-150 group-active:scale-125"
+                                />
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                              <button
+                                onClick={() => setEditId(t.id)}
+                                className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
+                              >
+                                <img src={Pencil} alt="" />
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => onDelete(t.id)}
+                                className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                              >
+                                <img src={Sampah} alt="" />
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="4"
+                          className="py-3 italic text-center text-gray-500"
+                        >
+                          Tidak ada data
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              ) : (
+                // Card View untuk Menu
+                <div className="flex items-center flex-wrap gap-[15px]">
+                  {loading ? (
+                    <div className="py-3 italic text-center text-gray-500 animate-pulse">
+                      Memuat data...
+                    </div>
+                  ) : paginatedData.length > 0 ? (
+                    paginatedData.map((item) => (
+                      <div
+                        key={item.id}
+                        className="w-[165px] h-[164px] shadow-[0px_2px_10.2px_rgb(0,0,0,0.25)] cursor-pointer transition hover:-translate-y-2 hover:shadow-[0px_7px_8px_rgba(0,0,0,0.25)] relative group"
+                        onClick={() => setSelectedMenu(item)}
+                      >
+                        <div className="w-full h-[93px]">
+                          <img
+                            src={ExampleImage}
+                            className="w-full h-[93px] object-cover"
+                            alt={item.nama}
+                          />
+                        </div>
+                        <div className="flex flex-col items-center justify-between text-[15px] h-[calc(100%-93px)]">
+                          <h4 className="text-sm font-semibold font-boogaloo pt-[6px] px-2 text-center">
+                            {item.nama}
+                          </h4>
+                          <h4 className="text-sm font-semibold font-baloo-2 self-start pl-[8px] pb-[4px]">
+                            Rp. {item.harga.toLocaleString("id-ID")}
+                          </h4>
+                        </div>
+                      </div>
                     ))
                   ) : (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic"
-                      >
-                        Tidak ada data
-                      </td>
-                    </tr>
+                    <div className="col-span-4 py-3 italic text-center text-gray-500">
+                      Tidak ada data
+                    </div>
                   )}
-                </tbody>
-              </table>
+                </div>
+              )}
+
+              {/* Pagination */}
               <div className="flex items-center justify-between mt-5 text-sm">
                 <p>
                   Page {currentPage} of {totalPages || 1} entries
@@ -478,17 +731,17 @@ function Stok() {
               </div>
             </div>
           </div>
+
+          {/* Right Sidebar - Category Totals */}
           <div className="w-[21.5rem] pt-[28px] pb-[24px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)]">
+            <h2 className="text-center font-bold text-[16px] mb-4">
+              Total per Kategori ({viewMode === "bahan" ? "Bahan" : "Menu"})
+            </h2>
             <div className="space-y-[27.45px] px-[0.875rem]">
               {loading ? (
-                <tr>
-                  <td
-                    colSpan="6"
-                    className="text-center py-3 text-gray-500 italic animate-pulse"
-                  >
-                    Memuat data...
-                  </td>
-                </tr>
+                <div className="py-3 italic text-center text-gray-500 animate-pulse">
+                  Memuat data...
+                </div>
               ) : (
                 stockData.map((items, index) => (
                   <div key={index}>
@@ -512,14 +765,9 @@ function Stok() {
                 </h3>
                 <h4>
                   {loading ? (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic animate-pulse"
-                      >
-                        Memuat data...
-                      </td>
-                    </tr>
+                    <span className="italic text-gray-500 animate-pulse">
+                      ...
+                    </span>
                   ) : (
                     stockData.reduce((total, item) => total + item.stok, 0)
                   )}
@@ -529,17 +777,99 @@ function Stok() {
           </div>
         </div>
       </div>
+
       <div
         onClick={() => {
           setIsAddOpen(false);
           setEditId(null);
           setDeleteId(null);
           setIsAddKategori(false);
+          setSelectedMenu(null);
         }}
         className={`${
-          editId || isAddOpen || deleteId || isAddKategori ? "" : "hidden"
+          editId || isAddOpen || deleteId || isAddKategori || selectedMenu
+            ? ""
+            : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
+
+      {selectedMenu && (
+        <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+          <div className="bg-white gap-[30px] flex relative rounded-lg shadow-xl pt-[26px] pb-[46px] pl-[30px] pr-[27px] w-[702px] h-[539px]">
+            <button
+              onClick={() => setSelectedMenu(null)}
+              className="cursor-pointer absolute right-[33px] top-[26px]"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <div className="w-full h-full flex flex-col">
+              <h4 className="text-[24px] font-semibold pb-[10px]">Menu</h4>
+              {/* UPLOAD IMAGE */}
+              <div className="w-full h-[122px]">
+                <img
+                  src={ExampleImage}
+                  alt=""
+                  className="object-cover size-full"
+                />
+              </div>
+              <input
+                type="text"
+                name="nama"
+                className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                // value= menuData.nama
+              />
+              <div className="mt-[21px] flex flex-col">
+                <label htmlFor="kategori" className="mb-[7px]">
+                  Kategori
+                </label>
+                <select
+                  name="kategori"
+                  id="kategori"
+                  className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
+                >
+                  <option value="makanan">Makanan</option>
+                  <option value="minuman">Minuman</option>
+                  <option value="topping">Topping</option>
+                </select>
+              </div>
+              <div className="mt-[21px]  flex flex-col">
+                <label htmlFor="harga" className="mb-[7px]">
+                  Harga
+                </label>
+                <input
+                  type="number"
+                  className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                  name="harga"
+                  id="harga"
+                  // value={} menuData.harga
+                />
+              </div>
+              <button className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]">
+                Edit
+              </button>
+            </div>
+            <div className="flex flex-col">
+              <h4 className="text-[24px] font-semibold pb-[10px]">Bahan</h4>
+              <div className="w-[254px] h-full bg-[#FFF7DE] rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[18px] pr-[24px] pt-[26px] pb-[20px]">  </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isAddOpen && (
         <TambahProduk
           isAddOpen={isAddOpen}
@@ -562,7 +892,7 @@ function Stok() {
         <ConfirmDelete
           deleteId={deleteId}
           setDeleteId={setDeleteId}
-          setData={setStockTable}
+          // setData={viewMode === "bahan" ? setStockTable : setMenuData}
           onDelete={hapusBahanById}
           setSkipConfirm={setSkipConfirm}
         />
@@ -571,4 +901,5 @@ function Stok() {
     </div>
   );
 }
+
 export default Stok;
