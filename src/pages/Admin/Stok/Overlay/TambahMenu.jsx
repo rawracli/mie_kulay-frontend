@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
-
+import { createMenu } from "../../../../controllers/Menu";
+import { getBahan } from "../../../../controllers/Bahan";
 
 function TambahMenu({ onClose, onAdd }) {
   const [filePreview, setFilePreview] = useState(null);
   const [file, setFile] = useState(null);
   const [nama, setNama] = useState("");
   const [harga, setHarga] = useState(1);
+  const [selectedBahan, setSelectedBahan] = useState([]);
 
   // buat preview ketika file dipilih
   useEffect(() => {
@@ -22,22 +24,55 @@ function TambahMenu({ onClose, onAdd }) {
     if (f) setFile(f);
   };
 
-  const handleSubmit = (e) => {
+  const [bahanList, setBahanList] = useState([]);
+  useEffect(() => {
+    getBahan().then(setBahanList); // fetchBahan = API call
+  }, []);
+
+  const addBahan = (bahan) => {
+    setSelectedBahan((prev) => {
+      if (prev.find((b) => b.bahan_id === bahan.id)) return prev;
+      return [
+        ...prev,
+        { bahan_id: bahan.id, nama: bahan.nama_bahan, jumlah: 1 },
+      ];
+    });
+  };
+
+  const handleJumlahChange = (index, value) => {
+    setSelectedBahan((prev) =>
+      prev.map((b, i) => (i === index ? { ...b, jumlah: Number(value) } : b))
+    );
+  };
+
+  const handleRemoveBahan = (index) => {
+    setSelectedBahan((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!nama.trim()) return alert("Nama menu harus diisi.");
-    const foto = filePreview || Login; // kalau nggak pilih gambar, pakai placeholder (Login)
-    const newMenu = { foto, nama: nama.trim(), harga: Number(harga) || 1 };
-    onAdd(newMenu);
-    // reset
-    setFile(null);
-    setFilePreview(null);
-    setNama("");
-    setHarga(1);
+    const formData = new FormData();
+    formData.append("nama_hidangan", nama.trim());
+    formData.append("harga_jual", Number(harga));
+    formData.append("stok", 0);
+    formData.append("kategori_id", 1);
+    if (file) formData.append("gambar", file);
+
+    // bahan dengan jumlah (nested array format)
+    selectedBahan.forEach((bahan, idx) => {
+      formData.append(`bahan_ids[${idx}][bahan_id]`, bahan.bahan_id);
+      formData.append(`bahan_ids[${idx}][jumlah]`, bahan.jumlah);
+    });
+
+    const menu = await createMenu(formData);
+    onAdd(menu);
     onClose();
   };
 
   return (
-    <div className={`fixed top-1/2 -translate-y-1/2 -right-63 flex h-[577px] z-50`}>
+    <div
+      className={`fixed top-1/2 -translate-y-1/2 -right-63 flex h-[577px] z-50`}
+    >
       <div className="bg-white pl-[27px] pr-[32px] pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
         <div
           onClick={onClose}
@@ -47,12 +82,19 @@ function TambahMenu({ onClose, onAdd }) {
         </div>
         <h2 className="font-semibold text-2xl">Tambah Menu</h2>
 
-        <form onSubmit={handleSubmit} className="mt-[41px] h-full space-y-[20px] flex flex-col">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-[41px] h-full space-y-[20px] flex flex-col overflow-y-auto"
+        >
           <div>
             <label htmlFor="foto">Foto</label>
             <div className="relative w-full h-[131px] mt-[7px] bg-gray-200 rounded-[4px] cursor-pointer overflow-hidden">
               {filePreview ? (
-                <img src={filePreview} alt="preview" className="w-full h-full object-cover" />
+                <img
+                  src={filePreview}
+                  alt="preview"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <svg
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -83,7 +125,7 @@ function TambahMenu({ onClose, onAdd }) {
             <label htmlFor="Menu">Nama Menu</label>
             <input
               type="text"
-              name="menu"
+              name="nama_hidangan"
               required
               value={nama}
               onChange={(e) => setNama(e.target.value)}
@@ -92,7 +134,7 @@ function TambahMenu({ onClose, onAdd }) {
           </div>
 
           <div>
-            <label htmlFor="Harga">Harga</label>
+            <label htmlFor="Harga">Harga Jual</label>
             <input
               type="number"
               name="harga"
@@ -104,9 +146,52 @@ function TambahMenu({ onClose, onAdd }) {
             />
           </div>
 
+          <div>
+            <label>Bahan</label>
+            <select
+              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              onChange={(e) => {
+                const bahan = bahanList.find((b) => b.id == e.target.value);
+                if (bahan) addBahan(bahan);
+              }}
+            >
+              <option value="">-- Pilih Bahan --</option>
+              {bahanList.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.nama_bahan}
+                </option>
+              ))}
+            </select>
+
+            {selectedBahan.map((b, idx) => (
+              <div
+                key={b.bahan_id}
+                className="flex items-center justify-between p-2 border border-gray-300 rounded-lg shadow-sm bg-white mt-2"
+              >
+                <span className="text-gray-800 font-medium">{b.nama}</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min={1}
+                    value={b.jumlah}
+                    onChange={(e) => handleJumlahChange(idx, e.target.value)}
+                    className="w-20 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveBahan(idx)}
+                    className="px-3 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600 active:bg-red-700 transition"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <button
             type="submit"
-            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer"
+            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
           >
             Simpan
           </button>

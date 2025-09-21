@@ -1,66 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
-
-// Dummy data log aktivitas
-const logsData = [
-  { id: 1, user: "Staf 1", action: "Menambah pesanan [IDX1000009]", type: "Menambah", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 2, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 3, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 4, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 5, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 6, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 7, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 8, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 9, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 10, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 11, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 12, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 13, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 14, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 15, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 16, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 17, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 18, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 19, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 20, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 21, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 22, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 23, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 24, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 25, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 26, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 27, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 28, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 29, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 30, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 31, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 32, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 33, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 34, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 35, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 36, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 37, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 38, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 39, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 40, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 41, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 42, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 43, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 44, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 45, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 46, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  { id: 47, user: "Owner", action: "Menambah pengeluaran [IDX1000009]", type: "Membuat", detail: "Pengeluaran dicatat keuangan.", date: "2025-08-27T13:00:00" },
-  { id: 48, user: "Staf 3", action: "Menghapus menu [ID#2]", type: "Menghapus", detail: "Menu ID#2 dihapus dari daftar.", date: "2025-08-27T09:30:00" },
-  { id: 49, user: "Staf 1", action: "Membuat pesanan [IDX1000009]", type: "Membuat", detail: "Pesanan baru berhasil dibuat.", date: "2025-08-28T10:20:00" },
-  { id: 50, user: "Staf 2", action: "Mengubah pesanan [IDX1000009]", type: "Mengubah", detail: "Mie Pedas Manis 1 + Mie Pedas Gurih 1 + Bakso Sapi + Mojito Strawberry", date: "2025-08-27T13:00:00" },
-  // ... data lainnya tetap
-];
+import { getAktivitas } from "../../../controllers/Aktivitas";
 
 function LogAktivitas() {
+  const [logsData, setLogsData] = useState([]);
   const [filterType, setFilterType] = useState("All");
   const [filterDate, setFilterDate] = useState("");
-  const [search, ] = useState("");
+  const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
+  const [month, setMonth] = useState();
 
   // ✅ State modal
   const [selectedLog, setSelectedLog] = useState(null);
@@ -70,7 +18,7 @@ function LogAktivitas() {
   // Filter + Search
   const filteredLogs = useMemo(() => {
     return logsData.filter((log) => {
-      const matchType = filterType === "All" || log.type === filterType;
+      const matchType = filterType === "All" || log.action === filterType;
       const matchDate =
         !filterDate || log.date.startsWith(filterDate.split("T")[0]);
       const matchSearch =
@@ -80,7 +28,7 @@ function LogAktivitas() {
         log.detail.toLowerCase().includes(search.toLowerCase());
       return matchType && matchDate && matchSearch;
     });
-  }, [filterType, filterDate, search]);
+  }, [logsData, filterType, filterDate, search]);
 
   // Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
@@ -91,13 +39,26 @@ function LogAktivitas() {
 
   // Reset highlight otomatis setelah beberapa detik
   useEffect(() => {
-    if (highlightedRow !== null) {
-      const timer = setTimeout(() => {
-        setHighlightedRow(null);
-      }, 200); // 3 detik
-      return () => clearTimeout(timer);
-    }
-  }, [highlightedRow]);
+    const fetchLogs = async () => {
+      try {
+        const data = await getAktivitas();
+
+        const mapped = data.map((item) => ({
+          id: item.id,
+          user: item.user?.name || "Unknown",
+          action: item.action || "-",
+          detail: item.aktivitas ?? "Data ini tidak memerlukan aktivitas",
+          date: item.created_at,
+        }));
+
+        setLogsData(mapped);
+      } catch (error) {
+        console.error("Gagal mengambil data aktivitas:", error);
+      }
+    };
+
+    fetchLogs();
+  }, []);
 
   // Close modal + tandai row
   const handleCloseModal = () => {
@@ -138,13 +99,29 @@ function LogAktivitas() {
     return pages;
   }
 
+  useEffect(() => {
+    let date;
+
+    if (filterDate === "") {
+      date = new Date();
+    } else {
+      date = new Date(filterDate);
+    }
+    const formatted = date.toLocaleDateString("id-ID", {
+      month: "long",
+      year: "numeric",
+    });
+
+    setMonth(formatted);
+  }, [filterDate]);
+
   return (
-    <div className="bg-gray-200 w-full min-h-full flex justify-center py-6">
-      <div className="bg-white rounded-[10px] h-fit shadow-lg p-6 w-[1030px]">
-        <h2 className="text-2xl font-bold mb-4">Agustus 2025</h2>
+    <div className="bg-gray-200 w-full min-h-full flex justify-center py-[8px]">
+      <div className="bg-white rounded-[10px] h-fit shadow-lg px-[18px] pt-[11px] pb-[38px] w-full mx-[9px]">
+        <h2 className="text-[36px] font-semibold mb-4">{month}</h2>
 
         {/* Filter + Search */}
-        <div className="flex justify-between items-center mb-4 gap-4">
+        <div className="flex justify-between items-center mb-[14px] gap-4">
           <label className="flex items-center gap-2">
             <select
               value={itemsPerPage}
@@ -152,7 +129,7 @@ function LogAktivitas() {
                 setItemsPerPage(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-300 p-1 rounded-[2px] w-[47px] h-[32px]"
+              className="bg-gray-100 border border-gray-300 p-1 pl-[8px] rounded-[2px] w-[47px] h-[32px]"
             >
               <option value={4}>4</option>
               <option value={8}>8</option>
@@ -160,32 +137,35 @@ function LogAktivitas() {
             </select>
             <span>Entries per page</span>
           </label>
+          <div>
+            <select
+              value={filterType}
+              onChange={(e) => {
+                setFilterType(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-gray-100 border border-gray-300 p-1 pl-[17px] rounded-[5px] w-[164px] h-[35px] text font-semibold"
+            >
+              <option value="All">All</option>
+              <option value="Membuat">Membuat</option>
+              <option value="Mengubah">Mengubah</option>
+              <option value="Menghapus">Menghapus</option>
+              <option value="Menambah">Menambah</option>
+            </select>
 
-          <select
-            value={filterType}
-            onChange={(e) => {
-              setFilterType(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-gray-100 border border-gray-300 p-1 rounded-[5px] w-[164px] h-[35px] ml-58 text font-semibold"
-          >
-            <option value="All">All</option>
-            <option value="Membuat">Membuat</option>
-            <option value="Mengubah">Mengubah</option>
-            <option value="Menghapus">Menghapus</option>
-            <option value="Menambah">Menambah</option>
-          </select>
-
-          <label className="text text-[18px] font-semibold">Filter Logs by :</label>
-          <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => {
-              setFilterDate(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] w-[234px] h-[32px] "
-          />
+            <label className="text text-[18px] ml-[26px] font-semibold">
+              Filter Logs by :
+            </label>
+            <input
+              type="date"
+              value={filterDate}
+              onChange={(e) => {
+                setFilterDate(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] ml-[15px] w-[234px] h-[35px] "
+            />
+          </div>
         </div>
 
         {/* Tabel */}
@@ -193,10 +173,14 @@ function LogAktivitas() {
           <table className="w-full table-fixed border border-gray-400">
             <thead>
               <tr className="bg-[#FFB300] text-center h-[47px]">
-                <th className="p-2 border border-gray-400 w-[180px]">User</th>
-                <th className="p-2 border border-gray-400 w-[300px]">Aksi</th>
-                <th className="p-2 border border-gray-400 w-[200px]">Aktivitas</th>
-                <th className="p-2 border border-gray-400 w-[180px]">Tanggal</th>
+                <th className="p-2 border border-gray-400 w-[17.77%]">User</th>
+                <th className="p-2 border border-gray-400 w-[35.34%]">Aksi</th>
+                <th className="p-2 border border-gray-400 w-[25.30%]">
+                  Aktivitas
+                </th>
+                <th className="p-2 border border-gray-400 w-[24.10%]">
+                  Tanggal
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -210,11 +194,15 @@ function LogAktivitas() {
                         : "even:bg-gray-200"
                     }`}
                   >
-                    <td className="border border-gray-400 text-center truncate">{log.user}</td>
-                    <td className="p-1 border border-gray-400 text-sm truncate">{log.action}</td>
+                    <td className="border border-gray-400 text-center truncate">
+                      {log.user}
+                    </td>
+                    <td className="p-1 border border-gray-400 text-sm truncate pl-[24px]">
+                      {log.action}
+                    </td>
                     <td className="border border-gray-400 text-center">
                       <button
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                        className="bg-[#3578DC] text-white px-[6.5px] py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
                         onClick={() => setSelectedLog(log)}
                       >
                         Lihat Keterangan
@@ -245,7 +233,7 @@ function LogAktivitas() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         <div className="flex items-center justify-between mt-5 text-sm">
           <p>
@@ -256,7 +244,9 @@ function LogAktivitas() {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className={`${currentPage === 1 ? "cursor-default" : "cursor-pointer"} text-yellow-300 py-1 rounded disabled:opacity-50`}
+              className={`${
+                currentPage === 1 ? "cursor-default" : "cursor-pointer"
+              } text-yellow-300 py-1 rounded disabled:opacity-50`}
             >
               <svg
                 width="11"
@@ -278,12 +268,16 @@ function LogAktivitas() {
             <div className="flex gap-[12px]">
               {getPages(totalPages, currentPage).map((n, index) =>
                 n === "..." ? (
-                  <span key={index} className="py-1">...</span>
+                  <span key={index} className="py-1">
+                    ...
+                  </span>
                 ) : (
                   <button
                     key={index}
                     onClick={() => setCurrentPage(n)}
-                    className={`py-1 cursor-pointer ${n === currentPage ? "underline" : ""}`}
+                    className={`py-1 cursor-pointer ${
+                      n === currentPage ? "underline" : ""
+                    }`}
                   >
                     {n}
                   </button>
@@ -295,7 +289,9 @@ function LogAktivitas() {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className={`${currentPage === totalPages ? "cursor-default" : "cursor-pointer"} py-1 rounded disabled:opacity-50`}
+              className={`${
+                currentPage === totalPages ? "cursor-default" : "cursor-pointer"
+              } py-1 rounded disabled:opacity-50`}
             >
               <svg
                 width="11"
@@ -315,7 +311,6 @@ function LogAktivitas() {
           </div>
         </div>
 
-
         {/* Overlay Modal */}
         {selectedLog && (
           <div
@@ -326,10 +321,10 @@ function LogAktivitas() {
               className="bg-white rounded-[5px] w-[666px] h-[272px]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-[#3578DC] text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
+              <div className="bg-[#3578DC] relative text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
                 <h3 className="font-bold">{selectedLog.user}</h3>
                 <button
-                  className="absolute top-58 right-80 hover:text-black cursor-pointer"
+                  className="absolute top-[10px] right-[22px] hover:text-black cursor-pointer"
                   onClick={handleCloseModal}
                 >
                   ✕

@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { updateProfile } from "../../../controllers/AuthController";
+import ProfilePicture from "../../../assets/Admin/profile.svg";
 
 function Show({ userData, setIsEdit, editResponse }) {
   return (
@@ -16,12 +18,6 @@ function Show({ userData, setIsEdit, editResponse }) {
           <h5 className="text-[20px]">Email</h5>
           <p className="text-[#959595]">{userData.email}</p>
         </div>
-        <div className="flex justify-between pt-[16px] pb-[13px] border-b-1 border-[#D9D9D9]">
-          <h5 className="text-[20px]">Password</h5>
-          <p className="text-[#959595]">
-            {"*".repeat(userData.password.length)}
-          </p>
-        </div>
       </div>
       {editResponse && (
         <p className="text-green-600 self-center">{editResponse}</p>
@@ -38,32 +34,32 @@ function Show({ userData, setIsEdit, editResponse }) {
 
 function Edit({ userData, setUserData, setIsEdit, setEditResponse }) {
   const [alertMessage, setAlertMessage] = useState(null);
-  const onSubmit = (formData) => {
-    if (formData.get("oldPassword") !== userData.password) {
-      setAlertMessage("Password lama salah, coba lagi");
-      formData.delete("oldPassword");
-      formData.delete("newPassword");
-      return;
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    formData.append("_method", "PUT");
+
+    try {
+      const res = await updateProfile(formData); // panggil API
+      if (res.user) {
+        setUserData(res.user); // update state kalau ada user
+      }
+      setEditResponse("Berhasil update profile");
+      setIsEdit(false);
+    } catch (err) {
+      setAlertMessage(err.message);
     }
-    setUserData((prev) => ({
-      id: prev.id,
-      nama: formData.get("nama"),
-      role: prev.role,
-      email: formData.get("email"),
-      password: formData.get("newPassword"),
-    }));
-    setEditResponse("Berhasil edit");
-    setIsEdit(false);
   };
   return (
     <div className="border-[#959595] border-[0.5px] flex-1">
       {alertMessage && <p className="text-red-700 ml-2 mt-2">{alertMessage}</p>}
       <form
-        action={onSubmit}
+        onSubmit={onSubmit}
         className="pt-[13px] pl-[29px] pr-[26px] flex flex-col pb-[33px] "
       >
         <div className="space-y-[15px]">
-          {["nama", "email"].map((val, idx) => (
+          {["name", "email"].map((val, idx) => (
             <div key={idx} className="flex flex-col gap-[5px]">
               <label htmlFor={val} className="">
                 {val.slice(0, 1).toUpperCase() + val.slice(1, val.length)}
@@ -79,24 +75,36 @@ function Edit({ userData, setUserData, setIsEdit, setEditResponse }) {
             </div>
           ))}
           <div className="flex flex-col gap-[5px]">
-            <label htmlFor="oldPassword" className="">
+            <label htmlFor="current_password" className="">
               Password Lama
             </label>
             <input
-              id="oldPassword"
-              name="oldPassword"
+              id="current_password"
+              name="current_password"
               type="password"
               className="pl-[9px] border border-[#959595] text-[14px] h-[29px] rounded-[5px]"
               required
             />
           </div>
           <div className="flex flex-col gap-[5px]">
-            <label htmlFor="newPassword" className="">
+            <label htmlFor="password" className="">
               Password Baru
             </label>
             <input
-              id="newPassword"
-              name="newPassword"
+              id="password"
+              name="password"
+              type="password"
+              className="pl-[9px] border border-[#959595] text-[14px] h-[29px] rounded-[5px]"
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-[5px]">
+            <label htmlFor="password_confirmation" className="">
+              Konfirmasi Password Baru
+            </label>
+            <input
+              id="password_confirmation"
+              name="password_confirmation"
               type="password"
               className="pl-[9px] border border-[#959595] text-[14px] h-[29px] rounded-[5px]"
               required
@@ -119,16 +127,22 @@ function Profile({ userData, setUserData }) {
   const [editResponse, setEditResponse] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // (di api usage, upload ke server dan dapatkan URL)
-      const avatarUrl = URL.createObjectURL(file);
-      setUserData((prev) => ({
-        ...prev,
-        avatar: avatarUrl, // Update userData dengan URL avatar baru
-      }));
-      setEditResponse("Avatar berhasil diganti");
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+    formData.append("_method", "PUT"); // supaya cocok dengan updateProfile di backend
+
+    try {
+      const res = await updateProfile(formData);
+      if (res.user) {
+        setUserData(res.user); // update state dari data server (path avatar baru)
+        setEditResponse("Avatar berhasil diganti");
+      }
+    } catch (err) {
+      setEditResponse(err.message || "Gagal upload avatar");
     }
   };
 
@@ -143,7 +157,9 @@ function Profile({ userData, setUserData }) {
           className="size-full flex items-end bg-[#D9D9D9] relative"
           style={{
             backgroundImage: userData.avatar
-              ? `url(${userData.avatar})`
+              ? `url(${import.meta.env.VITE_API_URL_IMAGE}/storage/${
+                  userData.avatar
+                })`
               : "none",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -180,7 +196,7 @@ function Profile({ userData, setUserData }) {
                 isEdit && "invisible"
               }`}
             >
-              {userData.nama}
+              {userData?.name}
             </h4>
             <button
               type="button"

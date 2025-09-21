@@ -1,5 +1,6 @@
 import React from "react";
 import Close from "../../../../assets/Admin/x.svg";
+import { updateBahan } from "../../../../controllers/Bahan";
 
 function EditProduk({
   stockTable,
@@ -8,88 +9,120 @@ function EditProduk({
   setEditId,
   setStockTable,
 }) {
-  const defaultValue = stockTable.filter((val) => editId === val.id);
+  const defaultValue = stockTable.find((val) => editId === val.id);
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const payload = {
+      nama_bahan: formData.get("produk"),
+      harga_beli: formData.get("harga_beli"),
+      stok: formData.get("stok"),
+      kategori_id: formData.get("kategori_id"),
+    };
+
+    const result = await updateBahan(defaultValue.id, payload);
+
+    if (result.errors) {
+      alert(result.errors[Object.keys(result.errors)[0]][0]);
+      return;
+    }
+
     setStockTable((prevData) =>
       prevData.map((item) =>
-        item.id === defaultValue[0].id
+        item.id === defaultValue.id
           ? {
               ...item,
-              produk: formData.get("produk"),
-              stok: formData.get("stok"),
-              kategori: formData.get("kategori"),
+              produk: payload.nama_bahan,
+              harga_beli: payload.harga_beli,
+              stok: payload.stok,
+              kategori_id: payload.kategori_id,
+              kategori: result.data.kategori?.jenis_hidangan ?? "-",
             }
           : item
       )
     );
-    setHighlightedRow(defaultValue[0].id);
+
+    setHighlightedRow(defaultValue.id);
     setTimeout(() => setHighlightedRow(null), 200);
+
     setEditId(null);
   };
 
-
-  console.log(defaultValue);
   return (
-    <div className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}>
-      <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+    <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+      <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <div
-          onClick={() => {
-            setEditId(null);
-          }}
+          onClick={() => setEditId(null)}
           className="absolute top-[18px] right-[22px] cursor-pointer"
         >
           <img src={Close} alt="X" />
         </div>
         <h2 className="font-semibold text-2xl">Edit Produk</h2>
+
         <form
-          action={onSubmit}
-          className="mt-[41px] h-full space-y-[20px] flex flex-col"
+          onSubmit={onSubmit}
+          className="mt-[41px] space-y-[20px] flex flex-col"
         >
           <div>
-            <label htmlFor="Id">Id</label>
+            <label>Id</label>
             <input
               type="text"
-              name="Id"
-              defaultValue={defaultValue[0].id}
+              defaultValue={defaultValue.id}
               readOnly
-              className="cursor-default caret-transparent text-[#575757] bg-[#E8E8E8] w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              className="cursor-default text-[#575757] bg-[#E8E8E8] w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
             />
           </div>
+
           <div>
-            <label htmlFor="Produk">Produk</label>
+            <label>Bahan Mentah</label>
             <input
               type="text"
               name="produk"
-              defaultValue={defaultValue[0].produk}
+              defaultValue={defaultValue.produk}
               required
-              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              className="w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
             />
           </div>
+
           <div>
-            <label htmlFor="Kategori">Kategori</label>
+            <label>Harga Beli</label>
             <input
-              type="text"
-              name="kategori"
-              defaultValue={defaultValue[0].kategori}
+              type="number"
+              name="harga_beli"
+              defaultValue={defaultValue.harga_beli}
               required
-              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              className="w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
             />
           </div>
+
           <div>
-            <label htmlFor="Stok">Stok</label>
+            <label>Kategori Id</label>
+            <input
+              type="number"
+              name="kategori_id"
+              defaultValue={defaultValue.kategori_id}
+              required
+              className="w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
+            />
+          </div>
+
+          <div>
+            <label>Stok</label>
             <input
               type="number"
               min={1}
               name="stok"
-              defaultValue={defaultValue[0].stok}
+              defaultValue={defaultValue.stok}
               required
-              className="appearance-none w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
+              className="appearance-none w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
             />
           </div>
+
           <button
             type="submit"
-            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer"
+            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px]"
           >
             Simpan
           </button>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import Close from "../../../../assets/Admin/x.svg";
+import { tambahPengeluaran, updatePengeluaran } from "../../../../controllers/Pengeluaran";
 
 function TambahPengeluaran({
   setIsAddOpen,
@@ -9,7 +10,6 @@ function TambahPengeluaran({
   setEditId,
   setHighlightedRow,
 }) {
-
   const currentItem = useMemo(() => {
     if (!editId) return null;
     return dataPengeluaran.find((v) => v.id === editId) || null;
@@ -17,50 +17,66 @@ function TambahPengeluaran({
 
   const toInputDate = (dateStr) => {
     if (!dateStr) return "";
-    return String(dateStr).split("T")[0]
+    const date = new Date(dateStr);
+    if (isNaN(date)) return "";
+
+    // Menggunakan local timezone, bukan UTC
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
     console.log("currentItem:", currentItem);
   }, [currentItem]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
     const payload = {
-      judul: formData.get("judul"),
-      jumlah: formData.get("jumlah"),
+      pengeluaran: parseInt(formData.get("jumlah")),
       tanggal: formData.get("tanggal"),
       catatan: formData.get("catatan"),
     };
 
-    if (!editId) {
-      // Tambah
-      const index = `IDX${Math.floor(Math.random() * 100000)}`;
-      setDataPengeluaran((prevData) => [
-        ...prevData,
-        {
-          id: index,
-          ...payload,
-        },
-      ]);
-      setIsAddOpen(false);
-    } else {
-      // Edit
-      setDataPengeluaran((prevData) =>
-        prevData.map((item) =>
-          item.id === editId
-            ? {
-                ...item,
-                ...payload,
-              }
-            : item
-        )
-      );
-      setHighlightedRow(editId);
-      setEditId(null);
-      setIsAddOpen(false);
+    try {
+      if (!editId) {
+        const res = await tambahPengeluaran(payload);
+        setDataPengeluaran((prevData) => [
+          ...prevData,
+          {
+            id: res.data.id,
+            pengeluaran: res.data.pengeluaran,
+            catatan: res.data.catatan,
+            created_at: res.data.created_at,
+          },
+        ]);
+        setHighlightedRow(res.data.id);
+        setIsAddOpen(false);
+      } else {
+      await updatePengeluaran(editId, parseInt(formData.get("jumlah")), formData.get("catatan"));
+      setDataPengeluaran(prevData =>
+       prevData.map(item =>
+        item.id === editId
+         ? {
+          ...item,
+          pengeluaran: parseInt(formData.get("jumlah")),
+          catatan: formData.get("catatan"),
+          tanggal: formData.get("tanggal"),
+         }
+          : item
+         )
+        );
+        setHighlightedRow(editId);
+        setEditId(null);
+        setIsAddOpen(false);
+       }
+      } catch (err) {
+      console.error(err);
+      alert(err.message || "Gagal menambahkan pengeluaran");
     }
   };
 
@@ -80,24 +96,16 @@ function TambahPengeluaran({
           {editId === null ? "Tambah" : "Edit"} Pengeluaran
         </h2>
 
-        <form onSubmit={onSubmit} className="mt-[41px] h-full space-y-[12px] flex flex-col">
-          <div>
-            <label htmlFor="Judul">Judul</label>
-            <input
-              type="text"
-              name="judul"
-              defaultValue={currentItem?.judul ?? ""}
-              required
-              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
-            />
-          </div>
-
+        <form
+          onSubmit={onSubmit}
+          className="mt-[41px] h-full space-y-[12px] flex flex-col"
+        >
           <div>
             <label htmlFor="Jumlah">Jumlah</label>
             <input
               type="number"
               name="jumlah"
-              defaultValue={currentItem?.jumlah ?? ""}
+              defaultValue={currentItem?.pengeluaran ?? ""}
               required
               className="appearance-none w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
             />
@@ -109,7 +117,7 @@ function TambahPengeluaran({
               type="date"
               name="tanggal"
               required
-              defaultValue={toInputDate(currentItem?.tanggal)}
+              defaultValue={toInputDate(currentItem?.created_at ?? "")}
               className="w-full mt-[7px] pl-[13px] pr-[15px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
             />
           </div>

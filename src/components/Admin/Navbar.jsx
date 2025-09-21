@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePicture from "../../assets/Admin/profile.svg";
 import Arrow from "../../assets/Admin/arrow.svg";
 import { Link, useLocation } from "react-router-dom";
 import Profile from "./Overlay/Profile";
+import { getCurrentUser } from "../../controllers/AuthController";
 
 function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [userData, setUserData] = useState({
-    id: "IDX1209",
-    nama: "Rafli",
-    role: "Owner",
-    email: "r@gmail.com",
-    password: "123456",
-  });
+  const [userData, setUserData] = useState(null);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        setUserData(user);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const pathResult = pathname
     .slice(1)
     .split("-")
@@ -24,7 +33,7 @@ function Navbar() {
     <div className="h-[92px] flex justify-between items-center shadow-[0px_5px_10.8px_rgba(168,168,168,0.25)]">
       <div className="pb-[6px] px-[42px] font-semibold text-2xl flex">
         {pathname === "/dashboard" ? (
-          `Selamat Datang, ${userData.nama} 👋`
+          `Selamat Datang, ${userData?.name || ""} 👋`
         ) : (
           <h2>
             <Link to="/dashboard">Dashboard</Link> &gt;{" "}
@@ -33,12 +42,22 @@ function Navbar() {
         )}
       </div>
       <div className="flex gap-[18px] px-[31.92px] items-center">
-        <p>{userData.nama}</p>
+        <p>{userData?.name}</p>
         <button
           onClick={() => setIsProfileOpen((prev) => !prev)}
           className="flex gap-[18px]"
         >
-          <img src={ProfilePicture} alt="profile" className="mb-[5px]" />
+          <img
+            src={
+              userData?.avatar
+                ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
+                    userData.avatar
+                  }`
+                : ProfilePicture
+            }
+            alt="profile"
+            className="mb-[5px] w-[40px] h-[40px] rounded-full object-cover"
+          />
           <img
             src={Arrow}
             alt="arrow"
