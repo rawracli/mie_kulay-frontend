@@ -45,14 +45,23 @@ function MenuPage() {
     }
   }, [selectedCategory, menuData]); // Re-calculate when category changes or data changes
   const handleCategoryChange = (category) => {
-    setSelectedCategory((prev) => (prev === category ? "" : category));
+    setSelectedCategory((prev) => {
+      if (prev.includes(category)) {
+        // jika sudah ada, hapus
+        return prev.filter((c) => c !== category);
+      } else {
+        // jika belum ada, tambahkan
+        return [...prev, category];
+      }
+    });
   };
 
   const tileHeight = 505;
   const tileWidth = 505;
 
   const categories = [...new Set(menuData.map((item) => item.category))];
-  const shownCategories = selectedCategory ? [selectedCategory] : categories;
+  const shownCategories =
+    selectedCategory.length > 0 ? selectedCategory : categories;
 
   // zigzag background
   const createZigzagElements = () => {
@@ -93,12 +102,6 @@ function MenuPage() {
     return elements;
   };
 
-  const [selected, setSelected] = useState(null);
-  const handleClick = (cat) => {
-    // Jika sudah dipilih, klik lagi → unselect
-    setSelected((prev) => (prev === cat ? null : cat));
-  };
-
   return (
     <div className="w-full relative">
       <Hero text={"Menu Kami"} />
@@ -136,11 +139,9 @@ function MenuPage() {
                 {categories.map((cat) => (
                   <div key={cat} className="flex items-center gap-3">
                     <input
-                      type="radio"
-                      checked={selected === cat}
-                      onChange={() => {
-                        handleClick(cat), handleCategoryChange(cat);
-                      }}
+                      type="checkbox"
+                      checked={selectedCategory.includes(cat)}
+                      onChange={() => handleCategoryChange(cat)}
                       className="w-5 h-5 accent-gray-700 rounded-full"
                     />
                     <h1 className="font-bold text-[27px] font-boogaloo">
@@ -172,7 +173,7 @@ function MenuPage() {
                   <label key={cat} className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={selectedCategory === cat}
+                      checked={selectedCategory.includes(cat)}
                       onChange={() => handleCategoryChange(cat)}
                     />
                     <span className="ml-[20px] font-baloo-2 text-[28px]">
