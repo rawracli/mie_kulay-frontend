@@ -26,9 +26,9 @@ function ConfirmDelete({ deleteId, setSkipConfirm, setDeleteId, onDelete }) {
 
   return (
     <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-      <div className="bg-white relative flex flex-col items-center pb-[24px] pt-[15px] px-[30px] w-[415px] h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="bg-white relative flex flex-col items-center pb-[24px] pt-[15px] px-[30px] w-[415px] max-sm:w-[300px] h-fit max-sm:h-[283px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <img src={Alert} alt="" />
-        <h2 className="font-semibold text-[1.5rem] mt-[16px]">
+        <h2 className="font-semibold text-[1.5rem] mt-[16px] max-sm:text-[20px]">
           Yakin Hapus Data Ini ?
         </h2>
         <div className="flex-row-reverse flex items-center [&>*]:cursor-pointer mt-[12px] mb-[23px]">
