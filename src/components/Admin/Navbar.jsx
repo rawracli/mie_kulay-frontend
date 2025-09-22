@@ -48,20 +48,30 @@ function Navbar({ setIsOpen }) {
             fill="black"
           />
         </svg>
-        <div className="max-md:pl-[30px] ">
+        <div className="max-md:pl-[30px]">
           {pathname === "/dashboard" ? (
             <h2>
               Selamat Datang,{" "}
               <span className="text-nowrap">{userData?.name || ""} 👋</span>
             </h2>
           ) : (
-            <h2>
-              <Link to="/dashboard">Dashboard</Link> &gt;{" "}
-              <span className="text-[#FFB300] text-nowrap">{pathResult}</span>
+            <h2 className="max-sm:text-center max-sm:hidden">
+              <Link to="/dashboard" className="max-sm:hidden">
+                Dashboard
+              </Link>{" "}
+              &gt;{" "}
+              <span className="sm:text-[#FFB300] text-nowrap">
+                {pathResult}
+              </span>
             </h2>
           )}
         </div>
       </div>
+      {!(pathname === "/dashboard") && (
+        <h2 className="max-sm:text-center sm:hidden text-[20px] font-semibold">
+          {pathResult}
+        </h2>
+      )}
       <div className="flex gap-[18px] pr-[31.92px] items-center">
         <p>{userData?.name}</p>
         <button
