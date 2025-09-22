@@ -171,7 +171,7 @@ function Pemesanan() {
                     setPaymentMethod("cash");
                     setPaymentDropdown(false);
                   }}
-                  className="flex items-center gap-2 px-3 py-2 bg-white hover:bg-amber-700 cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-2 bg-white hover:bg-gray-100  cursor-pointer"
                 >
                   <img src={Cash} alt="" className="h-[18px]" />
                   <p className="text-[16px] font-medium">Cash</p>
