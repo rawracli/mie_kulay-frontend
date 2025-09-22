@@ -364,6 +364,8 @@ function Pemesanan() {
           isEditOpen || deleteIndex !== null ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
+      <div className={`${(!paymentDropdown) ? "hidden" : ""} size-svh fixed`} onClick={()=>setPaymentDropdown(false)}></div>
+      <div className={`${(!isAddOpen) ? "hidden" : ""} size-svh fixed`} onClick={()=>setIsAddOpen(false)}></div>
       <TambahPesanan
         isAddOpen={isAddOpen}
         setIsAddOpen={setIsAddOpen}
