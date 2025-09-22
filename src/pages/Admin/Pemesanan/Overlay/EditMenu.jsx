@@ -22,7 +22,7 @@ function EditMenu({ setFormData, formData, setIsEditOpen, isAddOpen, setIsAddOpe
   if (!formData) return null; // Safety check, though not needed after fix
   
   return (
-    <div className={`${isAddOpen ? "max-sm:-translate-y-1/6 sm:-translate-x-1/4" : "translate-x-0"} transition duration-300 max-sm:delay-75 fixed inset-0 flex items-center justify-center`}>
+    <div className={`${isAddOpen ? "max-sm:-translate-y-1/6 sm:-translate-x-1/4" : "translate-x-0"} w-[415px] h-[468px] sm:h-[509px] transition duration-300 max-sm:delay-75 fixed inset-0 flex items-center justify-center`}>
       <div className="bg-white relative py-[32px] px-[30px] mx-[10px] w-[415px] h-[468px] sm:h-[509px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <div
           onClick={() => {setIsEditOpen(false), setIsAddOpen(false), setEditIndex(null)}}
