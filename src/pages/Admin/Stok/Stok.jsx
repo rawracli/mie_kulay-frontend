@@ -321,14 +321,19 @@ function Stok() {
   const handleIncrement = (id) => {
     const current = stockTable.find((item) => item.id === id);
     if (!current) return;
-    handleUpdateStok(id, current.stok + 1);
+    handleUpdateStok(id, current.stok + 500);
   };
 
   const handleDecrement = (id) => {
     const current = stockTable.find((item) => item.id === id);
+    const amount = 500;
     if (!current) return;
     if (current.stok > 0) {
-      handleUpdateStok(id, current.stok - 1);
+      if (current.stok < amount) {
+        handleUpdateStok(id, 0);
+      } else {
+        handleUpdateStok(id, current.stok - 500);
+      }
     }
   };
 
@@ -593,10 +598,11 @@ function Stok() {
                         Id
                       </th>
                       <th className="border border-[#959595] text-center w-[32.42%]">
-                        Bahan Mentah
+                        Bahan
                       </th>
+                      {/* STOK JADI HARGA */}
                       <th className="border border-[#959595] text-center w-[25.07%]">
-                        Stok
+                        Harga
                       </th>
                       <th className="border border-[#959595] text-center w-[24.15%]">
                         Aksi
