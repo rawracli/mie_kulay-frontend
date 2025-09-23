@@ -10,9 +10,7 @@ import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
-import TambahProduk from "./Overlay/TambahProduk";
 import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
-import Bahan from "./section/bahan";
 
 function Stok() {
   // toggle bahan atau menu
@@ -219,7 +217,6 @@ function Stok() {
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [category, setCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isAddOpen, setIsAddOpen] = useState(false);
   const [isAddKategori, setIsAddKategori] = useState(false);
   const [editId, setEditId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
@@ -507,21 +504,11 @@ function Stok() {
         </button>
 
         <button
-          onClick={() => setIsAddOpen(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
-        >
-          <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">
-            {viewMode === "bahan" ? "Tambah Bahan Mentah" : "Tambah Menu"}
-          </p>
-        </button>
-
-        <button
           onClick={() => setIsAddKategori(true)}
           className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Kategori</p>
+          <p className="text-[14px] font-bold text-white">Tambah Baru</p>
         </button>
       </div>
 
@@ -864,14 +851,13 @@ function Stok() {
 
       <div
         onClick={() => {
-          setIsAddOpen(false);
           setEditId(null);
           setDeleteId(null);
           setIsAddKategori(false);
           setSelectedMenu(null);
         }}
         className={`${
-          editId || isAddOpen || deleteId || isAddKategori || selectedMenu
+          editId || deleteId || isAddKategori || selectedMenu
             ? ""
             : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
@@ -1035,15 +1021,6 @@ function Stok() {
         </div>
       )}
 
-      {isAddOpen && (
-        <TambahProduk
-          isAddOpen={isAddOpen}
-          setHighlightedRow={setHighlightedRow}
-          setIsAddOpen={setIsAddOpen}
-          setStockTable={setStockTable}
-          stockData={stockData}
-        />
-      )}
       {editId !== null && (
         <EditProduk
           stockTable={stockTable}
