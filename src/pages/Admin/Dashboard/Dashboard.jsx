@@ -43,6 +43,95 @@ function Dashboard() {
 
   const [transactionsData, setTransactionsData] = useState([]);
   useEffect(() => {
+    // Dummy data transaksi
+    const dummyData = [
+      {
+        id: "TRX-001",
+        tanggal: new Date("2025-09-01"),
+        total: 75000,
+        metode: "Cash",
+        items: [
+          { name: "Nasi Goreng Spesial", qty: 1, price: 25000 },
+          { name: "Es Teh Manis", qty: 2, price: 10000 },
+          { name: "Ayam Bakar", qty: 1, price: 30000 },
+        ],
+      },
+      {
+        id: "TRX-002",
+        tanggal: new Date("2025-09-02"),
+        total: 50000,
+        metode: "QRIS",
+        items: [
+          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
+          { name: "Teh Botol", qty: 1, price: 10000 },
+        ],
+      },
+      {
+        id: "TRX-002",
+        tanggal: new Date("2025-09-02"),
+        total: 50000,
+        metode: "QRIS",
+        items: [
+          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
+          { name: "Teh Botol", qty: 1, price: 10000 },
+        ],
+      },
+      {
+        id: "TRX-002",
+        tanggal: new Date("2025-09-02"),
+        total: 50000,
+        metode: "QRIS",
+        items: [
+          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
+          { name: "Teh Botol", qty: 1, price: 10000 },
+        ],
+      },
+      {
+        id: "TRX-002",
+        tanggal: new Date("2025-09-02"),
+        total: 50000,
+        metode: "QRIS",
+        items: [
+          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
+          { name: "Teh Botol", qty: 1, price: 10000 },
+        ],
+      },
+      {
+        id: "TRX-003",
+        tanggal: new Date("2025-09-05"),
+        total: 120000,
+        metode: "Debit",
+        items: [
+          { name: "Sate Ayam", qty: 2, price: 50000 },
+          { name: "Air Mineral", qty: 2, price: 10000 },
+        ],
+      },
+      {
+        id: "TRX-004",
+        tanggal: new Date("2025-09-08"),
+        total: 95000,
+        metode: "Cash",
+        items: [
+          { name: "Ayam Geprek", qty: 2, price: 40000 },
+          { name: "Es Jeruk", qty: 1, price: 15000 },
+        ],
+      },
+      {
+        id: "TRX-005",
+        tanggal: new Date("2025-09-12"),
+        total: 135000,
+        metode: "QRIS",
+        items: [
+          { name: "Ikan Bakar", qty: 1, price: 70000 },
+          { name: "Sop Buntut", qty: 1, price: 65000 },
+        ],
+      },
+    ];
+
+    setTransactionsData(dummyData);
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       const data = await getPemesanan();
       const formattedData = data.map((p) => ({
@@ -103,7 +192,7 @@ function Dashboard() {
   );
 
   return (
-    <div className="bg-[#EDF0F2] w-full min-h-[calc(100vh-92px)] flex flex-col items-center pl-[11px] pr-[20px]">
+    <div className="bg-[#EDF0F2] w-full min-h-[calc(100vh-92px)] flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
       {/* Analytics Data */}
       <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center">
         {/* Information Priority */}
@@ -160,14 +249,14 @@ function Dashboard() {
         </div>
       </div>
       {/* Detail Pemesanan */}
-      <div className="size-full">
+      <div className="h-full w-full">
         {/* Detail Pemesanan || Laporan Pemesanan */}
         <div className="w-full flex justify-start">
-          <h1 className="text-3xl font-semibold text-right mt-5 px-1.5">
+          <h1 className="max-sm:hidden text-3xl font-semibold text-right mt-5 px-1.5">
             Detail Pemesanan
           </h1>
         </div>
-        <div className="bg-white rounded-[10px] h-fit shadow-lg pt-[37px] pb-[19px] px-6 w-full mt-3 mb-24">
+        <div className="flex flex-col bg-white rounded-[10px] max-sm:min-h-[calc(100vh-92px)] sm:h-fit shadow-lg pt-[54px] sm:pt-[37px] pb-[19px] px-6 w-full sm:mt-3 sm:mb-24">
           {/* Filter */}
           <div className="grid grid-cols-2 gap-[29px] mb-4">
             <div>
@@ -199,14 +288,14 @@ function Dashboard() {
               setTanggalAkhir(tanggalAkhirInput);
               setCurrentPage(1);
             }}
-            className="w-full h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-6 flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-[45px] sm:mb-[34px] flex items-center justify-center gap-2 cursor-pointer"
           >
             <img src={Icon} alt="Filter" className="w-4 h-4" />
             <span>Filter</span>
           </button>
 
           {/* Search & entries per page */}
-          <div className="flex items-center justify-between mb-[15px] mt-[10px]">
+          <div className="flex items-center justify-between mb-[15px]">
             <div>
               <select
                 value={entriesPerPage}
@@ -221,7 +310,9 @@ function Dashboard() {
                 <option value={6}>6</option>
                 <option value={10}>10</option>
               </select>
-              <span className="ml-2 text-sm">Entries per page</span>
+              <span className="ml-2 text-sm max-sm:hidden">
+                Entries per page
+              </span>
             </div>
             <div>
               <label className="mr-2 text-sm">Search:</label>
@@ -235,49 +326,66 @@ function Dashboard() {
           </div>
 
           {/* Table */}
-          <div className="-translate-x-[3.6px]">
-            <table className="w-full border-collapse border border-gray-700">
-              <thead className="bg-[#FFB300] text-left h-[28px]">
+          <div className="relative border border-[#959595] flex-1">
+            <div
+              className={`absolute inset-0 grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
+                transactionsData.length === 0 && "invisible"
+              }`}
+            >
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="border-r border-[#959595]"></div>
+              ))}
+            </div>
+            <table className="w-full min-w-[450px] border-collapse">
+              <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
                 <tr>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
-                    Tanggal
-                  </th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
-                    Id
-                  </th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
-                    Total Pembayaran
-                  </th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
-                    Metode Pembayaran
-                  </th>
-                  <th className="border border-gray-600 text-center font-semibold py-[6px]">
-                    Aksi
-                  </th>
+                  {[
+                    "Tanggal",
+                    "Id",
+                    "Total Pembayaran",
+                    "Metode Pembayaran",
+                    "Aksi",
+                  ].map((value, index) => (
+                    <th
+                      key={index}
+                      className="text-center font-semibold py-[6px] text-nowrap"
+                    >
+                      {value}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {paginatedData.length > 0 ? (
                   paginatedData.map((t) => (
-                    <tr>
-                      <td className="border border-gray-600 text-center h-[33px]">
+                    <tr className="even:bg-gray-200">
+                      <td className="text-center h-[33px]">
                         {t.tanggal.toLocaleDateString("id-ID")}
                       </td>
-                      <td className="border border-gray-600 text-center h-[33px]">
-                        {t.id}
-                      </td>
-                      <td className="border border-gray-600 text-center h-[33px]">
+                      <td className="text-center h-[33px]">{t.id}</td>
+                      <td className="text-center h-[33px]">
                         Rp. {t.total.toLocaleString("id-ID")}
                       </td>
-                      <td className="border border-gray-600 text-center h-[33px]">
-                        {t.metode}
-                      </td>
-                      <td className="border border-gray-600 text-center h-[33px]">
+                      <td className="text-center h-[33px]">{t.metode}</td>
+                      <td className="text-center h-[33px]">
                         <button
                           onClick={() => setSelectedTransaction(t)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                          className="lg:bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
                         >
-                          Lihat Detail
+                          <span className="max-lg:hidden">Lihat Detail</span>
+                          <svg
+                            className="lg:hidden"
+                            width="22"
+                            height="15"
+                            viewBox="0 0 22 15"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
+                              fill="#4386EA"
+                            />
+                          </svg>
                         </button>
                       </td>
                     </tr>
