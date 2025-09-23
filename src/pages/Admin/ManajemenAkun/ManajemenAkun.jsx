@@ -173,7 +173,7 @@ function ManajemenAkun() {
                 <p className="ml-2 text-sm max-sm:hidden">Entries per page</p>
               </div>
               <div>
-                <label className="mr-2 text-sm">Search:</label>
+                <label className="mr-2 text-sm ">Search:</label>
                 <input
                   type="text"
                   value={search}
@@ -186,70 +186,66 @@ function ManajemenAkun() {
               </div>
             </div>
             {/* data table */}
-            <div className="w-full h-full ">
-              <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:w-[661px]">
-                <thead className="top-0">
-                  <tr className="bg-[#FFB300] h-[49px] ">
-                    <th className="border border-[#959595] text-center w-[15.50%]">
-                      Id
-                    </th>
-                    <th className="border border-[#959595] text-center w-[19.46%]">
-                      Nama
-                    </th>
-                    <th className="border border-[#959595] text-center w-[26.65%]">
-                      Email
-                    </th>
-                    <th className="border border-[#959595] text-center w-[13.58%]">
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedData.length > 0 ? (
-                    paginatedData.map((t, ind) => (
-                      <tr
-                        key={ind}
-                        className={`${
-                          highlightedRow === t.id
-                            ? "bg-[#AFCFFF]"
-                            : "even:bg-gray-200"
-                        } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
-                      >
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.id}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.name}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.email}
-                        </td>
-                        <td>
-                          <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
-                            <button
-                              onClick={() => onDelete(t.id)}
-                              className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
-                            >
-                              <img src={Sampah} alt="" />
-                              Delete
-                            </button>
-                          </div>
+            <div className="h-full overflow-x-auto">
+              <div className="overflow-x-auto max-sm:w-[360px] ">
+                <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
+                  <thead className="top-0">
+                    <tr className="bg-[#FFB300] h-[49px]">
+                      <th className="border border-[#959595] text-center w-[15.50%]">
+                        Id
+                      </th>
+                      <th className="border border-[#959595] text-center w-[19.46%]">
+                        Nama
+                      </th>
+                      <th className="border border-[#959595] text-center w-[26.65%]">
+                        Email
+                      </th>
+                      <th className="border border-[#959595] text-center w-[13.58%] max-sm:w-[7%]">
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedData.length > 0 ? (
+                      paginatedData.map((t, ind) => (
+                        <tr
+                          key={ind}
+                          className={`${
+                            highlightedRow === t.id
+                              ? "bg-[#AFCFFF]"
+                              : "even:bg-gray-200"
+                          } transition-colors duration-300 text-[14px] [&>td]:h-[34px]`}
+                        >
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.id}</td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.name}</td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.email}</td>
+                          <td>
+                            <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                              <button
+                                onClick={() => onDelete(t.id)}
+                                className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                              >
+                                <img src={Sampah} alt="" />
+                                <p className="max-sm:hidden">Delete</p>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="text-center py-3 text-gray-500 italic"
+                        >
+                          Tidak ada data
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic"
-                      >
-                        Tidak ada data
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              <div className="flex items-center justify-between mt-5 text-sm">
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex items-center justify-between mt-5 text-sm ">
                 <p>
                   Page {currentPage} of {totalPages || 1} entries
                 </p>
