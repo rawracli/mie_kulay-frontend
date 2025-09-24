@@ -793,7 +793,10 @@ function Stok() {
                 </div>
               ) : (
                 stockData.map((items, index) => (
-                  <div key={index}>
+                  <div key={index} className="cursor-pointer" onClick={() => {
+                    setCategory(items.nama);
+                    setCurrentPage(1);
+                  }}>
                     <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
                       <h3 className="text-center m-auto">
                         {items.nama.slice(0, 1).toUpperCase() +
