@@ -1,12 +1,9 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 const getMenu = async () => {
-  const token = localStorage.getItem("token");
-
   const response = await fetch(`${API_URL}/menu`, {
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
     },
   });
 
