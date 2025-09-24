@@ -31,14 +31,12 @@ const gctks = async () => {
 
 const loginUser = async (data) => {
   try {
-    const cstks = await gctks();
-
     const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-XSRF-TOKEN": cstks,
+        "X-XSRF-TOKEN": await gctks(),
       },
       body: JSON.stringify(data),
       credentials: 'include',
@@ -87,7 +85,6 @@ const getUsers = async () => {
 };
 
 const updateProfile = async (formData) => {
-
   const response = await fetch(`${API_URL}/updateProfile`, {
     method: 'POST',
     headers: {
