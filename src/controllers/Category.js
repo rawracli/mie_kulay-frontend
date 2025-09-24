@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL;
+import { gctks } from "./utils/get";
 
 // Ambil semua kategori
 const getCategories = async () => {
@@ -6,6 +7,7 @@ const getCategories = async () => {
     headers: {
       "Accept": "application/json",
     },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -17,15 +19,15 @@ const getCategories = async () => {
 };
 
 const addCategory = async (jenis_hidangan) => {
-  const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/category`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: JSON.stringify({ jenis_hidangan }),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -37,13 +39,13 @@ const addCategory = async (jenis_hidangan) => {
 };
 
 const deleteCategory = async (id) => {
-  const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/category/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -56,15 +58,15 @@ const deleteCategory = async (id) => {
 
 
 const updateCategory = async (id, jenis_hidangan) => {
-  const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/category/${id}`, {
     method: "PUT",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: JSON.stringify({ jenis_hidangan }),
+    credentials: "include",
   });
 
   if (!response.ok) {
