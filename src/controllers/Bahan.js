@@ -15,7 +15,6 @@ const getBahan = async () => {
 };
 
 const tambahBahan = async (data) => {
-  // 2. Baru POST bahan - PERBAIKI URL INI
   const res = await fetch(`${API_URL}/tambah/bahan`, {
     method: "POST",
     headers: {
