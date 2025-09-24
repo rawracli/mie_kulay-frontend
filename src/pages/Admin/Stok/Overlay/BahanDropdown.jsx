@@ -44,12 +44,12 @@ function BahanDropdown({ bahanList, addBahan }) {
   };
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className="relative max-md:w-[200px] w-full max-md:pb-3" ref={dropdownRef}>
       <div
         onClick={() => setOpen(!open)}
-        className="w-full mt-[7px] pl-[13px] flex items-center justify-between text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] cursor-pointer"
+        className="w-full max-md:h-[21px] mt-[7px] pl-[13px] flex items-center justify-between text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] cursor-pointer"
       >
-        <span>Pilih Bahan</span>
+        <span className="text-[12px] font-semibold">Pilih Bahan</span>
         <svg
           width="16"
           height="10"

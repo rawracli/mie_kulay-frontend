@@ -13,6 +13,7 @@ import {
 import { getMenu } from "../../../../controllers/Menu";
 
 function TambahKategori({ setIsAddKategori }) {
+  //dummy data
   const [kategoriData, setKategoriData] = useState([
     {
       id: 1,
@@ -21,6 +22,102 @@ function TambahKategori({ setIsAddKategori }) {
         {
           nama: "Nasi Goreng",
           foto: "https://via.placeholder.com/150x100.png?text=Nasi+Goreng",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
         },
         {
           nama: "Sate Ayam",
@@ -196,11 +293,12 @@ function TambahKategori({ setIsAddKategori }) {
       ? kategoriData[editIndex].menu
       : [];
 
+
   return (
     <>
-    <div className="fixed top-1/2 -translate-y-[calc(50%-1rem)] left-[calc(50%-5rem)] -translate-x-1/2 flex max-sm:flex-col h-[482px]">
+    <div className={`max-md:absolute md:fixed top-1/2 -translate-y-[calc(50%-1rem)] -translate-x-1/2 flex max-md:flex-col md:h-[482px] ${isTambahMenuOpen ? "max-md:left-1/2 md:left-[calc(50%-5rem)]" : "left-1/2"}`}>
       {/* Kiri */}
-      <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[416px] max-sm:rounded-t-[5px] sm:rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[340px] sm:w-[416px] max-sm:rounded-t-[5px] sm:rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
           onClick={() => {
             setEditIndex(null);
@@ -266,11 +364,11 @@ function TambahKategori({ setIsAddKategori }) {
         {/* Grid menu */}
         <div
           ref={refOverflow}
-          className={`py-[9px] flex-1 gap-[10px] mb-5 w-fit ml-[11px] grid grid-cols-3 mt-[20px] overflow-y-auto overflow-x-hidden ${
+          className={`py-[9px] flex-1 gap-[10px] px-1 mb-5 w-fit ml-[11px] grid grid-cols-3 mt-[20px] min-h-40 sm:min-h-30 max-h-40 sm:max-h-30 md:max-h-none overflow-y-auto overflow-x-hidden ${
             isOverflowing && "bg-[#EBEBEB]"
           }`}
         >
-          {currentMenu ? (
+          {currentMenu.length === 0 ? (
             <div className="max-sm:mt-[104px]"></div>
           ) : (
             currentMenu.map((m, i) => (
@@ -302,7 +400,7 @@ function TambahKategori({ setIsAddKategori }) {
       </div>
 
       {/* Kanan */}
-      <div className="relative bg-yellow-500 font-semibold pb-[24px] pt-[28px] pl-[17px] pr-[19px] w-[213px] max-sm:rounded-b-[5px] sm:rounded-r-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="relative bg-yellow-500 font-semibold pb-[24px] pt-[28px] pl-[17px] pr-[19px] md:w-[213px] max-sm:rounded-b-[5px] md:rounded-r-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
           className="absolute right-[22px] top-[19px] cursor-pointer"
           onClick={() => setIsAddKategori(false)}
@@ -310,30 +408,10 @@ function TambahKategori({ setIsAddKategori }) {
           <img src={Close} alt="X" />
         </button>
         <h2>Kategori</h2>
-        <div className="space-y-[20px] ml-[3px] my-[26px] text-[13px] overflow-auto h-[calc(100%-28px)]">
+        <div className="space-y-[20px] ml-[3px] mt-[26px] md:my-[26px] text-[13px] max-md:max-h-50 overflow-auto h-[calc(100%-28px)]">
           {isLoading ? (
             <div className="text-center">Memuat data...</div>
           ) : (
-            // <div
-            //   ref={rightPanelRef}
-            //   className="absolute z-10 flex flex-col divide-[#959595] divide-y-[0.5px] divide-solid border-[#959595] border-[0.5px] bg-white h-[46px] w-[95px] right-0 top-4 text-[14px]"
-            // >
-            //   <button
-            //     onClick={(e) => {
-            //       e.stopPropagation();
-            //       onDelete(idx);
-            //     }}
-            //     className="text-[#A01515] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
-            //   >
-            //     Hapus
-            //   </button>
-            //   <button
-            //     onClick={(e) => handleClickEditBtn(idx, e)}
-            //     className="text-[#3578DC] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
-            //   >
-            //     Edit
-            //   </button>
-            // </div>
             kategoriData.map((item, idx) => (
               <div key={idx}>
                 <div
