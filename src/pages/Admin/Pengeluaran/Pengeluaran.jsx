@@ -12,7 +12,37 @@ import {
 } from "../../../controllers/Pengeluaran";
 
 function Pengeluaran() {
-  const [dataPengeluaran, setDataPengeluaran] = useState([]);
+  
+  const [dataPengeluaran, setDataPengeluaran] = useState([
+    {
+      id: 1,
+      pengeluaran: 50000,
+      catatan: "Beli alat kebersihan",
+      tanggal: "2025-09-20",
+      created_at: "2025-09-20T10:30:00",
+    },
+    {
+      id: 2,
+      pengeluaran: 120000,
+      catatan: "Bayar listrik",
+      tanggal: "2025-09-21",
+      created_at: "2025-09-21T14:15:00",
+    },
+    {
+      id: 3,
+      pengeluaran: 75000,
+      catatan: "Beli kertas & tinta printer",
+      tanggal: "2025-09-22",
+      created_at: "2025-09-22T09:45:00",
+    },
+    {
+      id: 4,
+      pengeluaran: 25000,
+      catatan: "Air minum galon",
+      tanggal: "2025-09-23",
+      created_at: "2025-09-23T11:00:00",
+    },
+  ]);
   const [ setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -222,7 +252,7 @@ function Pengeluaran() {
             Tambah Pengeluaran
           </p>
       </button>
-      <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
+      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[650px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
             {/* filter date */}
@@ -233,7 +263,7 @@ function Pengeluaran() {
                   type="date"
                   value={tanggalInput}
                   onChange={(e) => setTanggalInput(e.target.value)}
-                  className="w-[234px] max-sm:w-[131px] h-[35px] max-sm:h-[25px] bg-gray-100 px-2 max-sm:mb-[10px] border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400 max-sm:text-[14px] max-sm:ml-[50px]"
+                  className="w-[234px] max-sm:w-[131px] h-[35px] max-sm:h-[30px] bg-gray-100 px-2 max-sm:mb-[10px] border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400 max-sm:text-[14px] max-sm:ml-[50px]"
                 />
               </div>
             </div>
@@ -279,7 +309,8 @@ function Pengeluaran() {
             </div>
             {/* data table */}
             <div className="w-full h-full">
-              <table className="w-full font-semibold border-collapse border border-[#959595]">
+              <div className="overflow-x-auto max-sm:w-[360px] ">
+              <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
                     <th className="border border-[#959595] text-center w-[12.01%]">
@@ -379,14 +410,14 @@ function Pengeluaran() {
                               className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
                             >
                               <img src={Pencil} alt="" />
-                              Edit
+                              <p className="max-sm:hidden">Edit</p>
                             </button>
                             <button
                               onClick={() => onDelete(t.id)}
                               className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
                             >
                               <img src={Sampah} alt="" />
-                              Delete
+                              <p className="max-sm:hidden">Delete</p>
                             </button>
                           </div>
                         </td>
@@ -404,6 +435,7 @@ function Pengeluaran() {
                   )}
                 </tbody>
               </table>
+              </div>
               <div className="flex items-center justify-between mt-5 text-sm">
                 <p>
                   Page {currentPage} of {totalPages || 1} entries
@@ -519,38 +551,58 @@ function Pengeluaran() {
           onClick={handleCloseModal}
         >
           <div
-            className="bg-white rounded-[5px] w-[666px] h-auto"
+            className="bg-white rounded-[5px] w-[666px]  shadow-lg overflow-hidden h-[272px] max-sm:w-[322px] max-sm:h-[172px]"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Header */}
+            <div className="bg-[#1976D2] flex justify-between items-center px-4 py-2 h-[103px] max-sm:w-[322px] max-sm:h-[65px]">
+              <h2 className="text-white font-semibold text-lg ">
+                {selectedPengeluaran.nama || "Pengeluaran"}
+              </h2>
               <button
-                className="absolute top-58 right-80 text-white hover:text-gray-300 text-[30px] cursor-pointer"
-                onClick={handleCloseModal}
-              >
-                ✕
-              </button>
-            <div className="p-[31px]">
-              <p className="text-gray-800">{selectedPengeluaran.catatan}</p>
-                {(() => {
-                const tanggal = parseDate(selectedPengeluaran.tanggal) || parseDate(selectedPengeluaran.created_at);
-                if (!tanggal) return <p className="text-right text-black font-semibold mt-15">Tanggal tidak tersedia</p>;
+          className=" top-2 right-3 text-black text-2xl hover:text-gray-200"
+          onClick={handleCloseModal}
+        >
+          ✕
+        </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6">
+              <p className="text-gray-800 mb-6">{selectedPengeluaran.catatan}</p>
+
+              {(() => {
+                const tanggal =
+                  parseDate(selectedPengeluaran.tanggal) ||
+                  parseDate(selectedPengeluaran.created_at);
+
+                if (!tanggal) {
+                  return (
+                    <p className="text-right text-gray-500 text-sm">
+                      Tanggal tidak tersedia
+                    </p>
+                  );
+                }
+
                 return (
-                <p className="text-right text-black font-semibold mt-15">
-                  {tanggal.toLocaleDateString("id-ID", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })}{" "}
-                {/* {tanggal.toLocaleTimeString("id-ID", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })} */}
-              </p>
-             );
-            })()}
+                  <p className="text-right text-gray-600 text-sm">
+                    {tanggal.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}{" "}
+                    {tanggal.toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                );
+              })()}
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
