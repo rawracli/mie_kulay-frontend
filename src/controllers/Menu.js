@@ -16,18 +16,17 @@ const getMenu = async () => {
 };
 
 import Cookies from "js-cookie";
+import { gctks } from "./utils/get";
 
 const createMenu = async (formData) => {
-  const xsrfToken = Cookies.get("XSRF-TOKEN"); // dari js-cookie
-
   const response = await fetch(`${API_URL}/menu`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": xsrfToken,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: formData,
-    credentials: "include", // wajib untuk cookie auth
+    credentials: "include",
   });
 
   if (!response.ok) {
