@@ -326,82 +326,96 @@ function Dashboard() {
           </div>
 
           {/* Table */}
-          <div className="relative border border-[#959595] flex-1">
-            <div
-              className={`absolute inset-0 grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
-                transactionsData.length === 0 && "invisible"
-              }`}
-            >
-              {Array.from({ length: 4 }).map((_, index) => (
-                <div key={index} className="border-r border-[#959595]"></div>
-              ))}
-            </div>
-            <table className="w-full min-w-[450px] border-collapse">
-              <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
-                <tr>
-                  {[
-                    "Tanggal",
-                    "Id",
-                    "Total Pembayaran",
-                    "Metode Pembayaran",
-                    "Aksi",
-                  ].map((value, index) => (
-                    <th
+          <div className="relative border grid border-[#959595] flex-1">
+            {/* Container untuk scroll */}
+            <div className="relative overflow-x-auto">
+              <div className="w-full min-w-[550px]">
+                {/* Grid lines - perlu disesuaikan dengan lebar tabel */}
+                <div
+                  className={`absolute inset-0 w-full grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
+                    transactionsData.length === 0 && "invisible"
+                  }`}
+                  style={{ minWidth: "550px" }} // Sesuaikan dengan min-width tabel
+                >
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
                       key={index}
-                      className="text-center font-semibold py-[6px] text-nowrap"
-                    >
-                      {value}
-                    </th>
+                      className="border-r border-[#959595]"
+                    ></div>
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.length > 0 ? (
-                  paginatedData.map((t) => (
-                    <tr className="even:bg-gray-200">
-                      <td className="text-center h-[33px]">
-                        {t.tanggal.toLocaleDateString("id-ID")}
-                      </td>
-                      <td className="text-center h-[33px]">{t.id}</td>
-                      <td className="text-center h-[33px]">
-                        Rp. {t.total.toLocaleString("id-ID")}
-                      </td>
-                      <td className="text-center h-[33px]">{t.metode}</td>
-                      <td className="text-center h-[33px]">
-                        <button
-                          onClick={() => setSelectedTransaction(t)}
-                          className="lg:bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                </div>
+
+                {/* Tabel dengan min-width */}
+                <table className="w-full border-collapse">
+                  <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
+                    <tr>
+                      {[
+                        "Tanggal",
+                        "Id",
+                        "Total Pembayaran",
+                        "Metode Pembayaran",
+                        "Aksi",
+                      ].map((value, index) => (
+                        <th
+                          key={index}
+                          className="text-center font-semibold py-[6px] text-nowrap"
                         >
-                          <span className="max-lg:hidden">Lihat Detail</span>
-                          <svg
-                            className="lg:hidden"
-                            width="22"
-                            height="15"
-                            viewBox="0 0 22 15"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
-                              fill="#4386EA"
-                            />
-                          </svg>
-                        </button>
-                      </td>
+                          {value}
+                        </th>
+                      ))}
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="text-center py-3 text-gray-500 italic"
-                    >
-                      Tidak ada data
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {paginatedData.length > 0 ? (
+                      paginatedData.map((t) => (
+                        <tr key={t.id} className="even:bg-gray-200">
+                          <td className="text-center h-[33px]">
+                            {t.tanggal.toLocaleDateString("id-ID")}
+                          </td>
+                          <td className="text-center h-[33px]">{t.id}</td>
+                          <td className="text-center h-[33px]">
+                            Rp. {t.total.toLocaleString("id-ID")}
+                          </td>
+                          <td className="text-center h-[33px]">{t.metode}</td>
+                          <td className="text-center h-[33px]">
+                            <button
+                              onClick={() => setSelectedTransaction(t)}
+                              className="lg:bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                            >
+                              <span className="max-lg:hidden">
+                                Lihat Detail
+                              </span>
+                              <svg
+                                className="lg:hidden"
+                                width="22"
+                                height="15"
+                                viewBox="0 0 22 15"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
+                                  fill="#4386EA"
+                                />
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="5"
+                          className="text-center py-3 text-gray-500 italic"
+                        >
+                          Tidak ada data
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
           {/* Pagination */}
@@ -494,7 +508,7 @@ function Dashboard() {
           onClick={() => setSelectedTransaction(null)} // klik area luar = close
         >
           <div
-            className="bg-white rounded-[5px] shadow-lg w-[358px] h-[612px] cursor-default"
+            className="bg-white rounded-[5px] shadow-lg w-[347px] sm:w-[358px] h-[612px] cursor-default"
             onClick={(e) => e.stopPropagation()} // cegah close kalau klik di dalam card
           >
             {/* Header */}
@@ -532,7 +546,7 @@ function Dashboard() {
 
               {/* Daftar item */}
               {selectedTransaction.items?.map((item, idx) => (
-                <div key={idx} className="flex justify-between">
+                <div key={idx} className="flex justify-between text-nowrap flex-wrap ">
                   <span>
                     {item.name} x{item.qty}
                   </span>
@@ -542,19 +556,19 @@ function Dashboard() {
 
               <div className="my-[20px] border-t border-dashed w-[180px] "></div>
 
-              <p className="flex justify-between font-semibold">
+              <p className="flex justify-between text-nowrap flex-wrap font-semibold">
                 <span>Total Pembayaran :</span>
                 <span>
                   Rp {selectedTransaction.total.toLocaleString("id-ID")}
                 </span>
               </p>
-              <p className="flex justify-between font-semibold">
+              <p className="flex justify-between text-nowrap flex-wrap font-semibold">
                 <span className="font-semibold">Metode Pembayaran :</span>{" "}
-                {selectedTransaction.metode}
+                <span>{selectedTransaction.metode}</span>
               </p>
-              <div className="my-[50px]">
-                <div className="border-t border-dashed"></div>
-                <div className="border-t border-dashed my-[2px]"></div>
+              <div className="my-[50px] flex flex-col">
+                <div className="border-t border-dashed h-1"></div>
+                <div className="border-t border-dashed h-1"></div>
               </div>
               <p className="text-center text-[16px] text-gray-500 my-10">
                 @Mie Kulay
