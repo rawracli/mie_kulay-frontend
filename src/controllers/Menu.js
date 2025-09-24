@@ -5,6 +5,7 @@ const getMenu = async () => {
     headers: {
       "Accept": "application/json",
     },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -14,16 +15,19 @@ const getMenu = async () => {
   return await response.json();
 };
 
+import Cookies from "js-cookie";
+
 const createMenu = async (formData) => {
-  const token = localStorage.getItem("token");
+  const xsrfToken = Cookies.get("XSRF-TOKEN"); // dari js-cookie
 
   const response = await fetch(`${API_URL}/menu`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": xsrfToken,
     },
-    body: formData, // FormData karena ada file gambar
+    body: formData,
+    credentials: "include", // wajib untuk cookie auth
   });
 
   if (!response.ok) {
@@ -33,5 +37,6 @@ const createMenu = async (formData) => {
 
   return await response.json();
 };
+
 
 export { getMenu, createMenu };

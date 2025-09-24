@@ -17,44 +17,63 @@ const registerUser = async (data) => {
   return result;
 };
 
-const loginUser = async (data) => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    },
-    body: JSON.stringify(data),
+import Cookies from 'js-cookie';
+const API_URL = `${import.meta.env.VITE_API_URL}`;
+const getWEB = `${import.meta.env.VITE_API_URL_IMAGE}`;
+
+const gctks = async () => {
+  await fetch(`${getWEB}/sanctum/csrf-cookie`, {
+    credentials: "include",
   });
+  const csrfToken = Cookies.get('XSRF-TOKEN');
+  return csrfToken;
+};
 
-  const result = await response.json();
+const loginUser = async (data) => {
+  try {
+    const cstks = await gctks();
 
-  if (!response.ok) {
-    throw new Error(result.message || "Login gagal, periksa email dan password.");
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-XSRF-TOKEN": cstks,
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || 'Login gagal');
+
+    return result;
+  } catch (err) {
+    console.error('Login error:', err.message);
+    throw err;
   }
-
-  return result;
 };
 
 const getCurrentUser = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch(`${API_URL}/user`, {
+      headers: { "Accept": "application/json" },
+      credentials: "include",
+    });
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/user`, {
-    headers: {
-      "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
-  });
+    if (!response.ok) throw new Error('Gagal mengambil data user');
 
-  if (!response.ok) {
-    throw new Error("Gagal mengambil data user login");
+    return await response.json();
+  } catch (err) {
+    console.error('Get user error:', err.message);
+    throw err;
   }
-
-  return await response.json();
 };
 
+
+
 const getUsers = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+  const response = await fetch(`${API_URL}/users`, {
     headers: {
       "Accept": "application/json",
     },
@@ -68,35 +87,31 @@ const getUsers = async () => {
 };
 
 const updateProfile = async (formData) => {
-  const token = localStorage.getItem("token");
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/updateProfile`, {
-    method: "POST",
+  const response = await fetch(`${API_URL}/updateProfile`, {
+    method: 'POST',
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: formData,
+    credentials: "include",
   });
 
   const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Gagal update profile");
-  }
-
+  if (!response.ok) throw new Error(result.message || 'Gagal update profile');
   return result;
 };
 
-const deleteUser = async (id) => {
-  const token = localStorage.getItem("token");
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/deleteUser/${id}`, {
+const deleteUser = async (id) => {
+  const response = await fetch(`${API_URL}/deleteUser/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
+    credentials: "include",
   });
 
   const result = await response.json();
