@@ -1,5 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL;
-const getWEB = import.meta.env.VITE_API_URL_IMAGE;
+import { gctks } from "./utils/get";
 
 const getBahan = async () => {
   const response = await fetch(`${API_URL}/bahan`, {
@@ -12,15 +12,6 @@ const getBahan = async () => {
   }
 
   return await response.json();
-};
-
-import Cookies from "js-cookie";
-const gctks = async () => {
-  await fetch(`${getWEB}/sanctum/csrf-cookie`, {
-    credentials: "include",
-  });
-  const csrfToken = Cookies.get('XSRF-TOKEN');
-  return csrfToken;
 };
 
 const tambahBahan = async (data) => {
