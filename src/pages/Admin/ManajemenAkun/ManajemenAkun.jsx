@@ -6,7 +6,18 @@ import TambahAkun from "./Overlay/TambahAkun";
 import { getUsers, deleteUser } from "../../../controllers/AuthController.js";
 
 function ManajemenAkun() {
-  const [userData, setUserData] = useState([]);
+ const [userData, setUserData] = useState([
+    { id: 1, name: "Budi Santoso", email: "budi@example.com" },
+    { id: 2, name: "Siti Aisyah", email: "siti@example.com" },
+    { id: 3, name: "Andi Wijaya", email: "andi@example.com" },
+    { id: 4, name: "Rina Kartika", email: "rina@example.com" },
+    { id: 5, name: "Agus Pratama", email: "agus@example.com" },
+    { id: 6, name: "Fitri Lestari", email: "fitri@example.com" },
+    { id: 7, name: "Dewi Anggraini", email: "dewi@example.com" },
+    { id: 8, name: "Rizki Ramadhan", email: "rizki@example.com" },
+    { id: 9, name: "Bayu Saputra", email: "bayu@example.com" },
+    { id: 10, name: "Lina Marlina", email: "lina@example.com" },
+  ]);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +25,8 @@ function ManajemenAkun() {
   const [deleteId, setDeleteId] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
+
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -62,6 +75,7 @@ function ManajemenAkun() {
       });
   };
 
+  
 
   //btn delete
   const onDelete = (id) => {
@@ -119,17 +133,17 @@ function ManajemenAkun() {
   }, [currentPage, totalPages]);
 
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pb-[0.5rem]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pb-[0.5rem] max-sm:pb-0 max-sm:w-full">
       <div className="flex items-center justify-end py-[13px]">
         <button
           onClick={() => setIsAddOpen(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[30px] max-sm:w-[135px] max-sm:mr-[11px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Akun</p>
+          <p className="text-[14px] max-sm:text-[12px] font-bold text-white">Tambah Akun</p>
         </button>
       </div>
-      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
+      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-[394px] max-sm:h-[696px]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 pb-[1.375rem] space-y-[0.9375rem]">
             {/* search & filter */}
@@ -149,17 +163,17 @@ function ManajemenAkun() {
                     }
                     setEntriesPerPage(newEntriesPerPage);
                   }}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer"
+                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer max-sm:w-[38px] max-sm:h-[28px] max-sm:text-[14px]"
                 >
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                   <option value={6}>6</option>
                   <option value={10}>10</option>
                 </select>
-                <p className="ml-2 text-sm">Entries per page</p>
+                <p className="ml-2 text-sm max-sm:hidden">Entries per page</p>
               </div>
               <div>
-                <label className="mr-2 text-sm">Search:</label>
+                <label className="mr-2 text-sm ">Search:</label>
                 <input
                   type="text"
                   value={search}
@@ -172,70 +186,66 @@ function ManajemenAkun() {
               </div>
             </div>
             {/* data table */}
-            <div className="w-full h-full">
-              <table className="w-full font-semibold border-collapse border border-[#959595]">
-                <thead className="top-0">
-                  <tr className="bg-[#FFB300] h-[49px]">
-                    <th className="border border-[#959595] text-center w-[15.50%]">
-                      Id
-                    </th>
-                    <th className="border border-[#959595] text-center w-[19.46%]">
-                      Nama
-                    </th>
-                    <th className="border border-[#959595] text-center w-[26.65%]">
-                      Email
-                    </th>
-                    <th className="border border-[#959595] text-center w-[13.58%]">
-                      Aksi
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedData.length > 0 ? (
-                    paginatedData.map((t, ind) => (
-                      <tr
-                        key={ind}
-                        className={`${
-                          highlightedRow === t.id
-                            ? "bg-[#AFCFFF]"
-                            : "even:bg-gray-200"
-                        } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
-                      >
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.id}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.name}
-                        </td>
-                        <td className="border-r border-[#959595] pl-[10.5px]">
-                          {t.email}
-                        </td>
-                        <td>
-                          <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
-                            <button
-                              onClick={() => onDelete(t.id)}
-                              className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
-                            >
-                              <img src={Sampah} alt="" />
-                              Delete
-                            </button>
-                          </div>
+            <div className="h-full overflow-x-auto">
+              <div className="overflow-x-auto max-sm:w-[360px] ">
+                <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
+                  <thead className="top-0">
+                    <tr className="bg-[#FFB300] h-[49px]">
+                      <th className="border border-[#959595] text-center w-[15.50%]">
+                        Id
+                      </th>
+                      <th className="border border-[#959595] text-center w-[19.46%]">
+                        Nama
+                      </th>
+                      <th className="border border-[#959595] text-center w-[26.65%]">
+                        Email
+                      </th>
+                      <th className="border border-[#959595] text-center w-[13.58%] max-sm:w-[7%]">
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedData.length > 0 ? (
+                      paginatedData.map((t, ind) => (
+                        <tr
+                          key={ind}
+                          className={`${
+                            highlightedRow === t.id
+                              ? "bg-[#AFCFFF]"
+                              : "even:bg-gray-200"
+                          } transition-colors duration-300 text-[14px] [&>td]:h-[34px]`}
+                        >
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.id}</td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.name}</td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">{t.email}</td>
+                          <td>
+                            <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                              <button
+                                onClick={() => onDelete(t.id)}
+                                className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                              >
+                                <img src={Sampah} alt="" />
+                                <p className="max-sm:hidden">Delete</p>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="text-center py-3 text-gray-500 italic"
+                        >
+                          Tidak ada data
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="text-center py-3 text-gray-500 italic"
-                      >
-                        Tidak ada data
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              <div className="flex items-center justify-between mt-5 text-sm">
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex items-center justify-between mt-5 text-sm ">
                 <p>
                   Page {currentPage} of {totalPages || 1} entries
                 </p>
