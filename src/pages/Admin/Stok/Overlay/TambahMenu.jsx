@@ -3,6 +3,7 @@ import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
 import { createMenu } from "../../../../controllers/Menu";
 import { getBahan } from "../../../../controllers/Bahan";
+import BahanDropdown from "./BahanDropdown";
 
 function TambahMenu({ onClose, onAdd }) {
   const [filePreview, setFilePreview] = useState(null);
@@ -29,6 +30,7 @@ function TambahMenu({ onClose, onAdd }) {
     getBahan().then(setBahanList); // fetchBahan = API call
   }, []);
 
+  //! Ubah jumlah jadi harga
   const addBahan = (bahan) => {
     setSelectedBahan((prev) => {
       if (prev.find((b) => b.bahan_id === bahan.id)) return prev;
@@ -71,7 +73,7 @@ function TambahMenu({ onClose, onAdd }) {
 
   return (
     <div
-      className={`fixed top-1/2 -translate-y-1/2 -right-63 flex h-[577px] z-50`}
+      className={`fixed top-1/2 -translate-y-[calc(50%-1rem)] translate-x-1/2 right-[calc(50%-15rem)] flex h-[577px] z-50`}
     >
       <div className="bg-white pl-[27px] pr-[32px] pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
         <div
@@ -148,27 +150,16 @@ function TambahMenu({ onClose, onAdd }) {
 
           <div>
             <label>Bahan</label>
-            <select
-              className="w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] focus:outline-none"
-              onChange={(e) => {
-                const bahan = bahanList.find((b) => b.id == e.target.value);
-                if (bahan) addBahan(bahan);
-              }}
-            >
-              <option value="">-- Pilih Bahan --</option>
-              {bahanList.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.nama_bahan}
-                </option>
-              ))}
-            </select>
+            <BahanDropdown bahanList={bahanList} addBahan={addBahan} />
 
             {selectedBahan.map((b, idx) => (
               <div
-                key={b.bahan_id}
+                key={b.bahan_id || b.id}
                 className="flex items-center justify-between p-2 border border-gray-300 rounded-lg shadow-sm bg-white mt-2"
               >
-                <span className="text-gray-800 font-medium">{b.nama}</span>
+                <span className="text-gray-800 font-medium">
+                  {b.nama || b.nama_bahan}
+                </span>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
