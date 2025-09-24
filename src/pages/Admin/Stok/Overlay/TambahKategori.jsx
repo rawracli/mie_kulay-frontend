@@ -178,7 +178,7 @@ function TambahKategori({ setIsAddKategori }) {
       : [];
 
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex h-[482px]">
+    <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex max-sm:flex-col h-[482px]">
       {/* Kiri */}
       <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
@@ -207,7 +207,7 @@ function TambahKategori({ setIsAddKategori }) {
           <h2 className="font-semibold text-[20px]">
             {editIndex !== null ? "Edit Kategori" : "Tambah Kategori"}
           </h2>
-          <div className="ml-[14px] mt-[22px] flex flex-col font-semibold">
+          <div className="mx-[14px] mt-[22px] flex flex-col font-semibold">
             <label htmlFor="Nama Kategori" className="text-[14px] pb-[8px]">
               Nama Kategori
             </label>
@@ -218,12 +218,13 @@ function TambahKategori({ setIsAddKategori }) {
               className="w-full h-[38px] border-1 rounded-[4px] pl-[16px]"
             />
             {/* tombol Tambah Menu buka overlay */}
+            <hr className="-mx-[14px] mt-[21px] text-[#737373]" />
             <button
               onClick={() => {
                 // jika belum ada kategori yang dipilih, kita tetap buka TambahMenu
                 setIsTambahMenuOpen(true);
               }}
-              className="flex text-[13px] text-[#44962D] items-center gap-[13px] mt-[21px] cursor-pointer"
+              className="flex text-[13px] text-[#44962D] items-center gap-[13px] mt-[16px] cursor-pointer"
             >
               <svg
                 width="14"
@@ -240,7 +241,6 @@ function TambahKategori({ setIsAddKategori }) {
               Tambah Menu
             </button>
           </div>
-          <hr className="mt-[17.5px] text-[#737373]" />
         </div>
 
         {/* Grid menu */}
