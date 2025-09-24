@@ -24,13 +24,13 @@ function TambahAkun({isAddOpen, setIsAddOpen, setData, setHighlightedRow}) {
     }
   };
   return (
-    <div className={`${isAddOpen ? "translate-x-0" : "translate-x-[110%]"} duration-300 transition fixed shadow-[0px_2px_6px_rgba(0,0,0,0.25)] top-[92px] right-0 bg-[#FEFEFE] h-[calc(100svh-92px)] w-[25.75rem]`}>
+    <div className={`${isAddOpen ? "translate-x-0" : "translate-x-[110%]"} duration-300 transition fixed shadow-[0px_2px_6px_rgba(0,0,0,0.25)] top-[92px] max-sm:top-0  right-0 bg-[#FEFEFE] h-[calc(100svh-92px)] max-sm:h-[468px] w-[25.75rem] max-sm:w-[356px] max-sm:mt-[188px] max-sm:mr-[17px]`}>
       <button className="p-[10px] absolute top-[11px] right-[12px] cursor-pointer" onClick={()=>setIsAddOpen(false)}>
         <img src={Close} alt="X" />
       </button>
-      <div className="mx-[31px] mt-[84px] ">
+      <div className="mx-[31px] mt-[84px] max-sm:mt-[35px] ">
         <h2 className="font-semibold text-[1.5rem] mb-[30px]">Tambah Akun</h2>
-        <form onSubmit={onSubmit} className="space-y-[20px]">
+        <form onSubmit={onSubmit} className="space-y-[20px] max-sm:space-y-[7px]">
           <div className="flex gap-[8px] flex-col">
             <label htmlFor="Nama" className="">
               Nama
