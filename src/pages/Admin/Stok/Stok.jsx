@@ -229,11 +229,11 @@ function Stok() {
     nama: "",
     kategori: "",
     harga: 0,
-    bahan: []
+    bahan: [],
   });
   const [newBahan, setNewBahan] = useState({
     nama: "",
-    harga: 0
+    harga: 0,
   });
 
   // Init form saat menu yang dipilih berubah
@@ -243,7 +243,7 @@ function Stok() {
         nama: selectedMenu.nama || "",
         kategori: selectedMenu.kategori || "",
         harga: selectedMenu.harga || 0,
-        bahan: selectedMenu.bahan || []
+        bahan: selectedMenu.bahan || [],
       });
     }
   }, [selectedMenu]);
@@ -366,50 +366,53 @@ function Stok() {
 
   // Edit Menu
   const handleMenuFormChange = (field, value) => {
-    setEditMenuForm(prev => ({
+    setEditMenuForm((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleBahanDelete = (indexToRemove) => {
-    setEditMenuForm(prev => ({
+    setEditMenuForm((prev) => ({
       ...prev,
-      bahan: prev.bahan.filter((_, index) => index !== indexToRemove)
+      bahan: prev.bahan.filter((_, index) => index !== indexToRemove),
     }));
   };
 
   const handleNewBahanChange = (field, value) => {
-    setNewBahan(prev => ({
+    setNewBahan((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleAddBahan = () => {
     if (newBahan.nama && newBahan.harga > 0) {
-      setEditMenuForm(prev => ({
+      setEditMenuForm((prev) => ({
         ...prev,
-        bahan: [...prev.bahan, { ...newBahan }]
+        bahan: [...prev.bahan, { ...newBahan }],
       }));
       setNewBahan({ nama: "", harga: 0 });
     }
   };
 
   const handleMenuSave = () => {
-    if (selectedMenu && editMenuForm.nama && editMenuForm.kategori && editMenuForm.harga > 0) {
+    if (
+      selectedMenu &&
+      editMenuForm.nama &&
+      editMenuForm.kategori &&
+      editMenuForm.harga > 0
+    ) {
       // Update menuData
-      setMenuData(prev => 
-        prev.map(menu => 
-          menu.id === selectedMenu.id 
-            ? { ...menu, ...editMenuForm }
-            : menu
+      setMenuData((prev) =>
+        prev.map((menu) =>
+          menu.id === selectedMenu.id ? { ...menu, ...editMenuForm } : menu
         )
       );
-      
+
       // Close modal
       setSelectedMenu(null);
-      
+
       console.log("Menu berhasil diupdate:", editMenuForm);
     } else {
       alert("Mohon lengkapi semua field yang diperlukan");
@@ -480,11 +483,11 @@ function Stok() {
   }, []);
 
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
-      <div className="flex items-center gap-[16px] justify-end pb-[13px]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pb-[0.5rem] overflow-y-clip">
+      <div className="flex items-center gap-[16px] justify-end py-[15px] sm:py-[13px]">
         <button
           onClick={handleToggleView}
-          className="mr-auto pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
+          className="mr-auto pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[30px] sm:h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-start cursor-pointer"
         >
           <svg
             width="17"
@@ -498,23 +501,25 @@ function Stok() {
               fill="white"
             />
           </svg>
-          <p className="text-[14px] font-bold text-white">
+          <p className="text-[12px] sm:text-[14px] font-bold text-white">
             {viewMode === "bahan" ? "Lihat Menu" : "Lihat Bahan"}
           </p>
         </button>
 
         <button
           onClick={() => setIsAddKategori(true)}
-          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
+          className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[30px] sm:h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] font-bold text-white">Tambah Baru</p>
+          <p className="text-[12px] sm:text-[14px] font-bold text-white">
+            Tambah Baru
+          </p>
         </button>
       </div>
 
       <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
-        <div className="flex gap-[0.9375rem] w-full">
-          <div className="flex-1 space-y-[0.9375rem]">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_35%] xl:grid-cols-[1fr_21.5rem] gap-[0.9375rem] w-full min-w-0">
+          <div className="min-w-0 space-y-[0.9375rem] w-full">
             {/* Search & Filter */}
             <div className="flex items-center justify-between h-[1.9375rem]">
               <div className="flex items-center">
@@ -540,7 +545,7 @@ function Stok() {
                   <option value={10}>10</option>
                   <option value={12}>12</option>
                 </select>
-                <p className="ml-2 text-sm">Entries per page</p>
+                <p className="ml-2 text-sm max-lg:hidden">Entries per page</p>
                 <select
                   value={category}
                   onChange={(e) => {
@@ -557,8 +562,7 @@ function Stok() {
                   ))}
                 </select>
               </div>
-              <div>
-                <label className="mr-2 text-sm">Search:</label>
+              <div className="text-nowrap ">
                 <input
                   type="text"
                   value={search}
@@ -566,7 +570,7 @@ function Stok() {
                     setSearch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] ml-2 px-2 py-1 w-[170px] h-[31px]"
                   placeholder={
                     viewMode === "bahan" ? "Cari bahan..." : "Cari menu..."
                   }
@@ -577,117 +581,118 @@ function Stok() {
             {/* Data Display */}
             <div className="w-full h-full">
               {viewMode === "bahan" ? (
-                // Table View untuk Bahan
-                <table className="w-full font-semibold border-collapse border border-[#959595]">
-                  <thead className="top-0">
-                    <tr className="bg-[#FFB300] h-[49px]">
-                      <th className="border border-[#959595] text-center w-[18.30%]">
-                        Id
-                      </th>
-                      <th className="border border-[#959595] text-center w-[32.42%]">
-                        Bahan
-                      </th>
-                      {/* STOK JADI HARGA */}
-                      <th className="border border-[#959595] text-center w-[25.07%]">
-                        Harga
-                      </th>
-                      <th className="border border-[#959595] text-center w-[24.15%]">
-                        Aksi
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? (
-                      <tr>
-                        <td
-                          colSpan="4"
-                          className="py-3 italic text-center text-gray-500 animate-pulse"
-                        >
-                          Memuat data...
-                        </td>
+                // Table View untuk Bahan — wrapper scroll internal
+                <div className="overflow-x-auto max-w-full">
+                  <table className="min-w-[450px] w-full table-auto border-collapse border border-[#959595] font-semibold">
+                    <thead className="top-0">
+                      <tr className="bg-[#FFB300] h-[49px]">
+                        <th className="border border-[#959595] text-center w-[18.30%]">
+                          Id
+                        </th>
+                        <th className="border border-[#959595] text-center w-[32.42%]">
+                          Bahan
+                        </th>
+                        <th className="border border-[#959595] text-center w-[25.07%]">
+                          Harga
+                        </th>
+                        <th className="border border-[#959595] text-center w-[24.15%]">
+                          Aksi
+                        </th>
                       </tr>
-                    ) : paginatedData.length > 0 ? (
-                      paginatedData.map((t, ind) => (
-                        <tr
-                          key={ind}
-                          className={`${
-                            highlightedRow === t.id
-                              ? "bg-[#AFCFFF]"
-                              : "even:bg-gray-200"
-                          } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
-                        >
-                          <td className="border-r border-[#959595] pl-[10.5px]">
-                            {t.id}
-                          </td>
-                          <td className="border-r border-[#959595] pl-[10.5px]">
-                            {t.produk}
-                          </td>
-                          <td className="border-r border-[#959595]">
-                            <div className="flex items-center justify-around h-full text-center">
-                              <button
-                                onClick={() => handleDecrement(t.id)}
-                                className="flex items-center justify-center flex-1 h-full cursor-pointer group"
-                              >
-                                <img
-                                  src={MinRed}
-                                  alt=""
-                                  className="group-hover:scale-150 group-active:scale-125"
-                                />
-                              </button>
-                              <input
-                                type="text"
-                                className="w-10 text-center"
-                                value={t.stok}
-                                onChange={(e) =>
-                                  handleInputChange(t.id, e.target.value)
-                                }
-                              />
-                              <button
-                                onClick={() => handleIncrement(t.id)}
-                                className="flex items-center justify-center flex-1 h-full cursor-pointer group"
-                              >
-                                <img
-                                  src={PlusGreen}
-                                  alt=""
-                                  className="group-hover:scale-150 group-active:scale-125"
-                                />
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
-                              <button
-                                onClick={() => setEditId(t.id)}
-                                className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
-                              >
-                                <img src={Pencil} alt="" />
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => onDelete(t.id)}
-                                className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
-                              >
-                                <img src={Sampah} alt="" />
-                                Delete
-                              </button>
-                            </div>
+                    </thead>
+                    <tbody>
+                      {loading ? (
+                        <tr>
+                          <td
+                            colSpan="4"
+                            className="py-3 italic text-center text-gray-500 animate-pulse"
+                          >
+                            Memuat data...
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="4"
-                          className="py-3 italic text-center text-gray-500"
-                        >
-                          Tidak ada data
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      ) : paginatedData.length > 0 ? (
+                        paginatedData.map((t, ind) => (
+                          <tr
+                            key={ind}
+                            className={`${
+                              highlightedRow === t.id
+                                ? "bg-[#AFCFFF]"
+                                : "even:bg-gray-200"
+                            } transition-colors ease-initial duration-300 text-[14px] [&>td]:h-[34px]`}
+                          >
+                            <td className="border-r border-[#959595] pl-[10.5px]">
+                              {t.id}
+                            </td>
+                            <td className="border-r border-[#959595] pl-[10.5px]">
+                              {t.produk}
+                            </td>
+                            <td className="border-r border-[#959595]">
+                              <div className="flex items-center justify-around h-full text-center">
+                                <button
+                                  onClick={() => handleDecrement(t.id)}
+                                  className="flex items-center justify-center flex-1 h-full cursor-pointer group"
+                                >
+                                  <img
+                                    src={MinRed}
+                                    alt=""
+                                    className="group-hover:scale-150 group-active:scale-125"
+                                  />
+                                </button>
+                                <input
+                                  type="text"
+                                  className="w-10 text-center"
+                                  value={t.stok}
+                                  onChange={(e) =>
+                                    handleInputChange(t.id, e.target.value)
+                                  }
+                                />
+                                <button
+                                  onClick={() => handleIncrement(t.id)}
+                                  className="flex items-center justify-center flex-1 h-full cursor-pointer group"
+                                >
+                                  <img
+                                    src={PlusGreen}
+                                    alt=""
+                                    className="group-hover:scale-150 group-active:scale-125"
+                                  />
+                                </button>
+                              </div>
+                            </td>
+                            <td>
+                              <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                                <button
+                                  onClick={() => setEditId(t.id)}
+                                  className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
+                                >
+                                  <img src={Pencil} alt="" />
+                                  <span className="max-lg:hidden">Edit</span>
+                                </button>
+                                <button
+                                  onClick={() => onDelete(t.id)}
+                                  className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                                >
+                                  <img src={Sampah} alt="" />
+                                  <span className="max-lg:hidden">Delete</span>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="4"
+                            className="py-3 italic text-center text-gray-500"
+                          >
+                            Tidak ada data
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
-                // Card View untuk Menu
+                // Card View untuk Menu (tetap flex wrap)
                 <div className="flex items-center flex-wrap gap-[15px]">
                   {loading ? (
                     <div className="py-3 italic text-center text-gray-500 animate-pulse">
@@ -738,20 +743,7 @@ function Stok() {
                       currentPage === 1 ? "cursor-default" : "cursor-pointer"
                     } text-yellow-300 py-1 rounded disabled:opacity-50`}
                   >
-                    <svg
-                      width="11"
-                      height="14"
-                      viewBox="0 0 11 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M8.07608 14.0094L0.0429428 7.04744L8.00962 0.009545L10.0179 1.75003L4.0429 7.02845L10.0678 12.2499L8.07608 14.0094Z"
-                        fill="black"
-                      />
-                    </svg>
+                    {/* left svg */}
                   </button>
                   <div className="flex gap-[18px]">
                     {pages.map((n, index) =>
@@ -783,29 +775,15 @@ function Stok() {
                         : "cursor-pointer"
                     } py-1 rounded disabled:opacity-50`}
                   >
-                    <svg
-                      width="11"
-                      height="15"
-                      viewBox="0 0 11 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M2.00084 0.115846L10.1014 6.99927L2.20357 14.1144L0.178438 12.3935L6.10178 7.05719L0.0263892 1.89462L2.00084 0.115846Z"
-                        fill="black"
-                      />
-                    </svg>
+                    {/* right svg */}
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Sidebar - Category Totals */}
-          <div className="w-[21.5rem] pt-[28px] pb-[24px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)]">
-            <h2 className="text-center font-bold text-[16px] mb-4">
+          <aside className="max-sm:max-w-[430px] max-sm:w-full m-auto self-center pt-[28px] pb-[24px] min-h-[486px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] bg-white">
+            <h2 className="text-center font-bold text-[16px] mb-4 px-2">
               Total per Kategori ({viewMode === "bahan" ? "Bahan" : "Menu"})
             </h2>
             <div className="space-y-[27.45px] px-[0.875rem]">
@@ -816,8 +794,8 @@ function Stok() {
               ) : (
                 stockData.map((items, index) => (
                   <div key={index}>
-                    <div className="bg-[#FFB300] border border-[#959595] pl-[0.9375rem] pr-[1.25rem] w-full h-[2.75rem] flex items-center">
-                      <h3>
+                    <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
+                      <h3 className="text-center m-auto">
                         {items.nama.slice(0, 1).toUpperCase() +
                           items.nama.slice(1)}
                       </h3>
@@ -829,24 +807,9 @@ function Stok() {
                 ))
               )}
             </div>
-            <div className="px-[2.0938rem] w-full h-[2.5rem] mt-[0.875rem]">
-              <div className="flex pl-[1.3125rem] pr-[2.0625rem] items-center text-[#FFB300] justify-between border-[0.5px] border-[#959595] h-[40px] bg-white">
-                <h3 className="uppercase font-bold text-[0.875rem]">
-                  Total Stok :
-                </h3>
-                <h4>
-                  {loading ? (
-                    <span className="italic text-gray-500 animate-pulse">
-                      ...
-                    </span>
-                  ) : (
-                    stockData.reduce((total, item) => total + item.stok, 0)
-                  )}
-                </h4>
-              </div>
-            </div>
-          </div>
+          </aside>
         </div>
+        {/* === END: GRID LAYOUT REPLACEMENT === */}
       </div>
 
       <div
@@ -857,13 +820,11 @@ function Stok() {
           setSelectedMenu(null);
         }}
         className={`${
-          editId || deleteId || isAddKategori || selectedMenu
-            ? ""
-            : "hidden"
+          editId || deleteId || isAddKategori || selectedMenu ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
 
-        {/* INI UNTUK EDIT MENU */}
+      {/* INI UNTUK EDIT MENU */}
       {selectedMenu && (
         <div className="fixed top-[55%] -translate-y-1/2 left-[47%] -translate-x-1/2">
           <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[26px] pb-[41px] pl-[30px] pr-[27px] w-[702px] h-[539px]">
@@ -901,7 +862,7 @@ function Stok() {
                 type="text"
                 name="nama"
                 value={editMenuForm.nama}
-                onChange={(e) => handleMenuFormChange('nama', e.target.value)}
+                onChange={(e) => handleMenuFormChange("nama", e.target.value)}
                 className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
                 placeholder="Nama menu..."
               />
@@ -913,7 +874,9 @@ function Stok() {
                   name="kategori"
                   id="kategori"
                   value={editMenuForm.kategori}
-                  onChange={(e) => handleMenuFormChange('kategori', e.target.value)}
+                  onChange={(e) =>
+                    handleMenuFormChange("kategori", e.target.value)
+                  }
                   className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
                 >
                   {/* KATEGORI DARI DATABASE */}
@@ -933,11 +896,13 @@ function Stok() {
                   name="harga"
                   id="harga"
                   value={editMenuForm.harga}
-                  onChange={(e) => handleMenuFormChange('harga', parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    handleMenuFormChange("harga", parseInt(e.target.value) || 0)
+                  }
                   placeholder="Harga menu..."
                 />
               </div>
-              <button 
+              <button
                 onClick={handleMenuSave}
                 className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
               >
@@ -953,7 +918,9 @@ function Stok() {
                     <div className="flex pl-[10px] pr-[17px] items-center justify-between h-[45px]">
                       <h5 className="font-semibold">{bahan.nama}</h5>
                       <div className="flex items-center gap-[41px]">
-                        <h6 className="text-start">Rp. {bahan.harga.toLocaleString("id-ID")}</h6>
+                        <h6 className="text-start">
+                          Rp. {bahan.harga.toLocaleString("id-ID")}
+                        </h6>
                         {/* BTN HAPUS BAHAN */}
                         <svg
                           onClick={() => handleBahanDelete(idx)}
@@ -977,19 +944,26 @@ function Stok() {
                 {/* INI INPUT BARU */}
                 <div>
                   <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
-                    <input 
+                    <input
                       className="bg-[#D9D9D9] w-[91px] font-semibold px-2 py-1 rounded text-sm"
                       placeholder="Nama bahan"
                       value={newBahan.nama}
-                      onChange={(e) => handleNewBahanChange('nama', e.target.value)}
+                      onChange={(e) =>
+                        handleNewBahanChange("nama", e.target.value)
+                      }
                     />
                     <div className="flex items-center gap-[41px]">
-                      <input 
+                      <input
                         className="bg-[#D9D9D9] -translate-x-[30px] w-[91px] px-2 py-1 rounded text-sm"
                         placeholder="Harga"
                         type="number"
-                        value={newBahan.harga || ''}
-                        onChange={(e) => handleNewBahanChange('harga', parseInt(e.target.value) || 0)}
+                        value={newBahan.harga || ""}
+                        onChange={(e) =>
+                          handleNewBahanChange(
+                            "harga",
+                            parseInt(e.target.value) || 0
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -997,7 +971,7 @@ function Stok() {
                 </div>
                 {/* MENAMPILKAN INPUT BARU (DIATAS) */}
                 <div className="flex pl-[10px] pr-[20px] items-center justify-end h-[45px]">
-                  <div 
+                  <div
                     onClick={handleAddBahan}
                     className="bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] size-[22px] rounded-full flex items-center justify-center cursor-pointer"
                   >
