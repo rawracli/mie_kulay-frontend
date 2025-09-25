@@ -3,6 +3,7 @@ import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
+import Vector from "../../../assets/Admin/Vector.png";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahPengeluaran from "./Overlay/TambahPengeluaran";
 import {
@@ -252,7 +253,7 @@ function Pengeluaran() {
             Tambah Pengeluaran
           </p>
       </button>
-      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[650px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
+      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
             {/* filter date */}
@@ -378,13 +379,22 @@ function Pengeluaran() {
                             </button>
                           </div>
                         </td>
-                        <td className="border-r border-[#959595] text-center">
+                        <td className="border-r border-[#959595] text-center flex items-center justify-center">
+                          {/* Button untuk layar >= sm */}
                           <button
-                            className="bg-blue-500 text-white px-3 py-1 text rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px] max-sm:hidden"
                             onClick={() => setSelectedPengeluaran(t)}
                           >
-                            Lihat Keterangan
+                            <p className="max-sm:hidden">Lihat Keterangan</p>
                           </button>
+
+                          {/* Img untuk layar max-sm */}
+                          <img
+                            src={Vector}
+                            alt=""
+                            className="w-[30px] h-[20px] cursor-pointer sm:hidden items-center justify"
+                            onClick={() => setSelectedPengeluaran(t)}
+                          />
                         </td>
                         <td className="border-r border-[#959595] text-center">
                           {new Date(t.created_at).toLocaleDateString("id-ID", {
