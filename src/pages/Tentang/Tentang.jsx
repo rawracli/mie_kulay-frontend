@@ -19,26 +19,26 @@ import Logotr from "../../assets/User/logotr.png";
 function Tentang() {
 
   return (
-    <div className="w-full">
+    <div className="w-full max-sm:w-[390px]">
       <Hero text={"Tentang Kami"}/>
       {/* Container utama */}
-      <div className="max-w-6xl mx-auto flex px-6 py-12 gap-6 relat mt-[10px]">
-        {/* Kolom 1 (Teks) */}
-        <div className="flex-1 relative">
-          <h3 className="text-[49px] font-boogaloo relative z-10 mt-0.5">
-            Cerita di Balik Kedai Mie Kulay
-          </h3>
-          <p className="text-black leading-relaxed text-[24px] mt-[34px] font-baloo-2">
-            Mie Kulay lahir dari ide awal den7gan merintis usaha ini dilakukan
-            dirumah dengan mencoba melalui penjualan aplikasi online. Sejak
-            berdiri, Mie Kulay berkomitmen menghadirkan sajian yang berkualitas,
-            bersih, halal, dan terjangkau, agar setiap orang bisa menikmati mie
-            nikmat penuh kehangatan tanpa harus mahal.
-          </p>
-        </div>
+    <div className="max-w-6xl mx-auto flex flex-col-reverse sm:flex-row px-6 py-12 gap-6 relat mt-[10px]">
+      {/* Kolom 1 (Teks) */}
+      <div className="flex-1 relative">
+        <h3 className="text-[49px] font-boogaloo relative z-10 mt-0.5">
+          Cerita di Balik Kedai Mie Kulay
+        </h3>
+        <p className="text-black leading-relaxed text-[24px] mt-[34px] font-baloo-2">
+          Mie Kulay lahir dari ide awal dengan merintis usaha ini dilakukan
+          dirumah dengan mencoba melalui penjualan aplikasi online. Sejak
+          berdiri, Mie Kulay berkomitmen menghadirkan sajian yang berkualitas,
+          bersih, halal, dan terjangkau, agar setiap orang bisa menikmati mie
+          nikmat penuh kehangatan tanpa harus mahal.
+        </p>
+      </div>
 
-    {/* Kolom 2 (Gambar menumpuk) */}
-    <div className="flex-1 relative h-[500px]">
+      {/* Kolom 2 (Gambar menumpuk) */}
+      <div className="flex-1 relative h-[500px] max-sm:mt-[200px]">
         {/* Gambar 1 */}
         <img
           src={Toko}
@@ -49,10 +49,11 @@ function Tentang() {
         <img
           src={Toko1}
           alt="Kedai Bawah"
-          className="rounded-lg object-cover w-[372px] h-[217px] absolute -bottom-0 left-0 shadow-lg z-20 "
+          className="rounded-lg object-cover w-[372px] h-[217px] absolute bottom-0 left-0 shadow-lg z-20"
         />
       </div>
     </div>
+
 
 
 
