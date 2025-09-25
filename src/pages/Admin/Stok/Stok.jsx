@@ -10,56 +10,21 @@ import EditProduk from "./Overlay/EditProduk";
 import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
-import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
+import {
+  getBahan,
+  updateBahan,
+  hapusBahan,
+  tambahBahan,
+} from "../../../controllers/Bahan";
 import { getMenu, updateMenu } from "../../../controllers/Menu";
+import { getCategories } from "../../../controllers/Category";
 
 function Stok() {
   // toggle bahan atau menu
   const [viewMode, setViewMode] = useState("bahan");
 
   // Data Bahan (dummy)
-  const [stockTable, setStockTable] = useState([
-    {
-      id: 1,
-      produk: "Mie Kuning",
-      harga_beli: 15000,
-      stok: 20,
-      kategori_id: 1,
-      kategori: "Makanan",
-    },
-    {
-      id: 2,
-      produk: "Ayam Suwir",
-      harga_beli: 30000,
-      stok: 10,
-      kategori_id: 1,
-      kategori: "Makanan",
-    },
-    {
-      id: 3,
-      produk: "Cabe Merah",
-      harga_beli: 8000,
-      stok: 50,
-      kategori_id: 2,
-      kategori: "Bumbu",
-    },
-    {
-      id: 4,
-      produk: "Es Batu",
-      harga_beli: 2000,
-      stok: 200,
-      kategori_id: 3,
-      kategori: "Minuman",
-    },
-    {
-      id: 5,
-      produk: "Plastik Cup",
-      harga_beli: 1000,
-      stok: 500,
-      kategori_id: 4,
-      kategori: "-",
-    },
-  ]);
+  const [stockTable, setStockTable] = useState([]);
 
   // Data Menu (dummy)
   const [menuData, setMenuData] = useState([]);
@@ -96,7 +61,7 @@ function Stok() {
   // State Edit Menu
   const [editMenuForm, setEditMenuForm] = useState({
     nama: "",
-    kategori: "",
+    kategori_id: "",
     harga: 0,
     bahan: [],
   });
@@ -105,12 +70,26 @@ function Stok() {
     harga: 0,
   });
 
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data); // simpan semua kategori
+      } catch (err) {
+        console.error("Gagal mengambil kategori:", err.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   // Init form saat menu yang dipilih berubah
   useEffect(() => {
     if (selectedMenu) {
       setEditMenuForm({
         nama: selectedMenu.nama || "",
-        kategori: selectedMenu.kategori || "",
+        kategori_id: selectedMenu.kategori_id || "",
         harga: selectedMenu.harga || 0,
         bahan: selectedMenu.bahan || [],
       });
@@ -246,50 +225,75 @@ function Stok() {
     }));
   };
 
-  const handleAddBahan = () => {
+  const handleAddBahan = async () => {
     if (!newBahan.nama || !newBahan.harga) return;
 
-    setEditMenuForm({
-      ...editMenuForm,
-      bahan: [
-        ...editMenuForm.bahan,
-        {
-          nama: newBahan.nama_bahan,
-          harga: newBahan.harga_beli,
-        },
-      ],
-    });
+    if (!selectedMenu) {
+      console.error("Menu belum dipilih!");
+      return;
+    }
 
-    setNewBahan({ nama: "", harga: "" }); // reset input
+    const newItem = {
+      nama_bahan: newBahan.nama,
+      harga_beli: newBahan.harga,
+      menu_id: selectedMenu.id,
+      kategori_id: selectedMenu.kategori_id,
+    };
+
+    try {
+      const addedBahan = await tambahBahan(newItem);
+
+      // Sesuaikan dengan format UI
+      const uiBahan = {
+        id: addedBahan.id,
+        nama: addedBahan.nama_bahan,
+        harga: addedBahan.harga_beli,
+      };
+
+      setEditMenuForm((prev) => ({
+        ...prev,
+        bahan: [...prev.bahan, uiBahan],
+      }));
+
+      console.log("Bahan berhasil ditambahkan:", uiBahan);
+      setNewBahan({ nama: "", harga: 0 });
+    } catch (err) {
+      console.error("Gagal menambahkan bahan:", err.message);
+    }
   };
 
   const handleMenuSave = async () => {
     if (
-      selectedMenu &&
-      editMenuForm.nama &&
-      editMenuForm.kategori &&
-      editMenuForm.harga > 0
+      !selectedMenu ||
+      !editMenuForm.nama ||
+      !editMenuForm.kategori_id ||
+      editMenuForm.harga <= 0
     ) {
-      try {
-        const updated = await updateMenu(selectedMenu.id, {
-          nama_hidangan: editMenuForm.nama,
-          harga_pokok: editMenuForm.harga, // kalau ada harga pokok
-          harga_jual: editMenuForm.harga,
-          kategori_id: editMenuForm.kategori_id,
-        });
-
-        setMenuData((prev) =>
-          prev.map((menu) => (menu.id === selectedMenu.id ? updated : menu))
-        );
-        setSelectedMenu(null);
-      } catch (err) {
-        console.error("Gagal update menu:", err.message);
-      }
-    } else {
       alert("Mohon lengkapi semua field");
+      return;
+    }
+
+    try {
+      const payload = {
+        nama_hidangan: editMenuForm.nama,
+        harga_jual: parseInt(editMenuForm.harga),
+        kategori_id: parseInt(editMenuForm.kategori_id),
+      };
+
+      const updated = await updateMenu(selectedMenu.id, payload);
+
+      setMenuData((prev) =>
+        prev.map((menu) => (menu.id === selectedMenu.id ? updated : menu))
+      );
+
+      setSelectedMenu(null);
+      setEditMenuForm({ nama: "", kategori_id: "", harga: 0, bahan: [] });
+      alert("Menu berhasil diupdate!");
+    } catch (err) {
+      console.error("Gagal update menu:", err.message);
+      alert("Terjadi kesalahan saat update menu");
     }
   };
-  //End edit Menu
 
   // Pagination pages calculation
   const pages = useMemo(() => {
@@ -363,6 +367,7 @@ function Stok() {
         const mapped = data.map((item) => ({
           id: item.id,
           nama: item.nama_hidangan,
+          kategori_id: item.kategori?.id ?? null, // <=== tambahkan ini
           kategori: item.kategori?.jenis_hidangan ?? "-",
           harga: item.harga_jual,
           image: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}`,
@@ -778,17 +783,22 @@ function Stok() {
                 <select
                   name="kategori"
                   id="kategori"
-                  value={editMenuForm.kategori}
+                  value={editMenuForm.kategori_id}
                   onChange={(e) =>
-                    handleMenuFormChange("kategori", e.target.value)
+                    handleMenuFormChange(
+                      "kategori_id",
+                      parseInt(e.target.value) || ""
+                    )
                   }
                   className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
                 >
                   {/* KATEGORI DARI DATABASE */}
                   <option value="">Pilih kategori...</option>
-                  <option value="Makanan">Makanan</option>
-                  <option value="Minuman">Minuman</option>
-                  <option value="Topping">Topping</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.jenis_hidangan}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="mt-[21px] flex flex-col">
