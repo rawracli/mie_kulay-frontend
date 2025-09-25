@@ -7,7 +7,7 @@ function MainLayout() {
   return (
     <div className="h-screen flex">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen}/>
-      <div className="flex flex-col flex-1 max-h-screen">
+      <div className="flex flex-col flex-1 max-h-svh">
         <Navbar setIsOpen={setIsOpen}/>
         <main className="flex-1 overflow-y-auto">
           <Outlet />
