@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Close from "../../../../assets/Admin/x.svg";
 import useOverflow from "../../../../hooks/useOverflow";
 import Login from "../../../../assets/Login/login.png";
@@ -13,19 +13,143 @@ import {
 import { getMenu } from "../../../../controllers/Menu";
 
 function TambahKategori({ setIsAddKategori }) {
-  const [kategoriData, setKategoriData] = useState([]);
+  //dummy data
+  const [kategoriData, setKategoriData] = useState([
+    {
+      id: 1,
+      kategori: "Makanan",
+      menu: [
+        {
+          nama: "Nasi Goreng",
+          foto: "https://via.placeholder.com/150x100.png?text=Nasi+Goreng",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+        {
+          nama: "Sate Ayam",
+          foto: "https://via.placeholder.com/150x100.png?text=Sate+Ayam",
+        },
+      ],
+    },
+    {
+      id: 2,
+      kategori: "Minuman",
+      menu: [
+        {
+          nama: "Es Teh Manis",
+          foto: "https://via.placeholder.com/150x100.png?text=Es+Teh",
+        },
+        {
+          nama: "Kopi Hitam",
+          foto: "https://via.placeholder.com/150x100.png?text=Kopi",
+        },
+      ],
+    },
+  ]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const { refOverflow, isOverflowing } = useOverflow({ direction: "vertical" });
 
-  const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [formNamaKategori, setFormNamaKategori] = useState("");
   const [isTambahMenuOpen, setIsTambahMenuOpen] = useState(false);
   const [skipConfirm, setSkipConfirm] = useState(false);
-
-  const rightPanelRef = useRef(null);
 
   // close dropdown ketika klik di luar panel kanan
   useEffect(() => {
@@ -60,13 +184,7 @@ function TambahKategori({ setIsAddKategori }) {
     fetchData();
   }, []);
 
-  const handleToggleMenu = (idx) => {
-    setActiveMenuIndex((prev) => (prev === idx ? null : idx));
-  };
-
   const onDelete = async (idx) => {
-    setActiveMenuIndex(null);
-
     const kategoriToDelete = kategoriData[idx];
 
     if (skipConfirm) {
@@ -83,7 +201,6 @@ function TambahKategori({ setIsAddKategori }) {
           setEditIndex((prev) => prev - 1);
         }
 
-        setActiveMenuIndex(null);
         alert("Kategori berhasil dihapus");
       } catch (err) {
         console.error(err);
@@ -98,7 +215,6 @@ function TambahKategori({ setIsAddKategori }) {
     e.stopPropagation();
     setEditIndex(idx);
     setFormNamaKategori(kategoriData[idx].kategori);
-    setActiveMenuIndex(null);
   };
 
   const handleSave = async () => {
@@ -177,16 +293,18 @@ function TambahKategori({ setIsAddKategori }) {
       ? kategoriData[editIndex].menu
       : [];
 
+
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex h-[482px]">
+    <>
+    <div className={`max-md:absolute md:fixed top-1/2 -translate-y-[calc(50%-1rem)] -translate-x-1/2 flex max-md:flex-col md:h-[482px] ${isTambahMenuOpen ? "max-md:left-1/2 md:left-[calc(50%-5rem)]" : "left-1/2"}`}>
       {/* Kiri */}
-      <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[416px] rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="bg-white relative pb-[24px] pt-[28px] flex flex-col w-[340px] sm:w-[416px] max-sm:rounded-t-[5px] sm:rounded-l-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
           onClick={() => {
             setEditIndex(null);
             setFormNamaKategori("");
           }}
-          className={`cursor-pointer absolute py-[15px] px-[11px] left-0 top-0 ${
+          className={`cursor-pointer absolute py-[15px] px-[11px] left-0 -top-1 ${
             editIndex === null && "hidden"
           }`}
         >
@@ -207,7 +325,7 @@ function TambahKategori({ setIsAddKategori }) {
           <h2 className="font-semibold text-[20px]">
             {editIndex !== null ? "Edit Kategori" : "Tambah Kategori"}
           </h2>
-          <div className="ml-[14px] mt-[22px] flex flex-col font-semibold">
+          <div className="mx-[14px] mt-[22px] flex flex-col font-semibold">
             <label htmlFor="Nama Kategori" className="text-[14px] pb-[8px]">
               Nama Kategori
             </label>
@@ -218,12 +336,13 @@ function TambahKategori({ setIsAddKategori }) {
               className="w-full h-[38px] border-1 rounded-[4px] pl-[16px]"
             />
             {/* tombol Tambah Menu buka overlay */}
+            <hr className="-mx-[14px] mt-[21px] text-[#737373]" />
             <button
               onClick={() => {
                 // jika belum ada kategori yang dipilih, kita tetap buka TambahMenu
                 setIsTambahMenuOpen(true);
               }}
-              className="flex text-[13px] text-[#44962D] items-center gap-[13px] mt-[21px] cursor-pointer"
+              className="flex text-[13px] text-[#44962D] items-center gap-[13px] mt-[16px] cursor-pointer"
             >
               <svg
                 width="14"
@@ -240,33 +359,36 @@ function TambahKategori({ setIsAddKategori }) {
               Tambah Menu
             </button>
           </div>
-          <hr className="mt-[17.5px] text-[#737373]" />
         </div>
 
         {/* Grid menu */}
         <div
           ref={refOverflow}
-          className={`py-[9px] flex-1 gap-[10px] mb-5 w-fit ml-[11px] grid grid-cols-3 mt-[20px] overflow-y-auto overflow-x-hidden ${
+          className={`py-[9px] flex-1 gap-[10px] px-1 mb-5 w-fit ml-[11px] grid grid-cols-3 mt-[20px] min-h-40 sm:min-h-30 max-h-40 sm:max-h-30 md:max-h-none overflow-y-auto overflow-x-hidden ${
             isOverflowing && "bg-[#EBEBEB]"
           }`}
         >
-          {currentMenu.map((m, i) => (
-            <div
-              key={i}
-              className="w-[122px] h-[132px] bg-white flex flex-col shadow-[0px_2px_10.2px_rgba(0,0,0,0.25)]"
-            >
-              <div className="w-full h-[92px] bg-yellow-400">
-                <img
-                  src={m.foto}
-                  alt={m.nama}
-                  className="h-full w-full object-cover"
-                />
+          {currentMenu.length === 0 ? (
+            <div className="max-sm:mt-[104px]"></div>
+          ) : (
+            currentMenu.map((m, i) => (
+              <div
+                key={i}
+                className="w-[122px] h-[132px] bg-white flex flex-col shadow-[0px_2px_10.2px_rgba(0,0,0,0.25)]"
+              >
+                <div className="w-full h-[92px] bg-yellow-400">
+                  <img
+                    src={m.foto}
+                    alt={m.nama}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <h4 className="pl-[4px] font-semibold text-[14px] leading-[17px] m-auto self-center">
+                  {m.nama}
+                </h4>
               </div>
-              <h4 className="pl-[4px] font-semibold text-[14px] leading-[17px] m-auto self-center">
-                {m.nama}
-              </h4>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <button
@@ -278,7 +400,7 @@ function TambahKategori({ setIsAddKategori }) {
       </div>
 
       {/* Kanan */}
-      <div className="relative bg-yellow-500 font-semibold pb-[24px] pt-[28px] pl-[17px] pr-[19px] w-[213px] rounded-r-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="relative bg-yellow-500 font-semibold pb-[24px] pt-[28px] pl-[17px] pr-[19px] md:w-[213px] max-sm:rounded-b-[5px] md:rounded-r-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <button
           className="absolute right-[22px] top-[19px] cursor-pointer"
           onClick={() => setIsAddKategori(false)}
@@ -286,55 +408,34 @@ function TambahKategori({ setIsAddKategori }) {
           <img src={Close} alt="X" />
         </button>
         <h2>Kategori</h2>
-        <div className="space-y-[20px] ml-[3px] my-[26px] text-[13px] overflow-auto h-[calc(100%-28px)]">
+        <div className="space-y-[20px] ml-[3px] mt-[26px] md:my-[26px] text-[13px] max-md:max-h-50 overflow-auto h-[calc(100%-28px)]">
           {isLoading ? (
             <div className="text-center">Memuat data...</div>
           ) : (
             kategoriData.map((item, idx) => (
-              <div key={idx} className="relative">
-                {activeMenuIndex === idx && (
-                  <div
-                    ref={rightPanelRef}
-                    className="absolute z-10 flex flex-col divide-[#959595] divide-y-[0.5px] divide-solid border-[#959595] border-[0.5px] bg-white h-[46px] w-[95px] right-0 top-4 text-[14px]"
-                  >
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(idx);
-                      }}
-                      className="text-[#A01515] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
-                    >
-                      Hapus
-                    </button>
-                    <button
-                      onClick={(e) => handleClickEditBtn(idx, e)}
-                      className="text-[#3578DC] pl-[7.8px] cursor-pointer text-start hover:bg-[#C0C0C0] flex-1"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                )}
-
+              <div key={idx}>
                 <div
                   className="flex justify-between items-center cursor-pointer"
-                  onClick={() => handleToggleMenu(idx)}
+                  onClick={(e) => handleClickEditBtn(idx, e)}
                 >
                   <h3 className="pl-[1px]">{item.kategori}</h3>
-                  <svg
-                    width="8"
-                    height="6"
-                    viewBox="0 0 8 6"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-[7px]"
+                  <button
+                    className="group cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(idx);
+                    }}
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M4.00048 5.207L7.85448 1.354L7.14748 0.645996L4.00048 3.793L0.854485 0.645996L0.146484 1.354L4.00048 5.207Z"
-                      fill="black"
-                    />
-                  </svg>
+                    <svg
+                      width="14"
+                      height="16"
+                      viewBox="0 0 14 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="fill-black group-hover:fill-[#EC0000]"
+                    >
+                      <path d="M1 14.5C1 14.8978 1.15804 15.2794 1.43934 15.5607C1.72064 15.842 2.10218 16 2.5 16H11.5C11.8978 16 12.2794 15.842 12.5607 15.5607C12.842 15.2794 13 14.8978 13 14.5V4.00001H1V14.5ZM9.5 6.50001C9.5 6.3674 9.55268 6.24022 9.64645 6.14645C9.74021 6.05268 9.86739 6.00001 10 6.00001C10.1326 6.00001 10.2598 6.05268 10.3536 6.14645C10.4473 6.24022 10.5 6.3674 10.5 6.50001V13.5C10.5 13.6326 10.4473 13.7598 10.3536 13.8536C10.2598 13.9473 10.1326 14 10 14C9.86739 14 9.74021 13.9473 9.64645 13.8536C9.55268 13.7598 9.5 13.6326 9.5 13.5V6.50001ZM6.5 6.50001C6.5 6.3674 6.55268 6.24022 6.64645 6.14645C6.74021 6.05268 6.86739 6.00001 7 6.00001C7.13261 6.00001 7.25979 6.05268 7.35355 6.14645C7.44732 6.24022 7.5 6.3674 7.5 6.50001V13.5C7.5 13.6326 7.44732 13.7598 7.35355 13.8536C7.25979 13.9473 7.13261 14 7 14C6.86739 14 6.74021 13.9473 6.64645 13.8536C6.55268 13.7598 6.5 13.6326 6.5 13.5V6.50001ZM3.5 6.50001C3.5 6.3674 3.55268 6.24022 3.64645 6.14645C3.74021 6.05268 3.86739 6.00001 4 6.00001C4.13261 6.00001 4.25979 6.05268 4.35355 6.14645C4.44732 6.24022 4.5 6.3674 4.5 6.50001V13.5C4.5 13.6326 4.44732 13.7598 4.35355 13.8536C4.25979 13.9473 4.13261 14 4 14C3.86739 14 3.74021 13.9473 3.64645 13.8536C3.55268 13.7598 3.5 13.6326 3.5 13.5V6.50001ZM13.5 1.00001H9.75L9.45625 0.41563C9.39402 0.290697 9.29817 0.185606 9.17947 0.11218C9.06078 0.0387537 8.92395 -9.46239e-05 8.78438 5.47897e-06H5.2125C5.07324 -0.00052985 4.93665 0.0381736 4.81838 0.111682C4.7001 0.18519 4.60492 0.290529 4.54375 0.41563L4.25 1.00001H0.5C0.367392 1.00001 0.240215 1.05268 0.146447 1.14645C0.0526784 1.24022 0 1.3674 0 1.50001L0 2.50001C0 2.63261 0.0526784 2.75979 0.146447 2.85356C0.240215 2.94733 0.367392 3.00001 0.5 3.00001H13.5C13.6326 3.00001 13.7598 2.94733 13.8536 2.85356C13.9473 2.75979 14 2.63261 14 2.50001V1.50001C14 1.3674 13.9473 1.24022 13.8536 1.14645C13.7598 1.05268 13.6326 1.00001 13.5 1.00001Z" />
+                    </svg>
+                  </button>
                 </div>
                 <hr className="mt-[5px]" />
               </div>
@@ -343,18 +444,16 @@ function TambahKategori({ setIsAddKategori }) {
         </div>
       </div>
       <div
-        onClick={() => setDeleteIndex(null)}
+        onClick={() => {
+          setDeleteIndex(null);
+          setIsTambahMenuOpen(false);
+        }}
         className={`${
-          deleteIndex !== null ? "" : "hidden"
-        } bg-black/50 fixed inset-0 h-full w-full rounded-[5px]`}
+          deleteIndex !== null || isTambahMenuOpen
+            ? deleteIndex !== null && "bg-black/50"
+            : "hidden"
+        }  fixed inset-0 h-full w-full rounded-[5px]`}
       ></div>
-      {/* TambahMenu overlay */}
-      {isTambahMenuOpen && (
-        <TambahMenu
-          onClose={() => setIsTambahMenuOpen(false)}
-          onAdd={(menuObj) => handleAddMenuToCategory(menuObj)}
-        />
-      )}
       {deleteIndex !== null && (
         <ConfirmDelete
           deleteId={kategoriData[deleteIndex].id} // id kategori
@@ -371,12 +470,20 @@ function TambahKategori({ setIsAddKategori }) {
               setEditIndex((prev) => prev - 1);
             }
 
-            setActiveMenuIndex(null);
             alert("Kategori berhasil dihapus");
           }}
         />
       )}
     </div>
+          {/* TambahMenu overlay */}
+      {isTambahMenuOpen && (
+        <TambahMenu
+          onClose={() => setIsTambahMenuOpen(false)}
+          onAdd={(menuObj) => handleAddMenuToCategory(menuObj)}
+        />
+      )}
+    </>
+
   );
 }
 

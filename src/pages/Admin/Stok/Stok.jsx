@@ -552,7 +552,7 @@ function Stok() {
                     setCategory(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-[28px] h-[32px] cursor-pointer"
+                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-2 md::ml-[28px] h-[32px] cursor-pointer"
                 >
                   <option value="all">All</option>
                   {stockData.map((item, idx) => (
@@ -570,7 +570,7 @@ function Stok() {
                     setSearch(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] ml-2 px-2 py-1 w-[170px] h-[31px]"
+                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] ml-2 px-2 py-1 w-full sm:w-[170px] h-[31px]"
                   placeholder={
                     viewMode === "bahan" ? "Cari bahan..." : "Cari menu..."
                   }
@@ -693,7 +693,7 @@ function Stok() {
                 </div>
               ) : (
                 // Card View untuk Menu (tetap flex wrap)
-                <div className="flex items-center flex-wrap gap-[15px]">
+                <div className="flex items-center flex-wrap gap-[8px] sm:gap-[15px]">
                   {loading ? (
                     <div className="py-3 italic text-center text-gray-500 animate-pulse">
                       Memuat data...
@@ -702,18 +702,18 @@ function Stok() {
                     paginatedData.map((item) => (
                       <div
                         key={item.id}
-                        className="w-[165px] h-[164px] shadow-[0px_2px_10.2px_rgb(0,0,0,0.25)] cursor-pointer transition hover:-translate-y-2 hover:shadow-[0px_7px_8px_rgba(0,0,0,0.25)] relative group"
+                        className="h-[130.33px] w-[111.4px] sm:w-[165px] sm:h-[164px] shadow-[0px_2px_10.2px_rgb(0,0,0,0.25)] cursor-pointer transition hover:-translate-y-2 hover:shadow-[0px_7px_8px_rgba(0,0,0,0.25)] relative group"
                         onClick={() => setSelectedMenu(item)}
                       >
-                        <div className="w-full h-[93px]">
+                        <div className="w-full h-[70.3px] sm:h-[93px]">
                           <img
                             src={ExampleImage}
-                            className="w-full h-[93px] object-cover"
+                            className="w-full h-[70.3px] sm:h-[93px] object-cover"
                             alt={item.nama}
                           />
                         </div>
-                        <div className="flex flex-col items-center justify-between text-[15px] h-[calc(100%-93px)]">
-                          <h4 className="text-sm font-semibold font-boogaloo pt-[6px] px-2 text-center">
+                        <div className="flex flex-col items-center justify-between text-[15px] h-[calc(100%-69px)] sm:h-[calc(100%-93px)]">
+                          <h4 className="text-sm font-semibold font-boogaloo sm:pt-[6px] px-2 text-center">
                             {item.nama}
                           </h4>
                           <h4 className="text-sm font-semibold font-baloo-2 self-start pl-[8px] pb-[4px]">
@@ -782,7 +782,7 @@ function Stok() {
             </div>
           </div>
 
-          <aside className="max-sm:max-w-[430px] max-sm:w-full m-auto self-center pt-[28px] pb-[24px] min-h-[486px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] bg-white">
+          <aside className="max-sm:max-w-[430px] w-full max-sm:m-auto max-sm:self-center pt-[28px] pb-[24px] min-h-[486px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] bg-white">
             <h2 className="text-center font-bold text-[16px] mb-4 px-2">
               Total per Kategori ({viewMode === "bahan" ? "Bahan" : "Menu"})
             </h2>
@@ -793,7 +793,10 @@ function Stok() {
                 </div>
               ) : (
                 stockData.map((items, index) => (
-                  <div key={index}>
+                  <div key={index} className="cursor-pointer" onClick={() => {
+                    setCategory(items.nama);
+                    setCurrentPage(1);
+                  }}>
                     <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
                       <h3 className="text-center m-auto">
                         {items.nama.slice(0, 1).toUpperCase() +

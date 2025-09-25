@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 const navItems = [
   {
     name: "Dashboard",
-    to: "/dashboard",
+    to: "/admin",
     icon: (
       <svg
         width="20"
@@ -20,7 +20,7 @@ const navItems = [
   },
   {
     name: "Pemesanan",
-    to: "/pemesanan",
+    to: "/admin/pemesanan",
     icon: (
       <svg
         width="24"
@@ -37,8 +37,8 @@ const navItems = [
     ),
   },
   {
-    name: "Manajemen Stok",
-    to: "/stok",
+    name: "Manajemen Produk",
+    to: "/admin/manajemen-produk",
     icon: (
       <svg
         width="22"
@@ -56,7 +56,7 @@ const navItems = [
   },
   {
     name: "Log Aktivitas",
-    to: "/log-aktivitas",
+    to: "/admin/log-aktivitas",
     icon: (
       <svg
         width="24"
@@ -74,7 +74,7 @@ const navItems = [
   },
   {
     name: "Pengeluaran",
-    to: "/pengeluaran",
+    to: "/admin/pengeluaran",
     icon: (
       <svg
         width="24"
@@ -92,7 +92,7 @@ const navItems = [
   },
   {
     name: "Manajemen Akun",
-    to: "/manajemen-akun",
+    to: "/admin/manajemen-akun",
     icon: (
       <svg
         width="20"
@@ -118,8 +118,8 @@ function Sidebar({ isOpen, setIsOpen }) {
         onClick={() => setIsOpen(!isOpen)}
       ></div>
       <div
-        className={`w-[208px] max-md:z-20 md:w-[5.5rem] lg:w-[14.375rem] h-svh bg-white max-md:fixed transition-all ${
-          !isOpen && "max-md:-translate-x-[208px]"
+        className={`w-[230px] max-md:z-20 md:w-[5.5rem] lg:w-[14.375rem] h-svh bg-white max-md:fixed transition-all ${
+          !isOpen && "max-md:-translate-x-[231px]"
         }`}
       >
         <div className="relative h-[92px] w-full bg-[#FFBA00] flex items-center justify-center">
@@ -150,6 +150,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.to === "/admin"}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
                 `w-full h-[44px] md:h-[60px] lg:h-[44px] flex max-md:flex-row max-lg:flex-col justify-center items-center rounded-[10px] ${

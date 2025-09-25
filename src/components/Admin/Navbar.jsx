@@ -24,17 +24,18 @@ function Navbar({ setIsOpen }) {
   }, []);
 
   const pathResult = pathname
-    .slice(1)
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  .replace(/^\/admin\/?/, "") // buang "/admin" di depan
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
 
   return (
     <div className="h-[92px] flex justify-between items-center shadow-[0px_5px_10.8px_rgba(168,168,168,0.25)]">
       <div className="pl-[24px] md:pb-[6px] md:pl-[42px] font-semibold text-base md:text-2xl flex max-md:items-center">
         <svg
           onClick={() => setIsOpen((prev) => !prev)}
-          className="md:hidden cursor-pointer"
+          className="cursor-pointer md:hidden"
           width="26"
           height="18"
           viewBox="0 0 26 18"
@@ -49,14 +50,14 @@ function Navbar({ setIsOpen }) {
           />
         </svg>
         <div className="max-md:pl-[30px]">
-          {pathname === "/dashboard" ? (
+          {pathname === "/admin" ? (
             <h2>
               Selamat Datang,{" "}
               <span className="text-nowrap">{userData?.name || ""} 👋</span>
             </h2>
           ) : (
             <h2 className="max-sm:text-center max-sm:hidden">
-              <Link to="/dashboard" className="max-sm:hidden">
+              <Link to="/admin" className="max-sm:hidden">
                 Dashboard
               </Link>{" "}
               &gt;{" "}
