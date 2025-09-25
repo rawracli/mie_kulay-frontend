@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
 import { createMenu } from "../../../../controllers/Menu";
-import { getBahan } from "../../../../controllers/Bahan";
+import { getBahan, tambahBahan } from "../../../../controllers/Bahan";
 import BahanDropdown from "./BahanDropdown";
 
 function TambahMenu({ onClose, onAdd }) {
   const [filePreview, setFilePreview] = useState(null);
   const [file, setFile] = useState(null);
   const [nama, setNama] = useState("");
-  const [harga, setHarga] = useState(1);
+  const [hargaBeli, setHargaBeli] = useState(0);
   const [selectedBahan, setSelectedBahan] = useState([]);
 
   // buat preview ketika file dipilih
@@ -31,14 +31,45 @@ function TambahMenu({ onClose, onAdd }) {
   }, []);
 
   //! Ubah jumlah jadi harga
-  const addBahan = (bahan) => {
-    setSelectedBahan((prev) => {
-      if (prev.find((b) => b.bahan_id === bahan.id)) return prev;
-      return [
+  const addBahan = async (bahan) => {
+    // Cek kalau bahan sudah ada di list
+    if (selectedBahan.find((b) => b.bahan_id === bahan.id)) return;
+
+    try {
+      // Menggunakan field yang sesuai dengan data yang diterima
+      const hargaBeli = Number(bahan.harga || bahan.harga_beli || 0);
+      const kategoriId = Number(bahan.kategori_id || 1); // default category
+
+      // console.log("💰 Harga beli yang digunakan:", hargaBeli);
+      // console.log("🏷️ Kategori ID yang digunakan:", kategoriId);
+
+      if (hargaBeli <= 0) {
+        throw new Error("Harga beli harus lebih dari 0");
+      }
+
+      // Kirim ke backend dengan field yang benar
+      const addedBahan = await tambahBahan({
+        nama_bahan: (bahan.nama_bahan || bahan.nama).trim(), // handle kedua kemungkinan
+        harga_beli: hargaBeli,
+        kategori_id: kategoriId,
+        stok: bahan.stok || 0,
+        satuan: bahan.satuan || "pcs",
+      });
+
+      // Tambahkan ke state lokal
+      setSelectedBahan((prev) => [
         ...prev,
-        { bahan_id: bahan.id, nama: bahan.nama_bahan, jumlah: 1 },
-      ];
-    });
+        {
+          bahan_id: addedBahan.id,
+          nama: addedBahan.nama_bahan,
+          jumlah: 1,
+        },
+      ]);
+
+      console.log("Bahan berhasil ditambahkan:", addedBahan);
+    } catch (err) {
+      console.error("Gagal menambahkan bahan:", err.message);
+    }
   };
 
   const handleJumlahChange = (index, value) => {
@@ -55,7 +86,7 @@ function TambahMenu({ onClose, onAdd }) {
     e.preventDefault();
     const formData = new FormData();
     formData.append("nama_hidangan", nama.trim());
-    formData.append("harga_jual", Number(harga));
+    formData.append("harga_jual", Number(hargaBeli));
     formData.append("stok", 0);
     formData.append("kategori_id", 1);
     if (file) formData.append("gambar", file);
@@ -151,8 +182,8 @@ function TambahMenu({ onClose, onAdd }) {
               name="harga"
               min={1}
               required
-              value={harga}
-              onChange={(e) => setHarga(e.target.value)}
+              value={hargaBeli}
+              onChange={(e) => setHargaBeli(e.target.value)}
               className="appearance-none w-full max-md:w-[200px] mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[21px] md:h-[50px] focus:outline-none"
             />
           </div>
@@ -165,35 +196,33 @@ function TambahMenu({ onClose, onAdd }) {
               <BahanDropdown bahanList={bahanList} addBahan={addBahan} />
             </div>
             <div className="overflow-y-auto max-h-32 md:max-h-48">
-              
-            {selectedBahan.map((b, idx) => (
-              <div
-                key={b.bahan_id || b.id}
-                className="flex items-center justify-between p-2 mt-1 bg-white border border-gray-300 rounded-lg shadow-sm"
-              >
-                <span className="font-medium text-gray-800">
-                  {b.nama || b.nama_bahan}
-                </span>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min={1}
-                    value={b.jumlah}
-                    onChange={(e) => handleJumlahChange(idx, e.target.value)}
-                    className="w-20 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveBahan(idx)}
-                    className="px-3 py-1 text-sm text-white transition bg-red-500 rounded cursor-pointer hover:bg-red-600 active:bg-red-700"
-                  >
-                    Hapus
-                  </button>
+              {selectedBahan.map((b, idx) => (
+                <div
+                  key={b.bahan_id || b.id}
+                  className="flex items-center justify-between p-2 mt-1 bg-white border border-gray-300 rounded-lg shadow-sm"
+                >
+                  <span className="font-medium text-gray-800">
+                    {b.nama || b.nama_bahan}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min={1}
+                      value={b.jumlah}
+                      onChange={(e) => handleJumlahChange(idx, e.target.value)}
+                      className="w-20 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBahan(idx)}
+                      className="px-3 py-1 text-sm text-white transition bg-red-500 rounded cursor-pointer hover:bg-red-600 active:bg-red-700"
+                    >
+                      Hapus
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             </div>
-
           </div>
 
           <button

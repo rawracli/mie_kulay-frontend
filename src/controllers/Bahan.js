@@ -15,7 +15,7 @@ const getBahan = async () => {
 };
 
 const tambahBahan = async (data) => {
-  const res = await fetch(`${API_URL}/tambah/bahan`, {
+  const res = await fetch(`${API_URL}/tambah/bahan/langsung`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
