@@ -67,36 +67,6 @@ function Dashboard() {
         ],
       },
       {
-        id: "TRX-002",
-        tanggal: new Date("2025-09-02"),
-        total: 50000,
-        metode: "QRIS",
-        items: [
-          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
-          { name: "Teh Botol", qty: 1, price: 10000 },
-        ],
-      },
-      {
-        id: "TRX-002",
-        tanggal: new Date("2025-09-02"),
-        total: 50000,
-        metode: "QRIS",
-        items: [
-          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
-          { name: "Teh Botol", qty: 1, price: 10000 },
-        ],
-      },
-      {
-        id: "TRX-002",
-        tanggal: new Date("2025-09-02"),
-        total: 50000,
-        metode: "QRIS",
-        items: [
-          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
-          { name: "Teh Botol", qty: 1, price: 10000 },
-        ],
-      },
-      {
         id: "TRX-003",
         tanggal: new Date("2025-09-05"),
         total: 120000,
@@ -161,6 +131,7 @@ function Dashboard() {
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
   const [search, setSearch] = useState("");
+  const [bulanInput, setBulanInput] = useState(""); // <<< filter bulan
 
   // Pagination
   const [entriesPerPage, setEntriesPerPage] = useState(4);
@@ -169,18 +140,24 @@ function Dashboard() {
   // Overlay detail
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  // Filter data
+  // Filter data (gabung tanggal, bulan, search)
   const filteredData = transactionsData.filter((item) => {
     const isDateInRange =
       (!tanggalAwal || item.tanggal >= new Date(tanggalAwal)) &&
       (!tanggalAkhir || item.tanggal <= new Date(tanggalAkhir));
+
+    const isMonthMatch =
+      !bulanInput ||
+      `${item.tanggal.getFullYear()}-${String(item.tanggal.getMonth() + 1).padStart(2, "0")}` ===
+        bulanInput;
 
     const isSearchMatch =
       !search ||
       item.id.toLowerCase().includes(search.toLowerCase()) ||
       item.metode.toLowerCase().includes(search.toLowerCase()) ||
       item.total.toString().includes(search);
-    return isDateInRange && isSearchMatch;
+
+    return isDateInRange && isMonthMatch && isSearchMatch;
   });
 
   // Pagination
@@ -192,43 +169,59 @@ function Dashboard() {
   );
 
   return (
-    <div className="bg-[#EDF0F2] w-full min-h-[calc(100vh-92px)] flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
+    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)] max-sm:h-full flex flex-col items-center sm:pl-[11px] sm:pr-[20px] ">
       {/* Analytics Data */}
-      <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center">
+      <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center max-sm:ml-[30px]">
         {/* Information Priority */}
         <div className="flex flex-col w-full">
-          <div className="grid grid-cols-3 gap-[9px]">
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+          <div className="grid grid-cols-3 gap-[9px] max-sm:gap-1">
+            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg ">
+              <h1 className="text-[14px] max-sm:text-[12px] font-semibold px-[13px] pb-[11px] pt-[6px]">
                 Total Orders
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-5xl font-semibold">
+              <h5 className="my-auto text-center text-5xl max-sm:text-[24px] font-semibold">
                 500
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg">
+              <h1 className="text-[14px] max-sm:text-[12px]  font-semibold px-[13px] pb-[11px] pt-[6px]">
                 Profit
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold">
+              <h5 className="my-auto text-center text-4xl max-sm:text-[22px] font-semibold">
                 Rp. 10,5JT
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg">
+              <h1 className="text-[14px] max-sm:text-[12px] font-semibold px-[13px] pb-[11px] pt-[6px]">
                 Pengeluaran
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold">
+              <h5 className="my-auto text-center text-4xl max-sm:text-[22px] font-semibold">
                 Rp. 100K
               </h5>
             </div>
           </div>
+          {/* Top Menu & Monthly Orders... (Statistics) */}
+          <div className=" w-full lg:hidden mt-[9px] flex ">
+            <div className="grid grid-cols-2 gap-[20px]">
+              {/* Favorite Menu */}
+              <div className="bg-white w-[220px] h-[177px] rounded-[5px] flex items-center shadow-lg">
+                <div className="w-[400px] mx-auto">
+                  <FavoriteMenuChart />
+                </div>
+              </div>
+
+              {/* Monthly Orders */}
+              <div className="bg-white w-[200px] h-[177px] rounded-[5px] flex  items-center shadow-lg">
+                <MonthlyOrdersChart />
+              </div>
+            </div>
+          </div>
           {/* Monthly Earnings and Expenses */}
-          <div className="flex flex-col w-full">
-            <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
+          <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px]">
+            <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg ">
               <MonthlyEarningsChart />
             </div>
             <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg rounded-bl-[10px]">
@@ -236,23 +229,22 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        {/* Top Menu & Monthly Orders... (Statistics) */}
-        <div className="pl-[9px] w-[330px]">
-          <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
-            <div className="w-[400px] mx-auto">
-              <FavoriteMenuChart />
+          {/* Top Menu & Monthly Orders... (Statistics) */}
+          <div className="pl-[9px] w-[330px] max-sm:w-[195px] max-sm:h-[177px] max-sm:pt-[9px] max-sm:hidden">
+            <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
+              <div className="w-[400px] mx-auto">
+                <FavoriteMenuChart />
+              </div>
+            </div>
+            <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
+              <MonthlyOrdersChart />
             </div>
           </div>
-          <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
-            <MonthlyOrdersChart />
-          </div>
-        </div>
       </div>
       {/* Detail Pemesanan */}
-      <div className="h-full w-full">
-        {/* Detail Pemesanan || Laporan Pemesanan */}
+      <div className="h-full w-full ">
         <div className="w-full flex justify-start">
-          <h1 className="max-sm:hidden text-3xl font-semibold text-right mt-5 px-1.5">
+          <h1 className=" text-3xl font-semibold text-right mt-5 px-1.5">
             Detail Pemesanan
           </h1>
         </div>
@@ -288,11 +280,25 @@ function Dashboard() {
               setTanggalAkhir(tanggalAkhirInput);
               setCurrentPage(1);
             }}
-            className="w-full h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-[45px] sm:mb-[34px] flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-[42px] bg-[#FFB300] hover:bg-yellow-500 text-white font-semibold px-6 rounded-md mb-[20px] flex items-center justify-center gap-2 cursor-pointer"
           >
             <img src={Icon} alt="Filter" className="w-4 h-4" />
             <span>Filter</span>
           </button>
+
+          {/* Filter Bulan */}
+          <div className="flex items-center justify-start mb-[20px]">
+            <label className="mr-2 text-sm font-semibold">Filter by Month:</label>
+            <input
+              type="month"
+              value={bulanInput}
+              onChange={(e) => {
+                setBulanInput(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+            />
+          </div>
 
           {/* Search & entries per page */}
           <div className="flex items-center justify-between mb-[15px]">
@@ -325,26 +331,7 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Table */}
-          <div className="relative border grid border-[#959595] flex-1">
-            {/* Container untuk scroll */}
-            <div className="relative overflow-x-auto">
-              <div className="w-full min-w-[550px]">
-                {/* Grid lines - perlu disesuaikan dengan lebar tabel */}
-                <div
-                  className={`absolute inset-0 w-full grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
-                    transactionsData.length === 0 && "invisible"
-                  }`}
-                  style={{ minWidth: "550px" }} // Sesuaikan dengan min-width tabel
-                >
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="border-r border-[#959595]"
-                    ></div>
-                  ))}
-                </div>
-
+          
                 {/* Tabel dengan min-width */}
                 <table className="w-full border-collapse">
                   <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
@@ -414,9 +401,7 @@ function Dashboard() {
                     )}
                   </tbody>
                 </table>
-              </div>
-            </div>
-          </div>
+
 
           {/* Pagination */}
           <div className="flex items-center justify-between mt-5 text-sm">
@@ -498,85 +483,88 @@ function Dashboard() {
               </button>
             </div>
           </div>
+
+          {/* Overlay Detail */}
+          {selectedTransaction && (
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+              onClick={() => setSelectedTransaction(null)} // klik area luar = close
+            >
+              <div
+                className="bg-white rounded-[5px] shadow-lg w-[347px] sm:w-[358px] h-[612px] cursor-default"
+                onClick={(e) => e.stopPropagation()} // cegah close kalau klik di dalam card
+              >
+                {/* Header */}
+                <div className="relative bg-[#FFB300] text-center py-3 rounded-t-[5px]">
+                  <h2 className="text-lg font-bold text-black">
+                    DETAIL PEMESANAN <br />
+                    {selectedTransaction.id}
+                  </h2>
+
+                  {/* Tombol Tutup (icon X) */}
+                  <button
+                    onClick={() => setSelectedTransaction(null)}
+                    className="absolute top-2 right-3 hover:text-black cursor-pointer"
+                  >
+                    <img
+                      src={Close} // path icon X kamu
+                      alt="Close"
+                      className="w-5 h-5"
+                    />
+                  </button>
+                </div>
+
+                {/* Body */}
+                <div className="p-6 text-1xl space-y-[10px]">
+                  <p>
+                    <span className="font-semibold">Tanggal :</span>{" "}
+                    {selectedTransaction.tanggal.toLocaleDateString("id-ID")}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Id :</span>{" "}
+                    {selectedTransaction.id}
+                  </p>
+
+                  <div className="my-[20px] border-t border-dashed w-[180px]" />
+
+                  {/* Daftar item */}
+                  {selectedTransaction.items?.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between text-nowrap flex-wrap"
+                    >
+                      <span>
+                        {item.name} x{item.qty}
+                      </span>
+                      <span>Rp {item.price.toLocaleString("id-ID")}</span>
+                    </div>
+                  ))}
+
+                  <div className="my-[20px] border-t border-dashed w-[180px]" />
+
+                  <p className="flex justify-between text-nowrap flex-wrap font-semibold">
+                    <span>Total Pembayaran :</span>
+                    <span>
+                      Rp {selectedTransaction.total.toLocaleString("id-ID")}
+                    </span>
+                  </p>
+                  <p className="flex justify-between text-nowrap flex-wrap font-semibold">
+                    <span className="font-semibold">Metode Pembayaran :</span>{" "}
+                    <span>{selectedTransaction.metode}</span>
+                  </p>
+                  <div className="my-[50px] flex flex-col">
+                    <div className="border-t border-dashed h-1" />
+                    <div className="border-t border-dashed h-1" />
+                  </div>
+                  <p className="text-center text-[16px] text-gray-500 my-10">
+                    @Mie Kulay
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Overlay Detail */}
-      {selectedTransaction && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
-          onClick={() => setSelectedTransaction(null)} // klik area luar = close
-        >
-          <div
-            className="bg-white rounded-[5px] shadow-lg w-[347px] sm:w-[358px] h-[612px] cursor-default"
-            onClick={(e) => e.stopPropagation()} // cegah close kalau klik di dalam card
-          >
-            {/* Header */}
-            <div className="relative bg-[#FFB300] text-center py-3 rounded-t-[5px]">
-              <h2 className="text-lg font-bold text-black">
-                DETAIL PEMESANAN <br />
-                {selectedTransaction.id}
-              </h2>
-
-              {/* Tombol Tutup (icon X) */}
-              <button
-                onClick={() => setSelectedTransaction(null)}
-                className="absolute top-2 right-3 hover:text-black cursor-pointer"
-              >
-                <img
-                  src={Close} // path icon X kamu
-                  alt="Close"
-                  className="w-5 h-5"
-                />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="p-6 text-1xl space-y-[10px]">
-              <p>
-                <span className="font-semibold">Tanggal :</span>{" "}
-                {selectedTransaction.tanggal.toLocaleDateString("id-ID")}
-              </p>
-              <p>
-                <span className="font-semibold">Id :</span>{" "}
-                {selectedTransaction.id}
-              </p>
-
-              <div className="my-[20px] border-t border-dashed w-[180px] "></div>
-
-              {/* Daftar item */}
-              {selectedTransaction.items?.map((item, idx) => (
-                <div key={idx} className="flex justify-between text-nowrap flex-wrap ">
-                  <span>
-                    {item.name} x{item.qty}
-                  </span>
-                  <span>Rp {item.price.toLocaleString("id-ID")}</span>
-                </div>
-              ))}
-
-              <div className="my-[20px] border-t border-dashed w-[180px] "></div>
-
-              <p className="flex justify-between text-nowrap flex-wrap font-semibold">
-                <span>Total Pembayaran :</span>
-                <span>
-                  Rp {selectedTransaction.total.toLocaleString("id-ID")}
-                </span>
-              </p>
-              <p className="flex justify-between text-nowrap flex-wrap font-semibold">
-                <span className="font-semibold">Metode Pembayaran :</span>{" "}
-                <span>{selectedTransaction.metode}</span>
-              </p>
-              <div className="my-[50px] flex flex-col">
-                <div className="border-t border-dashed h-1"></div>
-                <div className="border-t border-dashed h-1"></div>
-              </div>
-              <p className="text-center text-[16px] text-gray-500 my-10">
-                @Mie Kulay
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
