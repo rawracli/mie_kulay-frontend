@@ -211,11 +211,22 @@ function Stok() {
     }));
   };
 
-  const handleBahanDelete = (indexToRemove) => {
-    setEditMenuForm((prev) => ({
-      ...prev,
-      bahan: prev.bahan.filter((_, index) => index !== indexToRemove),
-    }));
+  const handleBahanDelete = async (bahanId) => {
+    if (!bahanId) return;
+
+    try {
+      await hapusBahan(bahanId);
+
+      // Update state lokal agar UI langsung refleks
+      setEditMenuForm((prev) => ({
+        ...prev,
+        bahan: prev.bahan.filter((b) => b.id !== bahanId),
+      }));
+
+      console.log("Bahan berhasil dihapus dari menu dan database");
+    } catch (err) {
+      console.error("Gagal hapus bahan:", err.message);
+    }
   };
 
   const handleNewBahanChange = (field, value) => {
