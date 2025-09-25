@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -11,6 +11,7 @@ import "./Stok.css";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahKategori from "./Overlay/TambahKategori";
 import { getBahan, updateBahan, hapusBahan } from "../../../controllers/Bahan";
+import { getMenu, updateMenu } from "../../../controllers/Menu";
 
 function Stok() {
   // toggle bahan atau menu
@@ -61,141 +62,9 @@ function Stok() {
   ]);
 
   // Data Menu (dummy)
-  const [menuData, setMenuData] = useState([
-    {
-      id: 1,
-      nama: "Mie Ayam Special",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 25000,
-      stok: 15,
-      bahan: [
-        { nama: "Mie Kuning", harga: 5000 },
-        { nama: "Ayam Suwir", harga: 10000 },
-        { nama: "Sayuran", harga: 3000 },
-      ],
-    },
-    {
-      id: 2,
-      nama: "Mie Pedas Gurih",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 22000,
-      stok: 20,
-      bahan: [
-        { nama: "Mie Kuning", harga: 5000 },
-        { nama: "Cabe Merah", harga: 2000 },
-        { nama: "Bumbu Pedas", harga: 4000 },
-      ],
-    },
-    {
-      id: 3,
-      nama: "Es Teh Manis",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Minuman",
-      harga: 8000,
-      stok: 50,
-      bahan: [
-        { nama: "Teh", harga: 2000 },
-        { nama: "Gula", harga: 1000 },
-        { nama: "Es Batu", harga: 500 },
-      ],
-    },
-    {
-      id: 4,
-      nama: "Es Jeruk",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Minuman",
-      harga: 10000,
-      stok: 30,
-      bahan: [
-        { nama: "Jeruk", harga: 5000 },
-        { nama: "Gula", harga: 1000 },
-        { nama: "Es Batu", harga: 500 },
-      ],
-    },
-    {
-      id: 5,
-      nama: "Nasi Goreng Special",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 28000,
-      stok: 25,
-      bahan: [
-        { nama: "Nasi", harga: 5000 },
-        { nama: "Telur", harga: 3000 },
-        { nama: "Bumbu", harga: 4000 },
-      ],
-    },
-    {
-      id: 6,
-      nama: "Bakso Kuah",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 20000,
-      stok: 18,
-      bahan: [
-        { nama: "Bakso", harga: 8000 },
-        { nama: "Mie", harga: 3000 },
-        { nama: "Sayuran", harga: 2000 },
-      ],
-    },
-    {
-      id: 7,
-      nama: "Es Kopi Susu",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Minuman",
-      harga: 15000,
-      stok: 40,
-      bahan: [
-        { nama: "Kopi", harga: 5000 },
-        { nama: "Susu", harga: 4000 },
-        { nama: "Es Batu", harga: 500 },
-      ],
-    },
-    {
-      id: 8,
-      nama: "Soto Ayam",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 25000,
-      stok: 22,
-      bahan: [
-        { nama: "Ayam", harga: 10000 },
-        { nama: "Bumbu Soto", harga: 3000 },
-        { nama: "Sayuran", harga: 2000 },
-      ],
-    },
-    {
-      id: 9,
-      nama: "Jus Alpukat",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Minuman",
-      harga: 18000,
-      stok: 15,
-      bahan: [
-        { nama: "Alpukat", harga: 8000 },
-        { nama: "Susu", harga: 3000 },
-        { nama: "Gula", harga: 1000 },
-      ],
-    },
-    {
-      id: 10,
-      nama: "Ayam Bakar",
-      image: "https://via.placeholder.com/165x93",
-      kategori: "Makanan",
-      harga: 35000,
-      stok: 12,
-      bahan: [
-        { nama: "Ayam", harga: 15000 },
-        { nama: "Bumbu Bakar", harga: 5000 },
-        { nama: "Sambal", harga: 2000 },
-      ],
-    },
-  ]);
+  const [menuData, setMenuData] = useState([]);
 
   const [loading, setLoading] = useState(false);
-  const updateTimeout = useRef({});
   const stockData = useMemo(() => {
     const dataToUse = viewMode === "bahan" ? stockTable : menuData;
     const grouped = dataToUse.reduce((acc, item) => {
@@ -203,13 +72,13 @@ function Stok() {
       if (!acc[kategoriName]) {
         acc[kategoriName] = 0;
       }
-      acc[kategoriName] += item.stok;
+      acc[kategoriName] += item.id;
       return acc;
     }, {});
 
-    return Object.entries(grouped).map(([nama, stok]) => ({
+    return Object.entries(grouped).map(([nama, id]) => ({
       nama,
-      stok,
+      id,
     }));
   }, [stockTable, menuData, viewMode]);
 
@@ -286,39 +155,35 @@ function Stok() {
   };
 
   // Handlers for bahan
-  const handleUpdateStok = (id, newStok) => {
+  const handleUpdateStok = async (id, newHarga) => {
     // update state lokal langsung
     setStockTable((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, stok: newStok } : item))
+      prev.map((item) =>
+        item.id === id ? { ...item, harga_beli: newHarga } : item
+      )
     );
-    if (updateTimeout.current[id]) {
-      clearTimeout(updateTimeout.current[id]);
+
+    try {
+      const current = stockTable.find((item) => item.id === id);
+      if (!current) return;
+
+      // langsung kirim ke backend
+      const updated = await updateBahan(id, {
+        nama_bahan: current.nama_bahan,
+        harga_beli: newHarga, // gunakan nilai baru langsung
+        kategori_id: current.kategori_id,
+      });
+
+      console.log("Harga berhasil diupdate:", updated);
+    } catch (err) {
+      console.error("Gagal update harga:", err.message);
     }
-
-    // timer biar tidak spam update ke server, sehingga tidak delay saat menambah/mengurangi stok
-    updateTimeout.current[id] = setTimeout(async () => {
-      try {
-        const current = stockTable.find((item) => item.id === id);
-        if (!current) return;
-
-        const updated = await updateBahan(id, {
-          nama_bahan: current.produk,
-          harga_beli: current.harga_beli,
-          stok: newStok,
-          kategori_id: current.kategori_id,
-        });
-
-        console.log("Stok berhasil diupdate:", updated);
-      } catch (err) {
-        console.error("Gagal update stok:", err.message);
-      }
-    }, 300);
   };
 
   const handleIncrement = (id) => {
     const current = stockTable.find((item) => item.id === id);
     if (!current) return;
-    handleUpdateStok(id, current.stok + 500);
+    handleUpdateStok(id, current.harga_beli + 500);
   };
 
   const handleDecrement = (id) => {
@@ -329,14 +194,9 @@ function Stok() {
       if (current.stok < amount) {
         handleUpdateStok(id, 0);
       } else {
-        handleUpdateStok(id, current.stok - 500);
+        handleUpdateStok(id, current.harga_beli - 500);
       }
     }
-  };
-
-  const handleInputChange = (id, value) => {
-    const newValue = parseInt(value) || 1;
-    handleUpdateStok(id, newValue);
   };
 
   const hapusBahanById = async (id) => {
@@ -387,35 +247,46 @@ function Stok() {
   };
 
   const handleAddBahan = () => {
-    if (newBahan.nama && newBahan.harga > 0) {
-      setEditMenuForm((prev) => ({
-        ...prev,
-        bahan: [...prev.bahan, { ...newBahan }],
-      }));
-      setNewBahan({ nama: "", harga: 0 });
-    }
+    if (!newBahan.nama || !newBahan.harga) return;
+
+    setEditMenuForm({
+      ...editMenuForm,
+      bahan: [
+        ...editMenuForm.bahan,
+        {
+          nama: newBahan.nama_bahan,
+          harga: newBahan.harga_beli,
+        },
+      ],
+    });
+
+    setNewBahan({ nama: "", harga: "" }); // reset input
   };
 
-  const handleMenuSave = () => {
+  const handleMenuSave = async () => {
     if (
       selectedMenu &&
       editMenuForm.nama &&
       editMenuForm.kategori &&
       editMenuForm.harga > 0
     ) {
-      // Update menuData
-      setMenuData((prev) =>
-        prev.map((menu) =>
-          menu.id === selectedMenu.id ? { ...menu, ...editMenuForm } : menu
-        )
-      );
+      try {
+        const updated = await updateMenu(selectedMenu.id, {
+          nama_hidangan: editMenuForm.nama,
+          harga_pokok: editMenuForm.harga, // kalau ada harga pokok
+          harga_jual: editMenuForm.harga,
+          kategori_id: editMenuForm.kategori_id,
+        });
 
-      // Close modal
-      setSelectedMenu(null);
-
-      console.log("Menu berhasil diupdate:", editMenuForm);
+        setMenuData((prev) =>
+          prev.map((menu) => (menu.id === selectedMenu.id ? updated : menu))
+        );
+        setSelectedMenu(null);
+      } catch (err) {
+        console.error("Gagal update menu:", err.message);
+      }
     } else {
-      alert("Mohon lengkapi semua field yang diperlukan");
+      alert("Mohon lengkapi semua field");
     }
   };
   //End edit Menu
@@ -459,6 +330,7 @@ function Stok() {
       setLoading(false);
     }
 
+    // Fetch bahan dari API
     const fetchBahan = async () => {
       try {
         const data = await getBahan();
@@ -466,7 +338,6 @@ function Stok() {
           id: item.id,
           produk: item.nama_bahan,
           harga_beli: item.harga_beli,
-          stok: item.stok,
           kategori_id: item.kategori_id,
           kategori: item.kategori?.jenis_hidangan ?? "-",
         }));
@@ -480,6 +351,38 @@ function Stok() {
     };
 
     fetchBahan();
+  }, []);
+
+  // Fetch menu dari API
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        setLoading(true);
+        const data = await getMenu();
+
+        const mapped = data.map((item) => ({
+          id: item.id,
+          nama: item.nama_hidangan,
+          kategori: item.kategori?.jenis_hidangan ?? "-",
+          harga: item.harga_jual,
+          image: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}`,
+          bahan:
+            item.bahan_mentahs?.map((b) => ({
+              id: b.id,
+              nama: b.nama_bahan,
+              harga: b.harga_beli,
+            })) ?? "Maaf, menu ini belum memiliki bahan",
+        }));
+
+        setMenuData(mapped);
+      } catch (err) {
+        console.error("Error fetch menu:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenu();
   }, []);
 
   return (
@@ -638,14 +541,9 @@ function Stok() {
                                     className="group-hover:scale-150 group-active:scale-125"
                                   />
                                 </button>
-                                <input
-                                  type="text"
-                                  className="w-10 text-center"
-                                  value={t.stok}
-                                  onChange={(e) =>
-                                    handleInputChange(t.id, e.target.value)
-                                  }
-                                />
+                                <span>
+                                  {t.harga_beli?.toLocaleString("id-ID")}
+                                </span>
                                 <button
                                   onClick={() => handleIncrement(t.id)}
                                   className="flex items-center justify-center flex-1 h-full cursor-pointer group"
@@ -707,7 +605,7 @@ function Stok() {
                       >
                         <div className="w-full h-[70.3px] sm:h-[93px]">
                           <img
-                            src={ExampleImage}
+                            src={item.image}
                             className="w-full h-[70.3px] sm:h-[93px] object-cover"
                             alt={item.nama}
                           />
@@ -793,10 +691,14 @@ function Stok() {
                 </div>
               ) : (
                 stockData.map((items, index) => (
-                  <div key={index} className="cursor-pointer" onClick={() => {
-                    setCategory(items.nama);
-                    setCurrentPage(1);
-                  }}>
+                  <div
+                    key={index}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setCategory(items.nama);
+                      setCurrentPage(1);
+                    }}
+                  >
                     <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
                       <h3 className="text-center m-auto">
                         {items.nama.slice(0, 1).toUpperCase() +
@@ -804,7 +706,7 @@ function Stok() {
                       </h3>
                     </div>
                     <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                      <h4>{items.stok}</h4>
+                      <h4>{items.id}</h4>
                     </div>
                   </div>
                 ))
@@ -916,34 +818,40 @@ function Stok() {
               <h4 className="text-[24px] font-semibold pb-[10px]">Bahan</h4>
               <div className="w-[273px] h-full bg-[#FFF7DE] rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[10px] pr-[4px] pt-[2px] pb-[2px] overflow-y-auto">
                 {/* LOOP DARI DATA BAHAN YANG ADA DI MENU */}
-                {editMenuForm.bahan.map((bahan, idx) => (
-                  <div key={idx}>
-                    <div className="flex pl-[10px] pr-[17px] items-center justify-between h-[45px]">
-                      <h5 className="font-semibold">{bahan.nama}</h5>
-                      <div className="flex items-center gap-[41px]">
-                        <h6 className="text-start">
-                          Rp. {bahan.harga.toLocaleString("id-ID")}
-                        </h6>
-                        {/* BTN HAPUS BAHAN */}
-                        <svg
-                          onClick={() => handleBahanDelete(idx)}
-                          className="cursor-pointer"
-                          width="14"
-                          height="16"
-                          viewBox="0 0 14 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1 14.5C1 14.8978 1.15804 15.2794 1.43934 15.5607C1.72064 15.842 2.10218 16 2.5 16H11.5C11.8978 16 12.2794 15.842 12.5607 15.5607C12.842 15.2794 13 14.8978 13 14.5V4.00001H1V14.5ZM9.5 6.50001C9.5 6.3674 9.55268 6.24022 9.64645 6.14645C9.74021 6.05268 9.86739 6.00001 10 6.00001C10.1326 6.00001 10.2598 6.05268 10.3536 6.14645C10.4473 6.24022 10.5 6.3674 10.5 6.50001V13.5C10.5 13.6326 10.4473 13.7598 10.3536 13.8536C10.2598 13.9473 10.1326 14 10 14C9.86739 14 9.74021 13.9473 9.64645 13.8536C9.55268 13.7598 9.5 13.6326 9.5 13.5V6.50001ZM6.5 6.50001C6.5 6.3674 6.55268 6.24022 6.64645 6.14645C6.74021 6.05268 6.86739 6.00001 7 6.00001C7.13261 6.00001 7.25979 6.05268 7.35355 6.14645C7.44732 6.24022 7.5 6.3674 7.5 6.50001V13.5C7.5 13.6326 7.44732 13.7598 7.35355 13.8536C7.25979 13.9473 7.13261 14 7 14C6.86739 14 6.74021 13.9473 6.64645 13.8536C6.55268 13.7598 6.5 13.6326 6.5 13.5V6.50001ZM3.5 6.50001C3.5 6.3674 3.55268 6.24022 3.64645 6.14645C3.74021 6.05268 3.86739 6.00001 4 6.00001C4.13261 6.00001 4.25979 6.05268 4.35355 6.14645C4.44732 6.24022 4.5 6.3674 4.5 6.50001V13.5C4.5 13.6326 4.44732 13.7598 4.35355 13.8536C4.25979 13.9473 4.13261 14 4 14C3.86739 14 3.74021 13.9473 3.64645 13.8536C3.55268 13.7598 3.5 13.6326 3.5 13.5V6.50001ZM13.5 1.00001H9.75L9.45625 0.41563C9.39402 0.290697 9.29817 0.185606 9.17947 0.11218C9.06078 0.0387537 8.92395 -9.46239e-05 8.78438 5.47897e-06H5.2125C5.07324 -0.00052985 4.93665 0.0381736 4.81838 0.111682C4.7001 0.18519 4.60492 0.290529 4.54375 0.41563L4.25 1.00001H0.5C0.367392 1.00001 0.240215 1.05268 0.146447 1.14645C0.0526784 1.24022 0 1.3674 0 1.50001L0 2.50001C0 2.63261 0.0526784 2.75979 0.146447 2.85356C0.240215 2.94733 0.367392 3.00001 0.5 3.00001H13.5C13.6326 3.00001 13.7598 2.94733 13.8536 2.85356C13.9473 2.75979 14 2.63261 14 2.50001V1.50001C14 1.3674 13.9473 1.24022 13.8536 1.14645C13.7598 1.05268 13.6326 1.00001 13.5 1.00001Z"
-                            fill="#EC0000"
-                          />
-                        </svg>
+                {editMenuForm.bahan.length > 0 ? (
+                  editMenuForm.bahan.map((bahan, idx) => (
+                    <div key={idx}>
+                      <div className="flex pl-[10px] pr-[17px] items-center justify-between h-[45px]">
+                        <h5 className="font-semibold">{bahan.nama}</h5>
+                        <div className="flex items-center gap-[41px]">
+                          <h6 className="text-start">
+                            Rp. {bahan.harga.toLocaleString("id-ID")}
+                          </h6>
+                          {/* BTN HAPUS BAHAN */}
+                          <svg
+                            onClick={() => handleBahanDelete(idx)}
+                            className="cursor-pointer"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1 14.5C1 14.8978 1.15804 15.2794 1.43934 15.5607C1.72064 15.842 2.10218 16 2.5 16H11.5C11.8978 16 12.2794 15.842 12.5607 15.5607C12.842 15.2794 13 14.8978 13 14.5V4.00001H1V14.5ZM9.5 6.50001C9.5 6.3674 9.55268 6.24022 9.64645 6.14645C9.74021 6.05268 9.86739 6.00001 10 6.00001C10.1326 6.00001 10.2598 6.05268 10.3536 6.14645C10.4473 6.24022 10.5 6.3674 10.5 6.50001V13.5C10.5 13.6326 10.4473 13.7598 10.3536 13.8536C10.2598 13.9473 10.1326 14 10 14C9.86739 14 9.74021 13.9473 9.64645 13.8536C9.55268 13.7598 9.5 13.6326 9.5 13.5V6.50001ZM6.5 6.50001C6.5 6.3674 6.55268 6.24022 6.64645 6.14645C6.74021 6.05268 6.86739 6.00001 7 6.00001C7.13261 6.00001 7.25979 6.05268 7.35355 6.14645C7.44732 6.24022 7.5 6.3674 7.5 6.50001V13.5C7.5 13.6326 7.44732 13.7598 7.35355 13.8536C7.25979 13.9473 7.13261 14 7 14C6.86739 14 6.74021 13.9473 6.64645 13.8536C6.55268 13.7598 6.5 13.6326 6.5 13.5V6.50001ZM3.5 6.50001C3.5 6.3674 3.55268 6.24022 3.64645 6.14645C3.74021 6.05268 3.86739 6.00001 4 6.00001C4.13261 6.00001 4.25979 6.05268 4.35355 6.14645C4.44732 6.24022 4.5 6.3674 4.5 6.50001V13.5C4.5 13.6326 4.44732 13.7598 4.35355 13.8536C4.25979 13.9473 4.13261 14 4 14C3.86739 14 3.74021 13.9473 3.64645 13.8536C3.55268 13.7598 3.5 13.6326 3.5 13.5V6.50001ZM13.5 1.00001H9.75L9.45625 0.41563C9.39402 0.290697 9.29817 0.185606 9.17947 0.11218C9.06078 0.0387537 8.92395 -9.46239e-05 8.78438 5.47897e-06H5.2125C5.07324 -0.00052985 4.93665 0.0381736 4.81838 0.111682C4.7001 0.18519 4.60492 0.290529 4.54375 0.41563L4.25 1.00001H0.5C0.367392 1.00001 0.240215 1.05268 0.146447 1.14645C0.0526784 1.24022 0 1.3674 0 1.50001L0 2.50001C0 2.63261 0.0526784 2.75979 0.146447 2.85356C0.240215 2.94733 0.367392 3.00001 0.5 3.00001H13.5C13.6326 3.00001 13.7598 2.94733 13.8536 2.85356C13.9473 2.75979 14 2.63261 14 2.50001V1.50001C14 1.3674 13.9473 1.24022 13.8536 1.14645C13.7598 1.05268 13.6326 1.00001 13.5 1.00001Z"
+                              fill="#EC0000"
+                            />
+                          </svg>
+                        </div>
                       </div>
+                      <hr className="w-full h-[0.5px] text-[#737373]" />
                     </div>
-                    <hr className="w-full h-[0.5px] text-[#737373]" />
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="italic text-gray-500 text-sm px-2">
+                    Tidak ada bahan
+                  </p>
+                )}
                 {/* INI INPUT BARU */}
                 <div>
                   <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
