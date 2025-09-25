@@ -169,80 +169,87 @@ function Dashboard() {
   );
 
   return (
-    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)] max-sm:h-full flex flex-col items-center sm:pl-[11px] sm:pr-[20px] ">
+    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)]  flex flex-col items-center sm:pl-[11px] sm:pr-[20px] ">
+      
       {/* Analytics Data */}
-      <div className="flex rounded-[10px] h-fit w-full mt-8 justify-center max-sm:ml-[30px]">
+      <div className="flex rounded-[10px] h-full w-full mt-8 justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
         {/* Information Priority */}
-        <div className="flex flex-col w-full">
-          <div className="grid grid-cols-3 gap-[9px] max-sm:gap-1">
-            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg ">
-              <h1 className="text-[14px] max-sm:text-[12px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+        <div className="flex flex-col w-full max-sm:justify-center">
+          {/* Cards Summary */}
+          <div className="grid grid-cols-3 gap-[9px] max-sm:flex max-sm:gap-10 max-sm:ml-9">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[103px] max-sm:w-[120px]">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Total Orders
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-5xl max-sm:text-[24px] font-semibold">
+              <h5 className="my-auto text-center text-5xl font-semibold max-sm:text-[24px]">
                 500
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg">
-              <h1 className="text-[14px] max-sm:text-[12px]  font-semibold px-[13px] pb-[11px] pt-[6px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[103px] max-sm:w-[120px]">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Profit
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl max-sm:text-[22px] font-semibold">
+              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[22px]">
                 Rp. 10,5JT
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] max-sm:h-[103px] max-sm:w-[120px] rounded-[5px] flex flex-col shadow-lg">
-              <h1 className="text-[14px] max-sm:text-[12px] font-semibold px-[13px] pb-[11px] pt-[6px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg 
+                            max-sm:h-[103px] max-sm:w-[120px]">
+              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Pengeluaran
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl max-sm:text-[22px] font-semibold">
+              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[22px]">
                 Rp. 100K
               </h5>
             </div>
           </div>
-          {/* Top Menu & Monthly Orders... (Statistics) */}
-          <div className=" w-full lg:hidden mt-[9px] flex ">
-            <div className="grid grid-cols-2 gap-[20px]">
-              {/* Favorite Menu */}
-              <div className="bg-white w-[220px] h-[177px] rounded-[5px] flex items-center shadow-lg">
-                <div className="w-[400px] mx-auto">
-                  <FavoriteMenuChart />
-                </div>
-              </div>
 
-              {/* Monthly Orders */}
-              <div className="bg-white w-[200px] h-[177px] rounded-[5px] flex  items-center shadow-lg">
-                <MonthlyOrdersChart />
-              </div>
+      {/* Favorite Menu & Monthly Orders saat mobile */}
+      <div className="w-full lg:hidden mt-[9px] flex max-sm:justify-center">
+        <div className="grid grid-cols-2 gap-[20px] max-sm:ml-8">
+          {/* Favorite Menu */}
+          <div className="bg-white w-[220px] h-[177px] rounded-[5px] flex items-center shadow-lg">
+            <div className="w-[400px] mx-auto">
+              <FavoriteMenuChart />
             </div>
           </div>
-          {/* Monthly Earnings and Expenses */}
-          <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px]">
-            <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg ">
-              <MonthlyEarningsChart />
-            </div>
-            <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg rounded-bl-[10px]">
-              <MonthlyExpensesChart />
-            </div>
+
+          {/* Monthly Orders */}
+          <div className="bg-white w-[200px] h-[177px] rounded-[5px] flex items-center shadow-lg">
+            <MonthlyOrdersChart />
           </div>
         </div>
-          {/* Top Menu & Monthly Orders... (Statistics) */}
-          <div className="pl-[9px] w-[330px] max-sm:w-[195px] max-sm:h-[177px] max-sm:pt-[9px] max-sm:hidden">
-            <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
-              <div className="w-[400px] mx-auto">
-                <FavoriteMenuChart />
-              </div>
-            </div>
-            <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
-              <MonthlyOrdersChart />
+      </div>
+
+        {/* Monthly Earnings & Expenses */}
+        <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px] max-sm:ml-8">
+          <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
+            <MonthlyEarningsChart />
+          </div>
+          <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg">
+            <MonthlyExpensesChart />
+          </div>
+        </div>
+      </div>
+
+        {/* Chart kanan (desktop only) */}
+        <div className="pl-[9px] w-[330px] max-sm:hidden">
+          <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
+            <div className="w-[400px] mx-auto">
+              <FavoriteMenuChart />
             </div>
           </div>
+          <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
+            <MonthlyOrdersChart />
+          </div>
+        </div>
       </div>
+
       {/* Detail Pemesanan */}
-      <div className="h-full w-full ">
+
         <div className="w-full flex justify-start">
           <h1 className=" text-3xl font-semibold text-right mt-5 px-1.5">
             Detail Pemesanan
@@ -565,7 +572,6 @@ function Dashboard() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 
