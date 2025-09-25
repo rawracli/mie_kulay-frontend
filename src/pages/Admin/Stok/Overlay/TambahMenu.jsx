@@ -73,7 +73,7 @@ function TambahMenu({ onClose, onAdd }) {
 
   return (
     <div
-      className={`fixed top-[33.3%] sm:top-[36%] md:top-1/2 md:-translate-y-[calc(50%-1rem)] translate-x-1/2 right-1/2 md:right-[calc(50%-13rem)] lg:right-[calc(50%-15rem)] flex h-[577px] z-50`}
+      className={`fixed top-[33.3%] sm:top-[36%] md:top-1/2 md:-translate-y-[calc(50%-1rem)] translate-x-1/2 right-1/2 md:right-[calc(50%-13rem)] lg:right-[calc(50%-15rem)] flex md:h-[577px] z-50`}
     >
       <div className="bg-white max-md:border p-[11px] md:pl-[27px] md:pr-[32px] md:pb-[24px] md:pt-[28px] flex flex-col w-[317px] lg:w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
         <div
@@ -89,13 +89,15 @@ function TambahMenu({ onClose, onAdd }) {
           className="mt-[3px] md:mt-[41px] h-full md:space-y-[20px] flex flex-col overflow-y-auto"
         >
           <div>
-            <label htmlFor="foto" className="max-md:text-[12.5px]">Foto</label>
+            <label htmlFor="foto" className="max-md:text-[12.5px]">
+              Foto
+            </label>
             <div className="relative w-full h-[57px] md:h-[131px] md:mt-[7px] bg-[#D9D9D9] rounded-[4px] cursor-pointer overflow-hidden">
               {filePreview ? (
                 <img
                   src={filePreview}
                   alt="preview"
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full"
                 />
               ) : (
                 <svg
@@ -118,13 +120,15 @@ function TambahMenu({ onClose, onAdd }) {
                 name="foto"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full h-full opacity-0 cursor-pointer absolute top-0 left-0"
+                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
               />
             </div>
           </div>
 
-          <div className="max-md:flex items-center justify-end gap-2">
-            <label htmlFor="Menu" className="max-md:text-[12.5px] text-nowrap">Nama Menu <span className="md:hidden">:</span></label>
+          <div className="items-center justify-end gap-2 max-md:flex">
+            <label htmlFor="Menu" className="max-md:text-[12.5px] text-nowrap">
+              Nama Menu <span className="md:hidden">:</span>
+            </label>
             <input
               type="text"
               name="nama_hidangan"
@@ -135,8 +139,13 @@ function TambahMenu({ onClose, onAdd }) {
             />
           </div>
 
-          <div className="max-md:flex items-center justify-end gap-2">
-            <label htmlFor="Harga" className=" max-md:text-[12.5px] text-nowrap">Harga Jual <span className="md:hidden">:</span></label>
+          <div className="items-center justify-end gap-2 max-md:flex">
+            <label
+              htmlFor="Harga"
+              className=" max-md:text-[12.5px] text-nowrap"
+            >
+              Harga Jual <span className="md:hidden">:</span>
+            </label>
             <input
               type="number"
               name="harga"
@@ -148,16 +157,21 @@ function TambahMenu({ onClose, onAdd }) {
             />
           </div>
 
-          <div className="max-md:flex items-center justify-end gap-2">
-            <label className=" max-md:text-[12.5px] text-nowrap">Bahan <span className="md:hidden">:</span></label>
-            <BahanDropdown bahanList={bahanList} addBahan={addBahan} />
-
+          <div>
+            <div className="items-center justify-end gap-2 mt-1 mb-3 max-md:flex">
+              <label className=" max-md:text-[12.5px] text-nowrap max-md:-translate-x-52">
+                Bahan <span className="md:hidden">:</span>
+              </label>
+              <BahanDropdown bahanList={bahanList} addBahan={addBahan} />
+            </div>
+            <div className="overflow-y-auto max-h-32 md:max-h-48">
+              
             {selectedBahan.map((b, idx) => (
               <div
                 key={b.bahan_id || b.id}
-                className="flex items-center justify-between p-2 border border-gray-300 rounded-lg shadow-sm bg-white mt-2"
+                className="flex items-center justify-between p-2 mt-1 bg-white border border-gray-300 rounded-lg shadow-sm"
               >
-                <span className="text-gray-800 font-medium">
+                <span className="font-medium text-gray-800">
                   {b.nama || b.nama_bahan}
                 </span>
                 <div className="flex items-center gap-2">
@@ -171,18 +185,20 @@ function TambahMenu({ onClose, onAdd }) {
                   <button
                     type="button"
                     onClick={() => handleRemoveBahan(idx)}
-                    className="px-3 py-1 text-sm text-white bg-red-500 rounded hover:bg-red-600 active:bg-red-700 transition"
+                    className="px-3 py-1 text-sm text-white transition bg-red-500 rounded cursor-pointer hover:bg-red-600 active:bg-red-700"
                   >
                     Hapus
                   </button>
                 </div>
               </div>
             ))}
+            </div>
+
           </div>
 
           <button
             type="submit"
-            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
+            className="self-end w-[111px] max-md:mt-3 h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
           >
             Simpan
           </button>
