@@ -1,13 +1,10 @@
 const API_URL = import.meta.env.VITE_API_URL;
+import { gctks } from "./utils/get";
 
 const getBahan = async () => {
-  const token = localStorage.getItem("token");
-
   const response = await fetch(`${API_URL}/bahan`, {
-    headers: {
-      "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: { "Accept": "application/json" },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -18,36 +15,34 @@ const getBahan = async () => {
 };
 
 const tambahBahan = async (data) => {
-  const token = localStorage.getItem("token");
-
-  const response = await fetch(`${API_URL}/tambah/bahan`, {
+  const res = await fetch(`${API_URL}/tambah/bahan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
-    body: JSON.stringify(data),
+    credentials: "include",
+    body: JSON.stringify(data)
   });
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err.message || "Gagal menambahkan bahan mentah");
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message);
   }
-
-  return await response.json();
+  return await res.json();
 };
 
 const updateBahan = async (id, payload) => {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/edit/bahan/${id}`, {
+  const response = await fetch(`${API_URL}/edit/bahan/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: JSON.stringify(payload),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -58,13 +53,13 @@ const updateBahan = async (id, payload) => {
 };
 
 const hapusBahan = async (id) => {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/hapus/bahan/${id}`, {
+  const response = await fetch(`${API_URL}/hapus/bahan/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
+    credentials: "include",
   });
 
   if (!response.ok) {

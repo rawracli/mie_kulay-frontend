@@ -5,6 +5,7 @@ const getMenu = async () => {
     headers: {
       "Accept": "application/json",
     },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -14,16 +15,18 @@ const getMenu = async () => {
   return await response.json();
 };
 
-const createMenu = async (formData) => {
-  const token = localStorage.getItem("token");
+import Cookies from "js-cookie";
+import { gctks } from "./utils/get";
 
+const createMenu = async (formData) => {
   const response = await fetch(`${API_URL}/menu`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
-    body: formData, // FormData karena ada file gambar
+    body: formData,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -33,5 +36,6 @@ const createMenu = async (formData) => {
 
   return await response.json();
 };
+
 
 export { getMenu, createMenu };

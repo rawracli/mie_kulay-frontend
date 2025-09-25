@@ -16,11 +16,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const result = await loginUser({ email, password });
-
-      // MenyimpN token ke localStorage
-      localStorage.setItem("token", result.user.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
+      await loginUser({ email, password });
       window.location.href = "/dashboard";
     } catch (err) {
       setError(err.message);

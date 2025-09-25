@@ -1,12 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL;
+import { gctks } from "./utils/get";
 
 const getPengeluaran = async () => {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/pengeluaran`, {
     headers: {
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
+    credentials: "include",
   });
 
   if (!res.ok) throw new Error("Gagal fetch pengeluaran");
@@ -16,14 +17,14 @@ const getPengeluaran = async () => {
 };
 
 const tambahPengeluaran = async (payload) => {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/pengeluaran`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: JSON.stringify(payload),
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -36,15 +37,15 @@ const tambahPengeluaran = async (payload) => {
 };
 
 const updatePengeluaran = async (id, pengeluaran, catatan) => {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/pengeluaran/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
     body: JSON.stringify({ pengeluaran, catatan }),
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -56,14 +57,14 @@ const updatePengeluaran = async (id, pengeluaran, catatan) => {
 };
 
 const hapusPengeluaran = async (id) => {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/pengeluaran/${id}`, {
     method: "DELETE",
     headers: {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
       "Accept": "application/json",
-      "Authorization": `Bearer ${token}`,
+      "X-XSRF-TOKEN": await gctks(),
     },
+    credentials: "include",
   });
 
   return await res.json();
