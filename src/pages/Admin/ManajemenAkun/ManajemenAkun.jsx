@@ -186,8 +186,8 @@ function ManajemenAkun() {
               </div>
             </div>
             {/* data table */}
-            <div className="h-full overflow-x-auto">
-              <div className="overflow-x-auto max-sm:w-[360px] max-sm:min-w-full">
+            <div className="grid h-full">
+              <div className="overflow-x-auto">
                 <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                   <thead className="top-0">
                     <tr className="bg-[#FFB300] h-[49px]">
@@ -236,7 +236,7 @@ function ManajemenAkun() {
                       <tr>
                         <td
                           colSpan="6"
-                          className="text-center py-3 text-gray-500 italic"
+                          className="py-3 italic text-center text-gray-500"
                         >
                           Tidak ada data
                         </td>
