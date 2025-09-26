@@ -49,7 +49,6 @@ export default function HeroSection() {
           height="100%"
           src={item.src}
           title="YouTube video player"
-          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
@@ -99,10 +98,10 @@ export default function HeroSection() {
     <>
       <div className="overflow-x-hidden">
         {/* HERO SECTION */}
-        <div className="relative min-h-[600px] flex">
-          <div className="z-10 flex flex-col justify-center ml-[70px] w-1/2 gap-[10px] -translate-y-5">
-            <h1 className="font-boogaloo text-[70px]">MIE KULAY SUKABUMI</h1>
-            <p className="font-baloo-2 text-[24px] leading-[35px]">
+        <div className="relative min-h-[1080px] xmd:min-h-[600px] flex max-xmd:flex-col">
+          <div className="z-10 max-xmd:mt-[100px] flex flex-col justify-center max-xmd:items-center ml-[70px] w-[80%] xmd:w-1/2 gap-[20px] xmd:gap-[10px] -translate-y-5">
+            <h1 className="font-boogaloo text-[62px] md:text-[70px] max-md:bg-amber-600 text-nowrap">MIE KULAY SUKABUMI</h1>
+            <p className="font-baloo-2 text-[24px] leading-[38.8px] xmd:leading-[35px] max-xmd:text-center text-balance">
               Mie Kulay, ,<span className="font-semibold">rasanya</span> bikin
               susah <span className="font-semibold">move on!</span> Teksturnya
               kenyal, gurihnya pas, dan setiap suapan bikin{" "}
@@ -113,31 +112,33 @@ export default function HeroSection() {
             </p>
             <Link
               to="/menu"
-              className="mt-2 active:shadow-[0px_0px_0px_#DDAB1E] active:translate-y-[6px] transition-all cursor-pointer bg-[#FFB300] w-[181px] h-[50px] rounded-full shadow-[0px_6px_0px_#DDAB1E] text-white font-chewy text-[22px] text-center content-center"
+              className="mt-2 active:shadow-[0px_0px_0px_#DDAB1E] xmd:active:translate-y-[6px] transition-all cursor-pointer bg-[#FFB300] w-[210px] xmd:w-[181px] h-[60px] xmd:h-[50px] rounded-[10.07px] xmd:rounded-full xmd:shadow-[0px_6px_0px_#DDAB1E] text-white font-chewy text-[22px] text-center content-center"
             >
               Lihat Menu
             </Link>
           </div>
+          <div>
           <img
             src={Papan}
             alt="Papan"
-            className="absolute -right-[475px] -top-[60px] -rotate-[38.03deg]"
+            className="absolute max-xmd:w-[379.39px] max-xmd:h-[382.31px] max-xmd:-translate-x-1/2 max-xmd:left-[46%] xmd:-right-[475px] max-xmd:mt-[160px] xmd:-top-[60px] -rotate-[137.9deg] xmd:-rotate-[38.03deg]"
           />
           <img
             src={Pangsit}
             alt="Pangsit"
-            className="absolute right-[27px] top-[31px]"
+            className="absolute max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%-13.7rem)] translate-x-[200px] max-xmd:mt-[127px] max-xmd:z-10 max-xmd:size-[100px] xmd:right-[27px] xmd:top-[31px]"
           />
           <img
             src={Mie}
             alt="Mie"
-            className="absolute right-[23px] top-[90px]"
+            className="absolute max-xmd:w-[470px] xmd:right-[23px] xmd:top-[90px] max-xmd:-translate-x-1/2 max-xmd:left-[47.5%] max-xmd:mt-[130px] "
           />
           <img
             src={Bumbu}
             alt="Bumbu"
-            className="absolute -right-[10px] top-[173.68px] rotate-[22.45deg]"
+            className="max-xmd:scale-x-[-1] absolute max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%+7.6rem)] max-xmd:mt-[63px] xmd:-right-[10px] xmd:top-[173.68px] rotate-[313.61deg] w-[81.96px] xmd:rotate-[22.45deg]"
           />
+          </div>
         </div>
 
         {/* SELAMAT DATANG SECTION */}
