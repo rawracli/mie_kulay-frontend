@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   BarChart,
   Bar,
@@ -11,7 +12,9 @@ import {
 import axios from "axios";
 
 export default function MonthlyExpensesChart() {
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
+
 
   useEffect(() => {
     axios
@@ -54,7 +57,7 @@ export default function MonthlyExpensesChart() {
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
         width="100%"
-        height={180}
+        height={isMobile ? 250 : 180}
         className="pr-[34px] mt-[16px]"
       >
         <BarChart data={data}>

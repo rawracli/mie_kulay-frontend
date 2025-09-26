@@ -8,6 +8,7 @@ import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx"
 import "./Dashboard.css";
 import { getPemesanan } from "../../../controllers/Pemesanan.js";
 
+
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
   const getPages = (totalPages, currentPage) => {
@@ -169,15 +170,15 @@ function Dashboard() {
   );
 
   return (
-    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)]  flex flex-col items-center sm:pl-[11px] sm:pr-[20px] ">
+    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)]  flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
       
       {/* Analytics Data */}
       <div className="flex rounded-[10px] h-full w-full mt-8 justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
         {/* Information Priority */}
         <div className="flex flex-col w-full max-sm:justify-center">
           {/* Cards Summary */}
-          <div className="grid grid-cols-3 gap-[9px] max-sm:flex max-sm:gap-10 max-sm:ml-9">
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[103px] max-sm:w-[120px]">
+          <div className="grid grid-cols-3 gap-[9px] max-sm:flex max-sm:gap-[6px] max-sm:ml-[12px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
               <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Total Orders
               </h1>
@@ -186,57 +187,56 @@ function Dashboard() {
                 500
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[103px] max-sm:w-[120px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
               <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Profit
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[22px]">
+              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
                 Rp. 10,5JT
               </h5>
             </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg 
-                            max-sm:h-[103px] max-sm:w-[120px]">
+            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
               <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Pengeluaran
               </h1>
               <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[22px]">
+              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
                 Rp. 100K
               </h5>
             </div>
           </div>
 
       {/* Favorite Menu & Monthly Orders saat mobile */}
-      <div className="w-full lg:hidden mt-[9px] flex max-sm:justify-center">
-        <div className="grid grid-cols-2 gap-[20px] max-sm:ml-8">
+      <div className="w-full lg:hidden mt-[9px] ">
+        <div className="grid grid-cols-2 gap-[26px] max-sm:ml-[12px]">
           {/* Favorite Menu */}
-          <div className="bg-white w-[220px] h-[177px] rounded-[5px] flex items-center shadow-lg">
+          <div className="bg-white w-[250px] md:w-[380px] h-[229px] rounded-[5px] flex items-center shadow-lg">
             <div className="w-[400px] mx-auto">
               <FavoriteMenuChart />
             </div>
           </div>
 
           {/* Monthly Orders */}
-          <div className="bg-white w-[200px] h-[177px] rounded-[5px] flex items-center shadow-lg">
+          <div className="bg-white w-[220px] md:w-[310px] h-[229px] rounded-[5px] flex items-center shadow-lg md:ml-[25px]">
             <MonthlyOrdersChart />
           </div>
         </div>
       </div>
 
         {/* Monthly Earnings & Expenses */}
-        <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px] max-sm:ml-8">
-          <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg">
+        <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px] max-sm:ml-[12px]">
+          <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg max-sm:w-[475px] max-sm:h-[329px]">
             <MonthlyEarningsChart />
           </div>
-          <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg">
+          <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg max-sm:w-[475px] max-sm:h-[329px]">
             <MonthlyExpensesChart />
           </div>
         </div>
       </div>
 
         {/* Chart kanan (desktop only) */}
-        <div className="pl-[9px] w-[330px] max-sm:hidden">
+        <div className="pl-[9px] w-[330px]  max-lg:hidden">
           <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
             <div className="w-[400px] mx-auto">
               <FavoriteMenuChart />

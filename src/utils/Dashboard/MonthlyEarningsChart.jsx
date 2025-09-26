@@ -9,8 +9,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
 
 export default function MonthlyEarningsChart() {
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -47,45 +49,42 @@ export default function MonthlyEarningsChart() {
   }, []);
 
   return (
-    <div className="w-full h-full">
-      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-        Pendapatan bulanan
-      </h2>
-      <hr className="text-[#959595] mx-[8px]" />
-      <ResponsiveContainer
-        width="100%"
-        height={170}
-        className={"pr-[34px] mt-[16px]"}
-      >
-        <BarChart data={data}>
-          <CartesianGrid
-            stroke="#959595"
-            strokeDasharray={8}
-            vertical={false}
-          />
-          <XAxis dataKey="month" />
-          <YAxis
-            tickFormatter={(value) =>
-              new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-              }).format(value)
-            }
-            tick={{ fontSize: 10 }}
-          />
-          <Tooltip
-            formatter={(value) =>
-              new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-              }).format(value)
-            }
-          />
-          <Bar dataKey="income" fill="#FFB300" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+<div className="w-full h-full">
+  <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
+    Pendapatan bulanan
+  </h2>
+  <hr className="text-[#959595] mx-[8px]" />
+  <ResponsiveContainer
+    width="100%"
+    height={isMobile ? 250 : 180} 
+    className="pr-[34px] mt-[16px] w-full max-sm:h-[650px] max-sm:!w-[95%]"
+  >
+    <BarChart data={data}>
+      <CartesianGrid stroke="#959595" strokeDasharray={8} vertical={false} />
+      <XAxis dataKey="month" />
+      <YAxis
+        tickFormatter={(value) =>
+          new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0,
+          }).format(value)
+        }
+        tick={{ fontSize: 10 }}
+      />
+      <Tooltip
+        formatter={(value) =>
+          new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0,
+          }).format(value)
+        }
+      />
+      <Bar dataKey="income" fill="#FFB300" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+
   );
 }

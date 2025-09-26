@@ -100,8 +100,8 @@ export default function FavoriteMenuChart() {
     .map((item) => ({ name: item.nama_hidangan, value: item.jumlah }));
 
   return (
-    <div className="rounded-lg w-full max-sm:w-[199px]">
-      <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] pt-[6px] max-sm:pt-[80px]">
+    <div className="rounded-lg w-full max-sm:w-[250px] md:mt-[25px]">
+      <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] pt-[6px] max-sm:pt-[35px]">
         <h2 className="text-[14px] max-sm:text-[9px] font-semibold">Menu Favorite</h2>
         <select
           value={selectedCategory}

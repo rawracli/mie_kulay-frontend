@@ -54,7 +54,7 @@ export default function MonthlyOrdersChart() {
   <hr className="text-[#959595] mx-[8px]" />
 
   {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
-  <div className="h-[319px] max-sm:h-[150px]">
+  <div className="h-[319px] max-sm:h-[190px] md:h-[200px]">
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         data={data}
