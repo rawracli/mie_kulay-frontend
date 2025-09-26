@@ -143,7 +143,7 @@ function ManajemenAkun() {
           <p className="text-[14px] max-sm:text-[12px] font-bold text-white">Tambah Akun</p>
         </button>
       </div>
-      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-[394px] max-sm:h-[696px]">
+      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-full max-sm:h-[696px]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 pb-[1.375rem] space-y-[0.9375rem]">
             {/* search & filter */}
@@ -187,7 +187,7 @@ function ManajemenAkun() {
             </div>
             {/* data table */}
             <div className="h-full overflow-x-auto">
-              <div className="overflow-x-auto max-sm:w-[360px] ">
+              <div className="overflow-x-auto max-sm:w-[360px] max-sm:min-w-full">
                 <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                   <thead className="top-0">
                     <tr className="bg-[#FFB300] h-[49px]">
