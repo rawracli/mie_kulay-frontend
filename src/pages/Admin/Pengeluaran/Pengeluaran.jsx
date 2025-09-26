@@ -44,7 +44,7 @@ function Pengeluaran() {
       created_at: "2025-09-23T11:00:00",
     },
   ]);
-  const [ setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,7 +101,7 @@ function Pengeluaran() {
       }
     };
     fetchData();
-  },);
+  },[]);
 
   useEffect(() => {
     if (highlightedRow !== null) {
