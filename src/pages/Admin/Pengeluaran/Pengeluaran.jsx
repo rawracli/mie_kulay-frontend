@@ -232,7 +232,7 @@ function Pengeluaran() {
     currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pt-[13px] pb-[0.5rem] overflow-y-clip max-sm:w-[390px]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pt-[13px] pb-[0.5rem] overflow-y-clip max-sm:w-full">
       <button
         onClick={() => setIsAddOpen(true)}
         className="ml-[840px] max-sm:ml-[200px] pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[40px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer w-[201px] max-sm:w-[180px] mb-[13px]"
@@ -253,7 +253,7 @@ function Pengeluaran() {
             Tambah Pengeluaran
           </p>
       </button>
-      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
+      <div className="h-full pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
             {/* filter date */}
@@ -310,7 +310,7 @@ function Pengeluaran() {
             </div>
             {/* data table */}
             <div className="w-full h-full">
-              <div className="overflow-x-auto max-sm:w-[360px] ">
+              <div className="overflow-x-auto w-full max-sm:min-w-full max-sm:w-[360px] ">
               <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
