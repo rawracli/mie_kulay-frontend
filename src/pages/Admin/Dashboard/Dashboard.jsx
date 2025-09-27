@@ -171,12 +171,24 @@ function Dashboard() {
 
   return (
     <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)]  flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
+      <div className="flex items-center justify-end my-[10px] self-end">
+          <label className="mr-2 text-sm font-semibold">Filter logs by:</label>
+          <input
+            type="month"
+            value={bulanInput}
+            onChange={(e) => {
+              setBulanInput(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
+          />
+        </div>
       {/* Analytics Data */}
-      <div className="flex rounded-[10px] h-full w-full mt-8 justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
+      <div className="flex rounded-[10px] h-full w-full  justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
         {/* Information Priority */}
         <div className="flex flex-col w-full max-sm:justify-center">
           {/* Cards Summary */}
-          <div className="grid grid-cols-3 gap-[9px] max-sm:flex max-sm:gap-[6px] max-sm:ml-[12px]">
+          <div className="grid grid-cols-3 gap-[12px] max-sm:flex max-sm:gap-[6px] max-sm:ml-[12px]">
             <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
               <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
                 Total Orders
@@ -208,16 +220,16 @@ function Dashboard() {
 
           {/* Favorite Menu & Monthly Orders saat mobile */}
           <div className="w-full lg:hidden mt-[9px] ">
-            <div className="grid grid-cols-2 gap-[26px] max-sm:ml-[12px]">
+            <div className="grid grid-cols-2 max-sm:gap-[6px] gap-[12px] max-sm:ml-[12px]">
               {/* Favorite Menu */}
-              <div className="bg-white w-[250px] md:w-[380px] h-[229px] rounded-[5px] flex items-center shadow-lg">
+              <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
                 <div className="w-[400px] mx-auto">
                   <FavoriteMenuChart />
                 </div>
               </div>
 
               {/* Monthly Orders */}
-              <div className="bg-white w-[220px] md:w-[310px] h-[229px] rounded-[5px] flex items-center shadow-lg md:ml-[25px]">
+              <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
                 <MonthlyOrdersChart />
               </div>
             </div>
@@ -291,20 +303,6 @@ function Dashboard() {
           <img src={Icon} alt="Filter" className="w-4 h-4" />
           <span>Filter</span>
         </button>
-
-        {/* Filter Bulan */}
-        <div className="flex items-center justify-start mb-[20px]">
-          <label className="mr-2 text-sm font-semibold">Filter by Month:</label>
-          <input
-            type="month"
-            value={bulanInput}
-            onChange={(e) => {
-              setBulanInput(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
-          />
-        </div>
 
         {/* Search & entries per page */}
         <div className="flex items-center justify-between mb-[15px]">

@@ -76,6 +76,35 @@ const renderCustomizedLabel = ({
 
 export default function FavoriteMenuChart() {
   const [data, setData] = useState([]);
+  
+  useEffect(() => {
+  //! Dummy data untuk favorite menu
+  const dummyData = [
+    { nama_hidangan: "Nasi Goreng", kategori_hidangan: "Makanan Utama", jumlah: 45 },
+    { nama_hidangan: "Ayam Bakar", kategori_hidangan: "Makanan Utama", jumlah: 38 },
+    { nama_hidangan: "Gado-gado", kategori_hidangan: "Makanan Utama", jumlah: 32 },
+    { nama_hidangan: "Sate Ayam", kategori_hidangan: "Makanan Utama", jumlah: 28 },
+    
+    { nama_hidangan: "Es Teh Manis", kategori_hidangan: "Minuman", jumlah: 52 },
+    { nama_hidangan: "Jus Jeruk", kategori_hidangan: "Minuman", jumlah: 41 },
+    { nama_hidangan: "Kopi Hitam", kategori_hidangan: "Minuman", jumlah: 35 },
+    { nama_hidangan: "Es Campur", kategori_hidangan: "Minuman", jumlah: 29 },
+    
+    { nama_hidangan: "Pisang Goreng", kategori_hidangan: "Snack", jumlah: 33 },
+    { nama_hidangan: "Kerupuk Udang", kategori_hidangan: "Snack", jumlah: 27 },
+    { nama_hidangan: "Tahu Isi", kategori_hidangan: "Snack", jumlah: 24 },
+    { nama_hidangan: "Bakwan Jagung", kategori_hidangan: "Snack", jumlah: 19 }
+  ];
+  
+  setData(dummyData);
+  // Ambil kategori unik untuk dropdown
+  const uniqueCategories = [
+    ...new Set(dummyData.map((item) => item.kategori_hidangan)),
+  ];
+  setCategories(uniqueCategories);
+  setSelectedCategory(uniqueCategories[0] || "");
+}, []);
+
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 

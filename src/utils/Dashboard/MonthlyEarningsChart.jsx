@@ -14,6 +14,25 @@ import { useMediaQuery } from "react-responsive";
 export default function MonthlyEarningsChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
+  useEffect(() => {
+  // Dummy data pendapatan bulanan (dalam Rupiah)
+  const dummyEarnings = [
+    { month: "Jan", income: 15750000 },
+    { month: "Feb", income: 18200000 },
+    { month: "Mar", income: 22500000 },
+    { month: "Apr", income: 19800000 },
+    { month: "Mei", income: 25300000 },
+    { month: "Jun", income: 28750000 },
+    { month: "Jul", income: 31200000 },
+    { month: "Ags", income: 29600000 },
+    { month: "Sep", income: 26800000 },
+    { month: "Okt", income: 24100000 },
+    { month: "Nov", income: 27500000 },
+    { month: "Des", income: 33400000 }
+  ];
+  
+  setData(dummyEarnings);
+}, []);
 
   useEffect(() => {
     axios

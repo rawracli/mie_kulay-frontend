@@ -12,6 +12,25 @@ import axios from "axios";
 
 export default function MonthlyOrdersChart() {
   const [data, setData] = useState([]);
+  useEffect(() => {
+  // Dummy data jumlah order bulanan
+  const dummyOrders = [
+    { month: "Jan", orders: 245 },
+    { month: "Feb", orders: 287 },
+    { month: "Mar", orders: 356 },
+    { month: "Apr", orders: 312 },
+    { month: "Mei", orders: 398 },
+    { month: "Jun", orders: 445 },
+    { month: "Jul", orders: 478 },
+    { month: "Ags", orders: 456 },
+    { month: "Sep", orders: 423 },
+    { month: "Okt", orders: 389 },
+    { month: "Nov", orders: 434 },
+    { month: "Des", orders: 512 }
+  ];
+  
+  setData(dummyOrders);
+}, []);
 
   useEffect(() => {
     axios
@@ -54,7 +73,7 @@ export default function MonthlyOrdersChart() {
   <hr className="text-[#959595] mx-[8px]" />
 
   {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
-  <div className="h-[319px] max-sm:h-[190px] md:h-[200px]">
+  <div className="h-[200px] lg:h-[319px]">
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         data={data}
