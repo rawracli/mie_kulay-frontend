@@ -3,11 +3,14 @@ import { getAktivitas } from "../../../controllers/Aktivitas";
 import { useMediaQuery } from "react-responsive";
 
 function LogAktivitas() {
+
+  //dummy data (field baru: category)
   const [logsData, setLogsData] = useState([
     {
       id: 1,
       user: "Rafli",
       action: "Membuat",
+      category: "Akun",
       detail: "Menambahkan akun admin baru dengan nama 'Putri'.",
       date: "2025-09-20T10:15:00",
     },
@@ -15,6 +18,7 @@ function LogAktivitas() {
       id: 2,
       user: "Putri",
       action: "Mengubah",
+      category: "Stok",
       detail: "Mengedit data stok barang 'Beras Premium'.",
       date: "2025-09-21T14:30:00",
     },
@@ -22,6 +26,7 @@ function LogAktivitas() {
       id: 3,
       user: "Admin",
       action: "Menghapus",
+      category: "Pemesanan",
       detail: "Menghapus data transaksi pemesanan #INV-20250910.",
       date: "2025-09-22T09:45:00",
     },
@@ -29,6 +34,7 @@ function LogAktivitas() {
       id: 4,
       user: "Rafli",
       action: "Menambah",
+      category: "Pengeluaran",
       detail: "Menambahkan pengeluaran baru kategori 'Listrik'.",
       date: "2025-09-23T08:20:00",
     },
@@ -36,43 +42,52 @@ function LogAktivitas() {
       id: 5,
       user: "Putri",
       action: "Membuat",
-      detail: "Mendaftarkan akun pengguna staf gudang.",
+      category: "Pemesanan",
+      detail: "Mendaftarkan pesanan pengguna staf gudang.",
       date: "2025-09-23T16:40:00",
     },
     {
       id: 6,
       user: "Admin",
       action: "Mengubah",
+      category: "Role",
       detail: "Mengubah role pengguna 'Rafli' menjadi Super Admin.",
       date: "2025-09-24T11:10:00",
     },
   ]);
   const [filterType, setFilterType] = useState("All");
+  const [filterCategory, setFilterCategory] = useState("All");
   const [filterDate, setFilterDate] = useState("");
   const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const [month, setMonth] = useState();
 
-  // ✅ State modal
   const [selectedLog, setSelectedLog] = useState(null);
-  // ✅ State highlight row terakhir
+  // State highlight row terakhir
   const [highlightedRow, setHighlightedRow] = useState(null);
+
+  // data dropdown
+  const dropdownAction = [...new Set(logsData.map(log => log.action))];
+  const dropdownCategory = [...new Set(logsData.map(log => log.category))];
 
   // Filter + Search
   const filteredLogs = useMemo(() => {
     return logsData.filter((log) => {
-      const matchType = filterType === "All" || log.action === filterType;
+      const matchType = filterType === "All" || log.action == filterType;
+      const matchCategory = filterCategory === "All" || log.category == filterCategory;
+      console.log(log.category, filterCategory, matchCategory);
       const matchDate =
         !filterDate || log.date.startsWith(filterDate.split("T")[0]);
       const matchSearch =
         !search ||
         log.user.toLowerCase().includes(search.toLowerCase()) ||
         log.action.toLowerCase().includes(search.toLowerCase()) ||
+        log.category.toLowerCase().includes(search.toLowerCase()) ||
         log.detail.toLowerCase().includes(search.toLowerCase());
-      return matchType && matchDate && matchSearch;
+      return matchCategory && matchType && matchDate && matchSearch;
     });
-  }, [logsData, filterType, filterDate, search]);
+  }, [logsData, filterType, filterDate, search, filterCategory]);
 
   // Pagination
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
@@ -163,7 +178,7 @@ function LogAktivitas() {
     Juli: "Juli",
     Agustus: "Agust",
     September: "Septe",
-    Oktober: "Oktob", 
+    Oktober: "Oktob",
     November: "Novem",
     Desember: "Desem",
   };
@@ -221,24 +236,37 @@ function LogAktivitas() {
             <span className="max-sm:hidden">Entries per page</span>
           </label>
           <div className="flex items-center">
-            <select
-              value={filterType}
-              onChange={(e) => {
-                setFilterType(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="bg-gray-100 border border-gray-300 p-1 sm:pl-[17px] rounded-[5px] w-full sm:w-[164px] h-[35px] max-md:text-[14px]" //w-[164px]
-            >
-              <option value="All">All</option>
-              <option value="Membuat">Membuat</option>
-              <option value="Mengubah">Mengubah</option>
-              <option value="Menghapus">Menghapus</option>
-              <option value="Menambah">Menambah</option>
-            </select>
+            <div className="grid grid-cols-2 gap-1 w-full sm:w-[164px] xl:w-[220px]">
+              <select
+                value={filterType}
+                onChange={(e) => {
+                  setFilterType(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-100 border border-gray-300 p-1 rounded-l-[5px] rounded-r-none h-[35px] max-md:text-[14px] text-center"
+              >
+                <option value="All">All</option>
+                {dropdownAction.map((val, idx)=>(
+                <option key={idx} value={val}>{val}</option>))}
+              </select>
+              <select
+                value={filterCategory}
+                onChange={(e) => {
+                  setFilterCategory(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-100 border border-gray-300 p-1 rounded-r-[5px] rounded-l-none h-[35px] max-md:text-[14px] text-center"
+              >
+                <option value="All">All</option>
+                {dropdownCategory.map((val, idx)=>(
+                <option key={idx} value={val}>{val}</option>))}
+              </select>
+            </div>
 
-            <label className="max-lg:hidden text text-[18px] ml-[21px] font-semibold">
+            <label className="max-lg:hidden text-[18px] ml-[21px] font-semibold">
               Filter Logs by :
             </label>
+
             <input
               type="date"
               value={filterDate}
@@ -246,7 +274,7 @@ function LogAktivitas() {
                 setFilterDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 max-sm:text-[14px] border border-gray-400 pl-1 sm:pl-5 sm:pr-3 rounded-[2px] ml-[15px] w-[131px] sm:w-[220px] h-[35px] " //w-[220px]
+              className="bg-gray-100 max-sm:text-[14px] border border-gray-400 pl-1 sm:pl-5 sm:pr-3 rounded-[2px] ml-[15px] w-[131px] sm:w-[220px] h-[35px]"
             />
           </div>
         </div>
@@ -288,9 +316,7 @@ function LogAktivitas() {
                         : "even:bg-gray-200"
                     }`}
                   >
-                    <td className="text-center truncate">
-                      {log.user}
-                    </td>
+                    <td className="text-center truncate">{log.user}</td>
                     <td className="p-1 text-sm truncate pl-[24px]">
                       {log.action}
                     </td>
