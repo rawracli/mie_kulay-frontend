@@ -7,6 +7,7 @@ import MonthlyExpensesChart from "../../../utils/Dashboard/MonthlyExpensesChart.
 import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx";
 import "./Dashboard.css";
 import { getPemesanan } from "../../../controllers/Pemesanan.js";
+import ProfitChart from "../../../utils/Dashboard/ProfitChart.jsx";
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
@@ -258,6 +259,9 @@ function Dashboard() {
           </div>
         </div>
       </div>
+            <div className="bg-white mt-[9px] w-full h-[280px] lg:h-[373px] rounded-[7.57px] shadow-lg max-sm:h-[329px]">
+              <ProfitChart />
+            </div>
 
       {/* Detail Pemesanan */}
 
