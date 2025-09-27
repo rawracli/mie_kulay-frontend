@@ -338,7 +338,25 @@ function Dashboard() {
             </div>
           </div>
 
-          
+                    {/* Table */}
+          <div className="relative border grid border-[#959595] flex-1">
+            {/* Container untuk scroll */}
+            <div className="relative overflow-x-auto">
+              <div className="w-full min-w-[550px]">
+                {/* Grid lines - perlu disesuaikan dengan lebar tabel */}
+                <div
+                  className={`absolute inset-0 w-full grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
+                    transactionsData.length === 0 && "invisible"
+                  }`}
+                  style={{ minWidth: "550px" }} // Sesuaikan dengan min-width tabel
+                >
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="border-r border-[#959595]"
+                    ></div>
+                  ))}
+                </div>
                 {/* Tabel dengan min-width */}
                 <table className="w-full border-collapse">
                   <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
@@ -408,7 +426,9 @@ function Dashboard() {
                     )}
                   </tbody>
                 </table>
-
+           </div>
+            </div>
+          </div>
 
           {/* Pagination */}
           <div className="flex items-center justify-between mt-5 text-sm">
