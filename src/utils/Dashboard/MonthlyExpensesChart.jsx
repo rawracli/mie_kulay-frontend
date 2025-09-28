@@ -10,10 +10,31 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { formatShort } from "../priceFormat";
 
 export default function MonthlyExpensesChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
+
+  //! Dummy data
+  useEffect(() => {
+  const dummyExpenses = [
+    { month: "Jan", pengeluaran: 8500000 },
+    { month: "Feb", pengeluaran: 9200000 },
+    { month: "Mar", pengeluaran: 11200000 },
+    { month: "Apr", pengeluaran: 10500000 },
+    { month: "Mei", pengeluaran: 12800000 },
+    { month: "Jun", pengeluaran: 14200000 },
+    { month: "Jul", pengeluaran: 15600000 },
+    { month: "Ags", pengeluaran: 14800000 },
+    { month: "Sep", pengeluaran: 13500000 },
+    { month: "Okt", pengeluaran: 12300000 },
+    { month: "Nov", pengeluaran: 13900000 },
+    { month: "Des", pengeluaran: 16700000 }
+  ];
+  
+  setData(dummyExpenses);
+}, []);
 
 
   useEffect(() => {
@@ -57,8 +78,8 @@ export default function MonthlyExpensesChart() {
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
         width="100%"
-        height={isMobile ? 250 : 180}
-        className="pr-[34px] mt-[16px]"
+        height={isMobile ? 282 : 175}
+        className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
       >
         <BarChart data={data}>
           <CartesianGrid
@@ -66,15 +87,9 @@ export default function MonthlyExpensesChart() {
             strokeDasharray={8}
             vertical={false}
           />
-          <XAxis dataKey="month" textAnchor="end" interval={0} />
+          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }} />
           <YAxis
-            tickFormatter={(value) =>
-              new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-              }).format(value)
-            }
+            tickFormatter={(value) => `Rp. ${formatShort(value)}`}
             tick={{ fontSize: 10 }}
           />
           <Tooltip
