@@ -6,18 +6,7 @@ import TambahAkun from "./Overlay/TambahAkun";
 import { getUsers, deleteUser } from "../../../controllers/AuthController.js";
 
 function ManajemenAkun() {
- const [userData, setUserData] = useState([
-    { id: 1, name: "Budi Santoso", email: "budi@example.com" },
-    { id: 2, name: "Siti Aisyah", email: "siti@example.com" },
-    { id: 3, name: "Andi Wijaya", email: "andi@example.com" },
-    { id: 4, name: "Rina Kartika", email: "rina@example.com" },
-    { id: 5, name: "Agus Pratama", email: "agus@example.com" },
-    { id: 6, name: "Fitri Lestari", email: "fitri@example.com" },
-    { id: 7, name: "Dewi Anggraini", email: "dewi@example.com" },
-    { id: 8, name: "Rizki Ramadhan", email: "rizki@example.com" },
-    { id: 9, name: "Bayu Saputra", email: "bayu@example.com" },
-    { id: 10, name: "Lina Marlina", email: "lina@example.com" },
-  ]);
+  const [userData, setUserData] = useState(null);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,12 +15,11 @@ function ManajemenAkun() {
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [skipConfirm, setSkipConfirm] = useState(false);
 
-  
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const users = await getUsers();
+        setUserData(users || []);
         setUserData(users);
       } catch (err) {
         console.error(err);
@@ -42,15 +30,16 @@ function ManajemenAkun() {
   }, []);
 
   const filteredData = useMemo(() => {
+    if (userData === null) return [];
     const keyword = search?.toLowerCase().trim();
-  
+
     return userData.filter((t) => {
       const matchSearch =
         !keyword ||
         t.id.toString().toLowerCase().includes(keyword) ||
         t.name.toLowerCase().includes(keyword) ||
         t.email.toLowerCase().includes(keyword);
-    
+
       return matchSearch;
     });
   }, [search, userData]);
@@ -74,8 +63,6 @@ function ManajemenAkun() {
         alert("Gagal hapus user: " + err.message);
       });
   };
-
-  
 
   //btn delete
   const onDelete = (id) => {
@@ -140,7 +127,9 @@ function ManajemenAkun() {
           className="pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[30px] max-sm:w-[135px] max-sm:mr-[11px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
         >
           <img src={Plus} alt="plus" />
-          <p className="text-[14px] max-sm:text-[12px] font-bold text-white">Tambah Akun</p>
+          <p className="text-[14px] max-sm:text-[12px] font-bold text-white">
+            Tambah Akun
+          </p>
         </button>
       </div>
       <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-[394px] max-sm:h-[696px]">
@@ -206,7 +195,7 @@ function ManajemenAkun() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedData.length > 0 ? (
+                    {userData === null ? null : paginatedData.length > 0 ? (
                       paginatedData.map((t, ind) => (
                         <tr
                           key={ind}
@@ -216,9 +205,15 @@ function ManajemenAkun() {
                               : "even:bg-gray-200"
                           } transition-colors duration-300 text-[14px] [&>td]:h-[34px]`}
                         >
-                          <td className="border-r border-[#959595] pl-[10.5px]">{t.id}</td>
-                          <td className="border-r border-[#959595] pl-[10.5px]">{t.name}</td>
-                          <td className="border-r border-[#959595] pl-[10.5px]">{t.email}</td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">
+                            {t.id}
+                          </td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">
+                            {t.name}
+                          </td>
+                          <td className="border-r border-[#959595] pl-[10.5px]">
+                            {t.email}
+                          </td>
                           <td>
                             <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
                               <button
@@ -328,9 +323,9 @@ function ManajemenAkun() {
           setIsAddOpen(false);
           setDeleteId(null);
         }}
-        className={`${
-          isAddOpen || deleteId ? "" : "hidden"
-        } ${deleteId && "bg-black/50"} fixed inset-0 h-full w-full`}
+        className={`${isAddOpen || deleteId ? "" : "hidden"} ${
+          deleteId && "bg-black/50"
+        } fixed inset-0 h-full w-full`}
       ></div>
       <TambahAkun
         data={userData}
