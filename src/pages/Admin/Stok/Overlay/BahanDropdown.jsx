@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function BahanDropdown({ bahanList, addBahan }) {
+function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
@@ -9,7 +9,7 @@ function BahanDropdown({ bahanList, addBahan }) {
   const [newOpsi, setNewOpsi] = useState("");
   const dropdownRef = useRef(null);
 
-  // Dummy data untuk kategori
+  //! Dummy data (hapus)
   const kategoriList = [
     { id: 1, nama: "Sayuran" },
     { id: 2, nama: "Daging" },
@@ -17,13 +17,13 @@ function BahanDropdown({ bahanList, addBahan }) {
     { id: 4, nama: "Lainnya" }
   ];
 
-  // Dummy data untuk opsi
+  //! Dummy data (hapus)
   const opsiList = [
     { id: 1, nama: "bahan jadi" },
     { id: 2, nama: "bahan mentah" }
   ];
 
-  // Dummy data untuk bahan list (tambahkan kategori dan opsi)
+  //! Dummy data (hapus)
   const dummyBahanList = [
     { id: 1, nama_bahan: "Wortel", harga: 10000, kategori: "Sayuran", opsi: "bahan mentah" },
     { id: 2, nama_bahan: "Ayam Fillet", harga: 25000, kategori: "Daging", opsi: "bahan jadi" },
@@ -34,7 +34,7 @@ function BahanDropdown({ bahanList, addBahan }) {
     { id: 7, nama_bahan: "Kecap Manis", harga: 12000, kategori: "Lainnya", opsi: "bahan jadi" },
   ];
 
-  // Gabungkan dengan bahanList dari props jika ada
+  //! Gabungan bahanList & dummy (hapus)
   const combinedBahanList = bahanList && bahanList.length > 0 ? bahanList : dummyBahanList;
 
   useEffect(() => {
@@ -47,32 +47,30 @@ function BahanDropdown({ bahanList, addBahan }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  //! ubah combinedList jadi bahanList pas udah ada API
   const filtered = combinedBahanList.filter((b) =>
     b.nama_bahan.toLowerCase().includes(search.toLowerCase())
   );
 
+  //! Tambahin category & opsi
   const handleAddCustom = () => {
-    if (!newNama.trim() || !newHarga || !newKategori || !newOpsi) return;
+    if (!newNama.trim() || !newHarga) return;
     addBahan({
       id: Date.now(),
       nama_bahan: newNama,
       harga: Number(newHarga),
-      kategori: newKategori,
-      opsi: newOpsi
     });
     setNewNama("");
     setNewHarga("");
-    setNewKategori("");
-    setNewOpsi("");
     setSearch("");
     setOpen(false);
   };
 
   return (
-    <div className="max-md:absolute md:relative max-md:w-[200px] w-full" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       <div
-        onClick={() => setOpen(!open)}
-        className="w-full max-md:h-[21px] mt-[7px] pl-[13px] flex items-center justify-between text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] cursor-pointer"
+        onClick={() => {setOpen(!open); onDropdownClick && onDropdownClick();}}
+        className="w-full max-md:h-[38px] mt-[7px] pl-[13px] flex items-center justify-between text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] cursor-pointer"
       >
         <span className="text-[12px] font-semibold">Pilih Bahan</span>
         <svg
@@ -93,7 +91,7 @@ function BahanDropdown({ bahanList, addBahan }) {
       </div>
 
       {open && (
-        <div className="absolute left-0 z-50 w-full mt-1 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg top-full max-h-64">
+        <div className="absolute left-0 z-50 w-full mt-1 overflow-y-auto bg-[#F5F5F5] border border-gray-300 rounded-md shadow-lg top-full max-h-64">
           {/* Input tambah bahan baru */}
           <div className="w-full p-2 space-y-2 border-b">
             <div className="flex gap-2">
@@ -105,21 +103,21 @@ function BahanDropdown({ bahanList, addBahan }) {
                   setNewNama(e.target.value);
                   setSearch(e.target.value);
                 }}
-                className="px-2  placeholder:text-xs py-1 max-md:h-[21px] text-xs sm:text-sm border rounded flex-1 w-full focus:outline-none"
+                className="px-2 placeholder:text-xs py-1 max-md:h-[22.5px] text-xs sm:text-sm border rounded flex-1 w-full focus:outline-none"
               />
               <input
                 type="number"
                 placeholder="Harga bahan"
                 value={newHarga}
                 onChange={(e) => setNewHarga(e.target.value)}
-                className="px-2 placeholder:text-xs py-1 max-md:h-[21px] text-xs sm:text-sm border rounded flex-1 w-full focus:outline-none"
+                className="px-2 placeholder:text-xs py-1 max-md:h-[22.5px] text-xs sm:text-sm border rounded flex-1 w-full focus:outline-none"
               />
             </div>
             <div className="flex gap-2">
               <select
                 value={newKategori}
                 onChange={(e) => setNewKategori(e.target.value)}
-                className="px-2 sm:text-sm text-xs max-md:h-[21px] border rounded flex-1 w-full focus:outline-none"
+                className="px-2 sm:text-sm text-xs max-md:h-[22.5px] border rounded flex-1 w-full focus:outline-none"
               >
                 <option value="">Pilih Kategori</option>
                 {kategoriList.map((kategori) => (
@@ -131,7 +129,7 @@ function BahanDropdown({ bahanList, addBahan }) {
               <select
                 value={newOpsi}
                 onChange={(e) => setNewOpsi(e.target.value)}
-                className="px-2 sm:text-sm text-xs max-md:h-[21px] border rounded flex-1 w-full focus:outline-none"
+                className="px-2 sm:text-sm text-xs max-md:h-[22.5px] border rounded flex-1 w-full focus:outline-none"
               >
                 <option value="">Pilih Opsi</option>
                 {opsiList.map((opsi) => (
