@@ -15,25 +15,6 @@ import { formatShort } from "../priceFormat";
 export default function MonthlyOrdersChart() {
   const [data, setData] = useState([]);
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
-  //! Dummy data
-  useEffect(() => {
-    const dummyOrders = [
-      { month: "Jan", orders: 245 },
-      { month: "Feb", orders: 287 },
-      { month: "Mar", orders: 356 },
-      { month: "Apr", orders: 312 },
-      { month: "Mei", orders: 398 },
-      { month: "Jun", orders: 445 },
-      { month: "Jul", orders: 478 },
-      { month: "Ags", orders: 456 },
-      { month: "Sep", orders: 423 },
-      { month: "Okt", orders: 389 },
-      { month: "Nov", orders: 434 },
-      { month: "Des", orders: 512 },
-    ];
-
-    setData(dummyOrders);
-  }, []);
 
   useEffect(() => {
     axios

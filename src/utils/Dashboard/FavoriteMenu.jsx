@@ -80,34 +80,6 @@ export default function FavoriteMenuChart() {
   const [data, setData] = useState([]);
   const isTablet = useMediaQuery({ query: "(max-width: 768px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
-  
-  //! Dummy data
-  useEffect(() => {
-  const dummyData = [
-    { nama_hidangan: "Nasi Goreng", kategori_hidangan: "Makanan Utama", jumlah: 45 },
-    { nama_hidangan: "Ayam Bakar", kategori_hidangan: "Makanan Utama", jumlah: 38 },
-    { nama_hidangan: "Gado-gado", kategori_hidangan: "Makanan Utama", jumlah: 32 },
-    { nama_hidangan: "Sate Ayam", kategori_hidangan: "Makanan Utama", jumlah: 28 },
-    
-    { nama_hidangan: "Es Teh Manis", kategori_hidangan: "Minuman", jumlah: 52 },
-    { nama_hidangan: "Jus Jeruk", kategori_hidangan: "Minuman", jumlah: 41 },
-    { nama_hidangan: "Kopi Hitam", kategori_hidangan: "Minuman", jumlah: 35 },
-    { nama_hidangan: "Es Campur", kategori_hidangan: "Minuman", jumlah: 29 },
-    
-    { nama_hidangan: "Pisang Goreng", kategori_hidangan: "Snack", jumlah: 33 },
-    { nama_hidangan: "Kerupuk Udang", kategori_hidangan: "Snack", jumlah: 27 },
-    { nama_hidangan: "Tahu Isi", kategori_hidangan: "Snack", jumlah: 24 },
-    { nama_hidangan: "Bakwan Jagung", kategori_hidangan: "Snack", jumlah: 19 }
-  ];
-  
-  setData(dummyData);
-  // Ambil kategori unik untuk dropdown
-  const uniqueCategories = [
-    ...new Set(dummyData.map((item) => item.kategori_hidangan)),
-  ];
-  setCategories(uniqueCategories);
-  setSelectedCategory(uniqueCategories[0] || "");
-}, []);
 
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -135,7 +107,9 @@ export default function FavoriteMenuChart() {
   return (
     <div className="rounded-lg w-full md:mt-[25px]">
       <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] md:pt-[8px] lg:pt-[6px] max-sm:pt-[35px]">
-        <h2 className="text-[14px] max-sm:text-[9px] font-semibold">Menu Favorite</h2>
+        <h2 className="text-[14px] max-sm:text-[9px] font-semibold">
+          Menu Favorite
+        </h2>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
@@ -150,7 +124,7 @@ export default function FavoriteMenuChart() {
       </div>
       <hr className="text-gray-400 w-[95%]" />
       <div className="flex justify-center items-center">
-        <PieChart width={300} height={isTablet ? isMobile ? 219 : 185 : 219}>
+        <PieChart width={300} height={isTablet ? (isMobile ? 219 : 185) : 219}>
           <Pie
             data={filteredData}
             cx="50%"

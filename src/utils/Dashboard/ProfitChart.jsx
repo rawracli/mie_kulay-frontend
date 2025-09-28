@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 import { formatShort } from "../priceFormat";
 
@@ -16,37 +17,43 @@ export default function ProfitChart() {
   const isTabletBig = useMediaQuery({ query: "(max-width: 1024px)" });
   const [data, setData] = useState([]);
 
-  //! Dummy data
   useEffect(() => {
-    const dummyEarnings = [
-      { month: "Jan", income: 15750000 },
-      { month: "Feb", income: 18200000 },
-      { month: "Mar", income: 22500000 },
-      { month: "Apr", income: 19800000 },
-      { month: "Mei", income: 25300000 },
-      { month: "Jun", income: 28750000 },
-      { month: "Jul", income: 31200000 },
-      { month: "Ags", income: 29600000 },
-      { month: "Sep", income: 26800000 },
-      { month: "Okt", income: 24100000 },
-      { month: "Nov", income: 27500000 },
-      { month: "Des", income: 33400000 },
-    ];
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/monthly-income`)
+      .then((res) => {
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Jun",
+          "Jul",
+          "Ags",
+          "Sep",
+          "Okt",
+          "Nov",
+          "Des",
+        ];
 
-    setData(dummyEarnings);
+        // Buat template semua bulan dengan income default 0
+        const template = months.map((month) => ({ month, income: 0 }));
+
+        // Merge data API
+        res.data.forEach((item) => {
+          const index = template.findIndex((t) => t.month === item.month);
+          if (index !== -1) template[index].income = item.income;
+        });
+
+        setData(template);
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   return (
     <div className="w-full h-full">
       <div className="pt-[6px] pl-[19px] pb-[9px] font-semibold">
-        <h2 className="text-[14px]">Provit:</h2>
-        <h3 className="text-[24px]">
-          Rp{" "}
-          {data
-            .map((val) => val.income)
-            .reduce((a, b) => a + b, 0)
-            .toLocaleString("id-ID")}
-        </h3>
+        <h2 className="text-[14px]">Keuntungan Bulanan</h2>
       </div>
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
@@ -60,7 +67,7 @@ export default function ProfitChart() {
             strokeDasharray={8}
             vertical={false}
           />
-          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }}/>
+          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }} />
           <YAxis
             tickFormatter={(value) => `Rp. ${formatShort(value)}`}
             tick={{ fontSize: 10 }}

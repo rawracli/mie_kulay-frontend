@@ -16,27 +16,6 @@ export default function MonthlyExpensesChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
 
-  //! Dummy data
-  useEffect(() => {
-  const dummyExpenses = [
-    { month: "Jan", pengeluaran: 8500000 },
-    { month: "Feb", pengeluaran: 9200000 },
-    { month: "Mar", pengeluaran: 11200000 },
-    { month: "Apr", pengeluaran: 10500000 },
-    { month: "Mei", pengeluaran: 12800000 },
-    { month: "Jun", pengeluaran: 14200000 },
-    { month: "Jul", pengeluaran: 15600000 },
-    { month: "Ags", pengeluaran: 14800000 },
-    { month: "Sep", pengeluaran: 13500000 },
-    { month: "Okt", pengeluaran: 12300000 },
-    { month: "Nov", pengeluaran: 13900000 },
-    { month: "Des", pengeluaran: 16700000 }
-  ];
-  
-  setData(dummyExpenses);
-}, []);
-
-
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/monthly-expenses`)
