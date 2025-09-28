@@ -9,6 +9,7 @@ import "./Dashboard.css";
 import { getPemesanan } from "../../../controllers/Pemesanan.js";
 import ProfitChart from "../../../utils/Dashboard/ProfitChart.jsx";
 import { formatShort } from "../../../utils/priceFormat";
+import axios from "axios";
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
@@ -45,73 +46,6 @@ function Dashboard() {
 
   const [transactionsData, setTransactionsData] = useState([]);
 
-  //! hapus dummy data
-  useEffect(() => {
-    // Dummy data transaksi
-    const dummyData = [
-      {
-        id: "TRX-001",
-        tanggal: new Date("2025-09-01"),
-        total: 75000,
-        metode: "Cash",
-        items: [
-          { name: "Nasi Goreng Spesial", qty: 1, price: 25000 },
-          { name: "Es Teh Manis", qty: 2, price: 10000 },
-          { name: "Ayam Bakar", qty: 1, price: 30000 },
-        ],
-      },
-      {
-        id: "TRX-002",
-        tanggal: new Date("2025-09-02"),
-        total: 50000,
-        metode: "QRIS",
-        items: [
-          { name: "Mie Ayam Bakso", qty: 2, price: 20000 },
-          { name: "Teh Botol", qty: 1, price: 10000 },
-        ],
-      },
-      {
-        id: "TRX-003",
-        tanggal: new Date("2025-09-05"),
-        total: 120000,
-        metode: "Debit",
-        items: [
-          { name: "Sate Ayam", qty: 2, price: 50000 },
-          { name: "Air Mineral", qty: 2, price: 10000 },
-        ],
-      },
-      {
-        id: "TRX-004",
-        tanggal: new Date("2025-09-08"),
-        total: 95000,
-        metode: "Cash",
-        items: [
-          { name: "Ayam Geprek", qty: 2, price: 40000 },
-          { name: "Es Jeruk", qty: 1, price: 15000 },
-        ],
-      },
-      {
-        id: "TRX-005",
-        tanggal: new Date("2025-09-12"),
-        total: 135000,
-        metode: "QRIS",
-        items: [
-          { name: "Ikan Bakar", qty: 1, price: 70000 },
-          { name: "Sop Buntut", qty: 1, price: 65000 },
-        ],
-      },
-    ];
-
-    setTransactionsData(dummyData);
-  }, []);
-
-  //!dummy data
-  const cardSummary = [
-    { title: "Total Orders", value: 413243 },
-    { title: "Profit", value: 1235124 },
-    { title: "Pengeluaran", value: 942735 },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPemesanan();
@@ -120,6 +54,7 @@ function Dashboard() {
         tanggal: new Date(p.created_at),
         total: p.total_pesanan || 0,
         metode: p.pembayaran,
+        periode_tahunan: p.periode_tahunan, // <--- penting
         items:
           p.pesanan_detail?.map((d) => ({
             name: d.nama_hidangan || "-",
@@ -127,6 +62,7 @@ function Dashboard() {
             price: d.harga_satuan || 0,
           })) || [],
       }));
+
       console.log(data);
       setTransactionsData(formattedData);
     };
@@ -143,6 +79,60 @@ function Dashboard() {
   const [tanggalAkhir, setTanggalAkhir] = useState("");
   const [search, setSearch] = useState("");
   const [tahunInput, setTahunInput] = useState(""); // filter by tahun (untuk API nanti)
+  const [tahunList, setTahunList] = useState([]);
+
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/analisis-tahun-list`
+        );
+        // misal API mengembalikan: { years: [2022, 2023, 2024, 2025] }
+        setTahunList(data.years);
+      } catch (err) {
+        console.error("Gagal fetch tahun:", err);
+      }
+    };
+    fetchYears();
+  }, []);
+
+  const [cardSummary, setCardSummary] = useState([
+    { title: "Total Orders", value: 0 },
+    { title: "Profit", value: 0 },
+    { title: "Pengeluaran", value: 0 },
+  ]);
+
+  useEffect(() => {
+    const fetchAnalisis = async () => {
+      try {
+        const tahun = Number(tahunInput) || new Date().getFullYear();
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/analisis?tahun=${tahun}`
+        );
+        console.log("API data:", data); // <-- cek response API
+
+        if (data.keuangan && data.keuangan.length > 0) {
+          const latest = data.keuangan[0];
+          console.log("Latest record:", latest); // <-- cek field yang dipakai
+          setCardSummary([
+            { title: "Total Orders", value: latest.order_average },
+            { title: "Profit", value: latest.hasil_keuntungan },
+            { title: "Pengeluaran", value: latest.total_pengeluaran },
+          ]);
+        } else {
+          setCardSummary([
+            { title: "Total Orders", value: 0 },
+            { title: "Profit", value: 0 },
+            { title: "Pengeluaran", value: 0 },
+          ]);
+        }
+      } catch (err) {
+        console.error("Gagal fetch analisis:", err);
+      }
+    };
+
+    fetchAnalisis();
+  }, [tahunInput]);
 
   // Pagination
   const [entriesPerPage, setEntriesPerPage] = useState(4);
@@ -159,11 +149,14 @@ function Dashboard() {
 
     const isSearchMatch =
       !search ||
-      item.id.toLowerCase().includes(search.toLowerCase()) ||
+      item.id.toString().toLowerCase().includes(search.toLowerCase()) ||
       item.metode.toLowerCase().includes(search.toLowerCase()) ||
       item.total.toString().includes(search);
 
-    return isDateInRange && isSearchMatch;
+    const isTahunMatch =
+      !tahunInput || item.periode_tahunan === Number(tahunInput); // <--- pakai periode_tahunan
+
+    return isDateInRange && isSearchMatch && isTahunMatch;
   });
 
   // Pagination
@@ -210,17 +203,11 @@ function Dashboard() {
               }}
               className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] pl-8 pr-2 py-1 w-[100px] md:w-[170px] h-[31px]"
             >
-              {Array.from(
-                { length: new Date().getFullYear() - 2000 + 1 },
-                (_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                }
-              )}
+              {tahunList.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -233,7 +220,7 @@ function Dashboard() {
             <div className="grid grid-cols-3 gap-[12px] max-sm:flex max-sm:gap-[6px] w-full">
               <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
                 <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                  Total Orders
+                  Jumlah Pesanan Berdasarkan Tahun
                 </h1>
                 <hr className="text-gray-400 mx-auto w-[95%]" />
                 <h5 className="my-auto text-center text-5xl font-semibold max-sm:text-[24px]">
@@ -242,7 +229,7 @@ function Dashboard() {
               </div>
               <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
                 <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                  Profit
+                  Keuntungan Bedasarkan Tahun
                 </h1>
                 <hr className="text-gray-400 mx-auto w-[95%]" />
                 <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
@@ -251,7 +238,7 @@ function Dashboard() {
               </div>
               <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
                 <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                  Pengeluaran
+                  Pengeluaran Berdasarkan Tahun
                 </h1>
                 <hr className="text-gray-400 mx-auto w-[95%]" />
                 <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">

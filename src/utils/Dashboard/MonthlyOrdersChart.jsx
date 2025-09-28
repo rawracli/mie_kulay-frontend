@@ -52,7 +52,7 @@ export default function MonthlyOrdersChart() {
   return (
     <div className="w-full h-full">
       <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-        Order bulanan
+        Jumlah Pemesanan Berdasarkan Bulan
       </h2>
       <hr className="text-[#959595] mx-[8px]" />
 

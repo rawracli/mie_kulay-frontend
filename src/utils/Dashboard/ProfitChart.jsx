@@ -53,7 +53,7 @@ export default function ProfitChart() {
   return (
     <div className="w-full h-full">
       <div className="pt-[6px] pl-[19px] pb-[9px] font-semibold">
-        <h2 className="text-[14px]">Keuntungan Bulanan</h2>
+        <h2 className="text-[14px]">Jumlah Keuntungan Berdasarkan Bulan</h2>
       </div>
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer

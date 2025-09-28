@@ -52,7 +52,7 @@ export default function MonthlyEarningsChart() {
   return (
     <div className="w-full h-full">
       <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-        Pendapatan bulanan
+        Jumlah Pendapatan Berdasarkan Bulan
       </h2>
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
