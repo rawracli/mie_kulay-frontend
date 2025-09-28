@@ -9,14 +9,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useMediaQuery } from "react-responsive";
+import { formatShort } from "../priceFormat";
 
 export default function ProfitChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const isTabletBig = useMediaQuery({ query: "(max-width: 1024px)" });
   const [data, setData] = useState([]);
 
+  //! Dummy data
   useEffect(() => {
-    // Dummy data pendapatan bulanan (dalam Rupiah)
     const dummyEarnings = [
       { month: "Jan", income: 15750000 },
       { month: "Feb", income: 18200000 },
@@ -51,7 +52,7 @@ export default function ProfitChart() {
       <ResponsiveContainer
         width="100%"
         height={isMobile ? 250 : isTabletBig ? 200 : 285}
-        className="pr-[34px] mt-[16px] w-full max-sm:h-[650px] max-sm:!w-[95%]"
+        className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
       >
         <LineChart data={data}>
           <CartesianGrid
@@ -59,15 +60,9 @@ export default function ProfitChart() {
             strokeDasharray={8}
             vertical={false}
           />
-          <XAxis dataKey="month" />
+          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }}/>
           <YAxis
-            tickFormatter={(value) =>
-              new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-              }).format(value)
-            }
+            tickFormatter={(value) => `Rp. ${formatShort(value)}`}
             tick={{ fontSize: 10 }}
           />
           <Tooltip

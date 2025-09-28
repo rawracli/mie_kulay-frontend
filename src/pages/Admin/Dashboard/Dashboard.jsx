@@ -8,6 +8,7 @@ import MonthlyOrdersChart from "../../../utils/Dashboard/MonthlyOrdersChart.jsx"
 import "./Dashboard.css";
 import { getPemesanan } from "../../../controllers/Pemesanan.js";
 import ProfitChart from "../../../utils/Dashboard/ProfitChart.jsx";
+import { formatShort } from "../../../utils/priceFormat";
 
 function Dashboard() {
   // Helper: buat array halaman dengan titik-titik
@@ -43,6 +44,8 @@ function Dashboard() {
   };
 
   const [transactionsData, setTransactionsData] = useState([]);
+
+  //! hapus dummy data
   useEffect(() => {
     // Dummy data transaksi
     const dummyData = [
@@ -102,6 +105,13 @@ function Dashboard() {
     setTransactionsData(dummyData);
   }, []);
 
+  //!dummy data
+  const cardSummary = [
+    { title: "Total Orders", value: 413243 },
+    { title: "Profit", value: 1235124 },
+    { title: "Pengeluaran", value: 942735 },
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPemesanan();
@@ -132,7 +142,7 @@ function Dashboard() {
   const [tanggalAwal, setTanggalAwal] = useState("");
   const [tanggalAkhir, setTanggalAkhir] = useState("");
   const [search, setSearch] = useState("");
-  const [bulanInput, setBulanInput] = useState(""); // <<< filter bulan
+  const [tahunInput, setTahunInput] = useState(""); // filter by tahun (untuk API nanti)
 
   // Pagination
   const [entriesPerPage, setEntriesPerPage] = useState(4);
@@ -147,19 +157,13 @@ function Dashboard() {
       (!tanggalAwal || item.tanggal >= new Date(tanggalAwal)) &&
       (!tanggalAkhir || item.tanggal <= new Date(tanggalAkhir));
 
-    const isMonthMatch =
-      !bulanInput ||
-      `${item.tanggal.getFullYear()}-${String(
-        item.tanggal.getMonth() + 1
-      ).padStart(2, "0")}` === bulanInput;
-
     const isSearchMatch =
       !search ||
       item.id.toLowerCase().includes(search.toLowerCase()) ||
       item.metode.toLowerCase().includes(search.toLowerCase()) ||
       item.total.toString().includes(search);
 
-    return isDateInRange && isMonthMatch && isSearchMatch;
+    return isDateInRange && isSearchMatch;
   });
 
   // Pagination
@@ -171,97 +175,135 @@ function Dashboard() {
   );
 
   return (
-    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)]  flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
-      <div className="flex items-center justify-end my-[10px] self-end">
-          <label className="mr-2 text-sm font-semibold">Filter logs by:</label>
-          <input
-            type="month"
-            value={bulanInput}
-            onChange={(e) => {
-              setBulanInput(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
-          />
-        </div>
-      {/* Analytics Data */}
-      <div className="flex rounded-[10px] h-full w-full  justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
-        {/* Information Priority */}
-        <div className="flex flex-col w-full max-sm:justify-center">
-          {/* Cards Summary */}
-          <div className="grid grid-cols-3 gap-[12px] max-sm:flex max-sm:gap-[6px] max-sm:ml-[12px]">
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                Total Orders
-              </h1>
-              <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-5xl font-semibold max-sm:text-[24px]">
-                500
-              </h5>
+    <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)] flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
+      <div className="w-full max-sm:px-[9px]">
+        {/* Filter logs by tahun */}
+        <div className="flex items-center justify-end my-[10px] self-end">
+          <label className="mr-2 text-sm font-semibold">Filter tahun:</label>
+          <div className="relative">
+            {/* SVG di kiri */}
+            <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.5 5.75C0.5 4.3355 0.5 3.629 0.9395 3.1895C1.379 2.75 2.0855 2.75 3.5 2.75H12.5C13.9145 2.75 14.621 2.75 15.0605 3.1895C15.5 3.629 15.5 4.3355 15.5 5.75C15.5 6.10325 15.5 6.28025 15.3905 6.3905C15.2802 6.5 15.1025 6.5 14.75 6.5H1.25C0.89675 6.5 0.71975 6.5 0.6095 6.3905C0.5 6.28025 0.5 6.1025 0.5 5.75ZM0.5 12.5C0.5 13.9145 0.5 14.621 0.9395 15.0605C1.379 15.5 2.0855 15.5 3.5 15.5H12.5C13.9145 15.5 14.621 15.5 15.0605 15.0605C15.5 14.621 15.5 13.9145 15.5 12.5V8.75C15.5 8.39675 15.5 8.21975 15.3905 8.1095C15.2802 8 15.1025 8 14.75 8H1.25C0.89675 8 0.71975 8 0.6095 8.1095C0.5 8.21975 0.5 8.3975 0.5 8.75V12.5Z"
+                  fill="black"
+                />
+                <path
+                  d="M4.25 1.25V3.5M11.75 1.25V3.5"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                Profit
-              </h1>
-              <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
-                Rp. 10,5JT
-              </h5>
-            </div>
-            <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-[155px]">
-              <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
-                Pengeluaran
-              </h1>
-              <hr className="text-gray-400 mx-auto w-[95%]" />
-              <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
-                Rp. 100K
-              </h5>
-            </div>
-          </div>
 
-          {/* Favorite Menu & Monthly Orders saat mobile */}
-          <div className="w-full lg:hidden mt-[9px] ">
-            <div className="grid grid-cols-2 max-sm:gap-[6px] gap-[12px] max-sm:ml-[12px]">
-              {/* Favorite Menu */}
-              <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
-                <div className="w-[400px] mx-auto">
-                  <FavoriteMenuChart />
+            <select
+              value={tahunInput}
+              onChange={(e) => {
+                setTahunInput(e.target.value);
+              }}
+              className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] pl-8 pr-2 py-1 w-[100px] md:w-[170px] h-[31px]"
+            >
+              {Array.from(
+                { length: new Date().getFullYear() - 2000 + 1 },
+                (_, i) => {
+                  const year = new Date().getFullYear() - i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                }
+              )}
+            </select>
+          </div>
+        </div>
+
+        {/* Analytics Data */}
+        <div className="flex rounded-[10px] h-full w-full  justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
+          {/* Information Priority */}
+          <div className="flex flex-col w-full max-sm:justify-center">
+            {/* Cards Summary */}
+            <div className="grid grid-cols-3 gap-[12px] max-sm:flex max-sm:gap-[6px] w-full">
+              <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
+                <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
+                  Total Orders
+                </h1>
+                <hr className="text-gray-400 mx-auto w-[95%]" />
+                <h5 className="my-auto text-center text-5xl font-semibold max-sm:text-[24px]">
+                  {formatShort(cardSummary[0].value)}
+                </h5>
+              </div>
+              <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
+                <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
+                  Profit
+                </h1>
+                <hr className="text-gray-400 mx-auto w-[95%]" />
+                <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
+                  {`Rp. ${formatShort(cardSummary[1].value)}`}
+                </h5>
+              </div>
+              <div className="bg-white col-span-1 h-[145px] rounded-[5px] flex flex-col shadow-lg max-sm:h-[138px] max-sm:w-full">
+                <h1 className="text-[14px] font-semibold px-[13px] pb-[11px] pt-[6px] max-sm:text-[12px]">
+                  Pengeluaran
+                </h1>
+                <hr className="text-gray-400 mx-auto w-[95%]" />
+                <h5 className="my-auto text-center text-4xl font-semibold max-sm:text-[24px]">
+                  {`Rp. ${formatShort(cardSummary[2].value)}`}
+                </h5>
+              </div>
+            </div>
+
+            {/* Favorite Menu & Monthly Orders saat mobile */}
+            <div className="w-full lg:hidden mt-[9px] ">
+              <div className="grid grid-cols-2 max-sm:gap-[6px] gap-[12px]">
+                {/* Favorite Menu */}
+                <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
+                  <div className="w-full mx-auto">
+                    <FavoriteMenuChart />
+                  </div>
+                </div>
+
+                {/* Monthly Orders */}
+                <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
+                  <MonthlyOrdersChart />
                 </div>
               </div>
+            </div>
 
-              {/* Monthly Orders */}
-              <div className="bg-white w-full h-[229px] rounded-[5px] flex items-center shadow-lg">
-                <MonthlyOrdersChart />
+            {/* Monthly Earnings & Expenses */}
+            <div className="flex flex-col w-full">
+              <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg max-sm:h-[329px]">
+                <MonthlyEarningsChart />
+              </div>
+              <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg max-sm:h-[329px]">
+                <MonthlyExpensesChart />
               </div>
             </div>
           </div>
 
-          {/* Monthly Earnings & Expenses */}
-          <div className="flex flex-col w-full max-sm:w-[440px] max-sm:mb-[31px] max-sm:ml-[12px]">
-            <div className="bg-white mt-[9px] w-full h-[220px] rounded-[5px] shadow-lg max-sm:w-[475px] max-sm:h-[329px]">
-              <MonthlyEarningsChart />
+          {/* Chart kanan (desktop only) */}
+          <div className="pl-[9px] w-[330px]  max-lg:hidden">
+            <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
+              <div className="w-[400px] mx-auto">
+                <FavoriteMenuChart />
+              </div>
             </div>
-            <div className="bg-white mt-[9px] w-full h-[228px] rounded-[5px] shadow-lg max-sm:w-[475px] max-sm:h-[329px]">
-              <MonthlyExpensesChart />
+            <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
+              <MonthlyOrdersChart />
             </div>
           </div>
         </div>
-
-        {/* Chart kanan (desktop only) */}
-        <div className="pl-[9px] w-[330px]  max-lg:hidden">
-          <div className="bg-white w-full h-[258px] rounded-[5px] flex justify-center items-center shadow-lg">
-            <div className="w-[400px] mx-auto">
-              <FavoriteMenuChart />
-            </div>
-          </div>
-          <div className="bg-white w-full h-[343px] mt-[9px] rounded-[5px] shadow-lg">
-            <MonthlyOrdersChart />
-          </div>
+        <div className="bg-white mt-[9px] w-full h-[280px] lg:h-[373px] rounded-[7.57px] shadow-lg max-sm:h-[329px]">
+          <ProfitChart />
         </div>
       </div>
-            <div className="bg-white mt-[9px] w-full h-[280px] lg:h-[373px] rounded-[7.57px] shadow-lg max-sm:h-[329px]">
-              <ProfitChart />
-            </div>
 
       {/* Detail Pemesanan */}
 

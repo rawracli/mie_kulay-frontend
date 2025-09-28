@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { PieChart, Pie, Tooltip, Cell } from "recharts";
+import { formatShort } from "../priceFormat";
 
 const COLORS = ["#FF4C4C", "#4C8CFF", "#FFB84C", "#4CAF50"];
 const RADIAN = Math.PI / 180;
@@ -68,7 +70,7 @@ const renderCustomizedLabel = ({
         dominantBaseline="central"
         fontSize={12}
       >
-        {value}
+        {formatShort(value)}
       </text>
     </g>
   );
@@ -76,9 +78,11 @@ const renderCustomizedLabel = ({
 
 export default function FavoriteMenuChart() {
   const [data, setData] = useState([]);
+  const isTablet = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   
+  //! Dummy data
   useEffect(() => {
-  //! Dummy data untuk favorite menu
   const dummyData = [
     { nama_hidangan: "Nasi Goreng", kategori_hidangan: "Makanan Utama", jumlah: 45 },
     { nama_hidangan: "Ayam Bakar", kategori_hidangan: "Makanan Utama", jumlah: 38 },
@@ -129,13 +133,13 @@ export default function FavoriteMenuChart() {
     .map((item) => ({ name: item.nama_hidangan, value: item.jumlah }));
 
   return (
-    <div className="rounded-lg w-full max-sm:w-[250px] md:mt-[25px]">
-      <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] pt-[6px] max-sm:pt-[35px]">
+    <div className="rounded-lg w-full md:mt-[25px]">
+      <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] md:pt-[8px] lg:pt-[6px] max-sm:pt-[35px]">
         <h2 className="text-[14px] max-sm:text-[9px] font-semibold">Menu Favorite</h2>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border px-2 rounded"
+          className="border px-2 rounded max-sm:px-1 max-sm:text-[9px] text-[14px] lg:text-base max-sm:h-[25px]"
         >
           {categories.map((cat, idx) => (
             <option key={idx} value={cat}>
@@ -144,9 +148,9 @@ export default function FavoriteMenuChart() {
           ))}
         </select>
       </div>
-      <hr className="text-gray-400 w-[95%] mx-auto" />
+      <hr className="text-gray-400 w-[95%]" />
       <div className="flex justify-center items-center">
-        <PieChart width={300} height={219}>
+        <PieChart width={300} height={isTablet ? isMobile ? 219 : 185 : 219}>
           <Pie
             data={filteredData}
             cx="50%"

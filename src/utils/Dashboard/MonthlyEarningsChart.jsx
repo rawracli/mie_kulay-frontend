@@ -10,29 +10,31 @@ import {
 } from "recharts";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
+import { formatShort } from "../priceFormat";
 
 export default function MonthlyEarningsChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
+
+  //! dummy data
   useEffect(() => {
-  // Dummy data pendapatan bulanan (dalam Rupiah)
-  const dummyEarnings = [
-    { month: "Jan", income: 15750000 },
-    { month: "Feb", income: 18200000 },
-    { month: "Mar", income: 22500000 },
-    { month: "Apr", income: 19800000 },
-    { month: "Mei", income: 25300000 },
-    { month: "Jun", income: 28750000 },
-    { month: "Jul", income: 31200000 },
-    { month: "Ags", income: 29600000 },
-    { month: "Sep", income: 26800000 },
-    { month: "Okt", income: 24100000 },
-    { month: "Nov", income: 27500000 },
-    { month: "Des", income: 33400000 }
-  ];
-  
-  setData(dummyEarnings);
-}, []);
+    const dummyEarnings = [
+      { month: "Jan", income: 15750000 },
+      { month: "Feb", income: 18200000 },
+      { month: "Mar", income: 22500000 },
+      { month: "Apr", income: 19800000 },
+      { month: "Mei", income: 25300000 },
+      { month: "Jun", income: 28750000 },
+      { month: "Jul", income: 31200000 },
+      { month: "Ags", income: 29600000 },
+      { month: "Sep", income: 26800000 },
+      { month: "Okt", income: 24100000 },
+      { month: "Nov", income: 27500000 },
+      { month: "Des", income: 33400000 },
+    ];
+
+    setData(dummyEarnings);
+  }, []);
 
   useEffect(() => {
     axios
@@ -68,42 +70,39 @@ export default function MonthlyEarningsChart() {
   }, []);
 
   return (
-<div className="w-full h-full">
-  <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-    Pendapatan bulanan
-  </h2>
-  <hr className="text-[#959595] mx-[8px]" />
-  <ResponsiveContainer
-    width="100%"
-    height={isMobile ? 250 : 180} 
-    className="pr-[34px] mt-[16px] w-full max-sm:h-[650px] max-sm:!w-[95%]"
-  >
-    <BarChart data={data}>
-      <CartesianGrid stroke="#959595" strokeDasharray={8} vertical={false} />
-      <XAxis dataKey="month" />
-      <YAxis
-        tickFormatter={(value) =>
-          new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            maximumFractionDigits: 0,
-          }).format(value)
-        }
-        tick={{ fontSize: 10 }}
-      />
-      <Tooltip
-        formatter={(value) =>
-          new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            maximumFractionDigits: 0,
-          }).format(value)
-        }
-      />
-      <Bar dataKey="income" fill="#FFB300" />
-    </BarChart>
-  </ResponsiveContainer>
-</div>
-
+    <div className="w-full h-full">
+      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
+        Pendapatan bulanan
+      </h2>
+      <hr className="text-[#959595] mx-[8px]" />
+      <ResponsiveContainer
+        width="100%"
+        height={isMobile ? 282 : 175}
+        className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
+      >
+        <BarChart data={data}>
+          <CartesianGrid
+            stroke="#959595"
+            strokeDasharray={8}
+            vertical={false}
+          />
+          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }} />
+          <YAxis
+            tickFormatter={(value) => `Rp. ${formatShort(value)}`}
+            tick={{ fontSize: 10 }}
+          />
+          <Tooltip
+            formatter={(value) =>
+              new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                maximumFractionDigits: 0,
+              }).format(value)
+            }
+          />
+          <Bar dataKey="income" fill="#FFB300" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

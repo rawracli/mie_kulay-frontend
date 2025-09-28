@@ -9,28 +9,31 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
+import { formatShort } from "../priceFormat";
 
 export default function MonthlyOrdersChart() {
   const [data, setData] = useState([]);
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  //! Dummy data
   useEffect(() => {
-  // Dummy data jumlah order bulanan
-  const dummyOrders = [
-    { month: "Jan", orders: 245 },
-    { month: "Feb", orders: 287 },
-    { month: "Mar", orders: 356 },
-    { month: "Apr", orders: 312 },
-    { month: "Mei", orders: 398 },
-    { month: "Jun", orders: 445 },
-    { month: "Jul", orders: 478 },
-    { month: "Ags", orders: 456 },
-    { month: "Sep", orders: 423 },
-    { month: "Okt", orders: 389 },
-    { month: "Nov", orders: 434 },
-    { month: "Des", orders: 512 }
-  ];
-  
-  setData(dummyOrders);
-}, []);
+    const dummyOrders = [
+      { month: "Jan", orders: 245 },
+      { month: "Feb", orders: 287 },
+      { month: "Mar", orders: 356 },
+      { month: "Apr", orders: 312 },
+      { month: "Mei", orders: 398 },
+      { month: "Jun", orders: 445 },
+      { month: "Jul", orders: 478 },
+      { month: "Ags", orders: 456 },
+      { month: "Sep", orders: 423 },
+      { month: "Okt", orders: 389 },
+      { month: "Nov", orders: 434 },
+      { month: "Des", orders: 512 },
+    ];
+
+    setData(dummyOrders);
+  }, []);
 
   useEffect(() => {
     axios
@@ -66,38 +69,41 @@ export default function MonthlyOrdersChart() {
   }, []);
 
   return (
-   <div className="w-full h-full">
-  <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-    Order bulanan
-  </h2>
-  <hr className="text-[#959595] mx-[8px]" />
+    <div className="w-full h-full">
+      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
+        Order bulanan
+      </h2>
+      <hr className="text-[#959595] mx-[8px]" />
 
-  {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
-  <div className="h-[200px] lg:h-[319px]">
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart
-        data={data}
-        layout="vertical"
-        margin={{ top: 10, right: 30, bottom: 10 }}
-      >
-        <CartesianGrid
-          stroke="#959595"
-          strokeDasharray={8}
-          horizontal={false}
-        />
-        <XAxis type="number" />
-        <YAxis
-          type="category"
-          tick={{ fontSize: 10 }}
-          dataKey="month"
-          width={40}
-        />
-        <Tooltip />
-        <Bar dataKey="orders" fill="#FFB300" />
-      </BarChart>
-    </ResponsiveContainer>
-  </div>
-</div>
-
+      {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
+      <div className="h-[206px] lg:h-[315px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 10, right: 30, bottom: 10 }}
+          >
+            <CartesianGrid
+              stroke="#959595"
+              strokeDasharray={8}
+              horizontal={false}
+            />
+            <XAxis
+              type="number"
+              tickFormatter={formatShort}
+              tick={{ fontSize: isMobile ? 12 : 15 }}
+            />
+            <YAxis
+              type="category"
+              tick={{ fontSize: 10 }}
+              dataKey="month"
+              width={40}
+            />
+            <Tooltip />
+            <Bar dataKey="orders" fill="#FFB300" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }
