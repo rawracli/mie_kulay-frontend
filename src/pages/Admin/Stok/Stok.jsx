@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -29,7 +29,53 @@ function Stok() {
   const [stockTable, setStockTable] = useState([]);
 
   // Data Menu (dummy)
-  const [menuData, setMenuData] = useState([]);
+  // Data Menu (dummy)
+const [menuData, setMenuData] = useState([
+  {
+    id: 1,
+    nama: "Nasi Goreng Spesial",
+    kategori_id: 1,
+    kategori: "Makanan",
+    harga: 25000,
+    image: ExampleImage, // sementara pakai gambar import ExampleImage
+    bahan: [
+      { id: 1, nama: "Nasi", harga: 5000 },
+      { id: 2, nama: "Telur", harga: 3000 },
+      { id: 3, nama: "Ayam", harga: 10000 },
+    ],
+  },
+  {
+    id: 2,
+    nama: "Es Teh Manis",
+    kategori_id: 2,
+    kategori: "Minuman",
+    harga: 8000,
+    image: ExampleImage,
+    bahan: [
+      { id: 4, nama: "Teh", harga: 2000 },
+      { id: 5, nama: "Gula", harga: 1000 },
+      { id: 6, nama: "Es Batu", harga: 500 },
+    ],
+  },
+  {
+    id: 3,
+    nama: "Mie Ayam Bakso",
+    kategori_id: 1,
+    kategori: "Makanan",
+    harga: 20000,
+    image: ExampleImage,
+    bahan: [
+      { id: 7, nama: "Mie", harga: 4000 },
+      { id: 8, nama: "Bakso", harga: 6000 },
+      { id: 9, nama: "Ayam", harga: 8000 },
+      { id: 10, nama: "Ayam", harga: 8000 },
+      { id: 11, nama: "Ayam", harga: 8000 },
+      { id: 12, nama: "Ayam", harga: 8000 },
+      { id: 13, nama: "Ayam", harga: 8000 },
+    ],
+  },
+]);
+
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
@@ -73,6 +119,7 @@ function Stok() {
   const [newBahan, setNewBahan] = useState({
     nama: "",
     harga: 0,
+    opsi: "",
   });
 
   const [categories, setCategories] = useState([]);
@@ -938,6 +985,29 @@ function EditMenuBahan({
   handleNewBahanChange,
   handleAddBahan,
 }) {
+  const [bahanList, setBahanList] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  
+  useEffect(() => {
+    getBahan().then(setBahanList);
+  }, []);
+
+  // Fungsi untuk handle pemilihan bahan dari dropdown
+  const handleBahanSelect = (bahan) => {
+    handleNewBahanChange("nama", bahan.nama_bahan);
+    handleNewBahanChange("harga", bahan.harga || bahan.harga_beli || 0);
+    setShowDropdown(false);
+  };
+
+  // Fungsi untuk handle tambah bahan custom dari dropdown
+  const handleCustomBahan = (customBahan) => {
+    // Langsung tambahkan bahan custom ke menu tanpa perlu API call terpisah
+    // karena handleAddBahan akan memanggil API
+    handleNewBahanChange("nama", customBahan.nama_bahan);
+    handleNewBahanChange("harga", customBahan.harga);
+    setShowDropdown(false);
+  };
+
   return (
     <div className="flex flex-col max-md:w-full">
       <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">Bahan</h4>
@@ -954,7 +1024,7 @@ function EditMenuBahan({
                   </h6>
                   {/* BTN HAPUS BAHAN */}
                   <svg
-                    onClick={() => handleBahanDelete(idx)}
+                    onClick={() => handleBahanDelete(bahan.id)}
                     className="cursor-pointer"
                     width="14"
                     height="16"
@@ -975,33 +1045,26 @@ function EditMenuBahan({
         ) : (
           <p className="px-2 text-sm italic text-gray-500">Tidak ada bahan</p>
         )}
-        {/* INI INPUT BARU */}
+        
+        {/* INPUT BARU DENGAN DROPDOWN */}
         <div>
-          <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
-            <input
-              className="bg-[#D9D9D9] w-[130px] md:w-[91px] font-semibold px-2 py-1 rounded text-sm"
-              placeholder="Nama bahan"
-              value={newBahan.nama}
-              onChange={(e) => handleNewBahanChange("nama", e.target.value)}
-            />
-            <div className="flex items-center gap-[41px]">
-              <input
-                className="bg-[#D9D9D9] -translate-x-[30px] w-[91px] px-2 py-1 rounded text-sm"
-                placeholder="Harga"
-                type="number"
-                value={newBahan.harga || ""}
-                onChange={(e) =>
-                  handleNewBahanChange("harga", parseInt(e.target.value) || 0)
-                }
-              />
-            </div>
+          <div className="flex items-center justify-between">
+            {/* Input nama dengan dropdown trigger */}
+              {showDropdown && (
+                <BahanDropdownEdit
+                  bahanList={bahanList}
+                  onBahanSelect={handleBahanSelect}
+                  onCustomBahan={handleCustomBahan}
+                  onClose={() => setShowDropdown(false)}
+                />
+              )}
           </div>
-          <hr className="w-full h-[0.5px] text-[#737373]" />
         </div>
-        {/* MENAMPILKAN INPUT BARU (DIATAS) */}
-        <div className="flex pl-[10px] pr-[20px] items-center justify-end h-[45px]">
+
+        {/* TOMBOL TAMBAH BAHAN */}
+        <div className="flex pl-[10px] pr-[13px] items-center justify-end h-[45px]">
           <div
-            onClick={handleAddBahan}
+            onClick={() => setShowDropdown(!showDropdown)}
             className="bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] size-[22px] rounded-full flex items-center justify-center cursor-pointer"
           >
             <svg
@@ -1019,6 +1082,126 @@ function EditMenuBahan({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function BahanDropdownEdit({ bahanList, onBahanSelect, onCustomBahan, onClose }) {
+  const [open, setOpen] = useState(true); // Selalu terbuka karena dipicu oleh input
+  const [search, setSearch] = useState("");
+  const [newNama, setNewNama] = useState("");
+  const [newHarga, setNewHarga] = useState("");
+  const [newOpsi, setNewOpsi] = useState("");
+  const dropdownRef = useRef(null);
+
+  const opsiList = [
+    { id: 1, nama: "bahan mentah" },
+    { id: 2, nama: "bahan baku" },
+    { id: 3, nama: "bahan lengkap" ,}
+  ];
+
+  // Gabungan dengan dummy data fallback
+  const combinedBahanList = bahanList && bahanList.length > 0 ? bahanList : [
+    { id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+        onClose && onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
+  const filtered = combinedBahanList.filter((b) =>
+    b.nama_bahan.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleAddCustom = () => {
+    if (!newNama.trim() || !newHarga) return;
+    
+    const customBahan = {
+      id: Date.now(),
+      nama_bahan: newNama,
+      harga: Number(newHarga),
+    };
+    
+    onCustomBahan(customBahan);
+    setNewNama("");
+    setNewHarga("");
+    setSearch("");
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      {open && (
+        <div className="absolute left-0 z-50 w-full mt-1 overflow-y-auto bg-[#FEF1C5] border border-gray-300 rounded-md shadow-lg top-full max-h-48">
+          {/* Input tambah bahan baru */}
+          <div className="w-full p-2 space-y-2 border-b bg-[#FEF1C5]">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Nama bahan baru"
+                value={newNama}
+                onChange={(e) => {
+                  setNewNama(e.target.value);
+                  setSearch(e.target.value);
+                }}
+                className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="Harga"
+                value={newHarga}
+                onChange={(e) => setNewHarga(e.target.value)}
+                className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
+              />
+            </div>
+             <select
+                value={newOpsi}
+                onChange={(e) => setNewOpsi(e.target.value)}
+                className="px-2 bg-white cursor-pointer max-md:h-[22.5px] h-[29px] sm:text-sm text-xs border rounded flex-1 w-full focus:outline-none"
+              >
+                <option value="">Pilih Opsi</option>
+                {opsiList.map((opsi) => (
+                  <option key={opsi.id} value={opsi.nama}>
+                    {opsi.nama}
+                  </option>
+                ))}
+              </select>
+            <button
+              type="button"
+              onClick={handleAddCustom}
+              className="w-full bg-[#FFB300] hover:bg-[#F1A900] text-white text-xs py-1 rounded cursor-pointer"
+            >
+              Tambah Bahan Baru
+            </button>
+          </div>
+
+          {/* List bahan */}
+          <div className="overflow-y-auto divide-y divide-gray-200 max-h-32">
+            {filtered.length > 0 ? (
+              filtered.map((b) => (
+                <div
+                  key={b.id}
+                  onClick={() => onBahanSelect(b)}
+                  className="flex justify-between px-3 py-2 text-sm cursor-pointer hover:bg-[#F4DC8C]"
+                >
+                  <span className="font-medium">{b.nama_bahan}</span>
+                  <span>Rp{b.harga?.toLocaleString("id-ID") || "0"}</span>
+                </div>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-sm text-center text-gray-500">
+                Tidak ada bahan ditemukan
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
