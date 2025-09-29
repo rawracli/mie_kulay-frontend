@@ -5,33 +5,24 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
   const [newHarga, setNewHarga] = useState("");
-  const [newKategori, setNewKategori] = useState("");
   const [newOpsi, setNewOpsi] = useState("");
   const dropdownRef = useRef(null);
 
-  //! Dummy data (hapus)
-  const kategoriList = [
-    { id: 1, nama: "Sayuran" },
-    { id: 2, nama: "Daging" },
-    { id: 3, nama: "Bumbu" },
-    { id: 4, nama: "Lainnya" }
-  ];
-
-  //! Dummy data (hapus)
   const opsiList = [
-    { id: 1, nama: "bahan jadi" },
-    { id: 2, nama: "bahan mentah" }
+    { id: 1, nama: "bahan mentah" },
+    { id: 2, nama: "bahan baku" },
+    { id: 3, nama: "bahan lengkap" ,}
   ];
 
   //! Dummy data (hapus)
   const dummyBahanList = [
-    { id: 1, nama_bahan: "Wortel", harga: 10000, kategori: "Sayuran", opsi: "bahan mentah" },
-    { id: 2, nama_bahan: "Ayam Fillet", harga: 25000, kategori: "Daging", opsi: "bahan jadi" },
-    { id: 3, nama_bahan: "Bawang Merah", harga: 15000, kategori: "Bumbu", opsi: "bahan mentah" },
-    { id: 4, nama_bahan: "Kecap Manis", harga: 12000, kategori: "Lainnya", opsi: "bahan jadi" },
-    { id: 5, nama_bahan: "Kecap Manis", harga: 12000, kategori: "Lainnya", opsi: "bahan jadi" },
-    { id: 6, nama_bahan: "Kecap Manis", harga: 12000, kategori: "Lainnya", opsi: "bahan jadi" },
-    { id: 7, nama_bahan: "Kecap Manis", harga: 12000, kategori: "Lainnya", opsi: "bahan jadi" },
+    { id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" },
+    { id: 2, nama_bahan: "Ayam Fillet", harga: 25000, opsi: "bahan baku" },
+    { id: 3, nama_bahan: "Bawang Merah", harga: 15000, opsi: "bahan mentah" },
+    { id: 4, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
+    { id: 5, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
+    { id: 6, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
+    { id: 7, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
   ];
 
   //! Gabungan bahanList & dummy (hapus)
@@ -115,21 +106,9 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
             </div>
             <div className="flex gap-2">
               <select
-                value={newKategori}
-                onChange={(e) => setNewKategori(e.target.value)}
-                className="px-2 sm:text-sm text-xs max-md:h-[22.5px] border rounded flex-1 w-full focus:outline-none"
-              >
-                <option value="">Pilih Kategori</option>
-                {kategoriList.map((kategori) => (
-                  <option key={kategori.id} value={kategori.nama}>
-                    {kategori.nama}
-                  </option>
-                ))}
-              </select>
-              <select
                 value={newOpsi}
                 onChange={(e) => setNewOpsi(e.target.value)}
-                className="px-2 sm:text-sm text-xs max-md:h-[22.5px] border rounded flex-1 w-full focus:outline-none"
+                className="cursor-pointer px-2 sm:text-sm text-xs max-md:h-[22.5px] h-[29px] border rounded flex-1 w-full focus:outline-none"
               >
                 <option value="">Pilih Opsi</option>
                 {opsiList.map((opsi) => (
