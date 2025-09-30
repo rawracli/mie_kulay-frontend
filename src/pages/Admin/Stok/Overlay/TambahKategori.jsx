@@ -83,9 +83,11 @@ function TambahKategori({ setIsAddKategori }) {
     }
   };
 
+  const [activeCategoryId, setActiveCategoryId] = useState(null);
   const handleClickEditBtn = (idx, e) => {
     e.stopPropagation();
     setEditIndex(idx);
+    setActiveCategoryId(kategoriData[idx].id); // simpan kategori aktif
     setFormNamaKategori(kategoriData[idx].kategori);
   };
 
@@ -130,26 +132,28 @@ function TambahKategori({ setIsAddKategori }) {
     }
   };
 
-  const handleAddMenuToCategory = async () => {
-    try {
-      // ambil data menu terbaru dari server
-      const resMenu = await getMenu();
+  const handleAddMenuToCategory = (menuObj) => {
+    if (!activeCategoryId) return;
 
-      setKategoriData((prev) =>
-        prev.map((cat) => {
-          const menus = resMenu.filter((m) => m.kategori_id === cat.id);
+    setKategoriData((prev) =>
+      prev.map((cat) => {
+        if (cat.id === activeCategoryId) {
           return {
             ...cat,
-            menu: menus.map((m) => ({
-              nama: m.nama_hidangan,
-              foto: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${m.gambar}`,
-            })),
+            menu: [
+              ...cat.menu,
+              {
+                nama: menuObj.nama_hidangan,
+                foto: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
+                  menuObj.gambar
+                }`,
+              },
+            ],
           };
-        })
-      );
-    } catch (err) {
-      console.error("Gagal refresh menu:", err);
-    }
+        }
+        return cat;
+      })
+    );
   };
 
   const currentMenu =
