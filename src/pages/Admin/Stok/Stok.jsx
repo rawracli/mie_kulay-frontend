@@ -201,7 +201,7 @@ function Stok() {
       const updated = await updateBahan(id, {
         nama_bahan: current.nama_bahan,
         harga_beli: newHarga, // gunakan nilai baru langsung
-        kategori_id: current.kategori_id,
+        tipe: current.tipe,
       });
 
       console.log("Harga berhasil diupdate:", updated);
@@ -299,7 +299,7 @@ function Stok() {
       nama_bahan: newBahan.nama,
       harga_beli: newBahan.harga,
       menu_id: selectedMenu.id,
-      kategori_id: selectedMenu.kategori_id,
+      tipe: newBahan.opsi,
     };
 
     try {
@@ -404,8 +404,7 @@ function Stok() {
           id: item.id,
           produk: item.nama_bahan,
           harga_beli: item.harga_beli,
-          kategori_id: item.kategori_id,
-          kategori: item.kategori?.jenis_hidangan ?? "-",
+          tipe: item.tipe,
         }));
         setStockTable(mapped);
         localStorage.setItem("bahan", JSON.stringify(mapped)); // update cache
