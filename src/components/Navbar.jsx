@@ -18,7 +18,7 @@ function Navbar() {
     <>
       <nav className="relative w-full font-chewy">
         <div
-          className={`z-40 fixed w-full h-[52px] flex items-center justify-center transition-all font-semibold ${
+          className={`z-40 fixed w-full h-[62px] flex items-center justify-center transition-all font-semibold ${
             isVisible ? "translate-y-0" : "-translate-y-[110%]"
           } ${
             isOpen
@@ -26,13 +26,17 @@ function Navbar() {
               : "bg-white sm:h-20 md:h-[104px] shadow-[0px_2px_18.8px_0px_rgba(255,211,88,0.75)] shadow-[#FFD358]"
           }`}
         >
-          <div className="flex items-center w-full mx-[70px]">
-            <div className="w-full h-full  items-center">
-              <Link className="flex items-center  w-fit sm:ml- md:ml-0" to="/">
-                <img src={Logo} alt="Logo" className="size-[42px] sm:size-[45px] sm-m md:size-[81px]" />
+          <div className="flex items-center w-full ml-[25px] mr-[17px] sm:ml-[30px] sm:mr-[22px] md:ml-[47px] md:mr-[30.7px] lg:ml-[70px] lg:mr-[111px]">
+            <div className="items-center w-full h-full">
+              <Link className="flex items-center w-fit sm:ml- md:ml-0" to="/">
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  className="size-[42px] sm:size-[45px] sm-m md:size-[81px]"
+                />
               </Link>
             </div>
-            <div className="md:hidden flex items-center">
+            <div className="flex items-center md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`focus:outline-none ${
@@ -43,7 +47,7 @@ function Navbar() {
                     : "text-black"
                 } relative`}
               >
-                <div className="w-6 h-6 flex flex-col justify-center items-center cursor-pointer">
+                <div className="flex flex-col items-center justify-center w-6 h-6 cursor-pointer">
                   <span
                     className={`block h-[3px] w-6 bg-current rounded-full transform transition-all duration-200 ease-in-out ${
                       isOpen ? "rotate-45 translate-y-2.5" : ""
@@ -62,13 +66,18 @@ function Navbar() {
                 </div>
               </button>
             </div>
-            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center mr-[41px] justify-end">
+            <div className="hidden md:flex w-full h-full gap-[54px] text-[1.375rem] items-center justify-end">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
                   onClick={() => window.scrollTo(0, 0)}
-                  className={({ isActive }) => `text-[22px] font-chewy ${!isActive && "text-[#FFB300] hover:text-[#FFD358] focus:text-[#FFB300]"}`}
+                  className={({ isActive }) =>
+                    `text-[22px] font-chewy ${
+                      !isActive &&
+                      "text-[#FFB300] hover:text-[#FFD358] focus:text-[#FFB300]"
+                    }`
+                  }
                 >
                   {item.name}
                 </NavLink>
@@ -77,43 +86,48 @@ function Navbar() {
           </div>
         </div>
         {/* Mobile Menu */}
-        {isOpen && (
-          <div className="fixed z-20">
-            <div className="fixed top-[68px] left-0 w-full bg-white shadow-lg z-20 px-6 py-9 animate-slide-down md:hidden">
-              {["", "tentang", "menu", "kontak",].map(
-                (value, index) => (
-                  <NavLink
-                    key={index}
-                    to={`/${value}`}
-                    className="block text-gray-800 hover:text-[#A42619] py-2 pt-4 border-b border-gray-200 transform transition-all duration-200 hover:translate-x-1"
-                    onClick={() => {
-                      setIsOpen(false);
-                      window.scrollTo(0, 0);
-                    }}
-                  >
-                    {["Home", "Tentang", "Menu", "Kontak",][index]}
-                  </NavLink>
-                )
-              )}
-              <div className="pt-4">
-                <a
-                  href="https://wa.me/6281333330073"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center bg-[#FFB300] text-white hover:bg-[#730B00] transition-all py-3 px-5 rounded-lg active:bg-[#600000] transform hover:scale-105 duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Pesan Sekarang
-                </a>
-              </div>
-            </div>
-            <div
-              className="fixed z-10 bg-black/40 h-full w-full"
+        <div
+          className={`fixed z-20 top-[62px] sm:top-[68px] left-0 w-full bg-white shadow-lg px-6 py-9 md:hidden transition-all duration-300 ease-in-out ${
+            isOpen
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-full opacity-0 pointer-events-none"
+          }`}
+        >
+          {["", "tentang", "menu", "kontak"].map((value, index) => (
+            <NavLink
+              key={index}
+              to={`/${value}`}
+              className="block text-gray-800 hover:text-[#FFB300] text-xl py-2 pt-4 border-b border-gray-200 transform transition-all duration-200 hover:translate-x-1"
               onClick={() => {
                 setIsOpen(false);
+                window.scrollTo(0, 0);
               }}
-            ></div>
+            >
+              <p className="pl-2">
+                {["Home", "Tentang", "Menu", "Kontak"][index]}
+              </p>
+            </NavLink>
+          ))}
+          <div className="pt-4">
+            <a
+              href="https://wa.me/6281333330073"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white transition-all py-3 px-5 rounded-lg transform hover:scale-105 duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              Pesan Sekarang
+            </a>
           </div>
+        </div>
+        {/* Overlay Background */}
+        {isOpen && (
+          <div
+            className="fixed top-0 left-0 z-10 w-full h-full bg-black/40 md:hidden"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          ></div>
         )}
       </nav>
     </>
