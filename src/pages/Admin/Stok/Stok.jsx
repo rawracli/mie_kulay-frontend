@@ -188,7 +188,7 @@ function Stok() {
     setViewMode((prev) => (prev === "bahan" ? "menu" : "bahan"));
     setCurrentPage(1);
     setSearch("");
-    setCategory("all");
+    setFilterValue("all"); // reset filter saat ganti view
   };
 
   // Handlers for bahan
@@ -523,9 +523,9 @@ function Stok() {
                 </select>
                 <p className="ml-2 text-sm max-lg:hidden">Entries per page</p>
                 <select
-                  value={category}
+                  value={filterValue}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    setFilterValue(e.target.value);
                     setCurrentPage(1);
                   }}
                   className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-2 md::ml-[28px] h-[32px] cursor-pointer"
@@ -533,7 +533,9 @@ function Stok() {
                   <option value="all">All</option>
                   {stockData.map((item, idx) => (
                     <option key={idx} value={item.nama}>
-                      {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+                      {item.nama
+                        ? item.nama.charAt(0).toUpperCase() + item.nama.slice(1)
+                        : "-"}
                     </option>
                   ))}
                 </select>
