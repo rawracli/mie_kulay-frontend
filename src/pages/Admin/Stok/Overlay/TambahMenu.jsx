@@ -40,44 +40,41 @@ function TambahMenu({ onClose, onAdd }) {
     }
   };
 
-  //! Ubah jumlah jadi harga
-  const addBahan = async (bahan) => {
-    // Cek kalau bahan sudah ada di list
+  // Mengambil data bahan
+  const addBahan = async (bahan, options = { isNew: false }) => {
+    // kalau sudah dipilih sebelumnya maka tidak akan duplikat
     if (selectedBahan.find((b) => b.bahan_id === bahan.id)) return;
 
     try {
-      // Menggunakan field yang sesuai dengan data yang diterima
-      const hargaBeli = Number(bahan.harga || bahan.harga_beli || 0);
-      // const kategoriId = Number(bahan.kategori_id || 1); // default category
+      if (options.isNew) {
+        // kalau bahan baru maka simpan ke DB dulu
+        const addedBahan = await tambahBahan({
+          nama_bahan: (bahan.nama_bahan || bahan.nama).trim(),
+          harga_beli: Number(bahan.harga || bahan.harga_beli || 0),
+          tipe: bahan.tipe,
+        });
 
-      // console.log("💰 Harga beli yang digunakan:", hargaBeli);
-      // console.log("🏷️ Kategori ID yang digunakan:", kategoriId);
-
-      if (hargaBeli <= 0) {
-        throw new Error("Harga beli harus lebih dari 0");
+        setSelectedBahan((prev) => [
+          ...prev,
+          {
+            bahan_id: addedBahan.id,
+            nama: addedBahan.nama_bahan,
+            jumlah: 1,
+          },
+        ]);
+        console.log("Bahan baru ditambahkan:", addedBahan);
+      } else {
+        // kalau bahan lama maka akan langsung masuk state, tanpa API
+        setSelectedBahan((prev) => [
+          ...prev,
+          {
+            bahan_id: bahan.id,
+            nama: bahan.nama_bahan,
+            jumlah: 1,
+          },
+        ]);
+        console.log("Bahan lama dipilih:", bahan);
       }
-
-      // Kirim ke backend dengan field yang benar
-      const addedBahan = await tambahBahan({
-        nama_bahan: (bahan.nama_bahan || bahan.nama).trim(), // handle kedua kemungkinan
-        harga_beli: hargaBeli,
-        tipe: bahan.tipe,
-        // kategori_id: kategoriId,
-        // stok: bahan.stok || 0,
-        // satuan: bahan.satuan || "pcs",
-      });
-
-      // Tambahkan ke state lokal
-      setSelectedBahan((prev) => [
-        ...prev,
-        {
-          bahan_id: addedBahan.id,
-          nama: addedBahan.nama_bahan,
-          jumlah: 1,
-        },
-      ]);
-
-      console.log("Bahan berhasil ditambahkan:", addedBahan);
     } catch (err) {
       console.error("Gagal menambahkan bahan:", err.message);
     }

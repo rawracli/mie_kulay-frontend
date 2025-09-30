@@ -130,29 +130,25 @@ function TambahKategori({ setIsAddKategori }) {
     }
   };
 
-  // ketika menambah menu dari TambahMenu
-  const handleAddMenuToCategory = (menuObj) => {
-    // jika sedang edit, tambahkan ke kategori yang sedang diedit
-    if (editIndex !== null && kategoriData[editIndex]) {
-      setKategoriData((prev) => {
-        const copy = [...prev];
-        const cat = {
-          ...copy[editIndex],
-          menu: [...copy[editIndex].menu, menuObj],
-        };
-        copy[editIndex] = cat;
-        return copy;
-      });
-    } else {
-      // kalau belum ada edit aktif → buat kategori baru (ambil nama dari formNamaKategori kalau ada)
-      const newCatName = formNamaKategori.trim() || "Kategori Baru";
-      setKategoriData((prev) => {
-        const copy = [...prev, { kategori: newCatName, menu: [menuObj] }];
-        return copy;
-      });
-      // set edit ke kategori baru agar user bisa lanjut edit jika perlu
-      setEditIndex((prev) => (prev === null ? kategoriData.length : prev));
-      setFormNamaKategori("");
+  const handleAddMenuToCategory = async () => {
+    try {
+      // ambil data menu terbaru dari server
+      const resMenu = await getMenu();
+
+      setKategoriData((prev) =>
+        prev.map((cat) => {
+          const menus = resMenu.filter((m) => m.kategori_id === cat.id);
+          return {
+            ...cat,
+            menu: menus.map((m) => ({
+              nama: m.nama_hidangan,
+              foto: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${m.gambar}`,
+            })),
+          };
+        })
+      );
+    } catch (err) {
+      console.error("Gagal refresh menu:", err);
     }
   };
 
