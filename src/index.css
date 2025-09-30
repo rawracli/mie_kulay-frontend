@@ -6,6 +6,7 @@
   --font-baloo-2: "Baloo 2", sans-serif;
   --default-font-family: "Open Sans", sans-serif;
   --breakpoint-xmd: 1195px;
+  --breakpoint-xs: 412px;
 }
 
 :root {
