@@ -96,7 +96,6 @@ function Stok() {
 
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [category, setCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [isAddKategori, setIsAddKategori] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -107,6 +106,7 @@ function Stok() {
   const [isEditMenuBahanOpen, setIsEditMenuBahanOpen] = useState(false);
   // UKURAN TABLET
   const isTablet = useMediaQuery({ query: "(max-width: 768px)" });
+  const [tipe, setTipe] = useState("all");
 
   // State Edit Menu
   const [editMenuForm, setEditMenuForm] = useState({
@@ -148,26 +148,20 @@ function Stok() {
   }, [selectedMenu]);
 
   const filteredData = useMemo(() => {
-    const keyword = search.trim().toLowerCase();
-    const selectedCategory = category?.toLowerCase();
-    const dataToFilter = viewMode === "bahan" ? stockTable : menuData;
+    let data = stockTable;
 
-    return dataToFilter.filter((t) => {
-      const matchCategory =
-        !category || category === "all"
-          ? true
-          : t.kategori.toLowerCase().includes(selectedCategory);
+    if (search) {
+      data = data.filter((item) =>
+        item.nama_bahan.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
-      const matchSearch =
-        !keyword ||
-        t.id.toString().toLowerCase().includes(keyword) ||
-        (viewMode === "bahan"
-          ? t.produk.toLowerCase().includes(keyword)
-          : t.nama.toLowerCase().includes(keyword));
+    if (tipe !== "all") {
+      data = data.filter((item) => item.tipe === tipe);
+    }
 
-      return matchCategory && matchSearch;
-    });
-  }, [search, stockTable, menuData, category, viewMode]);
+    return data;
+  }, [stockTable, search, tipe]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -181,7 +175,7 @@ function Stok() {
     setViewMode((prev) => (prev === "bahan" ? "menu" : "bahan"));
     setCurrentPage(1);
     setSearch("");
-    setCategory("all");
+    setTipe("all");
   };
 
   // Handlers for bahan
@@ -516,19 +510,23 @@ function Stok() {
                 </select>
                 <p className="ml-2 text-sm max-lg:hidden">Entries per page</p>
                 <select
-                  value={category}
+                  value={tipe}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    setTipe(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-2 md::ml-[28px] h-[32px] cursor-pointer"
+                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-2 md:ml-[28px] h-[32px] cursor-pointer"
                 >
-                  <option value="all">All</option>
-                  {stockData.map((item, idx) => (
-                    <option key={idx} value={item.nama}>
-                      {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
-                    </option>
-                  ))}
+                  <option value="all">Semua Tipe</option>
+                  {[...new Set(stockTable.map((item) => item.tipe))].map(
+                    (tipe, idx) => (
+                      <option key={idx} value={tipe}>
+                        {tipe
+                          .replace("_", " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
               <div className="text-nowrap ">
@@ -747,35 +745,41 @@ function Stok() {
           </div>
 
           <aside className="max-sm:max-w-[430px] w-full max-sm:m-auto max-sm:self-center pt-[28px] pb-[24px] min-h-[486px] font-semibold h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(0,0,0,0.25)] bg-white">
-            <h2 className="text-center font-bold text-[16px] mb-4 px-2">
-              Total per Kategori ({viewMode === "bahan" ? "Bahan" : "Menu"})
-            </h2>
             <div className="space-y-[27.45px] px-[0.875rem]">
               {loading ? (
                 <div className="py-3 italic text-center text-gray-500 animate-pulse">
                   Memuat data...
                 </div>
               ) : (
-                stockData.map((items, index) => (
-                  <div
-                    key={index}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      setCategory(items.nama);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
-                      <h3 className="m-auto text-center">
-                        {items.nama.slice(0, 1).toUpperCase() +
-                          items.nama.slice(1)}
-                      </h3>
+                // ambil tipe unik dari stockTable
+                [...new Set(stockTable.map((item) => item.tipe))].map(
+                  (tipe, index) => (
+                    <div
+                      key={index}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setTipe(tipe); // set tipe filter
+                        setCurrentPage(1);
+                      }}
+                    >
+                      <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
+                        <h3 className="m-auto text-center">
+                          {tipe
+                            .replace("_", " ")
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                        </h3>
+                      </div>
+                      <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
+                        <h4>
+                          {
+                            stockTable.filter((item) => item.tipe === tipe)
+                              .length
+                          }
+                        </h4>
+                      </div>
                     </div>
-                    <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                      <h4>{items.id}</h4>
-                    </div>
-                  </div>
-                ))
+                  )
+                )
               )}
             </div>
           </aside>
