@@ -30,52 +30,51 @@ function Stok() {
 
   // Data Menu (dummy)
   // Data Menu (dummy)
-const [menuData, setMenuData] = useState([
-  {
-    id: 1,
-    nama: "Nasi Goreng Spesial",
-    kategori_id: 1,
-    kategori: "Makanan",
-    harga: 25000,
-    image: ExampleImage, // sementara pakai gambar import ExampleImage
-    bahan: [
-      { id: 1, nama: "Nasi", harga: 5000 },
-      { id: 2, nama: "Telur", harga: 3000 },
-      { id: 3, nama: "Ayam", harga: 10000 },
-    ],
-  },
-  {
-    id: 2,
-    nama: "Es Teh Manis",
-    kategori_id: 2,
-    kategori: "Minuman",
-    harga: 8000,
-    image: ExampleImage,
-    bahan: [
-      { id: 4, nama: "Teh", harga: 2000 },
-      { id: 5, nama: "Gula", harga: 1000 },
-      { id: 6, nama: "Es Batu", harga: 500 },
-    ],
-  },
-  {
-    id: 3,
-    nama: "Mie Ayam Bakso",
-    kategori_id: 1,
-    kategori: "Makanan",
-    harga: 20000,
-    image: ExampleImage,
-    bahan: [
-      { id: 7, nama: "Mie", harga: 4000 },
-      { id: 8, nama: "Bakso", harga: 6000 },
-      { id: 9, nama: "Ayam", harga: 8000 },
-      { id: 10, nama: "Ayam", harga: 8000 },
-      { id: 11, nama: "Ayam", harga: 8000 },
-      { id: 12, nama: "Ayam", harga: 8000 },
-      { id: 13, nama: "Ayam", harga: 8000 },
-    ],
-  },
-]);
-
+  const [menuData, setMenuData] = useState([
+    {
+      id: 1,
+      nama: "Nasi Goreng Spesial",
+      kategori_id: 1,
+      kategori: "Makanan",
+      harga: 25000,
+      image: ExampleImage, // sementara pakai gambar import ExampleImage
+      bahan: [
+        { id: 1, nama: "Nasi", harga: 5000 },
+        { id: 2, nama: "Telur", harga: 3000 },
+        { id: 3, nama: "Ayam", harga: 10000 },
+      ],
+    },
+    {
+      id: 2,
+      nama: "Es Teh Manis",
+      kategori_id: 2,
+      kategori: "Minuman",
+      harga: 8000,
+      image: ExampleImage,
+      bahan: [
+        { id: 4, nama: "Teh", harga: 2000 },
+        { id: 5, nama: "Gula", harga: 1000 },
+        { id: 6, nama: "Es Batu", harga: 500 },
+      ],
+    },
+    {
+      id: 3,
+      nama: "Mie Ayam Bakso",
+      kategori_id: 1,
+      kategori: "Makanan",
+      harga: 20000,
+      image: ExampleImage,
+      bahan: [
+        { id: 7, nama: "Mie", harga: 4000 },
+        { id: 8, nama: "Bakso", harga: 6000 },
+        { id: 9, nama: "Ayam", harga: 8000 },
+        { id: 10, nama: "Ayam", harga: 8000 },
+        { id: 11, nama: "Ayam", harga: 8000 },
+        { id: 12, nama: "Ayam", harga: 8000 },
+        { id: 13, nama: "Ayam", harga: 8000 },
+      ],
+    },
+  ]);
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
@@ -801,158 +800,159 @@ const [menuData, setMenuData] = useState([
       {/* INI UNTUK EDIT MENU */}
       {selectedMenu && (
         <>
-        <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-          <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[35px] md:pt-[26px] pb-[33px] md:pb-[41px] px-[40px] md:px-[28.5px] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
-            <button
-              onClick={() => setSelectedMenu(null)}
-              className="cursor-pointer absolute right-[33px] top-[26px]"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+          <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+            <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[35px] md:pt-[26px] pb-[33px] md:pb-[41px] px-[40px] md:px-[28.5px] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
+              <button
+                onClick={() => setSelectedMenu(null)}
+                className="cursor-pointer absolute right-[33px] top-[26px]"
               >
-                <path
-                  d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            {/* KIRI */}
-            <div className="flex flex-col w-full h-full">
-              <h4 className="text-[24px] font-semibold pb-[10px]">Menu</h4>
-              {/* UPLOAD IMAGE */}
-              <div className="w-full h-[122px] bg-amber-800">
-                <img
-                  src={ExampleImage}
-                  alt=""
-                  className="object-cover size-full"
-                />
-              </div>
-              <input
-                type="text"
-                name="nama"
-                value={editMenuForm.nama}
-                onChange={(e) => handleMenuFormChange("nama", e.target.value)}
-                className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
-                placeholder="Nama menu..."
-              />
-              <div className="mt-[21px] flex flex-col">
-                <label htmlFor="kategori" className="mb-[7px]">
-                  Kategori
-                </label>
-                <select
-                  name="kategori"
-                  id="kategori"
-                  value={editMenuForm.kategori_id}
-                  onChange={(e) =>
-                    handleMenuFormChange(
-                      "kategori_id",
-                      parseInt(e.target.value) || ""
-                    )
-                  }
-                  className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  {/* KATEGORI DARI DATABASE */}
-                  <option value="">Pilih kategori...</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.jenis_hidangan}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mt-[21px] flex flex-col">
-                <label htmlFor="harga" className="mb-[7px]">
-                  Harga
-                </label>
+                  <path
+                    d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              {/* KIRI */}
+              <div className="flex flex-col w-full h-full">
+                <h4 className="text-[24px] font-semibold pb-[10px]">Menu</h4>
+                {/* UPLOAD IMAGE */}
+                <div className="w-full h-[122px] bg-amber-800">
+                  <img
+                    src={ExampleImage}
+                    alt=""
+                    className="object-cover size-full"
+                  />
+                </div>
                 <input
-                  type="number"
-                  className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
-                  name="harga"
-                  id="harga"
-                  value={editMenuForm.harga}
-                  onChange={(e) =>
-                    handleMenuFormChange("harga", parseInt(e.target.value) || 0)
-                  }
-                  placeholder="Harga menu..."
+                  type="text"
+                  name="nama"
+                  value={editMenuForm.nama}
+                  onChange={(e) => handleMenuFormChange("nama", e.target.value)}
+                  className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                  placeholder="Nama menu..."
                 />
-              </div>
-              <div className="md:hidden mt-[21px] flex flex-col">
-                <label htmlFor="bahan" className="mb-[7px]">
-                  Bahan
-                </label>
+                <div className="mt-[21px] flex flex-col">
+                  <label htmlFor="kategori" className="mb-[7px]">
+                    Kategori
+                  </label>
+                  <select
+                    name="kategori"
+                    id="kategori"
+                    value={editMenuForm.kategori_id}
+                    onChange={(e) =>
+                      handleMenuFormChange(
+                        "kategori_id",
+                        parseInt(e.target.value) || ""
+                      )
+                    }
+                    className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
+                  >
+                    {/* KATEGORI DARI DATABASE */}
+                    <option value="">Pilih kategori...</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.jenis_hidangan}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mt-[21px] flex flex-col">
+                  <label htmlFor="harga" className="mb-[7px]">
+                    Harga
+                  </label>
+                  <input
+                    type="number"
+                    className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                    name="harga"
+                    id="harga"
+                    value={editMenuForm.harga}
+                    onChange={(e) =>
+                      handleMenuFormChange(
+                        "harga",
+                        parseInt(e.target.value) || 0
+                      )
+                    }
+                    placeholder="Harga menu..."
+                  />
+                </div>
+                <div className="md:hidden mt-[21px] flex flex-col">
+                  <label htmlFor="bahan" className="mb-[7px]">
+                    Bahan
+                  </label>
+                  <button
+                    type="number"
+                    className="text-start w-full h-[50px] border-[#7E7E7E] hover:bg-gray-100 cursor-pointer border rounded-[4px] pl-[16px] text-[20px]"
+                    onClick={() => setIsEditMenuBahanOpen(true)}
+                  >
+                    {selectedMenu.bahan[0]?.nama ||
+                      "Menu ini belum memiliki bahan"}
+                    ...
+                  </button>
+                </div>
                 <button
-                  type="number"
-                  className="text-start w-full h-[50px] border-[#7E7E7E] hover:bg-gray-100 cursor-pointer border rounded-[4px] pl-[16px] text-[20px]"
-                  onClick={() => setIsEditMenuBahanOpen(true)}
+                  onClick={handleMenuSave}
+                  className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
                 >
-                  {selectedMenu.bahan[0]?.nama ||
-                    "Menu ini belum memiliki bahan"}
-                  ...
+                  Edit
                 </button>
               </div>
-              <button
-                onClick={handleMenuSave}
-                className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
-              >
-                Edit
-              </button>
-            </div>
 
-            {/* KANAN */}
-            {!isTablet && (
-              <EditMenuBahan
-                editMenuForm={editMenuForm}
-                handleAddBahan={handleAddBahan}
-                handleBahanDelete={handleBahanDelete}
-                handleNewBahanChange={handleNewBahanChange}
-                newBahan={newBahan}
-              />
-            )}
-          </div>
-        </div>
-        {isEditMenuBahanOpen && isTablet && (      
-          <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-            <div className="bg-[#FFF7DE] gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
-              <button
-              onClick={() => setIsEditMenuBahanOpen(false)}
-              className="cursor-pointer absolute right-[17px] top-[18px]"
-            >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {/* KANAN */}
+              {!isTablet && (
+                <EditMenuBahan
+                  editMenuForm={editMenuForm}
+                  handleAddBahan={handleAddBahan}
+                  handleBahanDelete={handleBahanDelete}
+                  handleNewBahanChange={handleNewBahanChange}
+                  newBahan={newBahan}
                 />
-              </svg>
-            </button>
-              <EditMenuBahan
-                editMenuForm={editMenuForm}
-                handleAddBahan={handleAddBahan}
-                handleBahanDelete={handleBahanDelete}
-                handleNewBahanChange={handleNewBahanChange}
-                newBahan={newBahan}
-              />
+              )}
             </div>
           </div>
-        )}
+          {isEditMenuBahanOpen && isTablet && (
+            <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+              <div className="bg-[#FFF7DE] gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
+                <button
+                  onClick={() => setIsEditMenuBahanOpen(false)}
+                  className="cursor-pointer absolute right-[17px] top-[18px]"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <EditMenuBahan
+                  editMenuForm={editMenuForm}
+                  handleAddBahan={handleAddBahan}
+                  handleBahanDelete={handleBahanDelete}
+                  handleNewBahanChange={handleNewBahanChange}
+                  newBahan={newBahan}
+                />
+              </div>
+            </div>
+          )}
         </>
-
-        
       )}
 
       {editId !== null && (
@@ -981,13 +981,13 @@ const [menuData, setMenuData] = useState([
 function EditMenuBahan({
   editMenuForm,
   handleBahanDelete,
-  newBahan,
+  // newBahan,
   handleNewBahanChange,
-  handleAddBahan,
+  // handleAddBahan,
 }) {
   const [bahanList, setBahanList] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  
+
   useEffect(() => {
     getBahan().then(setBahanList);
   }, []);
@@ -1010,7 +1010,9 @@ function EditMenuBahan({
 
   return (
     <div className="flex flex-col max-md:w-full">
-      <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">Bahan</h4>
+      <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">
+        Bahan
+      </h4>
       <div className="w-full md:w-[273px] h-full bg-[#FFF7DE] rounded-[5px] max-md:border-[#737373] max-md:border-t-1 md:shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[10px] pr-[4px] pt-[2px] pb-[2px] overflow-y-auto">
         {/* LOOP DARI DATA BAHAN YANG ADA DI MENU */}
         {editMenuForm.bahan.length > 0 ? (
@@ -1045,19 +1047,19 @@ function EditMenuBahan({
         ) : (
           <p className="px-2 text-sm italic text-gray-500">Tidak ada bahan</p>
         )}
-        
+
         {/* INPUT BARU DENGAN DROPDOWN */}
         <div>
           <div className="flex items-center justify-between">
             {/* Input nama dengan dropdown trigger */}
-              {showDropdown && (
-                <BahanDropdownEdit
-                  bahanList={bahanList}
-                  onBahanSelect={handleBahanSelect}
-                  onCustomBahan={handleCustomBahan}
-                  onClose={() => setShowDropdown(false)}
-                />
-              )}
+            {showDropdown && (
+              <BahanDropdownEdit
+                bahanList={bahanList}
+                onBahanSelect={handleBahanSelect}
+                onCustomBahan={handleCustomBahan}
+                onClose={() => setShowDropdown(false)}
+              />
+            )}
           </div>
         </div>
 
@@ -1086,7 +1088,12 @@ function EditMenuBahan({
   );
 }
 
-function BahanDropdownEdit({ bahanList, onBahanSelect, onCustomBahan, onClose }) {
+function BahanDropdownEdit({
+  bahanList,
+  onBahanSelect,
+  onCustomBahan,
+  onClose,
+}) {
   const [open, setOpen] = useState(true); // Selalu terbuka karena dipicu oleh input
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
@@ -1097,13 +1104,14 @@ function BahanDropdownEdit({ bahanList, onBahanSelect, onCustomBahan, onClose })
   const opsiList = [
     { id: 1, nama: "bahan mentah" },
     { id: 2, nama: "bahan baku" },
-    { id: 3, nama: "bahan lengkap" ,}
+    { id: 3, nama: "bahan lengkap" },
   ];
 
   // Gabungan dengan dummy data fallback
-  const combinedBahanList = bahanList && bahanList.length > 0 ? bahanList : [
-    { id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" },
-  ];
+  const combinedBahanList =
+    bahanList && bahanList.length > 0
+      ? bahanList
+      : [{ id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" }];
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -1122,13 +1130,13 @@ function BahanDropdownEdit({ bahanList, onBahanSelect, onCustomBahan, onClose })
 
   const handleAddCustom = () => {
     if (!newNama.trim() || !newHarga) return;
-    
+
     const customBahan = {
       id: Date.now(),
       nama_bahan: newNama,
       harga: Number(newHarga),
     };
-    
+
     onCustomBahan(customBahan);
     setNewNama("");
     setNewHarga("");
@@ -1160,18 +1168,18 @@ function BahanDropdownEdit({ bahanList, onBahanSelect, onCustomBahan, onClose })
                 className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
               />
             </div>
-             <select
-                value={newOpsi}
-                onChange={(e) => setNewOpsi(e.target.value)}
-                className="px-2 bg-white cursor-pointer max-md:h-[22.5px] h-[29px] sm:text-sm text-xs border rounded flex-1 w-full focus:outline-none"
-              >
-                <option value="">Pilih Opsi</option>
-                {opsiList.map((opsi) => (
-                  <option key={opsi.id} value={opsi.nama}>
-                    {opsi.nama}
-                  </option>
-                ))}
-              </select>
+            <select
+              value={newOpsi}
+              onChange={(e) => setNewOpsi(e.target.value)}
+              className="px-2 bg-white cursor-pointer max-md:h-[22.5px] h-[29px] sm:text-sm text-xs border rounded flex-1 w-full focus:outline-none"
+            >
+              <option value="">Pilih Opsi</option>
+              {opsiList.map((opsi) => (
+                <option key={opsi.id} value={opsi.nama}>
+                  {opsi.nama}
+                </option>
+              ))}
+            </select>
             <button
               type="button"
               onClick={handleAddCustom}

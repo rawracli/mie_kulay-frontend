@@ -9,24 +9,13 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
   const dropdownRef = useRef(null);
 
   const opsiList = [
-    { id: 1, nama: "bahan mentah" },
-    { id: 2, nama: "bahan baku" },
-    { id: 3, nama: "bahan lengkap" ,}
-  ];
-
-  //! Dummy data (hapus)
-  const dummyBahanList = [
-    { id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" },
-    { id: 2, nama_bahan: "Ayam Fillet", harga: 25000, opsi: "bahan baku" },
-    { id: 3, nama_bahan: "Bawang Merah", harga: 15000, opsi: "bahan mentah" },
-    { id: 4, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
-    { id: 5, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
-    { id: 6, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
-    { id: 7, nama_bahan: "Kecap Manis", harga: 12000, opsi: "bahan baku" },
+    { id: 1, nama: "Bahan Mentah" },
+    { id: 2, nama: "Bahan Baku" },
+    { id: 3, nama: "Bahan Lengkap" },
   ];
 
   //! Gabungan bahanList & dummy (hapus)
-  const combinedBahanList = bahanList && bahanList.length > 0 ? bahanList : dummyBahanList;
+  const combinedBahanList = bahanList && bahanList.length > 0 ? bahanList : [];
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -45,11 +34,12 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
 
   //! Tambahin category & opsi
   const handleAddCustom = () => {
-    if (!newNama.trim() || !newHarga) return;
+    if (!newNama.trim() || !newHarga || !newOpsi) return;
     addBahan({
       id: Date.now(),
       nama_bahan: newNama,
       harga: Number(newHarga),
+      tipe: newOpsi.replace(/\s+/g, "_").toLowerCase(),
     });
     setNewNama("");
     setNewHarga("");
@@ -60,7 +50,10 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div
-        onClick={() => {setOpen(!open); onDropdownClick && onDropdownClick();}}
+        onClick={() => {
+          setOpen(!open);
+          onDropdownClick && onDropdownClick();
+        }}
         className="w-full max-md:h-[38px] mt-[7px] pl-[13px] flex items-center justify-between text-[15px] border border-[#7E7E7E] rounded-[4px] h-[50px] cursor-pointer"
       >
         <span className="text-[12px] font-semibold">Pilih Bahan</span>
@@ -70,7 +63,9 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
           viewBox="0 0 16 10"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`mr-4 ${open && "-rotate-180"} transition duration-200 max-md:h-2`}
+          className={`mr-4 ${
+            open && "-rotate-180"
+          } transition duration-200 max-md:h-2`}
         >
           <path
             fillRule="evenodd"
@@ -112,7 +107,10 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
               >
                 <option value="">Pilih Opsi</option>
                 {opsiList.map((opsi) => (
-                  <option key={opsi.id} value={opsi.nama}>
+                  <option
+                    key={opsi.id}
+                    value={opsi.nama.replace(/\s+/g, "_").toLowerCase()}
+                  >
                     {opsi.nama}
                   </option>
                 ))}
@@ -129,7 +127,7 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
 
           {/* List bahan */}
           <div className="overflow-y-auto max-h-30 md:max-h-40 divide-[#7E7E7E] divide-y-[0.5px]">
-            {filtered.length > 0 && (
+            {filtered.length > 0 &&
               filtered.map((b) => (
                 <div
                   key={b.id}
@@ -139,12 +137,12 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
                   }}
                   className="px-3 py-1 flex flex-wrap justify-between text-sm cursor-pointer lg:py-2 hover:bg-gray-100"
                 >
-                   
                   <h5>{b.nama_bahan}</h5>
-                  <h5>{b.harga ? `Rp${b.harga.toLocaleString("id-ID")}` : ""}</h5>
+                  <h5>
+                    {b.harga ? `Rp${b.harga.toLocaleString("id-ID")}` : ""}
+                  </h5>
                 </div>
-              ))
-            )}
+              ))}
           </div>
         </div>
       )}

@@ -48,7 +48,7 @@ function TambahMenu({ onClose, onAdd }) {
     try {
       // Menggunakan field yang sesuai dengan data yang diterima
       const hargaBeli = Number(bahan.harga || bahan.harga_beli || 0);
-      const kategoriId = Number(bahan.kategori_id || 1); // default category
+      // const kategoriId = Number(bahan.kategori_id || 1); // default category
 
       // console.log("💰 Harga beli yang digunakan:", hargaBeli);
       // console.log("🏷️ Kategori ID yang digunakan:", kategoriId);
@@ -61,9 +61,10 @@ function TambahMenu({ onClose, onAdd }) {
       const addedBahan = await tambahBahan({
         nama_bahan: (bahan.nama_bahan || bahan.nama).trim(), // handle kedua kemungkinan
         harga_beli: hargaBeli,
-        kategori_id: kategoriId,
-        stok: bahan.stok || 0,
-        satuan: bahan.satuan || "pcs",
+        tipe: bahan.tipe,
+        // kategori_id: kategoriId,
+        // stok: bahan.stok || 0,
+        // satuan: bahan.satuan || "pcs",
       });
 
       // Tambahkan ke state lokal
@@ -182,7 +183,9 @@ function TambahMenu({ onClose, onAdd }) {
           </div>
 
           <div className="max-md:mt-[8px]">
-            <label htmlFor="Harga" className="max-md:text-[12.5px] text-nowrap">Harga Jual</label>
+            <label htmlFor="Harga" className="max-md:text-[12.5px] text-nowrap">
+              Harga Jual
+            </label>
             <input
               type="number"
               name="harga"
@@ -197,7 +200,11 @@ function TambahMenu({ onClose, onAdd }) {
           <div className="max-md:mt-[8px]">
             <div className="mb-3">
               <label className="max-md:text-[12.5px] text-nowrap">Bahan</label>
-              <BahanDropdown bahanList={bahanList} addBahan={addBahan} onDropdownClick={scrollToBottom}/>
+              <BahanDropdown
+                bahanList={bahanList}
+                addBahan={addBahan}
+                onDropdownClick={scrollToBottom}
+              />
             </div>
             <div className="overflow-y-auto max-h-48">
               {selectedBahan.map((b, idx) => (
