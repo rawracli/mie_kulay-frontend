@@ -22,13 +22,13 @@ function Menu() {
       <div className="flex">
         {image.map((image, index) => (
           <div
-            className="flex-[0_0_28%] sm:flex-[0_0_19%] md:flex-[0_0_29%] lg:flex-[0_0_22%] xl:flex-[0_0_15.5%] font-inter mr-[14px] md:mr-[32px] rounded-3xl bg-white"
+            className="flex-[0_0_28%] sm:flex-[0_0_30%] md:flex-[0_0_26%] lg:flex-[0_0_22%] xl:flex-[0_0_19%] font-inter mr-[14px] sm:mr-[29.14px] xmd:mr-[34px] rounded-3xl bg-white"
             key={index}
           >
             <img
               src={image}
               alt=""
-              className="rounded-[10px] size-[120px] md:size-[270px] object-cover"
+              className="rounded-[10px] size-[120px] sm:size-[242px] xmd:size-[270px] object-cover"
             />
             <div></div>
           </div>
