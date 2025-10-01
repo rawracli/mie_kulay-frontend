@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import useScrollBehaviour from "../hooks/useScrollBehaviour";
@@ -13,6 +13,18 @@ const navItems = [
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isVisible, isOnTop } = useScrollBehaviour();
+
+    // Tutup navbar saat user scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
 
   return (
     <>
@@ -87,7 +99,7 @@ function Navbar() {
         </div>
         {/* Mobile Menu */}
         <div
-          className={`fixed z-20 top-[62px] sm:top-[68px] left-0 w-full bg-white shadow-lg px-6 py-9 md:hidden transition-all duration-300 ease-in-out ${
+          className={`fixed z-30 top-[62px] sm:top-[68px] left-0 w-full bg-white shadow-lg px-6 py-9 md:hidden transition-all duration-300 ease-in-out ${
             isOpen
               ? "translate-y-0 opacity-100"
               : "-translate-y-full opacity-0 pointer-events-none"
@@ -108,14 +120,24 @@ function Navbar() {
               </p>
             </NavLink>
           ))}
+          <div className="pt-4">
+            <a
+              href="https://wa.me/6281333330073"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white transition-all py-3 px-5 rounded-lg transform hover:scale-105 duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              Pesan Sekarang
+            </a>
+          </div>
         </div>
         {/* Overlay Background */}
         {isOpen && (
           <div
-            className="fixed top-0 left-0 z-10 w-full h-full bg-black/40 md:hidden"
-            onClick={() => {
-              setIsOpen(false);
-            }}
+            className="fixed top-0 left-0 z-20 w-full h-full bg-black/40 md:hidden"
+            onClick={() => setIsOpen(false)}
+            onTouchStart={() => setIsOpen(false)}
           ></div>
         )}
       </nav>
