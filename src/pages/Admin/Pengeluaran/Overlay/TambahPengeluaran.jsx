@@ -82,7 +82,7 @@ function TambahPengeluaran({
 
   return (
     <div className={`fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`}>
-      <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] h-fit rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
+      <div className="bg-white relative pb-[53px] pt-[32px] px-[30px] w-[415px] max-sm:w-[356px] h-fit max-sm:h-[576px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)]">
         <div
           onClick={() => {
             setIsAddOpen(false);

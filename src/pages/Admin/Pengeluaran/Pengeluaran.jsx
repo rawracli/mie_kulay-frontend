@@ -3,6 +3,7 @@ import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
 import MinRed from "../../../assets/Admin/minRed.svg";
+import Vector from "../../../assets/Admin/Vector.png";
 import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import TambahPengeluaran from "./Overlay/TambahPengeluaran";
 import {
@@ -12,7 +13,37 @@ import {
 } from "../../../controllers/Pengeluaran";
 
 function Pengeluaran() {
-  const [dataPengeluaran, setDataPengeluaran] = useState([]);
+  
+  const [dataPengeluaran, setDataPengeluaran] = useState([
+    {
+      id: 1,
+      pengeluaran: 50000,
+      catatan: "Beli alat kebersihan",
+      tanggal: "2025-09-20",
+      created_at: "2025-09-20T10:30:00",
+    },
+    {
+      id: 2,
+      pengeluaran: 120000,
+      catatan: "Bayar listrik",
+      tanggal: "2025-09-21",
+      created_at: "2025-09-21T14:15:00",
+    },
+    {
+      id: 3,
+      pengeluaran: 75000,
+      catatan: "Beli kertas & tinta printer",
+      tanggal: "2025-09-22",
+      created_at: "2025-09-22T09:45:00",
+    },
+    {
+      id: 4,
+      pengeluaran: 25000,
+      catatan: "Air minum galon",
+      tanggal: "2025-09-23",
+      created_at: "2025-09-23T11:00:00",
+    },
+  ]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -70,7 +101,7 @@ function Pengeluaran() {
       }
     };
     fetchData();
-  }, []);
+  },[]);
 
   useEffect(() => {
     if (highlightedRow !== null) {
@@ -201,84 +232,86 @@ function Pengeluaran() {
     currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pt-[13px] pb-[0.5rem] overflow-y-clip">
-      <div className="min-h-[32.0625rem] pt-[29px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] px-[1rem]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pt-[13px] pb-[0.5rem] overflow-y-clip max-sm:w-[390px]">
+      <button
+        onClick={() => setIsAddOpen(true)}
+        className="ml-[840px] max-sm:ml-[200px] pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[40px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer w-[201px] max-sm:w-[180px] mb-[13px]"
+        >
+        <svg
+            width="11"
+            height="19"
+            viewBox="0 0 11 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.63555 18.25V16.1C3.75221 15.9 2.98988 15.5167 2.34855 14.95C1.70721 14.3833 1.23621 13.5833 0.935547 12.55L2.78555 11.8C3.03555 12.6 3.40655 13.2083 3.89855 13.625C4.39055 14.0417 5.03621 14.25 5.83555 14.25C6.51888 14.25 7.09821 14.096 7.57355 13.788C8.04888 13.48 8.28621 13.0007 8.28555 12.35C8.28555 11.7667 8.10221 11.3043 7.73555 10.963C7.36888 10.6217 6.51888 10.234 5.18555 9.8C3.75221 9.35 2.76888 8.81267 2.23555 8.188C1.70221 7.56333 1.43555 6.80067 1.43555 5.9C1.43555 4.81667 1.78555 3.975 2.48555 3.375C3.18555 2.775 3.90221 2.43333 4.63555 2.35V0.25H6.63555V2.35C7.46888 2.48333 8.15655 2.78767 8.69855 3.263C9.24055 3.73833 9.63621 4.31733 9.88555 5L8.03555 5.8C7.83555 5.26667 7.55221 4.86667 7.18555 4.6C6.81888 4.33333 6.31888 4.2 5.68555 4.2C4.95221 4.2 4.39388 4.36267 4.01055 4.688C3.62721 5.01333 3.43555 5.41733 3.43555 5.9C3.43555 6.45 3.68555 6.88333 4.18555 7.2C4.68555 7.51667 5.55221 7.85 6.78555 8.2C7.93555 8.53333 8.80655 9.06267 9.39855 9.788C9.99055 10.5133 10.2862 11.3507 10.2855 12.3C10.2855 13.4833 9.93555 14.3833 9.23555 15C8.53555 15.6167 7.66888 16 6.63555 16.15V18.25H4.63555Z"
+              fill="white"
+          />
+        </svg>
+          <p className="text-[14px] max-sm:text-[12px] font-bold text-white">
+            Tambah Pengeluaran
+          </p>
+      </button>
+      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
-            {/* search & filter */}
-            <div className="text-end">
-              <label className="mr-2 text-sm">Search:</label>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] h-[31px]"
-              />
+            {/* filter date */}
+            <div className="flex items-center justify-between mb-3 ml-[665px] max-sm:ml-[178px]">
+              <div className="flex items-center">
+                <label className="text-1xl  font-semibold mr-2 max-sm:hidden">Filter logs by:</label>
+                <input
+                  type="date"
+                  value={tanggalInput}
+                  onChange={(e) => setTanggalInput(e.target.value)}
+                  className="w-[234px] max-sm:w-[131px] h-[35px] max-sm:h-[30px] bg-gray-100 px-2 max-sm:mb-[10px] border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400 max-sm:text-[14px] max-sm:ml-[50px]"
+                />
+              </div>
             </div>
-            <div className="flex items-center justify-between h-[1.9375rem]">
+
+            {/* entries per page & search sejajar */}
+            <div className="flex items-center justify-between">
+              {/* entries per page */}
               <div className="flex items-center">
                 <select
                   value={entriesPerPage}
                   onChange={(e) => {
                     const newEntriesPerPage = Number(e.target.value);
-                    const newTotalPages = Math.ceil(
-                      filteredData.length / newEntriesPerPage
-                    );
+                    const newTotalPages = Math.ceil(filteredData.length / newEntriesPerPage);
                     const newStartIndex = (currentPage - 1) * newEntriesPerPage;
-                    // If the current startIndex exceeds the total data length, reset to the last valid page
                     if (newStartIndex >= filteredData.length) {
-                      setCurrentPage(newTotalPages || 1); // Ensure at least page 1 if no data
+                      setCurrentPage(newTotalPages || 1);
                     }
                     setEntriesPerPage(newEntriesPerPage);
                   }}
-                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] cursor-pointer"
+                  className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-2 h-[32px] max-sm:h-[28px]  cursor-pointer"
                 >
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                   <option value={6}>6</option>
                   <option value={10}>10</option>
                 </select>
-                <p className="ml-2 text-sm">Entries per page</p>
-                <button
-                  onClick={() => setIsAddOpen(true)}
-                  className="ml-[20px] pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer"
-                >
-                  <svg
-                    width="11"
-                    height="19"
-                    viewBox="0 0 11 19"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.63555 18.25V16.1C3.75221 15.9 2.98988 15.5167 2.34855 14.95C1.70721 14.3833 1.23621 13.5833 0.935547 12.55L2.78555 11.8C3.03555 12.6 3.40655 13.2083 3.89855 13.625C4.39055 14.0417 5.03621 14.25 5.83555 14.25C6.51888 14.25 7.09821 14.096 7.57355 13.788C8.04888 13.48 8.28621 13.0007 8.28555 12.35C8.28555 11.7667 8.10221 11.3043 7.73555 10.963C7.36888 10.6217 6.51888 10.234 5.18555 9.8C3.75221 9.35 2.76888 8.81267 2.23555 8.188C1.70221 7.56333 1.43555 6.80067 1.43555 5.9C1.43555 4.81667 1.78555 3.975 2.48555 3.375C3.18555 2.775 3.90221 2.43333 4.63555 2.35V0.25H6.63555V2.35C7.46888 2.48333 8.15655 2.78767 8.69855 3.263C9.24055 3.73833 9.63621 4.31733 9.88555 5L8.03555 5.8C7.83555 5.26667 7.55221 4.86667 7.18555 4.6C6.81888 4.33333 6.31888 4.2 5.68555 4.2C4.95221 4.2 4.39388 4.36267 4.01055 4.688C3.62721 5.01333 3.43555 5.41733 3.43555 5.9C3.43555 6.45 3.68555 6.88333 4.18555 7.2C4.68555 7.51667 5.55221 7.85 6.78555 8.2C7.93555 8.53333 8.80655 9.06267 9.39855 9.788C9.99055 10.5133 10.2862 11.3507 10.2855 12.3C10.2855 13.4833 9.93555 14.3833 9.23555 15C8.53555 15.6167 7.66888 16 6.63555 16.15V18.25H4.63555Z"
-                      fill="white"
-                    />
-                  </svg>
-                  <p className="text-[14px] font-bold text-white">
-                    Tambah Pengeluaran
-                  </p>
-                </button>
+                <p className="ml-2 text-sm max-sm:hidden">Entries per page</p>
               </div>
-              <div>
-                {/* filter date */}
-                <label className="text-1xl font-semibold mb-1 mt-[11px] mr-[15px]">
-                  Filter logs by:
-                </label>
+
+              {/* search */}
+              <div className="text-end">
+                <label className="mr-2 text-sm max-sm:text-[14px]">Search:</label>
                 <input
-                  type="date"
-                  value={tanggalInput}
-                  onChange={(e) => setTanggalInput(e.target.value)}
-                  className="w-[234px] h-[35px] bg-gray-100 px-2  border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  type="text"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="border border-[#959595] bg-[#F4F4F4] rounded-[2px] px-2 py-1 w-[170px] max-sm:w-[130px] h-[31px] max-sm:h-[25px]"
                 />
               </div>
             </div>
             {/* data table */}
             <div className="w-full h-full">
-              <table className="w-full font-semibold border-collapse border border-[#959595]">
+              <div className="overflow-x-auto max-sm:w-[360px] ">
+              <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
                     <th className="border border-[#959595] text-center w-[12.01%]">
@@ -346,13 +379,22 @@ function Pengeluaran() {
                             </button>
                           </div>
                         </td>
-                        <td className="border-r border-[#959595] text-center">
+                        <td className="border-r border-[#959595] text-center flex items-center justify-center">
+                          {/* Button untuk layar >= sm */}
                           <button
-                            className="bg-blue-500 text-white px-3 py-1 text rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
+                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px] max-sm:hidden"
                             onClick={() => setSelectedPengeluaran(t)}
                           >
-                            Lihat Keterangan
+                            <p className="max-sm:hidden">Lihat Keterangan</p>
                           </button>
+
+                          {/* Img untuk layar max-sm */}
+                          <img
+                            src={Vector}
+                            alt=""
+                            className="w-[30px] h-[20px] cursor-pointer sm:hidden items-center justify"
+                            onClick={() => setSelectedPengeluaran(t)}
+                          />
                         </td>
                         <td className="border-r border-[#959595] text-center">
                           {new Date(t.created_at).toLocaleDateString("id-ID", {
@@ -378,14 +420,14 @@ function Pengeluaran() {
                               className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
                             >
                               <img src={Pencil} alt="" />
-                              Edit
+                              <p className="max-sm:hidden">Edit</p>
                             </button>
                             <button
                               onClick={() => onDelete(t.id)}
                               className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
                             >
                               <img src={Sampah} alt="" />
-                              Delete
+                              <p className="max-sm:hidden">Delete</p>
                             </button>
                           </div>
                         </td>
@@ -403,6 +445,7 @@ function Pengeluaran() {
                   )}
                 </tbody>
               </table>
+              </div>
               <div className="flex items-center justify-between mt-5 text-sm">
                 <p>
                   Page {currentPage} of {totalPages || 1} entries
@@ -518,38 +561,58 @@ function Pengeluaran() {
           onClick={handleCloseModal}
         >
           <div
-            className="bg-white rounded-[5px] w-[666px] h-auto"
+            className="bg-white rounded-[5px] w-[666px]  shadow-lg overflow-hidden h-[272px] max-sm:w-[322px] max-sm:h-[172px]"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Header */}
+            <div className="bg-[#1976D2] flex justify-between items-center px-4 py-2 h-[103px] max-sm:w-[322px] max-sm:h-[65px]">
+              <h2 className="text-white font-semibold text-lg ">
+                {selectedPengeluaran.nama || "Pengeluaran"}
+              </h2>
               <button
-                className="absolute top-58 right-80 text-white hover:text-gray-300 text-[30px] cursor-pointer"
-                onClick={handleCloseModal}
-              >
-                ✕
-              </button>
-            <div className="p-[31px]">
-              <p className="text-gray-800">{selectedPengeluaran.catatan}</p>
-                {(() => {
-                const tanggal = parseDate(selectedPengeluaran.tanggal) || parseDate(selectedPengeluaran.created_at);
-                if (!tanggal) return <p className="text-right text-black font-semibold mt-15">Tanggal tidak tersedia</p>;
+          className=" top-2 right-3 text-black text-2xl hover:text-gray-200"
+          onClick={handleCloseModal}
+        >
+          ✕
+        </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-6">
+              <p className="text-gray-800 mb-6">{selectedPengeluaran.catatan}</p>
+
+              {(() => {
+                const tanggal =
+                  parseDate(selectedPengeluaran.tanggal) ||
+                  parseDate(selectedPengeluaran.created_at);
+
+                if (!tanggal) {
+                  return (
+                    <p className="text-right text-gray-500 text-sm">
+                      Tanggal tidak tersedia
+                    </p>
+                  );
+                }
+
                 return (
-                <p className="text-right text-black font-semibold mt-15">
-                  {tanggal.toLocaleDateString("id-ID", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })}{" "}
-                {/* {tanggal.toLocaleTimeString("id-ID", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })} */}
-              </p>
-             );
-            })()}
+                  <p className="text-right text-gray-600 text-sm">
+                    {tanggal.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}{" "}
+                    {tanggal.toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                );
+              })()}
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }

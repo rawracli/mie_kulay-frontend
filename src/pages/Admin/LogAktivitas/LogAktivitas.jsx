@@ -1,8 +1,52 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { getAktivitas } from "../../../controllers/Aktivitas";
+import { useMediaQuery } from "react-responsive";
 
 function LogAktivitas() {
-  const [logsData, setLogsData] = useState([]);
+  const [logsData, setLogsData] = useState([
+    {
+      id: 1,
+      user: "Rafli",
+      action: "Membuat",
+      detail: "Menambahkan akun admin baru dengan nama 'Putri'.",
+      date: "2025-09-20T10:15:00",
+    },
+    {
+      id: 2,
+      user: "Putri",
+      action: "Mengubah",
+      detail: "Mengedit data stok barang 'Beras Premium'.",
+      date: "2025-09-21T14:30:00",
+    },
+    {
+      id: 3,
+      user: "Admin",
+      action: "Menghapus",
+      detail: "Menghapus data transaksi pemesanan #INV-20250910.",
+      date: "2025-09-22T09:45:00",
+    },
+    {
+      id: 4,
+      user: "Rafli",
+      action: "Menambah",
+      detail: "Menambahkan pengeluaran baru kategori 'Listrik'.",
+      date: "2025-09-23T08:20:00",
+    },
+    {
+      id: 5,
+      user: "Putri",
+      action: "Membuat",
+      detail: "Mendaftarkan akun pengguna staf gudang.",
+      date: "2025-09-23T16:40:00",
+    },
+    {
+      id: 6,
+      user: "Admin",
+      action: "Mengubah",
+      detail: "Mengubah role pengguna 'Rafli' menjadi Super Admin.",
+      date: "2025-09-24T11:10:00",
+    },
+  ]);
   const [filterType, setFilterType] = useState("All");
   const [filterDate, setFilterDate] = useState("");
   const [search] = useState("");
@@ -36,6 +80,15 @@ function LogAktivitas() {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredLogs.slice(start, start + itemsPerPage);
   }, [filteredLogs, currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    if (highlightedRow !== null) {
+      const timer = setTimeout(() => {
+        setHighlightedRow(null);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [highlightedRow]);
 
   // Reset highlight otomatis setelah beberapa detik
   useEffect(() => {
@@ -99,25 +152,49 @@ function LogAktivitas() {
     return pages;
   }
 
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const bulanMap = {
+    Januari: "Janua",
+    Februari: "Febru",
+    Maret: "Maret",
+    April: "April",
+    Mei: "Mei",
+    Juni: "Juni",
+    Juli: "Juli",
+    Agustus: "Agust",
+    September: "Septe",
+    Oktober: "Oktob", 
+    November: "Novem",
+    Desember: "Desem",
+  };
+
   useEffect(() => {
     let date;
-
     if (filterDate === "") {
       date = new Date();
     } else {
       date = new Date(filterDate);
     }
-    const formatted = date.toLocaleDateString("id-ID", {
-      month: "long",
-      year: "numeric",
-    });
+    const bulan = new Intl.DateTimeFormat("id-ID", { month: "long" }).format(
+      date
+    );
+    const tahun = new Intl.DateTimeFormat("id-ID", { year: "numeric" }).format(
+      date
+    );
 
-    setMonth(formatted);
-  }, [filterDate]);
+    let bulanFinal;
+    if (isMobile) {
+      bulanFinal = bulanMap[bulan] || bulan;
+    } else {
+      bulanFinal = bulan;
+    }
+
+    setMonth(`${bulanFinal} ${tahun}`);
+  }, [filterDate, isMobile]);
 
   return (
-    <div className="bg-gray-200 w-full min-h-full flex justify-center py-[8px]">
-      <div className="bg-white rounded-[10px] h-fit shadow-lg px-[18px] pt-[11px] pb-[38px] w-full mx-[9px]">
+    <div className="bg-gray-200 w-full min-h-full flex justify-center sm:py-[8px]">
+      <div className="bg-white grid grid-rows-[auto_auto_1fr_auto] rounded-[10px] shadow-lg px-[18px] pt-[11px] pb-[38px] w-full sm:mx-[9px] max-sm:rounded-none sm:h-fit">
         <h2 className="text-[36px] font-semibold mb-4">{month}</h2>
 
         {/* Filter + Search */}
@@ -129,22 +206,28 @@ function LogAktivitas() {
                 setItemsPerPage(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-300 p-1 pl-[8px] rounded-[2px] w-[47px] h-[32px]"
+              className="bg-gray-100 border border-gray-300 p-1 pl-[8px] rounded-[2px] w-[55px] h-[32px]" //w-[47px]
             >
-              <option value={4}>4</option>
-              <option value={8}>8</option>
-              <option value={10}>10</option>
+              <option value={4} className="max-md:text-[14px]">
+                4
+              </option>
+              <option value={8} className="max-md:text-[14px]">
+                8
+              </option>
+              <option value={10} className="max-md:text-[14px]">
+                10
+              </option>
             </select>
-            <span>Entries per page</span>
+            <span className="max-sm:hidden">Entries per page</span>
           </label>
-          <div>
+          <div className="flex items-center">
             <select
               value={filterType}
               onChange={(e) => {
                 setFilterType(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-300 p-1 pl-[17px] rounded-[5px] w-[164px] h-[35px] text font-semibold"
+              className="bg-gray-100 border border-gray-300 p-1 sm:pl-[17px] rounded-[5px] w-full sm:w-[164px] h-[35px] max-md:text-[14px]" //w-[164px]
             >
               <option value="All">All</option>
               <option value="Membuat">Membuat</option>
@@ -153,7 +236,7 @@ function LogAktivitas() {
               <option value="Menambah">Menambah</option>
             </select>
 
-            <label className="text text-[18px] ml-[26px] font-semibold">
+            <label className="max-lg:hidden text text-[18px] ml-[21px] font-semibold">
               Filter Logs by :
             </label>
             <input
@@ -163,20 +246,31 @@ function LogAktivitas() {
                 setFilterDate(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-gray-100 border border-gray-400 pl-5 pr-3 rounded-[2px] ml-[15px] w-[234px] h-[35px] "
+              className="bg-gray-100 max-sm:text-[14px] border border-gray-400 pl-1 sm:pl-5 sm:pr-3 rounded-[2px] ml-[15px] w-[131px] sm:w-[220px] h-[35px] " //w-[220px]
             />
           </div>
         </div>
 
-        {/* Tabel */}
-        <div className="overflow-x-auto text font-semibold">
-          <table className="w-full table-fixed border border-gray-400">
+        {/* Tabel - memakan sisa ruang pada mobile */}
+        <div className="relative overflow-x-auto border border-gray-400 font-semibold max-sm:flex-1 max-sm:overflow-y-auto">
+          <div
+            className={`absolute inset-0 min-w-[640px] grid grid-cols-[16.7%_46.7%_14.1%] md:grid-cols-[17.36%_34.5%_24.67%] pointer-events-none ${
+              paginatedLogs.length === 0 && "invisible"
+            }`}
+          >
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="border-r border-[#959595]"></div>
+            ))}
+          </div>
+          <table className="w-full table-fixed min-w-[640px]">
             <thead>
               <tr className="bg-[#FFB300] text-center h-[47px]">
                 <th className="p-2 border border-gray-400 w-[17.77%]">User</th>
-                <th className="p-2 border border-gray-400 w-[35.34%]">Aksi</th>
-                <th className="p-2 border border-gray-400 w-[25.30%]">
+                <th className="p-2 border border-gray-400 w-[50%] md:w-[35.34%]">
                   Aktivitas
+                </th>
+                <th className="p-2 border border-gray-400 w-[15%] md:w-[25.30%]">
+                  Aksi
                 </th>
                 <th className="p-2 border border-gray-400 w-[24.10%]">
                   Tanggal
@@ -194,27 +288,44 @@ function LogAktivitas() {
                         : "even:bg-gray-200"
                     }`}
                   >
-                    <td className="border border-gray-400 text-center truncate">
+                    <td className="text-center truncate">
                       {log.user}
                     </td>
-                    <td className="p-1 border border-gray-400 text-sm truncate pl-[24px]">
+                    <td className="p-1 text-sm truncate pl-[24px]">
                       {log.action}
                     </td>
-                    <td className="border border-gray-400 text-center">
-                      <button
-                        className="bg-[#3578DC] text-white px-[6.5px] py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
-                        onClick={() => setSelectedLog(log)}
-                      >
-                        Lihat Keterangan
-                      </button>
+                    <td className="text-center">
+                      <div className="flex justify-center items-center">
+                        <button
+                          className="bg-[#3578DC] text-white px-[13px] md:px-[6.5px] md:py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[26px] md:h-[25px]"
+                          onClick={() => setSelectedLog(log)}
+                        >
+                          <span className="max-md:hidden">
+                            Lihat Keterangan
+                          </span>
+                          <svg
+                            width="20"
+                            height="15"
+                            viewBox="0 0 22 15"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="md:hidden"
+                          >
+                            <path
+                              d="M11 4.5C10.2044 4.5 9.44129 4.81607 8.87868 5.37868C8.31607 5.94129 8 6.70435 8 7.5C8 8.29565 8.31607 9.05871 8.87868 9.62132C9.44129 10.1839 10.2044 10.5 11 10.5C11.7956 10.5 12.5587 10.1839 13.1213 9.62132C13.6839 9.05871 14 8.29565 14 7.5C14 6.70435 13.6839 5.94129 13.1213 5.37868C12.5587 4.81607 11.7956 4.5 11 4.5ZM11 12.5C9.67392 12.5 8.40215 11.9732 7.46447 11.0355C6.52678 10.0979 6 8.82608 6 7.5C6 6.17392 6.52678 4.90215 7.46447 3.96447C8.40215 3.02678 9.67392 2.5 11 2.5C12.3261 2.5 13.5979 3.02678 14.5355 3.96447C15.4732 4.90215 16 6.17392 16 7.5C16 8.82608 15.4732 10.0979 14.5355 11.0355C13.5979 11.9732 12.3261 12.5 11 12.5ZM11 0C6 0 1.73 3.11 0 7.5C1.73 11.89 6 15 11 15C16 15 20.27 11.89 22 7.5C20.27 3.11 16 0 11 0Z"
+                              fill="#fff"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </td>
-                    <td className="border border-gray-400 text-center">
+                    <td className="text-center">
                       {new Date(log.date).toLocaleDateString("id-ID", {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
                       })}{" "}
-                      <span className="text-blue-500 font-semibold">
+                      <span className="font-semibold text-blue-500">
                         {new Date(log.date).toLocaleTimeString("id-ID", {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -225,7 +336,7 @@ function LogAktivitas() {
                 ))
               ) : (
                 <tr className="h-[33px]">
-                  <td colSpan="4" className="text-center p-1 text-sm">
+                  <td colSpan="4" className="p-1 text-sm text-center">
                     Tidak ada data
                   </td>
                 </tr>
@@ -314,15 +425,15 @@ function LogAktivitas() {
         {/* Overlay Modal */}
         {selectedLog && (
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             onClick={handleCloseModal}
           >
             <div
-              className="bg-white rounded-[5px] w-[666px] h-[272px]"
+              className="bg-white rounded-[5px] w-[666px] h-[272px] max-sm:w-[90%] max-sm:mx-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-[#3578DC] relative text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-[666px] h-[103px]">
-                <h3 className="font-bold">{selectedLog.user}</h3>
+              <div className="bg-[#3578DC] relative text-2xl text-black flex justify-between items-center px-[31px] py-2 rounded-t-[5px] w-full h-[103px]">
+                <h3 className="font-bold text-white">{selectedLog.user}</h3>
                 <button
                   className="absolute top-[10px] right-[22px] hover:text-black cursor-pointer"
                   onClick={handleCloseModal}
@@ -332,7 +443,7 @@ function LogAktivitas() {
               </div>
               <div className="p-[31px]">
                 <p className="text-gray-800">{selectedLog.detail}</p>
-                <p className="text-right text-black font-semibold mt-15 ">
+                <p className="font-semibold text-right text-black mt-15 ">
                   {new Date(selectedLog.date).toLocaleDateString("en-US", {
                     month: "short",
                     day: "2-digit",

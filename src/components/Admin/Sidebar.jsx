@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 const navItems = [
   {
     name: "Dashboard",
-    to: "/dashboard",
+    to: "/admin",
     icon: (
       <svg
         width="20"
@@ -20,7 +20,7 @@ const navItems = [
   },
   {
     name: "Pemesanan",
-    to: "/pemesanan",
+    to: "/admin/pemesanan",
     icon: (
       <svg
         width="24"
@@ -37,8 +37,8 @@ const navItems = [
     ),
   },
   {
-    name: "Manajemen Stok",
-    to: "/stok",
+    name: "Manajemen Produk",
+    to: "/admin/manajemen-produk",
     icon: (
       <svg
         width="22"
@@ -56,7 +56,7 @@ const navItems = [
   },
   {
     name: "Log Aktivitas",
-    to: "/log-aktivitas",
+    to: "/admin/log-aktivitas",
     icon: (
       <svg
         width="24"
@@ -74,7 +74,7 @@ const navItems = [
   },
   {
     name: "Pengeluaran",
-    to: "/pengeluaran",
+    to: "/admin/pengeluaran",
     icon: (
       <svg
         width="24"
@@ -92,7 +92,7 @@ const navItems = [
   },
   {
     name: "Manajemen Akun",
-    to: "/manajemen-akun",
+    to: "/admin/manajemen-akun",
     icon: (
       <svg
         width="20"
@@ -110,29 +110,65 @@ const navItems = [
   },
 ];
 
-function Sidebar() {
+function Sidebar({ isOpen, setIsOpen }) {
   return (
-    <div className="w-[14.375rem] h-svh">
-      <div className="h-[92px] w-full bg-[#FFBA00] flex items-center justify-center">
-        <img src={logoTransparant} alt="logo" className="mr-[11px] mb-[1px]" />
-      </div>
-      <div className="mt-[50px] px-[9px] w-full space-y-[18px]">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `w-full h-[44px] flex items-center rounded-[10px] ${
-                isActive ? "bg-[#FFB300]" : "bg-none"
-              }`
-            }
+    <>
+      <div
+        className={`absolute z-20 size-full ${!isOpen && "hidden"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      ></div>
+      <div
+        className={`w-[230px] max-md:z-20 md:w-[5.5rem] lg:w-[14.375rem] h-svh bg-white max-md:fixed transition-all ${
+          !isOpen && "max-md:-translate-x-[231px]"
+        }`}
+      >
+        <div className="relative h-[92px] w-full bg-[#FFBA00] flex items-center justify-center">
+          <img
+            src={logoTransparant}
+            alt="logo"
+            className="lg:mr-[11px] mb-[1px]"
+          />
+          <svg
+            className="absolute md:hidden right-[19px] cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+            width="26"
+            height="18"
+            viewBox="0 0 26 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div className="pl-[20px] pr-[16px]">{item.icon}</div>
-            <div className="flex-1 font-semibold ">{item.name}</div>
-          </NavLink>
-        ))}
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M0 2.09375C0 1.77052 0.128404 1.46052 0.356964 1.23196C0.585524 1.0034 0.895517 0.875 1.21875 0.875H24.7812C25.1045 0.875 25.4145 1.0034 25.643 1.23196C25.8716 1.46052 26 1.77052 26 2.09375C26 2.41698 25.8716 2.72698 25.643 2.95554C25.4145 3.1841 25.1045 3.3125 24.7812 3.3125H1.21875C0.895517 3.3125 0.585524 3.1841 0.356964 2.95554C0.128404 2.72698 0 2.41698 0 2.09375ZM0 9C0 8.67677 0.128404 8.36677 0.356964 8.13821C0.585524 7.90965 0.895517 7.78125 1.21875 7.78125H24.7812C25.1045 7.78125 25.4145 7.90965 25.643 8.13821C25.8716 8.36677 26 8.67677 26 9C26 9.32323 25.8716 9.63323 25.643 9.86179C25.4145 10.0903 25.1045 10.2188 24.7812 10.2188H1.21875C0.895517 10.2188 0.585524 10.0903 0.356964 9.86179C0.128404 9.63323 0 9.32323 0 9ZM1.21875 14.6875C0.895517 14.6875 0.585524 14.8159 0.356964 15.0445C0.128404 15.273 0 15.583 0 15.9062C0 16.2295 0.128404 16.5395 0.356964 16.768C0.585524 16.9966 0.895517 17.125 1.21875 17.125H24.7812C25.1045 17.125 25.4145 16.9966 25.643 16.768C25.8716 16.5395 26 16.2295 26 15.9062C26 15.583 25.8716 15.273 25.643 15.0445C25.4145 14.8159 25.1045 14.6875 24.7812 14.6875H1.21875Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        <div className="mt-[50px] md:mt-[18px] lg:mt-[50px] px-[9px] w-full space-y-[11px] lg:space-y-[18px]">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === "/admin"}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `w-full h-[44px] md:h-[60px] lg:h-[44px] flex max-md:flex-row max-lg:flex-col justify-center items-center rounded-[10px] ${
+                  isActive ? "bg-[#FFB300]" : "bg-none"
+                }`
+              }
+            >
+              <div className="lg:pl-[20px] lg:pr-[16px] max-md:pl-[12px] max-md:pr-[16px]">
+                {item.icon}
+              </div>
+              <div className="max-md:flex-1 lg:flex-1 text-base lg:text-base md:text-[10px] font-semibold md:text-center lg:text-start">
+                {item.name}
+              </div>
+            </NavLink>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

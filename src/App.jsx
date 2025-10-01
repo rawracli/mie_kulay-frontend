@@ -25,16 +25,17 @@ function App() {
           <Route path="/tentang" element={<Tentang />}></Route>
         </Route>
         <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/pemesanan" element={<Pemesanan />}></Route>
-          <Route path="/stok" element={<Stok />}></Route>
-          <Route path="/log-aktivitas" element={<LogAktivitas />}></Route>
-          <Route path="/manajemen-akun" element={<ManajemenAkun />}></Route>
-          <Route path="/pengeluaran" element={<Pengeluaran />}></Route>
+          <Route path="admin">
+            <Route index element={<Dashboard />} />
+            <Route path="pemesanan" element={<Pemesanan />} />
+            <Route path="manajemen-produk" element={<Stok />} />
+            <Route path="log-aktivitas" element={<LogAktivitas />} />
+            <Route path="manajemen-akun" element={<ManajemenAkun />} />
+            <Route path="pengeluaran" element={<Pengeluaran />} />
+          </Route>
         </Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/register" element={<Home />}></Route>
 
+        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </>
   );

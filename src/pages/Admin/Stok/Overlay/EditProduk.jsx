@@ -107,19 +107,6 @@ function EditProduk({
               className="w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
             />
           </div>
-
-          <div>
-            <label>Stok</label>
-            <input
-              type="number"
-              min={1}
-              name="stok"
-              defaultValue={defaultValue.stok}
-              required
-              className="appearance-none w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
-            />
-          </div>
-
           <button
             type="submit"
             className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px]"
