@@ -101,6 +101,7 @@ export default function HeroSection() {
       )}
     </div>
   ));
+  const isDesktopBig = useMediaQuery({ query: "(max-width: 1280px)" });
   const isTablet = useMediaQuery({ query: "(max-width: 1195px)" });
   const isTabletSmall = useMediaQuery({ query: "(max-width: 768px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
@@ -109,12 +110,12 @@ export default function HeroSection() {
     <>
       <div className="overflow-x-hidden">
         {/* HERO SECTION */}
-        <div className="relative min-h-[980px] sm:min-h-[1080px] xmd:min-h-[600px] flex max-xmd:flex-col">
+        <div className="relative max-sm:min-h-[702px] max-xmd:min-h-[1080px] xmd:min-h-[600px] flex max-xmd:flex-col">
           <div className="z-10 max-xmd:mt-[100px] flex flex-col justify-center max-xmd:items-center mx-auto xmd:ml-[70px] max-sm:w-full max-xmd:w-4/5 xmd:w-1/2 gap-[10px] -translate-y-5">
-            <h1 className="font-boogaloo text-[35px] sm:text-[50px] md:text-[62px] xmd:text-[70px] text-center xmd:text-left ">
+            <h1 className="font-boogaloo text-[35px] sm:text-[50px] md:text-[62px] xmd:text-[70px] text-center xmd:text-left">
               MIE KULAY SUKABUMI
             </h1>
-            <p className="font-baloo-2 text-[16px] sm:text-[18px] max-sm:px-[5pxpx] max-md:px-[10px] max-xmd:px-[84px] text-balance md:text-[22px] xmd:text-[24px] leading-[22px] sm:leading-[30px] md:leading-[34px] xmd:leading-[35px] text-center xmd:text-left">
+            <p className="font-baloo-2 text-[16px] sm:text-[18px] max-sm:px-[5px] max-md:px-[10px] max-xmd:px-[84px] text-balance md:text-[22px] xmd:text-[24px] leading-[22px] sm:leading-[30px] md:leading-[34px] xmd:leading-[35px] text-center xmd:text-left">
               Mie Kulay, <span className="font-semibold">rasanya</span> bikin
               susah <span className="font-semibold">move on!</span> Teksturnya{" "}
               <span className="font-semibold">kenyal</span>, gurihnya pas, dan
@@ -134,28 +135,28 @@ export default function HeroSection() {
             <img
               src={Papan}
               alt="Papan"
-              className="absolute max-xmd:max-w-[379.39px] max-xmd:h-[382.31px] max-xmd:-translate-x-1/2 max-xmd:left-[46%] xmd:-right-[475px] max-xmd:mt-[160px] xmd:-top-[60px] -rotate-[137.9deg] xmd:-rotate-[38.03deg]"
+              className="absolute max-sm:size-[243px] max-xmd:max-w-[379.39px] max-xmd:h-[382.31px] max-xmd:-translate-x-1/2 max-xmd:left-[46%] xmd:-right-[475px] max-sm:mt-[100px] max-xmd:mt-[160px] xmd:-top-[60px] -rotate-[137.9deg] xmd:-rotate-[38.03deg]"
             />
             <img
               src={Pangsit}
               alt="Pangsit"
-              className="absolute max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%-13.7rem)] max-xmd:mt-[127px] max-xmd:z-10 max-xmd:size-[100px] xmd:right-[27px] xmd:top-[31px]"
+              className="absolute max-sm:size-[68px] max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%-13.7rem)] max-sm:left-[calc(50%-9.4rem)] max-sm:mt-[90px] max-xmd:mt-[127px] max-xmd:z-10 max-xmd:size-[100px] xmd:right-[27px] xmd:top-[31px]"
             />
             <img
               src={Mie}
               alt="Mie"
-              className="absolute max-xmd:max-w-[470px] xmd:right-[23px] xmd:top-[90px] max-xmd:-translate-x-1/2 max-xmd:left-[47.5%] max-xmd:mt-[130px] "
+              className="absolute max-sm:max-w-[300px] max-xmd:max-w-[470px] xmd:right-[23px] xmd:top-[90px] max-xmd:-translate-x-1/2 max-xmd:left-[47.5%] max-sm:mt-[80px] max-xmd:mt-[130px] "
             />
             <img
               src={Bumbu}
               alt="Bumbu"
-              className="max-xmd:scale-x-[-1] absolute max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%+7.6rem)] max-xmd:mt-[63px] xmd:-right-[10px] xmd:top-[173.68px] rotate-[313.61deg] w-[81.96px] xmd:rotate-[22.45deg]"
+              className="max-xmd:scale-x-[-1] absolute max-xmd:-translate-x-1/2 max-sm:left-[calc(50%+5.8rem)] max-xmd:left-[calc(50%+7.6rem)] max-sm:mt-[50px] max-xmd:mt-[63px] xmd:-right-[10px] xmd:top-[173.68px] rotate-[313.61deg] max-sm:w-[50.07px] max-xmd:w-[81.96px] xmd:rotate-[22.45deg]"
             />
           </div>
           <img
             src={bubuk}
             alt="bubuk"
-            className="absolute left-1/2 -translate-x-1/2 bottom-80 sm:bottom-85 md:bottom-70 -z-10 xmd:hidden object-center max-xmd:w-full max-md:w-[758.27px] max-w-none"
+            className="absolute left-1/2 -translate-x-1/2 bottom-45 sm:bottom-85 md:bottom-70 -z-10 xmd:hidden object-center max-xmd:w-full max-sm:min-w-[500px] max-sm:max-w-[500px] max-md:min-w-[758.27px] max-xmd:max-w-[800.27px]  max-w-none"
           />
         </div>
 
@@ -188,7 +189,7 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="z-10 flex flex-col justify-center w-[98%] sm:w-[86%] lg:w-[45%] xmd:w-[45%] gap-[30px] mb-[67px] xmd:mb-10">
-            <h2 className="font-boogaloo max-sm:text-[40px] sm:text-[50px] md:text-[65.15px] xmd:text-[60px] leading-[50px] sm:leading-[60px] md:leading-[80px] xmd:leading-[68px]">
+            <h2 className="font-boogaloo max-sm:text-[40px] lg:text-nowrap sm:text-[50px] md:text-[65.15px] xmd:text-[60px] leading-[50px] sm:leading-[60px] md:leading-[80px] xmd:leading-[68px]">
               <span className="text-[#FFB300]">Rasa</span> yang Menyatukan{" "}
               <span className="text-[#DC3538] block">Setiap Momen</span>
             </h2>
@@ -210,7 +211,7 @@ export default function HeroSection() {
               className="h-[389px] w-full min-w-[600px]"
             />
           </div>
-          <div className="bg-[#FFB300] relative max-xmd:flex-col flex items-center min-h-svh md:min-h-[834px] xmd:min-h-[calc(100svh-70px)]">
+          <div className="bg-[#FFB300] relative max-xmd:flex-col flex items-center max-sm:max-h-[650px] max-sm:min-h-[650px] max-md:max-h-[700px] max-md:min-h-[700px] md:min-h-[800px] md:max-h-[800px] xmd:max-h-[634px] xmd:min-h-[634px]">
             <div className="z-10 flex flex-col max-xmd:text-center justify-center xmd:ml-[79px] max-xmd:px-5 xmd:w-1/2 pt-10">
               <h2 className="font-boogaloo text-[40px] md:text-[60px] pb-[20px] max-md:leading-10 pt-5">
                 Saatnya Menjelajah Rasa
@@ -226,32 +227,32 @@ export default function HeroSection() {
               <img
                 src={Saus}
                 alt="saus"
-                className="absolute max-md:w-[580px] max-sm:min-w-[200px] max-md:h-[442px] max-xmd:w-[642.11px] max-xmd:h-[532.95px] max-xmd:-bottom-10 xmd:bottom-0 right-0 -rotate-[5.51deg]"
+                className="absolute max-sm:w-[400px] max-sm:h-[332px] max-md:w-[580px] max-sm:min-w-[200px] max-md:h-[442px] max-xmd:w-[642.11px] max-xmd:h-[532.95px] max-sm:-bottom-6 max-xmd:-bottom-10 -bottom-5 right-0 max-xmd:-rotate-[5.51deg]"
               />
               <img
                 src={Mie2}
                 alt="mie"
-                className="absolute max-md:w-[300.82px] max-xmd:w-[350.11px] max-xmd:right-[50px] right-[10px] bottom-[182px] -rotate-[4.93deg]"
+                className="absolute max-sm:w-[230.82px] max-md:w-[300.82px] max-xmd:w-[350.11px] max-sm:right-[21.97px] max-xmd:right-[50px] right-[10px] max-sm:bottom-[111px] bottom-[182px] -rotate-[4.93deg]"
               />
               <img
                 src={Minum}
                 alt="minum"
-                className="absolute max-md:w-[130px] max-xmd:w-[132.29px] max-md:right-[350px] max-md:-rotate-[14.46deg] max-xmd:bottom-[260px] max-xmd:right-[474.82px] right-[410px] bottom-[401px] -rotate-[8.87deg]"
+                className="absolute max-sm:w-[101.21px] max-md:w-[130px] max-xmd:w-[132.29px] max-sm:right-[253.89px] max-md:right-[350px] max-md:-rotate-[14.46deg] max-sm:bottom-[183.13px] max-xmd:bottom-[260px] max-xmd:right-[474.82px] right-[410px] bottom-[401px] -rotate-[8.87deg]"
               />
               <img
                 src={Mie3}
                 alt="mie"
-                className="absolute max-xmd:w-[120.29px] max-md:right-[60px] max-xmd:right-[80px] right-[375px] max-xmd: bottom-[37px] rotate-[13.42deg]"
+                className="absolute max-sm:w-[97.47px] max-xmd:w-[120.29px] max-md:right-[60px] max-sm:right-[29px] max-xmd:right-[80px] right-[375px] max-sm:bottom-[14px] bottom-[37px] rotate-[13.42deg]"
               />
               <img
                 src={Sosis}
                 alt="sosis"
-                className="absolute max-xmd:w-[148.85px] max-md:right-[230px] max-xmd:bottom-[70px] max-xmd:right-[513.29px] right-[6.5px] bottom-[490px] rotate-[21.45deg]"
+                className="absolute max-sm:w-[111.97px] max-xmd:w-[148.85px] max-sm:right-[230.74px] max-sm:bottom-[24.28px] max-md:right-[230px] max-xmd:bottom-[70px] max-xmd:right-[513.29px] right-[6.5px] bottom-[490px] rotate-[21.45deg]"
               />
               <img
                 src={Cabe}
                 alt="cabe"
-                className="absolute max-md:w-[230.38px] max-md:-rotate-[12.46deg] max-md:-right-[50px] -right-[125px] bottom-[180px] -rotate-[21.34deg]"
+                className="absolute max-sm:w-[195.38px] max-md:w-[230.38px] max-md:-rotate-[12.46deg] max-md:-right-[50px] -right-[125px] bottom-[107.44px] sm:bottom-[180px] -rotate-[21.34deg]"
               />
             </>
           </div>
@@ -300,7 +301,7 @@ export default function HeroSection() {
           </div>
         </div>
         {/* CAROUSEL VIDEO */}
-        <div className="relative flex h-svh lg:max-h-[720px]">
+        <div className="relative flex h-svh max-h-[800px]">
           <div className="flex-1 bg-[#FFB300]">
             <h2 className="text-[40px] md:text-[60px] font-boogaloo text-end mr-[12px] pt-[57px]">
               Seputar
