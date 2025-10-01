@@ -49,7 +49,7 @@ function Tentang() {
         <img
           src={Toko1}
           alt="Kedai Bawah"
-          className="rounded-lg object-cover w-[372px] max-sm:w-[216px] h-[217px] max-sm:h-[105px] absolute bottom-0 max-sm:top-35 left-0 max-sm:right-32 shadow-lg z-20"
+          className="rounded-lg object-cover w-[372px] max-sm:w-[216px] h-[217px] max-sm:h-[105px] absolute bottom-0 max-sm:top-35 left-0 max-sm:right-32 shadow-lg z-10"
         />
       </div>
     </div>
@@ -58,19 +58,19 @@ function Tentang() {
 
 
       
-      <div className="bg-[#FFB300] mt-[10px] h-[404px] max-sm:h-[163px] relative flex items-center px-10 overflow-visible">
+      <div className="bg-[#FFB300] mt-[10px] h-[404px] max-sm:h-[163px]  relative flex items-center px-10 overflow-visible">
       {/* Foto sebelah kiri */}
-      <div className="absolute left-0 -translate-x-1/5 ml-23 max-sm:ml-7 mt-32 max-sm:mt-0">
+      <div className="absolute left-0 -translate-x-1/5 ml-23 max-sm:ml-7 max-lg:ml-7 max-md:ml-7 mt-32 max-sm:mt-0 max-lg:mt-0 max-md:mt-0">
         <img
           src={Miesumpit}
           alt="Promo Mie"
-          className="h-[1142px] max-sm:h-[350px] object-contain"
+          className="h-[1142px] max-sm:h-[350px] max-lg:h-[750px] max-md:h-[750px] object-contain" 
         />
       </div>
 
       {/* Teks sebelah kanan */}
-      <div className="ml-[351px] max-sm:ml-[50px] max-w-3xl">
-          <p className="text-black font-boogaloo text-[50px] max-sm:text-[20px] text-left">
+      <div className="ml-[351px] max-sm:ml-[50px] max-md:ml-[150px] max-lg:ml-[260px] max-w-3xl">
+          <p className="text-black font-boogaloo text-[50px] max-sm:text-[20px] max-lg:text-[40px] max-md-text-[20px] text-left">
             Nikmati <span className="text-red-600">mie enak</span> dan
             <span className="text-blue-600"> berkualitas </span>
             dengan harga hemat, cuma <span className="text-red-600">5 ribuan</span> saja.
@@ -82,10 +82,10 @@ function Tentang() {
 
       {/* Bersih & Terjamin */}
       
-      <div className="max-w-6xl mx-auto px-6 py-12  gap-8 items-center ml-[534px] max-sm:ml-[0px] max-sm:mt-[30px]">
+      <div className="max-w-6xl mx-auto px-6 py-12  gap-8 items-center ml-[534px] max-sm:ml-[0px] max-md:ml-0 max-lg:ml-0 max-sm:mt-[30px] max-md:text-center max-lg:text-center max-lg:mt-15">
         <div>
-          <h3 className="text-[60px] max-sm:text-[40px] max-sm:text-center font-boogaloo mb-4">Bersih & Terjamin</h3>
-          <p className="text-gray-700 leading-relaxed text-[24px] max-sm:text-[15px] font-baloo-2 mr-[126px] max-sm:mr-0 max-sm:text-center">
+          <h3 className="text-[60px] max-sm:text-[40px] max-lg:text-[40px] max-sm:text-center max-lg:text-center font-boogaloo mb-4 ">Bersih & Terjamin</h3>
+          <p className="text-gray-700 leading-relaxed text-[24px] max-sm:text-[15px] max-lg:text-[15px] max-md:text-[15px] font-baloo-2 mr-[126px] max-sm:mr-0 max-lg:mr-0  max-sm:text-center max-lg:text-center">
             Semua sajian di Mie Kulay dibuat dari bahan pilihan yang segar dan
             berkualitas 🌟. Kami selalu menjaga kebersihan dan keamanan dalam
             setiap proses, jadi kamu bisa menikmati mie yang bukan hanya enak,
@@ -96,15 +96,17 @@ function Tentang() {
       </div>
 
       {/* Keunggulan */}
-      <div className="max-w-6xl mx-auto px-[51px] py-12 max-sm:py-0 text-center ml-[170px] max-sm:ml-0 mr-[130px] max-sm:mr-0 ">
+      <div className="relative max-w-6xl mx-auto px-[51px] py-12 max-sm:py-0 text-center ml-[170px] max-sm:ml-0 mr-[130px] max-sm:mr-0 ">
         <h3 className="text-[60px] max-sm:text-[35px] font-boogaloo mb-10 max-sm:mb-[50px]">
           Keunggulan <span className="text-[#FFB300]">Mie Kulay</span>
         </h3>
         {/* Background logo */}
         <div
-          className="absolute inset-0 bg-cover w-[717px] max-sm:w-[352px] h-[717px] max-sm:h-[352px] mt-[1432px]  ml-[270px] max-sm:ml-5 opacity-5 z-0"
-          style={{ backgroundImage: `url(${Logotr})` }}
-        ></div>
+          className="absolute inset-0 bg-cover w-full opacity-5 z-0 flex items-center justify-center"
+        >
+          <img src={Logotr} className="w-[717px] max-sm:w-[352px]" alt="" />
+        </div>
+
 
 {/* Card wrapper */}
 <div className="relative z-10 flex gap-6 mb-[50px] max-sm:flex-col max-sm:items-center">
