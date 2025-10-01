@@ -7,7 +7,7 @@ function MainLayout() {
   return (
     <>
       <Navbar />
-      <div className="h-[52px] sm:h-20 md:h-[104px]"></div>
+      <div className="h-[62px] sm:h-20 md:h-[104px]"></div>
       <main>
         <Outlet />
       </main>
