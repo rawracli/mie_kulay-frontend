@@ -301,7 +301,7 @@ export default function HeroSection() {
           </div>
         </div>
         {/* CAROUSEL VIDEO */}
-        <div className="relative flex h-svh max-h-[800px]">
+        <div className="relative flex h-screen max-h-[800px]">
           <div className="flex-1 bg-[#FFB300]">
             <h2 className="text-[40px] md:text-[60px] font-boogaloo text-end mr-[12px] pt-[57px]">
               Seputar
@@ -314,42 +314,30 @@ export default function HeroSection() {
               className="w-[140px] md:w-[200px] ml-[9px] md:ml-[12px] mt-[15px] md:mt-[20px] pt-[57px]"
             />
           </div>
-          <div className="flex justify-center absolute w-[1112px] bottom-[50px] xmd:bottom-[100px] right-1/2 translate-x-1/2">
+          <div className="flex justify-center absolute w-[1112px] bottom-[50px] py-3 xmd:bottom-[100px] right-1/2 translate-x-1/2">
             <Carousel
               items={items}
               containerWidth={
-                isMobile
-                  ? "500px"
-                  : isTabletSmall
-                  ? "80%"
-                  : isTablet
-                  ? "90%"
+                isTablet
+                  ? isMobile ? "420px" : "700px"
                   : "100%"
               }
               indicators={{ translate: ["0px", "17px"] }}
               boxShadow={""}
               width={
-                isMobile
+                isTablet
                   ? "320px"
-                  : isTabletSmall
-                  ? "500px"
-                  : isTablet
-                  ? "500px"
                   : "687px"
               }
               height={
-                isMobile
-                  ? "510px"
-                  : isTabletSmall
-                  ? "510px"
-                  : isTablet
+                isTablet
                   ? "510px"
                   : "406px"
               }
               transformDuration={300}
               sizeDuration={300}
               autoPlay={false}
-              showArrows={isMobile ? false : true}
+              showArrows={true}
               showStatus={false}
               showIndicators={isTablet ? true : false}
               startIndex={0}

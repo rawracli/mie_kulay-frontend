@@ -81,10 +81,10 @@ function Footer() {
 
               {/* Informasi Section - Show on lg+ */}
               <div className="hidden lg:block w-[290px]">
-                <h2 className="font-boogaloo text-[36px] leading-7 mb-[18px]">
+                <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Informasi
                 </h2>
-                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
                   <div className="flex gap-[19.5px]">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
                     <p>0838 - 6993 - 1820</p>
@@ -107,10 +107,10 @@ function Footer() {
             {/* Informasi Section - Show on mobile/tablet */}
             <nav className="lg:hidden max-w-100">
               <div>
-                <h2 className="font-boogaloo text-[36px] leading-7 mb-2.5">
+                <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Informasi
                 </h2>
-                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
                   <div className="flex gap-[19.5px]">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
                     <p>0838 - 6993 - 1820</p>
@@ -120,7 +120,7 @@ function Footer() {
                     <p>ayuuaulia01@gmail.com</p>
                   </div>
                   <div className="flex gap-[19.5px] items-start">
-                    <img src={Maps} alt="" className="pt-[5px]" />
+                    <img src={Maps} alt="" className="pt-[5px] translate-x-[2px]" />
                     <p className="text-left">
                       3WHG+P4G, Jl. Masjid, Gunungparang, Kec. Cikole, Kota
                       Sukabumi, Jawa Barat 43111
