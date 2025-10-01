@@ -77,39 +77,55 @@ const renderCustomizedLabel = ({
 };
 
 export default function FavoriteMenuChart() {
-  const [data, setData] = useState([]);
   const isTablet = useMediaQuery({ query: "(max-width: 768px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  // dummy sebagai state awal
+  const initialDummy = [
+    { kategori_hidangan: "Minuman", nama_hidangan: "Es Kopi Susu", jumlah: 120 },
+    { kategori_hidangan: "Minuman", nama_hidangan: "Teh Tarik", jumlah: 80 },
+    { kategori_hidangan: "Makanan", nama_hidangan: "Nasi Goreng", jumlah: 150 },
+    { kategori_hidangan: "Makanan", nama_hidangan: "Mie Ayam", jumlah: 90 },
+    { kategori_hidangan: "Snack", nama_hidangan: "Roti Bakar", jumlah: 40 },
+  ];
+
+  const [data, setData] = useState(initialDummy);
+  const unique = Array.from(new Set(initialDummy.map((i) => i.kategori_hidangan)));
+  const [categories, setCategories] = useState(["All", ...unique]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
+    let mounted = true;
     fetch(`${import.meta.env.VITE_API_URL}/favorite-menu`)
       .then((res) => res.json())
       .then((res) => {
-        setData(res);
-
-        // Ambil kategori unik untuk dropdown
-        const uniqueCategories = [
-          ...new Set(res.map((item) => item.kategori_hidangan)),
-        ];
-        setCategories(uniqueCategories);
-        setSelectedCategory(uniqueCategories[0] || "");
+        if (!mounted) return;
+        if (Array.isArray(res) && res.length > 0) {
+          setData(res);
+          const uniq = Array.from(new Set(res.map((i) => i.kategori_hidangan)));
+          setCategories(["All", ...uniq]);
+          setSelectedCategory("All");
+        }
+        // kalau API kosong -> jangan ubah state, tetap pakai dummy awal
+      })
+      .catch((err) => {
+        // keep dummy in initial state
+        console.error("FavoriteMenuChart fetch failed, using initial dummy:", err);
       });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // Filter data sesuai kategori terpilih
-  const filteredData = data
-    .filter((item) => item.kategori_hidangan === selectedCategory)
-    .map((item) => ({ name: item.nama_hidangan, value: item.jumlah }));
+  const filteredData = (selectedCategory === "All"
+    ? data
+    : data.filter((item) => item.kategori_hidangan === selectedCategory)
+  ).map((item) => ({ name: item.nama_hidangan, value: item.jumlah }));
 
   return (
     <div className="rounded-lg w-full md:mt-[25px]">
       <div className="flex justify-between items-center px-[13px] max-sm:px-[13px] pb-[11px] max-sm:pb-[5px] md:pt-[8px] lg:pt-[6px] max-sm:pt-[35px]">
-        <h2 className="text-[14px] max-sm:text-[9px] font-semibold">
-          Menu Favorite
-        </h2>
+        <h2 className="text-[14px] max-sm:text-[9px] font-semibold">Menu Favorite</h2>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
@@ -123,7 +139,7 @@ export default function FavoriteMenuChart() {
         </select>
       </div>
       <hr className="text-gray-400 w-[95%]" />
-      <div className="flex justify-center items-center">
+      <div className="flex items-center justify-center">
         <PieChart width={300} height={isTablet ? (isMobile ? 219 : 185) : 219}>
           <Pie
             data={filteredData}

@@ -6,7 +6,18 @@ import TambahAkun from "./Overlay/TambahAkun";
 import { getUsers, deleteUser } from "../../../controllers/AuthController.js";
 
 function ManajemenAkun() {
-  const [userData, setUserData] = useState(null);
+  // --- Dummy initial state untuk ManajemenAkun ---
+const initialDummyUsers = [
+  { id: 1, name: "Admin Utama", email: "admin@mie-kulay.test", role: "admin" },
+  { id: 2, name: "Kasir Andi", email: "kasir.andi@mie-kulay.test", role: "kasir" },
+  { id: 3, name: "Kasir Budi", email: "kasir.budi@mie-kulay.test", role: "kasir" },
+  { id: 4, name: "Koki Sari", email: "koki.sari@mie-kulay.test", role: "kitchen" },
+  { id: 5, name: "Staf Gudang", email: "gudang@mie-kulay.test", role: "warehouse" },
+];
+
+// gunakan dummy sebagai nilai awal state
+const [userData, setUserData] = useState(initialDummyUsers);
+
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -231,7 +242,7 @@ function ManajemenAkun() {
                       <tr>
                         <td
                           colSpan="6"
-                          className="text-center py-3 text-gray-500 italic"
+                          className="py-3 italic text-center text-gray-500"
                         >
                           Tidak ada data
                         </td>

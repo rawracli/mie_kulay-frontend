@@ -24,57 +24,64 @@ import { getCategories } from "../../../controllers/Category";
 function Stok() {
   // toggle bahan atau menu
   const [viewMode, setViewMode] = useState("bahan");
+const initialStockTable = [
+  { id: 1, produk: "Beras", harga_beli: 120000, tipe: "bahan baku", stok: 50 },
+  { id: 2, produk: "Telur Ayam", harga_beli: 20000, tipe: "bahan mentah", stok: 80 },
+  { id: 3, produk: "Minyak Goreng", harga_beli: 30000, tipe: "bahan baku", stok: 40 },
+  { id: 4, produk: "Gula Pasir", harga_beli: 15000, tipe: "bahan mentah", stok: 60 },
+  { id: 5, produk: "Tepung Terigu", harga_beli: 18000, tipe: "bahan lengkap", stok: 30 },
+];
 
-  // Data Bahan (dummy)
-  const [stockTable, setStockTable] = useState([]);
+const initialMenuData = [
+  {
+    id: 1,
+    nama: "Nasi Goreng Spesial",
+    kategori_id: 1,
+    kategori: "Makanan",
+    harga: 25000,
+    image: ExampleImage,
+    bahan: [
+      { id: 1, nama: "Beras", harga: 5000 },
+      { id: 2, nama: "Telur", harga: 3000 },
+      { id: 3, nama: "Minyak Goreng", harga: 2000 },
+    ],
+  },
+  {
+    id: 2,
+    nama: "Mie Ayam Bakso",
+    kategori_id: 1,
+    kategori: "Makanan",
+    harga: 22000,
+    image: ExampleImage,
+    bahan: [
+      { id: 7, nama: "Mie", harga: 4000 },
+      { id: 8, nama: "Bakso", harga: 6000 },
+      { id: 9, nama: "Ayam", harga: 8000 },
+    ],
+  },
+  {
+    id: 3,
+    nama: "Es Kopi Susu",
+    kategori_id: 2,
+    kategori: "Minuman",
+    harga: 15000,
+    image: ExampleImage,
+    bahan: [
+      { id: 4, nama: "Kopi", harga: 3000 },
+      { id: 5, nama: "Susu", harga: 4000 },
+      { id: 6, nama: "Gula", harga: 1000 },
+    ],
+  },
+];
 
-  // Data Menu (dummy)
-  // Data Menu (dummy)
-  const [menuData, setMenuData] = useState([
-    {
-      id: 1,
-      nama: "Nasi Goreng Spesial",
-      kategori_id: 1,
-      kategori: "Makanan",
-      harga: 25000,
-      image: ExampleImage, // sementara pakai gambar import ExampleImage
-      bahan: [
-        { id: 1, nama: "Nasi", harga: 5000 },
-        { id: 2, nama: "Telur", harga: 3000 },
-        { id: 3, nama: "Ayam", harga: 10000 },
-      ],
-    },
-    {
-      id: 2,
-      nama: "Es Teh Manis",
-      kategori_id: 2,
-      kategori: "Minuman",
-      harga: 8000,
-      image: ExampleImage,
-      bahan: [
-        { id: 4, nama: "Teh", harga: 2000 },
-        { id: 5, nama: "Gula", harga: 1000 },
-        { id: 6, nama: "Es Batu", harga: 500 },
-      ],
-    },
-    {
-      id: 3,
-      nama: "Mie Ayam Bakso",
-      kategori_id: 1,
-      kategori: "Makanan",
-      harga: 20000,
-      image: ExampleImage,
-      bahan: [
-        { id: 7, nama: "Mie", harga: 4000 },
-        { id: 8, nama: "Bakso", harga: 6000 },
-        { id: 9, nama: "Ayam", harga: 8000 },
-        { id: 10, nama: "Ayam", harga: 8000 },
-        { id: 11, nama: "Ayam", harga: 8000 },
-        { id: 12, nama: "Ayam", harga: 8000 },
-        { id: 13, nama: "Ayam", harga: 8000 },
-      ],
-    },
-  ]);
+const initialCategories = [
+  { id: 1, jenis_hidangan: "Makanan" },
+  { id: 2, jenis_hidangan: "Minuman" },
+  { id: 3, jenis_hidangan: "Snack" },
+];
+  const [stockTable, setStockTable] = useState(initialStockTable);
+const [menuData, setMenuData] = useState(initialMenuData);
+const [categories, setCategories] = useState(initialCategories);
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
@@ -125,7 +132,6 @@ function Stok() {
     opsi: "",
   });
 
-  const [categories, setCategories] = useState([]);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -995,7 +1001,15 @@ function EditMenuBahan({
   handleNewBahanChange,
   // handleAddBahan,
 }) {
-  const [bahanList, setBahanList] = useState([]);
+  
+const initialBahanList = [
+  { id: 1, nama_bahan: "Beras", harga: 120000, opsi: "bahan baku" },
+  { id: 2, nama_bahan: "Telur Ayam", harga: 20000, opsi: "bahan mentah" },
+  { id: 3, nama_bahan: "Minyak Goreng", harga: 30000, opsi: "bahan baku" },
+  { id: 4, nama_bahan: "Gula Pasir", harga: 15000, opsi: "bahan mentah" },
+  { id: 5, nama_bahan: "Mie", harga: 4000, opsi: "bahan lengkap" },
+];
+const [bahanList, setBahanList] = useState(initialBahanList);
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {

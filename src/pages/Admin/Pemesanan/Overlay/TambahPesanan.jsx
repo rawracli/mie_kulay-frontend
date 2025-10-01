@@ -22,43 +22,111 @@ function TambahPesanan({
   const [selectedCategory, setSelectedCategory] = useState("All menu");
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
-  // Data menu dinamis
-  const [categories, setCategories] = useState([]);
-  const [menuData, setMenuData] = useState([]);
+  // dummy menu awal (dipakai langsung sebagai state awal)
+  const initialDummyMenu = [
+    {
+      id: 301,
+      nama_hidangan: "Es Kopi Susu",
+      harga_jual: 15000,
+      kategori: { jenis_hidangan: "Minuman" },
+      gambar: null,
+    },
+    {
+      id: 302,
+      nama_hidangan: "Teh Manis Dingin",
+      harga_jual: 8000,
+      kategori: { jenis_hidangan: "Minuman" },
+      gambar: null,
+    },
+    {
+      id: 303,
+      nama_hidangan: "Nasi Goreng Spesial",
+      harga_jual: 25000,
+      kategori: { jenis_hidangan: "Makanan" },
+      gambar: null,
+    },
+    {
+      id: 304,
+      nama_hidangan: "Mie Ayam",
+      harga_jual: 20000,
+      kategori: { jenis_hidangan: "Makanan" },
+      gambar: null,
+    },
+    {
+      id: 305,
+      nama_hidangan: "Roti Bakar Coklat",
+      harga_jual: 12000,
+      kategori: { jenis_hidangan: "Snack" },
+      gambar: null,
+    },
+  ];
+
+  // map dummy ke struktur frontend yang dipakai component
+  const mappedInitialMenu = initialDummyMenu.map((item) => ({
+    id: item.id,
+    ...item,
+    category: item.kategori?.jenis_hidangan || "Unknown",
+    image: item.gambar ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}` : Login,
+    name: item.nama_hidangan,
+    harga_jual: item.harga_jual,
+  }));
+
+  const initialCategories = ["All menu", ...Array.from(new Set(mappedInitialMenu.map((m) => m.category)))];
+
+  // Data menu dinamis (pakai dummy sebagai state awal)
+  const [categories, setCategories] = useState(initialCategories);
+  const [menuData, setMenuData] = useState(mappedInitialMenu);
 
   useEffect(() => {
+    let mounted = true;
     const fetchCategories = async () => {
       try {
         const catData = await getCategories();
-        // Tambahkan "All menu" di awal
-        setCategories(["All menu", ...catData.map((c) => c.jenis_hidangan)]);
+        if (!mounted) return;
+        if (Array.isArray(catData) && catData.length > 0) {
+          setCategories(["All menu", ...catData.map((c) => c.jenis_hidangan)]);
+          // jangan set selectedCategory jika sudah ada pilihan user
+          if (!catData.map((c) => c.jenis_hidangan).includes(selectedCategory) && selectedCategory !== "All menu") {
+            setSelectedCategory("All menu");
+          }
+        } // else: biarkan dummy awal
       } catch (err) {
-        console.error("Gagal mengambil kategori:", err);
+        console.error("Gagal mengambil kategori, pakai dummy:", err);
       }
     };
     fetchCategories();
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    let mounted = true;
     const fetchMenu = async () => {
       try {
-        const data = await getMenu();
-        // Map backend field ke front-end
-        const mapped = data.map((item) => ({
-          id: item.id,
-          ...item,
-          category: item.kategori?.jenis_hidangan || "Unknown",
-          image: item.gambar
-            ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}`
-            : Login,
-          name: item.nama_hidangan,
-        }));
-        setMenuData(mapped);
+        const apiData = await getMenu();
+        if (!mounted) return;
+        if (Array.isArray(apiData) && apiData.length > 0) {
+          const mapped = apiData.map((item) => ({
+            id: item.id,
+            ...item,
+            category: item.kategori?.jenis_hidangan || "Unknown",
+            image: item.gambar ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}` : Login,
+            name: item.nama_hidangan,
+            harga_jual: item.harga_jual,
+          }));
+          setMenuData(mapped);
+        }
+        // kalau API kosong atau bukan array -> tetap pakai dummy awal
       } catch (error) {
-        console.error("Gagal mengambil menu:", error);
+        console.error("Gagal mengambil menu, tetap pakai dummy:", error);
       }
     };
     fetchMenu();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // Filter data berdasarkan search dan category
@@ -100,7 +168,7 @@ function TambahPesanan({
   // Konten yang akan digunakan di desktop dan mobile
   const modalContent = (
     <>
-      <div className="flex justify-between items-center mb-4 px-4">
+      <div className="flex items-center justify-between px-4 mb-4">
         <div
           onClick={() => {
             setIsAddOpen(false);
@@ -112,7 +180,7 @@ function TambahPesanan({
         </div>
       </div>
 
-      <div className="px-4 flex flex-col">
+      <div className="flex flex-col px-4">
         <div className="relative">
           <input
             type="text"
@@ -124,7 +192,7 @@ function TambahPesanan({
           <img
             src={Search}
             alt="Search icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2"
+            className="absolute -translate-y-1/2 left-4 top-1/2"
           />
         </div>
         <div className="flex justify-end mt-3">
@@ -144,20 +212,20 @@ function TambahPesanan({
             <img
               src={Arrow}
               alt="Dropdown icon"
-              className="absolute right-3 size-4 top-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute -translate-y-1/2 pointer-events-none right-3 size-4 top-1/2"
             />
           </div>
         </div>
       </div>
 
       <div
-        className="mt-4 px-4 pb-6 overflow-y-auto"
+        className="px-4 pb-6 mt-4 overflow-y-auto"
         style={{ maxHeight: isMobile ? "70vh" : "none" }}
       >
         {Object.keys(groupedData).map((category) => (
           <div key={category} className="mb-6">
             <h3 className="font-bold text-[20px] mb-3">{category}</h3>
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-wrap gap-3">
               {groupedData[category].map((item, index) => (
                 <div
                   key={index}
@@ -168,7 +236,7 @@ function TambahPesanan({
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-full object-cover"
+                      className="object-cover w-full h-full"
                     />
                   </div>
                   <div className="flex items-center justify-center h-[41px] p-1">
@@ -182,7 +250,7 @@ function TambahPesanan({
           </div>
         ))}
         {Object.keys(groupedData).length === 0 && (
-          <p className="text-center text-gray-500 py-6">
+          <p className="py-6 text-center text-gray-500">
             Tidak ada item ditemukan
           </p>
         )}
@@ -205,14 +273,14 @@ function TambahPesanan({
         setIsAddOpen(false);
         setEditIndex(null);
       }}
-      snapPoints={[0.7, 0.5, 0.1]} // Snap points: 50% dan 10% (hampir tertutup)
-      initialSnap={0.7} // Mulai pada 50%
-      className="mx-auto max-w-lg" // Batasi lebar maksimum
+      snapPoints={[0.7, 0.5, 0.1]} // Snap points: 70%, 50%, 10%
+      initialSnap={0.7} // Mulai pada 70%
+      className="max-w-lg mx-auto" // Batasi lebar maksimum
     >
       <Sheet.Container
         style={{
-          height: "70vh", // Set tinggi menjadi 50% viewport
-          maxHeight: "70vh", // Pastikan tidak melebihi 50%
+          height: "70vh",
+          maxHeight: "70vh",
         }}
       >
         <Sheet.Header />

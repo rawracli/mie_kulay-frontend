@@ -13,7 +13,15 @@ import ConfirmDelete from "../../../components/Admin/ConfirmDelete";
 import { addPesananDetail } from "../../../controllers/PesananDetail";
 
 function Pemesanan() {
-  const [data, setData] = useState([]);
+  // dummy sebagai state awal
+  const initialDummy = [
+    { id: 201, nama: "Mie Ayam Spesial", jumlah: 1, harga: 20000 },
+    { id: 202, nama: "Nasi Goreng Sederhana", jumlah: 2, harga: 25000 },
+    { id: 203, nama: "Es Kopi Susu", jumlah: 1, harga: 15000 },
+    { id: 204, nama: "Sate Ayam (5 tusuk)", jumlah: 1, harga: 30000 },
+  ];
+
+  const [data, setData] = useState(initialDummy);
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -172,7 +180,7 @@ function Pemesanan() {
                     setPaymentMethod("cash");
                     setPaymentDropdown(false);
                   }}
-                  className="flex items-center gap-2 px-3 py-2 bg-white hover:bg-gray-100  cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-2 bg-white cursor-pointer hover:bg-gray-100"
                 >
                   <img src={Cash} alt="" className="h-[18px]" />
                   <p className="text-[16px] font-medium">Cash</p>
@@ -184,7 +192,7 @@ function Pemesanan() {
                     setPaymentMethod("ewallet");
                     setPaymentDropdown(false);
                   }}
-                  className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100"
                 >
                   <img src={Credit} alt="" className="h-[18px]" />
                   <p className="text-[16px] font-medium">E - wallet</p>
@@ -231,12 +239,12 @@ function Pemesanan() {
                     >
                       <td className="pl-[21px] ">{val.nama}</td>
                       <td>
-                        <div className="text-center flex justify-around items-center h-full">
+                        <div className="flex items-center justify-around h-full text-center">
                           <button
                             onClick={() => {
                               handleDecrement(ind);
                             }}
-                            className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                            className="flex items-center justify-center flex-1 h-full cursor-pointer group"
                           >
                             <img
                               src={MinRed}
@@ -246,7 +254,7 @@ function Pemesanan() {
                           </button>
                           <input
                             type="text"
-                            className="w-7 lg:w-10 text-center"
+                            className="text-center w-7 lg:w-10"
                             value={val.jumlah}
                             onChange={(e) =>
                               handleInputChange(ind, e.target.value)
@@ -254,7 +262,7 @@ function Pemesanan() {
                           />
                           <button
                             onClick={() => handleIncrement(ind)}
-                            className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                            className="flex items-center justify-center flex-1 h-full cursor-pointer group"
                           >
                             <img
                               src={PlusGreen}
@@ -292,7 +300,7 @@ function Pemesanan() {
                   <tr>
                     <td colSpan={4} className="h-[400px] text-center">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <h4 className="font-semibold text-sm">Data Kosong</h4>
+                        <h4 className="text-sm font-semibold">Data Kosong</h4>
                       </div>
                     </td>
                   </tr>

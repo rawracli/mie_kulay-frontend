@@ -48,23 +48,150 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getPemesanan();
-      const formattedData = data.map((p) => ({
-        id: p.id,
-        tanggal: new Date(p.created_at),
-        total: p.total_pesanan || 0,
-        metode: p.pembayaran,
-        periode_tahunan: p.periode_tahunan, // <--- penting
-        items:
-          p.pesanan_detail?.map((d) => ({
-            name: d.nama_hidangan || "-",
-            qty: d.jumlah || 0,
-            price: d.harga_satuan || 0,
-          })) || [],
-      }));
+      try {
+        const data = await getPemesanan();
 
-      console.log(data);
-      setTransactionsData(formattedData);
+        // jika API mengembalikan data kosong, fallback ke dummy
+        const raw = Array.isArray(data) && data.length > 0 ? data : null;
+
+        // Dummy pemesanan (struktur sama dengan yang diharapkan controller)
+        const dummyPemesanan = [
+          {
+            id: 101,
+            created_at: "2025-09-01T10:00:00Z",
+            total_pesanan: 45000,
+            pembayaran: "Cash",
+            periode_tahunan: 2025,
+            pesanan_detail: [
+              { nama_hidangan: "Mie Ayam", jumlah: 1, harga_satuan: 20000 },
+              { nama_hidangan: "Es Kopi", jumlah: 1, harga_satuan: 25000 },
+            ],
+          },
+          {
+            id: 102,
+            created_at: "2025-08-15T12:30:00Z",
+            total_pesanan: 60000,
+            pembayaran: "QRIS",
+            periode_tahunan: 2025,
+            pesanan_detail: [
+              { nama_hidangan: "Nasi Goreng", jumlah: 2, harga_satuan: 30000 },
+            ],
+          },
+          {
+            id: 89,
+            created_at: "2024-11-05T18:45:00Z",
+            total_pesanan: 30000,
+            pembayaran: "Debit",
+            periode_tahunan: 2024,
+            pesanan_detail: [
+              { nama_hidangan: "Sate Ayam", jumlah: 2, harga_satuan: 15000 },
+            ],
+          },
+          {
+            id: 77,
+            created_at: "2023-06-21T08:15:00Z",
+            total_pesanan: 20000,
+            pembayaran: "Cash",
+            periode_tahunan: 2023,
+            pesanan_detail: [
+              { nama_hidangan: "Teh Manis", jumlah: 2, harga_satuan: 5000 },
+              { nama_hidangan: "Roti Bakar", jumlah: 1, harga_satuan: 10000 },
+            ],
+          },
+          {
+            id: 55,
+            created_at: "2022-12-30T20:00:00Z",
+            total_pesanan: 120000,
+            pembayaran: "Transfer",
+            periode_tahunan: 2022,
+            pesanan_detail: [
+              { nama_hidangan: "Paket Hemat (4 porsi)", jumlah: 1, harga_satuan: 120000 },
+            ],
+          },
+          {
+            id: 103,
+            created_at: "2025-09-10T14:20:00Z",
+            total_pesanan: 18000,
+            pembayaran: "QRIS",
+            periode_tahunan: 2025,
+            pesanan_detail: [
+              { nama_hidangan: "Bakso", jumlah: 1, harga_satuan: 18000 },
+            ],
+          },
+        ];
+
+        const source = raw || dummyPemesanan;
+
+        const formattedData = source.map((p) => ({
+          id: p.id,
+          tanggal: new Date(p.created_at),
+          total: p.total_pesanan || 0,
+          metode: p.pembayaran || "-",
+          periode_tahunan: p.periode_tahunan || new Date(p.created_at).getFullYear(),
+          items:
+            p.pesanan_detail?.map((d) => ({
+              name: d.nama_hidangan || "-",
+              qty: d.jumlah || 0,
+              price: d.harga_satuan || 0,
+            })) || [],
+        }));
+
+        console.log("pemesanan (source):", source === raw ? "API" : "DUMMY");
+        setTransactionsData(formattedData);
+      } catch (err) {
+        console.error("Gagal ambil pemesanan, pakai dummy:", err);
+
+        // fallback ke dummy kalau error
+        const dummyPemesanan = [
+          {
+            id: 101,
+            created_at: "2025-09-01T10:00:00Z",
+            total_pesanan: 45000,
+            pembayaran: "Cash",
+            periode_tahunan: 2025,
+            pesanan_detail: [
+              { nama_hidangan: "Mie Ayam", jumlah: 1, harga_satuan: 20000 },
+              { nama_hidangan: "Es Kopi", jumlah: 1, harga_satuan: 25000 },
+            ],
+          },
+          {
+            id: 102,
+            created_at: "2025-08-15T12:30:00Z",
+            total_pesanan: 60000,
+            pembayaran: "QRIS",
+            periode_tahunan: 2025,
+            pesanan_detail: [
+              { nama_hidangan: "Nasi Goreng", jumlah: 2, harga_satuan: 30000 },
+            ],
+          },
+          {
+            id: 89,
+            created_at: "2024-11-05T18:45:00Z",
+            total_pesanan: 30000,
+            pembayaran: "Debit",
+            periode_tahunan: 2024,
+            pesanan_detail: [
+              { nama_hidangan: "Sate Ayam", jumlah: 2, harga_satuan: 15000 },
+            ],
+          },
+        ];
+
+        const formattedData = dummyPemesanan.map((p) => ({
+          id: p.id,
+          tanggal: new Date(p.created_at),
+          total: p.total_pesanan || 0,
+          metode: p.pembayaran || "-",
+          periode_tahunan: p.periode_tahunan || new Date(p.created_at).getFullYear(),
+          items:
+            p.pesanan_detail?.map((d) => ({
+              name: d.nama_hidangan || "-",
+              qty: d.jumlah || 0,
+              price: d.harga_satuan || 0,
+            })) || [],
+        }));
+
+        setTransactionsData(formattedData);
+      }
     };
 
     fetchData();
@@ -88,9 +215,10 @@ function Dashboard() {
           `${import.meta.env.VITE_API_URL}/analisis-tahun-list`
         );
         // misal API mengembalikan: { years: [2022, 2023, 2024, 2025] }
-        setTahunList(data.years);
+        setTahunList(data.years || []);
       } catch (err) {
-        console.error("Gagal fetch tahun:", err);
+        console.error("Gagal fetch tahun, pakai dummy:", err);
+        setTahunList([2022, 2023, 2024, 2025]);
       }
     };
     fetchYears();
@@ -115,11 +243,12 @@ function Dashboard() {
           const latest = data.keuangan[0];
           console.log("Latest record:", latest); // <-- cek field yang dipakai
           setCardSummary([
-            { title: "Total Orders", value: latest.order_average },
-            { title: "Profit", value: latest.hasil_keuntungan },
-            { title: "Pengeluaran", value: latest.total_pengeluaran },
+            { title: "Total Orders", value: latest.order_average || 0 },
+            { title: "Profit", value: latest.hasil_keuntungan || 0 },
+            { title: "Pengeluaran", value: latest.total_pengeluaran || 0 },
           ]);
         } else {
+          // kosong dari API, set default 0
           setCardSummary([
             { title: "Total Orders", value: 0 },
             { title: "Profit", value: 0 },
@@ -127,12 +256,31 @@ function Dashboard() {
           ]);
         }
       } catch (err) {
-        console.error("Gagal fetch analisis:", err);
+        console.error("Gagal fetch analisis, hitung fallback dari transaksi lokal:", err);
+
+        // fallback: hitung ringkasan sederhana dari transactionsData
+        const tahun = Number(tahunInput) || new Date().getFullYear();
+        const localForYear = transactionsData.filter(
+          (t) => t.periode_tahunan === tahun
+        );
+
+        const totalOrders = localForYear.length;
+        const totalRevenue = localForYear.reduce((s, t) => s + (t.total || 0), 0);
+        // asumsi sederhana: profit 20% dari revenue, pengeluaran 10% (hanya fallback)
+        const profit = Math.round(totalRevenue * 0.2);
+        const pengeluaran = Math.round(totalRevenue * 0.1);
+
+        setCardSummary([
+          { title: "Total Orders", value: totalOrders },
+          { title: "Profit", value: profit },
+          { title: "Pengeluaran", value: pengeluaran },
+        ]);
       }
     };
 
     fetchAnalisis();
-  }, [tahunInput]);
+    // tambahkan transactionsData agar fallback bisa memakai data lokal setelah load
+  }, [tahunInput, transactionsData]);
 
   // Pagination
   const [entriesPerPage, setEntriesPerPage] = useState(4);
@@ -167,6 +315,7 @@ function Dashboard() {
     startIndex + entriesPerPage
   );
 
+
   return (
     <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)] flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
       <div className="w-full max-sm:px-[9px]">
@@ -175,7 +324,7 @@ function Dashboard() {
           <label className="mr-2 text-sm font-semibold">Filter tahun:</label>
           <div className="relative">
             {/* SVG di kiri */}
-            <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 flex items-center pointer-events-none left-2">
               <svg
                 width="16"
                 height="16"
@@ -294,7 +443,7 @@ function Dashboard() {
 
       {/* Detail Pemesanan */}
 
-      <div className="w-full flex justify-start">
+      <div className="flex justify-start w-full">
         <h1 className=" text-3xl font-semibold text-right mt-5 px-1.5">
           Detail Pemesanan
         </h1>
@@ -441,7 +590,7 @@ function Dashboard() {
                     <tr>
                       <td
                         colSpan="5"
-                        className="text-center py-3 text-gray-500 italic"
+                        className="py-3 italic text-center text-gray-500"
                       >
                         Tidak ada data
                       </td>
@@ -533,7 +682,7 @@ function Dashboard() {
         {/* Overlay Detail */}
         {selectedTransaction && (
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             onClick={() => setSelectedTransaction(null)} // klik area luar = close
           >
             <div
@@ -550,7 +699,7 @@ function Dashboard() {
                 {/* Tombol Tutup (icon X) */}
                 <button
                   onClick={() => setSelectedTransaction(null)}
-                  className="absolute top-2 right-3 hover:text-black cursor-pointer"
+                  className="absolute cursor-pointer top-2 right-3 hover:text-black"
                 >
                   <img
                     src={Close} // path icon X kamu
@@ -577,7 +726,7 @@ function Dashboard() {
                 {selectedTransaction.items?.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between text-nowrap flex-wrap"
+                    className="flex flex-wrap justify-between text-nowrap"
                   >
                     <span>
                       {item.name} x{item.qty}
@@ -588,19 +737,19 @@ function Dashboard() {
 
                 <div className="my-[20px] border-t border-dashed w-[180px]" />
 
-                <p className="flex justify-between text-nowrap flex-wrap font-semibold">
+                <p className="flex flex-wrap justify-between font-semibold text-nowrap">
                   <span>Total Pembayaran :</span>
                   <span>
                     Rp {selectedTransaction.total.toLocaleString("id-ID")}
                   </span>
                 </p>
-                <p className="flex justify-between text-nowrap flex-wrap font-semibold">
+                <p className="flex flex-wrap justify-between font-semibold text-nowrap">
                   <span className="font-semibold">Metode Pembayaran :</span>{" "}
                   <span>{selectedTransaction.metode}</span>
                 </p>
                 <div className="my-[50px] flex flex-col">
-                  <div className="border-t border-dashed h-1" />
-                  <div className="border-t border-dashed h-1" />
+                  <div className="h-1 border-t border-dashed" />
+                  <div className="h-1 border-t border-dashed" />
                 </div>
                 <p className="text-center text-[16px] text-gray-500 my-10">
                   @Mie Kulay
