@@ -9,9 +9,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { useMediaQuery } from "react-responsive";
+import { formatShort } from "../priceFormat";
 
 export default function MonthlyOrdersChart() {
   const [data, setData] = useState([]);
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
   useEffect(() => {
     axios
@@ -47,38 +50,41 @@ export default function MonthlyOrdersChart() {
   }, []);
 
   return (
-   <div className="w-full h-full">
-  <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-    Order bulanan
-  </h2>
-  <hr className="text-[#959595] mx-[8px]" />
+    <div className="w-full h-full">
+      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
+        Jumlah Pemesanan Berdasarkan Bulan
+      </h2>
+      <hr className="text-[#959595] mx-[8px]" />
 
-  {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
-  <div className="h-[319px] max-sm:h-[190px] md:h-[200px]">
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart
-        data={data}
-        layout="vertical"
-        margin={{ top: 10, right: 30, bottom: 10 }}
-      >
-        <CartesianGrid
-          stroke="#959595"
-          strokeDasharray={8}
-          horizontal={false}
-        />
-        <XAxis type="number" />
-        <YAxis
-          type="category"
-          tick={{ fontSize: 10 }}
-          dataKey="month"
-          width={40}
-        />
-        <Tooltip />
-        <Bar dataKey="orders" fill="#FFB300" />
-      </BarChart>
-    </ResponsiveContainer>
-  </div>
-</div>
-
+      {/* Bungkus ResponsiveContainer dengan tinggi berbeda */}
+      <div className="h-[206px] lg:h-[315px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 10, right: 30, bottom: 10 }}
+          >
+            <CartesianGrid
+              stroke="#959595"
+              strokeDasharray={8}
+              horizontal={false}
+            />
+            <XAxis
+              type="number"
+              tickFormatter={formatShort}
+              tick={{ fontSize: isMobile ? 12 : 15 }}
+            />
+            <YAxis
+              type="category"
+              tick={{ fontSize: 10 }}
+              dataKey="month"
+              width={40}
+            />
+            <Tooltip />
+            <Bar dataKey="orders" fill="#FFB300" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }

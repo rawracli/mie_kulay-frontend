@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -29,23 +29,72 @@ function Stok() {
   const [stockTable, setStockTable] = useState([]);
 
   // Data Menu (dummy)
-  const [menuData, setMenuData] = useState([]);
+  // Data Menu (dummy)
+  const [menuData, setMenuData] = useState([
+    {
+      id: 1,
+      nama: "Nasi Goreng Spesial",
+      kategori_id: 1,
+      kategori: "Makanan",
+      harga: 25000,
+      image: ExampleImage, // sementara pakai gambar import ExampleImage
+      bahan: [
+        { id: 1, nama: "Nasi", harga: 5000 },
+        { id: 2, nama: "Telur", harga: 3000 },
+        { id: 3, nama: "Ayam", harga: 10000 },
+      ],
+    },
+    {
+      id: 2,
+      nama: "Es Teh Manis",
+      kategori_id: 2,
+      kategori: "Minuman",
+      harga: 8000,
+      image: ExampleImage,
+      bahan: [
+        { id: 4, nama: "Teh", harga: 2000 },
+        { id: 5, nama: "Gula", harga: 1000 },
+        { id: 6, nama: "Es Batu", harga: 500 },
+      ],
+    },
+    {
+      id: 3,
+      nama: "Mie Ayam Bakso",
+      kategori_id: 1,
+      kategori: "Makanan",
+      harga: 20000,
+      image: ExampleImage,
+      bahan: [
+        { id: 7, nama: "Mie", harga: 4000 },
+        { id: 8, nama: "Bakso", harga: 6000 },
+        { id: 9, nama: "Ayam", harga: 8000 },
+        { id: 10, nama: "Ayam", harga: 8000 },
+        { id: 11, nama: "Ayam", harga: 8000 },
+        { id: 12, nama: "Ayam", harga: 8000 },
+        { id: 13, nama: "Ayam", harga: 8000 },
+      ],
+    },
+  ]);
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
     const dataToUse = viewMode === "bahan" ? stockTable : menuData;
+
+    // Hitung jumlah item per kategori/tipe
     const grouped = dataToUse.reduce((acc, item) => {
-      const kategoriName = item.kategori || "-";
-      if (!acc[kategoriName]) {
-        acc[kategoriName] = 0;
+      const key =
+        viewMode === "bahan" ? item.tipe || "-" : item.kategori || "-";
+
+      if (!acc[key]) {
+        acc[key] = 0;
       }
-      acc[kategoriName] += item.id;
+      acc[key] += 1; // jumlah item, bukan id
       return acc;
     }, {});
 
-    return Object.entries(grouped).map(([nama, id]) => ({
+    return Object.entries(grouped).map(([nama, count]) => ({
       nama,
-      id,
+      count,
     }));
   }, [stockTable, menuData, viewMode]);
 
@@ -73,6 +122,7 @@ function Stok() {
   const [newBahan, setNewBahan] = useState({
     nama: "",
     harga: 0,
+    opsi: "",
   });
 
   const [categories, setCategories] = useState([]);
@@ -101,27 +151,30 @@ function Stok() {
     }
   }, [selectedMenu]);
 
+  const [filterValue, setFilterValue] = useState("all");
   const filteredData = useMemo(() => {
     const keyword = search.trim().toLowerCase();
-    const selectedCategory = category?.toLowerCase();
     const dataToFilter = viewMode === "bahan" ? stockTable : menuData;
 
-    return dataToFilter.filter((t) => {
-      const matchCategory =
-        !category || category === "all"
+    return dataToFilter.filter((item) => {
+      const matchesFilter =
+        !filterValue || filterValue === "all"
           ? true
-          : t.kategori.toLowerCase().includes(selectedCategory);
+          : viewMode === "bahan"
+          ? (item.tipe || "").toLowerCase() === filterValue.toLowerCase()
+          : (item.kategori || "").toLowerCase() === filterValue.toLowerCase();
 
-      const matchSearch =
+      const matchesSearch =
         !keyword ||
-        t.id.toString().toLowerCase().includes(keyword) ||
         (viewMode === "bahan"
-          ? t.produk.toLowerCase().includes(keyword)
-          : t.nama.toLowerCase().includes(keyword));
+          ? (item.produk || item.nama_bahan || "")
+              .toLowerCase()
+              .includes(keyword)
+          : (item.nama || "").toLowerCase().includes(keyword));
 
-      return matchCategory && matchSearch;
+      return matchesFilter && matchesSearch;
     });
-  }, [search, stockTable, menuData, category, viewMode]);
+  }, [stockTable, menuData, search, filterValue, viewMode]);
 
   const totalPages = Math.ceil(filteredData.length / entriesPerPage);
   const startIndex = (currentPage - 1) * entriesPerPage;
@@ -135,7 +188,7 @@ function Stok() {
     setViewMode((prev) => (prev === "bahan" ? "menu" : "bahan"));
     setCurrentPage(1);
     setSearch("");
-    setCategory("all");
+    setFilterValue("all"); // reset filter saat ganti view
   };
 
   // Handlers for bahan
@@ -155,7 +208,7 @@ function Stok() {
       const updated = await updateBahan(id, {
         nama_bahan: current.nama_bahan,
         harga_beli: newHarga, // gunakan nilai baru langsung
-        kategori_id: current.kategori_id,
+        tipe: current.tipe,
       });
 
       console.log("Harga berhasil diupdate:", updated);
@@ -253,7 +306,7 @@ function Stok() {
       nama_bahan: newBahan.nama,
       harga_beli: newBahan.harga,
       menu_id: selectedMenu.id,
-      kategori_id: selectedMenu.kategori_id,
+      tipe: newBahan.opsi,
     };
 
     try {
@@ -358,8 +411,7 @@ function Stok() {
           id: item.id,
           produk: item.nama_bahan,
           harga_beli: item.harga_beli,
-          kategori_id: item.kategori_id,
-          kategori: item.kategori?.jenis_hidangan ?? "-",
+          tipe: item.tipe,
         }));
         setStockTable(mapped);
         localStorage.setItem("bahan", JSON.stringify(mapped)); // update cache
@@ -471,9 +523,9 @@ function Stok() {
                 </select>
                 <p className="ml-2 text-sm max-lg:hidden">Entries per page</p>
                 <select
-                  value={category}
+                  value={filterValue}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    setFilterValue(e.target.value);
                     setCurrentPage(1);
                   }}
                   className="border border-gray-300 bg-[#F4F4F4] rounded-[2px] pl-3 pr-5 ml-2 md::ml-[28px] h-[32px] cursor-pointer"
@@ -481,7 +533,9 @@ function Stok() {
                   <option value="all">All</option>
                   {stockData.map((item, idx) => (
                     <option key={idx} value={item.nama}>
-                      {item.nama.slice(0, 1).toUpperCase() + item.nama.slice(1)}
+                      {item.nama
+                        ? item.nama.charAt(0).toUpperCase() + item.nama.slice(1)
+                        : "-"}
                     </option>
                   ))}
                 </select>
@@ -716,18 +770,20 @@ function Stok() {
                     key={index}
                     className="cursor-pointer"
                     onClick={() => {
-                      setCategory(items.nama);
+                      setFilterValue(items.nama); // pastikan setFilterValue sudah ada di state
                       setCurrentPage(1);
                     }}
                   >
                     <div className="bg-[#FFB300] border border-[#959595] w-full h-[2.75rem] flex items-center">
                       <h3 className="m-auto text-center">
-                        {items.nama.slice(0, 1).toUpperCase() +
-                          items.nama.slice(1)}
+                        {items.nama
+                          ? items.nama.charAt(0).toUpperCase() +
+                            items.nama.slice(1)
+                          : "-"}
                       </h3>
                     </div>
                     <div className="bg-white border border-[#D9D9D9] w-full h-[2.8125rem] flex items-center justify-center">
-                      <h4>{items.id}</h4>
+                      <h4>{items.count}</h4>
                     </div>
                   </div>
                 ))
@@ -754,158 +810,159 @@ function Stok() {
       {/* INI UNTUK EDIT MENU */}
       {selectedMenu && (
         <>
-        <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-          <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[35px] md:pt-[26px] pb-[33px] md:pb-[41px] px-[40px] md:px-[28.5px] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
-            <button
-              onClick={() => setSelectedMenu(null)}
-              className="cursor-pointer absolute right-[33px] top-[26px]"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+          <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+            <div className="bg-white gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] pt-[35px] md:pt-[26px] pb-[33px] md:pb-[41px] px-[40px] md:px-[28.5px] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
+              <button
+                onClick={() => setSelectedMenu(null)}
+                className="cursor-pointer absolute right-[33px] top-[26px]"
               >
-                <path
-                  d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            {/* KIRI */}
-            <div className="flex flex-col w-full h-full">
-              <h4 className="text-[24px] font-semibold pb-[10px]">Menu</h4>
-              {/* UPLOAD IMAGE */}
-              <div className="w-full h-[122px] bg-amber-800">
-                <img
-                  src={ExampleImage}
-                  alt=""
-                  className="object-cover size-full"
-                />
-              </div>
-              <input
-                type="text"
-                name="nama"
-                value={editMenuForm.nama}
-                onChange={(e) => handleMenuFormChange("nama", e.target.value)}
-                className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
-                placeholder="Nama menu..."
-              />
-              <div className="mt-[21px] flex flex-col">
-                <label htmlFor="kategori" className="mb-[7px]">
-                  Kategori
-                </label>
-                <select
-                  name="kategori"
-                  id="kategori"
-                  value={editMenuForm.kategori_id}
-                  onChange={(e) =>
-                    handleMenuFormChange(
-                      "kategori_id",
-                      parseInt(e.target.value) || ""
-                    )
-                  }
-                  className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  {/* KATEGORI DARI DATABASE */}
-                  <option value="">Pilih kategori...</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.jenis_hidangan}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mt-[21px] flex flex-col">
-                <label htmlFor="harga" className="mb-[7px]">
-                  Harga
-                </label>
+                  <path
+                    d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              {/* KIRI */}
+              <div className="flex flex-col w-full h-full">
+                <h4 className="text-[24px] font-semibold pb-[10px]">Menu</h4>
+                {/* UPLOAD IMAGE */}
+                <div className="w-full h-[122px] bg-amber-800">
+                  <img
+                    src={ExampleImage}
+                    alt=""
+                    className="object-cover size-full"
+                  />
+                </div>
                 <input
-                  type="number"
-                  className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
-                  name="harga"
-                  id="harga"
-                  value={editMenuForm.harga}
-                  onChange={(e) =>
-                    handleMenuFormChange("harga", parseInt(e.target.value) || 0)
-                  }
-                  placeholder="Harga menu..."
+                  type="text"
+                  name="nama"
+                  value={editMenuForm.nama}
+                  onChange={(e) => handleMenuFormChange("nama", e.target.value)}
+                  className="block w-full h-[50px] mt-[7px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                  placeholder="Nama menu..."
                 />
-              </div>
-              <div className="md:hidden mt-[21px] flex flex-col">
-                <label htmlFor="bahan" className="mb-[7px]">
-                  Bahan
-                </label>
+                <div className="mt-[21px] flex flex-col">
+                  <label htmlFor="kategori" className="mb-[7px]">
+                    Kategori
+                  </label>
+                  <select
+                    name="kategori"
+                    id="kategori"
+                    value={editMenuForm.kategori_id}
+                    onChange={(e) =>
+                      handleMenuFormChange(
+                        "kategori_id",
+                        parseInt(e.target.value) || ""
+                      )
+                    }
+                    className="block cursor-pointer w-full h-[50px] border-[#7E7E7E] border rounded-[4px] px-[16px] text-[20px]"
+                  >
+                    {/* KATEGORI DARI DATABASE */}
+                    <option value="">Pilih kategori...</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.jenis_hidangan}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mt-[21px] flex flex-col">
+                  <label htmlFor="harga" className="mb-[7px]">
+                    Harga
+                  </label>
+                  <input
+                    type="number"
+                    className="block w-full h-[50px] border-[#7E7E7E] border rounded-[4px] pl-[16px] text-[20px]"
+                    name="harga"
+                    id="harga"
+                    value={editMenuForm.harga}
+                    onChange={(e) =>
+                      handleMenuFormChange(
+                        "harga",
+                        parseInt(e.target.value) || 0
+                      )
+                    }
+                    placeholder="Harga menu..."
+                  />
+                </div>
+                <div className="md:hidden mt-[21px] flex flex-col">
+                  <label htmlFor="bahan" className="mb-[7px]">
+                    Bahan
+                  </label>
+                  <button
+                    type="number"
+                    className="text-start w-full h-[50px] border-[#7E7E7E] hover:bg-gray-100 cursor-pointer border rounded-[4px] pl-[16px] text-[20px]"
+                    onClick={() => setIsEditMenuBahanOpen(true)}
+                  >
+                    {selectedMenu.bahan[0]?.nama ||
+                      "Menu ini belum memiliki bahan"}
+                    ...
+                  </button>
+                </div>
                 <button
-                  type="number"
-                  className="text-start w-full h-[50px] border-[#7E7E7E] hover:bg-gray-100 cursor-pointer border rounded-[4px] pl-[16px] text-[20px]"
-                  onClick={() => setIsEditMenuBahanOpen(true)}
+                  onClick={handleMenuSave}
+                  className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
                 >
-                  {selectedMenu.bahan[0]?.nama ||
-                    "Menu ini belum memiliki bahan"}
-                  ...
+                  Edit
                 </button>
               </div>
-              <button
-                onClick={handleMenuSave}
-                className="cursor-pointer bg-[#FFB300] hover:bg-[#F1A900] self-end mt-auto active:bg-[#D59501] text-[15px] font-semibold w-[78px] h-[31px] rounded-[5px]"
-              >
-                Edit
-              </button>
-            </div>
 
-            {/* KANAN */}
-            {!isTablet && (
-              <EditMenuBahan
-                editMenuForm={editMenuForm}
-                handleAddBahan={handleAddBahan}
-                handleBahanDelete={handleBahanDelete}
-                handleNewBahanChange={handleNewBahanChange}
-                newBahan={newBahan}
-              />
-            )}
-          </div>
-        </div>
-        {isEditMenuBahanOpen && isTablet && (      
-          <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-            <div className="bg-[#FFF7DE] gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
-              <button
-              onClick={() => setIsEditMenuBahanOpen(false)}
-              className="cursor-pointer absolute right-[17px] top-[18px]"
-            >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {/* KANAN */}
+              {!isTablet && (
+                <EditMenuBahan
+                  editMenuForm={editMenuForm}
+                  handleAddBahan={handleAddBahan}
+                  handleBahanDelete={handleBahanDelete}
+                  handleNewBahanChange={handleNewBahanChange}
+                  newBahan={newBahan}
                 />
-              </svg>
-            </button>
-              <EditMenuBahan
-                editMenuForm={editMenuForm}
-                handleAddBahan={handleAddBahan}
-                handleBahanDelete={handleBahanDelete}
-                handleNewBahanChange={handleNewBahanChange}
-                newBahan={newBahan}
-              />
+              )}
             </div>
           </div>
-        )}
+          {isEditMenuBahanOpen && isTablet && (
+            <div className="fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+              <div className="bg-[#FFF7DE] gap-[15px] flex relative rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] w-[356px] sm:w-[500px] md:w-[702px] h-[646px] md:h-[539px]">
+                <button
+                  onClick={() => setIsEditMenuBahanOpen(false)}
+                  className="cursor-pointer absolute right-[17px] top-[18px]"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13 1L7 7M7 7L1 13M7 7L13 13M7 7L1 1"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <EditMenuBahan
+                  editMenuForm={editMenuForm}
+                  handleAddBahan={handleAddBahan}
+                  handleBahanDelete={handleBahanDelete}
+                  handleNewBahanChange={handleNewBahanChange}
+                  newBahan={newBahan}
+                />
+              </div>
+            </div>
+          )}
         </>
-
-        
       )}
 
       {editId !== null && (
@@ -934,13 +991,38 @@ function Stok() {
 function EditMenuBahan({
   editMenuForm,
   handleBahanDelete,
-  newBahan,
+  // newBahan,
   handleNewBahanChange,
-  handleAddBahan,
+  // handleAddBahan,
 }) {
+  const [bahanList, setBahanList] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    getBahan().then(setBahanList);
+  }, []);
+
+  // Fungsi untuk handle pemilihan bahan dari dropdown
+  const handleBahanSelect = (bahan) => {
+    handleNewBahanChange("nama", bahan.nama_bahan);
+    handleNewBahanChange("harga", bahan.harga || bahan.harga_beli || 0);
+    setShowDropdown(false);
+  };
+
+  // Fungsi untuk handle tambah bahan custom dari dropdown
+  const handleCustomBahan = (customBahan) => {
+    // Langsung tambahkan bahan custom ke menu tanpa perlu API call terpisah
+    // karena handleAddBahan akan memanggil API
+    handleNewBahanChange("nama", customBahan.nama_bahan);
+    handleNewBahanChange("harga", customBahan.harga);
+    setShowDropdown(false);
+  };
+
   return (
     <div className="flex flex-col max-md:w-full">
-      <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">Bahan</h4>
+      <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">
+        Bahan
+      </h4>
       <div className="w-full md:w-[273px] h-full bg-[#FFF7DE] rounded-[5px] max-md:border-[#737373] max-md:border-t-1 md:shadow-[0px_2px_6px_rgba(0,0,0,0.25)] pl-[10px] pr-[4px] pt-[2px] pb-[2px] overflow-y-auto">
         {/* LOOP DARI DATA BAHAN YANG ADA DI MENU */}
         {editMenuForm.bahan.length > 0 ? (
@@ -954,7 +1036,7 @@ function EditMenuBahan({
                   </h6>
                   {/* BTN HAPUS BAHAN */}
                   <svg
-                    onClick={() => handleBahanDelete(idx)}
+                    onClick={() => handleBahanDelete(bahan.id)}
                     className="cursor-pointer"
                     width="14"
                     height="16"
@@ -975,33 +1057,26 @@ function EditMenuBahan({
         ) : (
           <p className="px-2 text-sm italic text-gray-500">Tidak ada bahan</p>
         )}
-        {/* INI INPUT BARU */}
+
+        {/* INPUT BARU DENGAN DROPDOWN */}
         <div>
-          <div className="flex pl-[10px] pr-[24px] items-center justify-between h-[45px]">
-            <input
-              className="bg-[#D9D9D9] w-[130px] md:w-[91px] font-semibold px-2 py-1 rounded text-sm"
-              placeholder="Nama bahan"
-              value={newBahan.nama}
-              onChange={(e) => handleNewBahanChange("nama", e.target.value)}
-            />
-            <div className="flex items-center gap-[41px]">
-              <input
-                className="bg-[#D9D9D9] -translate-x-[30px] w-[91px] px-2 py-1 rounded text-sm"
-                placeholder="Harga"
-                type="number"
-                value={newBahan.harga || ""}
-                onChange={(e) =>
-                  handleNewBahanChange("harga", parseInt(e.target.value) || 0)
-                }
+          <div className="flex items-center justify-between">
+            {/* Input nama dengan dropdown trigger */}
+            {showDropdown && (
+              <BahanDropdownEdit
+                bahanList={bahanList}
+                onBahanSelect={handleBahanSelect}
+                onCustomBahan={handleCustomBahan}
+                onClose={() => setShowDropdown(false)}
               />
-            </div>
+            )}
           </div>
-          <hr className="w-full h-[0.5px] text-[#737373]" />
         </div>
-        {/* MENAMPILKAN INPUT BARU (DIATAS) */}
-        <div className="flex pl-[10px] pr-[20px] items-center justify-end h-[45px]">
+
+        {/* TOMBOL TAMBAH BAHAN */}
+        <div className="flex pl-[10px] pr-[13px] items-center justify-end h-[45px]">
           <div
-            onClick={handleAddBahan}
+            onClick={() => setShowDropdown(!showDropdown)}
             className="bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] size-[22px] rounded-full flex items-center justify-center cursor-pointer"
           >
             <svg
@@ -1019,6 +1094,132 @@ function EditMenuBahan({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function BahanDropdownEdit({
+  bahanList,
+  onBahanSelect,
+  onCustomBahan,
+  onClose,
+}) {
+  const [open, setOpen] = useState(true); // Selalu terbuka karena dipicu oleh input
+  const [search, setSearch] = useState("");
+  const [newNama, setNewNama] = useState("");
+  const [newHarga, setNewHarga] = useState("");
+  const [newOpsi, setNewOpsi] = useState("");
+  const dropdownRef = useRef(null);
+
+  const opsiList = [
+    { id: 1, nama: "bahan mentah" },
+    { id: 2, nama: "bahan baku" },
+    { id: 3, nama: "bahan lengkap" },
+  ];
+
+  // Gabungan dengan dummy data fallback
+  const combinedBahanList =
+    bahanList && bahanList.length > 0
+      ? bahanList
+      : [{ id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" }];
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+        onClose && onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
+  const filtered = combinedBahanList.filter((b) =>
+    b.nama_bahan.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleAddCustom = () => {
+    if (!newNama.trim() || !newHarga) return;
+
+    const customBahan = {
+      id: Date.now(),
+      nama_bahan: newNama,
+      harga: Number(newHarga),
+    };
+
+    onCustomBahan(customBahan);
+    setNewNama("");
+    setNewHarga("");
+    setSearch("");
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      {open && (
+        <div className="absolute left-0 z-50 w-full mt-1 overflow-y-auto bg-[#FEF1C5] border border-gray-300 rounded-md shadow-lg top-full max-h-48">
+          {/* Input tambah bahan baru */}
+          <div className="w-full p-2 space-y-2 border-b bg-[#FEF1C5]">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Nama bahan baru"
+                value={newNama}
+                onChange={(e) => {
+                  setNewNama(e.target.value);
+                  setSearch(e.target.value);
+                }}
+                className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
+              />
+              <input
+                type="number"
+                placeholder="Harga"
+                value={newHarga}
+                onChange={(e) => setNewHarga(e.target.value)}
+                className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
+              />
+            </div>
+            <select
+              value={newOpsi}
+              onChange={(e) => setNewOpsi(e.target.value)}
+              className="px-2 bg-white cursor-pointer max-md:h-[22.5px] h-[29px] sm:text-sm text-xs border rounded flex-1 w-full focus:outline-none"
+            >
+              <option value="">Pilih Opsi</option>
+              {opsiList.map((opsi) => (
+                <option key={opsi.id} value={opsi.nama}>
+                  {opsi.nama}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={handleAddCustom}
+              className="w-full bg-[#FFB300] hover:bg-[#F1A900] text-white text-xs py-1 rounded cursor-pointer"
+            >
+              Tambah Bahan Baru
+            </button>
+          </div>
+
+          {/* List bahan */}
+          <div className="overflow-y-auto divide-y divide-gray-200 max-h-32">
+            {filtered.length > 0 ? (
+              filtered.map((b) => (
+                <div
+                  key={b.id}
+                  onClick={() => onBahanSelect(b)}
+                  className="flex justify-between px-3 py-2 text-sm cursor-pointer hover:bg-[#F4DC8C]"
+                >
+                  <span className="font-medium">{b.nama_bahan}</span>
+                  <span>Rp{b.harga?.toLocaleString("id-ID") || "0"}</span>
+                </div>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-sm text-center text-gray-500">
+                Tidak ada bahan ditemukan
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

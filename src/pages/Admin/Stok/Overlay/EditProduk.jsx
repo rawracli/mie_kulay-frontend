@@ -18,8 +18,7 @@ function EditProduk({
     const payload = {
       nama_bahan: formData.get("produk"),
       harga_beli: formData.get("harga_beli"),
-      stok: formData.get("stok"),
-      kategori_id: formData.get("kategori_id"),
+      tipe: formData.get("tipe"),
     };
 
     const result = await updateBahan(defaultValue.id, payload);
@@ -36,9 +35,7 @@ function EditProduk({
               ...item,
               produk: payload.nama_bahan,
               harga_beli: payload.harga_beli,
-              stok: payload.stok,
-              kategori_id: payload.kategori_id,
-              kategori: result.data.kategori?.jenis_hidangan ?? "-",
+              tipe: payload.tipe,
             }
           : item
       )
@@ -98,14 +95,18 @@ function EditProduk({
           </div>
 
           <div>
-            <label>Kategori Id</label>
-            <input
-              type="number"
-              name="kategori_id"
-              defaultValue={defaultValue.kategori_id}
+            <label>Pilih tipe bahan</label>
+            <select
+              name="tipe"
+              defaultValue={defaultValue.tipe}
               required
               className="w-full mt-[7px] pl-[13px] border border-[#7E7E7E] rounded-[4px] h-[50px]"
-            />
+            >
+              <option value="">-- Pilih Tipe --</option>
+              <option value="bahan_mentah">Bahan Mentah</option>
+              <option value="bahan_baku">Bahan Baku</option>
+              <option value="bahan_lengkap">Bahan Lengkap</option>
+            </select>
           </div>
           <button
             type="submit"

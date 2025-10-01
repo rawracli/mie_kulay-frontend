@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Close from "../../../../assets/Admin/x.svg";
 import Login from "../../../../assets/Login/login.png";
 import { createMenu } from "../../../../controllers/Menu";
@@ -9,8 +9,9 @@ function TambahMenu({ onClose, onAdd }) {
   const [filePreview, setFilePreview] = useState(null);
   const [file, setFile] = useState(null);
   const [nama, setNama] = useState("");
-  const [hargaBeli, setHargaBeli] = useState(0);
+  const [hargaBeli, setHargaBeli] = useState();
   const [selectedBahan, setSelectedBahan] = useState([]);
+  const formRef = useRef(null);
 
   // buat preview ketika file dipilih
   useEffect(() => {
@@ -30,43 +31,50 @@ function TambahMenu({ onClose, onAdd }) {
     getBahan().then(setBahanList); // fetchBahan = API call
   }, []);
 
-  //! Ubah jumlah jadi harga
-  const addBahan = async (bahan) => {
-    // Cek kalau bahan sudah ada di list
+  // Fungsi untuk scroll ke bawah
+  const scrollToBottom = () => {
+    if (formRef.current) {
+      setTimeout(() => {
+        formRef.current.scrollTop = formRef.current.scrollHeight;
+      }, 30);
+    }
+  };
+
+  // Mengambil data bahan
+  const addBahan = async (bahan, options = { isNew: false }) => {
+    // kalau sudah dipilih sebelumnya maka tidak akan duplikat
     if (selectedBahan.find((b) => b.bahan_id === bahan.id)) return;
 
     try {
-      // Menggunakan field yang sesuai dengan data yang diterima
-      const hargaBeli = Number(bahan.harga || bahan.harga_beli || 0);
-      const kategoriId = Number(bahan.kategori_id || 1); // default category
+      if (options.isNew) {
+        // kalau bahan baru maka simpan ke DB dulu
+        const addedBahan = await tambahBahan({
+          nama_bahan: (bahan.nama_bahan || bahan.nama).trim(),
+          harga_beli: Number(bahan.harga || bahan.harga_beli || 0),
+          tipe: bahan.tipe,
+        });
 
-      // console.log("💰 Harga beli yang digunakan:", hargaBeli);
-      // console.log("🏷️ Kategori ID yang digunakan:", kategoriId);
-
-      if (hargaBeli <= 0) {
-        throw new Error("Harga beli harus lebih dari 0");
+        setSelectedBahan((prev) => [
+          ...prev,
+          {
+            bahan_id: addedBahan.id,
+            nama: addedBahan.nama_bahan,
+            jumlah: 1,
+          },
+        ]);
+        console.log("Bahan baru ditambahkan:", addedBahan);
+      } else {
+        // kalau bahan lama maka akan langsung masuk state, tanpa API
+        setSelectedBahan((prev) => [
+          ...prev,
+          {
+            bahan_id: bahan.id,
+            nama: bahan.nama_bahan,
+            jumlah: 1,
+          },
+        ]);
+        console.log("Bahan lama dipilih:", bahan);
       }
-
-      // Kirim ke backend dengan field yang benar
-      const addedBahan = await tambahBahan({
-        nama_bahan: (bahan.nama_bahan || bahan.nama).trim(), // handle kedua kemungkinan
-        harga_beli: hargaBeli,
-        kategori_id: kategoriId,
-        stok: bahan.stok || 0,
-        satuan: bahan.satuan || "pcs",
-      });
-
-      // Tambahkan ke state lokal
-      setSelectedBahan((prev) => [
-        ...prev,
-        {
-          bahan_id: addedBahan.id,
-          nama: addedBahan.nama_bahan,
-          jumlah: 1,
-        },
-      ]);
-
-      console.log("Bahan berhasil ditambahkan:", addedBahan);
     } catch (err) {
       console.error("Gagal menambahkan bahan:", err.message);
     }
@@ -109,13 +117,14 @@ function TambahMenu({ onClose, onAdd }) {
       <div className="bg-white max-md:border p-[11px] md:pl-[27px] md:pr-[32px] md:pb-[24px] md:pt-[28px] flex flex-col w-[317px] lg:w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
         <div
           onClick={onClose}
-          className="absolute max-md:hidden top-[18px] right-[22px] cursor-pointer"
+          className="absolute top-[18px] right-[22px] cursor-pointer"
         >
           <img src={Close} alt="X" />
         </div>
-        <h2 className="font-semibold text-[20px] md:text-2xl">Tambah Menu</h2>
+        <h2 className="font-semibold text-2xl">Tambah Menu</h2>
 
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="mt-[3px] md:mt-[41px] h-full md:space-y-[20px] flex flex-col overflow-y-auto"
         >
@@ -123,7 +132,7 @@ function TambahMenu({ onClose, onAdd }) {
             <label htmlFor="foto" className="max-md:text-[12.5px]">
               Foto
             </label>
-            <div className="relative w-full h-[57px] md:h-[131px] md:mt-[7px] bg-[#D9D9D9] rounded-[4px] cursor-pointer overflow-hidden">
+            <div className="relative w-full h-[74px] md:h-[131px] md:mt-[7px] bg-[#D9D9D9] rounded-[4px] cursor-pointer overflow-hidden">
               {filePreview ? (
                 <img
                   src={filePreview}
@@ -156,7 +165,7 @@ function TambahMenu({ onClose, onAdd }) {
             </div>
           </div>
 
-          <div className="items-center justify-end gap-2 max-md:flex">
+          <div className="max-md:mt-[8px]">
             <label htmlFor="Menu" className="max-md:text-[12.5px] text-nowrap">
               Nama Menu <span className="md:hidden">:</span>
             </label>
@@ -166,16 +175,13 @@ function TambahMenu({ onClose, onAdd }) {
               required
               value={nama}
               onChange={(e) => setNama(e.target.value)}
-              className="w-full mt-[7px] pl-[13px] text-[15px] max-md:w-[200px] border border-[#7E7E7E] rounded-[4px] h-[21px] md:h-[50px] focus:outline-none"
+              className="w-full mt-[5px] md:mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[38px] md:h-[50px] focus:outline-none"
             />
           </div>
 
-          <div className="items-center justify-end gap-2 max-md:flex">
-            <label
-              htmlFor="Harga"
-              className=" max-md:text-[12.5px] text-nowrap"
-            >
-              Harga Jual <span className="md:hidden">:</span>
+          <div className="max-md:mt-[8px]">
+            <label htmlFor="Harga" className="max-md:text-[12.5px] text-nowrap">
+              Harga Jual
             </label>
             <input
               type="number"
@@ -184,18 +190,20 @@ function TambahMenu({ onClose, onAdd }) {
               required
               value={hargaBeli}
               onChange={(e) => setHargaBeli(e.target.value)}
-              className="appearance-none w-full max-md:w-[200px] mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[21px] md:h-[50px] focus:outline-none"
+              className="appearance-none w-full mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] max-md:h-[38px] h-[50px] focus:outline-none"
             />
           </div>
 
-          <div>
-            <div className="items-center justify-end gap-2 mt-1 mb-3 max-md:flex">
-              <label className=" max-md:text-[12.5px] text-nowrap max-md:-translate-x-52">
-                Bahan <span className="md:hidden">:</span>
-              </label>
-              <BahanDropdown bahanList={bahanList} addBahan={addBahan} />
+          <div className="max-md:mt-[8px]">
+            <div className="mb-3">
+              <label className="max-md:text-[12.5px] text-nowrap">Bahan</label>
+              <BahanDropdown
+                bahanList={bahanList}
+                addBahan={addBahan}
+                onDropdownClick={scrollToBottom}
+              />
             </div>
-            <div className="overflow-y-auto max-h-32 md:max-h-48">
+            <div className="overflow-y-auto max-h-48">
               {selectedBahan.map((b, idx) => (
                 <div
                   key={b.bahan_id || b.id}
@@ -227,7 +235,7 @@ function TambahMenu({ onClose, onAdd }) {
 
           <button
             type="submit"
-            className="self-end w-[111px] max-md:mt-3 h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
+            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
           >
             Simpan
           </button>

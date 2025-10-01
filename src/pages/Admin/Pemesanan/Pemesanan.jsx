@@ -84,6 +84,7 @@ function Pemesanan() {
   //btn edit
   const onEdit = (index) => {
     setFormData({
+      id: data[index].id,
       nama: data[index].nama,
       jumlah: data[index].jumlah,
       harga: data[index].harga,
@@ -197,110 +198,108 @@ function Pemesanan() {
       <div className="max-sm:mx-[9px] flex-1 grid max-sm:grid-rows-[45px_1fr] sm:grid-cols-[1fr_160px] md:grid-cols-[1fr_198px]">
         <div className="max-sm:order-2 relative shadow-[0px_2px_6px_rgba(156,156,156,0.25)] bg-[#F5F5F5] border border-[#959595] h-full min-h-[500px] overflow-x-auto">
           {/* Hapus garis kolom absolut karena sudah tidak diperlukan */}
-         <div className="min-w-[450px] relative size-full">
-
-          <div
-            className={`absolute inset-0 grid grid-cols-[44.92%_14.89%_21.93%_18.25%] pointer-events-none ${
-              data.length === 0 && "invisible"
-            }`}
-          >
-            <div className="border-r border-[#959595]"></div>
-            <div className="border-r border-[#959595]"></div>
-            <div className="border-r border-[#959595]"></div>
-            <div></div>
-          </div>
-          <table className="table-auto w-full [&_th]:border-[1px] [&_th]:border-r">
-            <thead className="h-[47px] bg-[#FFB300] text-base font-semibold z-10">
-              <tr className="border border-[#959595] [&_th]:border-[#959595]">
-                <th className="w-[44.92%]">Menu</th>
-                <th className="w-[14.89%]">Jumlah</th>
-                <th className="w-[21.93%]">Harga</th>
-                <th className="w-[18.25%]">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="bg-[#F5F5F5]">
-              {data.length !== 0 ? (
-                data.map((val, ind) => (
-                  <tr
-                    key={ind}
-                    className={`${
-                      highlightedRow === ind
-                        ? "bg-[#AFCFFF]"
-                        : "even:bg-gray-200"
-                    } transition-colors ease-initial duration-300 [&_td]:h-[33px] [&_td]:border-r [&_td]:border-[#959595] text-[14px] font-semibold`}
-                  >
-                    <td className="pl-[21px] ">{val.nama}</td>
-                    <td>
-                      <div className="text-center flex justify-around items-center h-full">
-                        <button
-                          onClick={() => {
-                            handleDecrement(ind);
-                          }}
-                          className="group cursor-pointer h-full flex-1 flex justify-center items-center"
-                        >
-                          <img
-                            src={MinRed}
-                            alt=""
-                            className="group-hover:scale-150 group-active:scale-125"
+          <div className="min-w-[450px] relative size-full">
+            <div
+              className={`absolute inset-0 grid grid-cols-[44.92%_14.89%_21.93%_18.25%] pointer-events-none ${
+                data.length === 0 && "invisible"
+              }`}
+            >
+              <div className="border-r border-[#959595]"></div>
+              <div className="border-r border-[#959595]"></div>
+              <div className="border-r border-[#959595]"></div>
+              <div></div>
+            </div>
+            <table className="table-auto w-full [&_th]:border-[1px] [&_th]:border-r">
+              <thead className="h-[47px] bg-[#FFB300] text-base font-semibold z-10">
+                <tr className="border border-[#959595] [&_th]:border-[#959595]">
+                  <th className="w-[44.92%]">Menu</th>
+                  <th className="w-[14.89%]">Jumlah</th>
+                  <th className="w-[21.93%]">Harga</th>
+                  <th className="w-[18.25%]">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="bg-[#F5F5F5]">
+                {data.length !== 0 ? (
+                  data.map((val, ind) => (
+                    <tr
+                      key={ind}
+                      className={`${
+                        highlightedRow === ind
+                          ? "bg-[#AFCFFF]"
+                          : "even:bg-gray-200"
+                      } transition-colors ease-initial duration-300 [&_td]:h-[33px] [&_td]:border-r [&_td]:border-[#959595] text-[14px] font-semibold`}
+                    >
+                      <td className="pl-[21px] ">{val.nama}</td>
+                      <td>
+                        <div className="text-center flex justify-around items-center h-full">
+                          <button
+                            onClick={() => {
+                              handleDecrement(ind);
+                            }}
+                            className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                          >
+                            <img
+                              src={MinRed}
+                              alt=""
+                              className="group-hover:scale-150 group-active:scale-125"
+                            />
+                          </button>
+                          <input
+                            type="text"
+                            className="w-7 lg:w-10 text-center"
+                            value={val.jumlah}
+                            onChange={(e) =>
+                              handleInputChange(ind, e.target.value)
+                            }
                           />
-                        </button>
-                        <input
-                          type="text"
-                          className="w-7 lg:w-10 text-center"
-                          value={val.jumlah}
-                          onChange={(e) =>
-                            handleInputChange(ind, e.target.value)
-                          }
-                        />
-                        <button
-                          onClick={() => handleIncrement(ind)}
-                          className="group cursor-pointer h-full flex-1 flex justify-center items-center"
-                        >
-                          <img
-                            src={PlusGreen}
-                            alt=""
-                            className="group-hover:scale-150 group-active:scale-125"
-                          />
-                        </button>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      Rp{" "}
-                      {Number(val.harga * val.jumlah).toLocaleString("id-ID")}
-                    </td>
-                    <td>
-                      <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[4px] py-[5.5px]">
-                        <button
-                          onClick={() => onEdit(ind)}
-                          className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
-                        >
-                          <img src={Pencil} alt="" />
-                          <span className="max-lg:hidden">Edit</span>
-                        </button>
-                        <button
-                          onClick={() => onDelete(ind)}
-                          className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
-                        >
-                          <img src={Sampah} alt="" />
-                          <span className="max-lg:hidden">Delete</span>
-                        </button>
+                          <button
+                            onClick={() => handleIncrement(ind)}
+                            className="group cursor-pointer h-full flex-1 flex justify-center items-center"
+                          >
+                            <img
+                              src={PlusGreen}
+                              alt=""
+                              className="group-hover:scale-150 group-active:scale-125"
+                            />
+                          </button>
+                        </div>
+                      </td>
+                      <td className="text-center">
+                        Rp{" "}
+                        {Number(val.harga * val.jumlah).toLocaleString("id-ID")}
+                      </td>
+                      <td>
+                        <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[4px] py-[5.5px]">
+                          <button
+                            onClick={() => onEdit(ind)}
+                            className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
+                          >
+                            <img src={Pencil} alt="" />
+                            <span className="max-lg:hidden">Edit</span>
+                          </button>
+                          <button
+                            onClick={() => onDelete(ind)}
+                            className="flex-1 flex items-center justify-center bg-[#DC3538] hover:bg-[#D22B2D] active:bg-[#B81C1F] h-full rounded-[5px] gap-1 cursor-pointer"
+                          >
+                            <img src={Sampah} alt="" />
+                            <span className="max-lg:hidden">Delete</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="h-[400px] text-center">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <h4 className="font-semibold text-sm">Data Kosong</h4>
                       </div>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="h-[400px] text-center">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <h4 className="font-semibold text-sm">Data Kosong</h4>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-         </div>
-
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="max-sm:order-1 max-sm:justify-self-end flex flex-col justify-between mx-[10px] md:mx-[14px]">
           <button
@@ -364,8 +363,14 @@ function Pemesanan() {
           isEditOpen || deleteIndex !== null ? "" : "hidden"
         } bg-black/50 fixed inset-0 h-full w-full`}
       ></div>
-      <div className={`${(!paymentDropdown) ? "hidden" : ""} size-svh fixed`} onClick={()=>setPaymentDropdown(false)}></div>
-      <div className={`${(!isAddOpen) ? "hidden" : ""} size-svh fixed`} onClick={()=>setIsAddOpen(false)}></div>
+      <div
+        className={`${!paymentDropdown ? "hidden" : ""} size-svh fixed`}
+        onClick={() => setPaymentDropdown(false)}
+      ></div>
+      <div
+        className={`${!isAddOpen ? "hidden" : ""} size-svh fixed`}
+        onClick={() => setIsAddOpen(false)}
+      ></div>
       <TambahPesanan
         isAddOpen={isAddOpen}
         setIsAddOpen={setIsAddOpen}

@@ -83,9 +83,11 @@ function TambahKategori({ setIsAddKategori }) {
     }
   };
 
+  const [activeCategoryId, setActiveCategoryId] = useState(null);
   const handleClickEditBtn = (idx, e) => {
     e.stopPropagation();
     setEditIndex(idx);
+    setActiveCategoryId(kategoriData[idx].id); // simpan kategori aktif
     setFormNamaKategori(kategoriData[idx].kategori);
   };
 
@@ -130,30 +132,28 @@ function TambahKategori({ setIsAddKategori }) {
     }
   };
 
-  // ketika menambah menu dari TambahMenu
   const handleAddMenuToCategory = (menuObj) => {
-    // jika sedang edit, tambahkan ke kategori yang sedang diedit
-    if (editIndex !== null && kategoriData[editIndex]) {
-      setKategoriData((prev) => {
-        const copy = [...prev];
-        const cat = {
-          ...copy[editIndex],
-          menu: [...copy[editIndex].menu, menuObj],
-        };
-        copy[editIndex] = cat;
-        return copy;
-      });
-    } else {
-      // kalau belum ada edit aktif → buat kategori baru (ambil nama dari formNamaKategori kalau ada)
-      const newCatName = formNamaKategori.trim() || "Kategori Baru";
-      setKategoriData((prev) => {
-        const copy = [...prev, { kategori: newCatName, menu: [menuObj] }];
-        return copy;
-      });
-      // set edit ke kategori baru agar user bisa lanjut edit jika perlu
-      setEditIndex((prev) => (prev === null ? kategoriData.length : prev));
-      setFormNamaKategori("");
-    }
+    if (!activeCategoryId) return;
+
+    setKategoriData((prev) =>
+      prev.map((cat) => {
+        if (cat.id === activeCategoryId) {
+          return {
+            ...cat,
+            menu: [
+              ...cat.menu,
+              {
+                nama: menuObj.nama_hidangan,
+                foto: `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
+                  menuObj.gambar
+                }`,
+              },
+            ],
+          };
+        }
+        return cat;
+      })
+    );
   };
 
   const currentMenu =

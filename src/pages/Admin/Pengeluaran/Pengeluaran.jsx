@@ -232,10 +232,10 @@ function Pengeluaran() {
     currentPage == 0 && totalPages > 0 && setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pt-[13px] pb-[0.5rem] overflow-y-clip max-sm:w-[390px]">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pt-[13px] pb-[0.5rem] overflow-y-clip max-sm:w-full">
       <button
         onClick={() => setIsAddOpen(true)}
-        className="ml-[840px] max-sm:ml-[200px] pl-[11px] pr-[14px] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[40px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer w-[201px] max-sm:w-[180px] mb-[13px]"
+        className="ml-auto pl-[11px] pr-[14px] max-sm:mr-[1rem] bg-[#44962D] hover:bg-[#3E8C29] active:bg-[#3A7D27] h-[43px] max-sm:h-[40px] rounded-[10px] flex gap-[7.94px] items-center justify-center cursor-pointer w-[201px] max-sm:w-[180px] mb-[13px]"
         >
         <svg
             width="11"
@@ -253,20 +253,18 @@ function Pengeluaran() {
             Tambah Pengeluaran
           </p>
       </button>
-      <div className="min-h-[32.0625rem] pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
+      <div className="h-full pt-[29px] w-full max-sm:h-[680px] bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] pb-[1rem] max-sm:pb-0 px-[1rem]">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 space-y-[0.9375rem]">
             {/* filter date */}
-            <div className="flex items-center justify-between mb-3 ml-[665px] max-sm:ml-[178px]">
-              <div className="flex items-center">
-                <label className="text-1xl  font-semibold mr-2 max-sm:hidden">Filter logs by:</label>
-                <input
-                  type="date"
-                  value={tanggalInput}
-                  onChange={(e) => setTanggalInput(e.target.value)}
-                  className="w-[234px] max-sm:w-[131px] h-[35px] max-sm:h-[30px] bg-gray-100 px-2 max-sm:mb-[10px] border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400 max-sm:text-[14px] max-sm:ml-[50px]"
-                />
-              </div>
+            <div className="flex items-center justify-end w-auto ml-auto">
+              <label className="mr-2 font-semibold text-1xl max-sm:hidden">Filter logs by:</label>
+              <input
+                type="date"
+                value={tanggalInput}
+                onChange={(e) => setTanggalInput(e.target.value)}
+                className="w-[234px] max-sm:w-[131px] h-[35px] max-sm:h-[30px] bg-gray-100 px-2 max-sm:mb-[10px] border-[#959595] border-[0.5px] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-yellow-400 max-sm:text-[14px] max-sm:ml-[50px]"
+              />
             </div>
 
             {/* entries per page & search sejajar */}
@@ -310,7 +308,7 @@ function Pengeluaran() {
             </div>
             {/* data table */}
             <div className="w-full h-full">
-              <div className="overflow-x-auto max-sm:w-[360px] ">
+              <div className="overflow-x-auto w-full max-sm:min-w-full max-sm:w-[0px]">
               <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                 <thead className="top-0">
                   <tr className="bg-[#FFB300] h-[49px]">
@@ -346,12 +344,12 @@ function Pengeluaran() {
                           {t.id}
                         </td>
                         <td className="border-r border-[#959595]">
-                          <div className="text-center flex justify-around items-center h-full">
+                          <div className="flex items-center justify-around h-full text-center">
                             <button
                               onClick={() => {
                                 handleDecrement(t.id);
                               }}
-                              className="group cursor-pointer h-full flex-1 flex justify-end pr-5 pl-5 items-center"
+                              className="flex items-center justify-end flex-1 h-full pl-5 pr-5 cursor-pointer group"
                             >
                               <img
                                 src={MinRed}
@@ -361,7 +359,7 @@ function Pengeluaran() {
                             </button>
                             <input
                               type="text"
-                              className="w-30 text-center"
+                              className="text-center w-30"
                               value={t.pengeluaran}
                               onChange={(e) =>
                                 handleInputChange(t.id, e.target.value)
@@ -369,7 +367,7 @@ function Pengeluaran() {
                             />
                             <button
                               onClick={() => handleIncrement(t.id)}
-                              className="group cursor-pointer h-full flex-1 flex justify-start pl-5 pr-5 items-center"
+                              className="flex items-center justify-start flex-1 h-full pl-5 pr-5 cursor-pointer group"
                             >
                               <img
                                 src={PlusGreen}
@@ -403,7 +401,7 @@ function Pengeluaran() {
                             year: "numeric",
                           })}
                           <span> </span>
-                          <span className="text-blue-500 font-semibold">
+                          <span className="font-semibold text-blue-500">
                             {/* {new Date(t.created_at).toLocaleTimeString(
                               "id-ID",
                               {
@@ -437,7 +435,7 @@ function Pengeluaran() {
                     <tr>
                       <td
                         colSpan="6"
-                        className="text-center py-3 text-gray-500 italic"
+                        className="py-3 italic text-center text-gray-500"
                       >
                         Tidak ada data
                       </td>
@@ -557,7 +555,7 @@ function Pengeluaran() {
       )}
       {selectedPengeluaran && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           onClick={handleCloseModal}
         >
           <div
@@ -566,11 +564,11 @@ function Pengeluaran() {
           >
             {/* Header */}
             <div className="bg-[#1976D2] flex justify-between items-center px-4 py-2 h-[103px] max-sm:w-[322px] max-sm:h-[65px]">
-              <h2 className="text-white font-semibold text-lg ">
+              <h2 className="text-lg font-semibold text-white ">
                 {selectedPengeluaran.nama || "Pengeluaran"}
               </h2>
               <button
-          className=" top-2 right-3 text-black text-2xl hover:text-gray-200"
+          className="text-2xl text-black top-2 right-3 hover:text-gray-200"
           onClick={handleCloseModal}
         >
           ✕
@@ -579,7 +577,7 @@ function Pengeluaran() {
 
             {/* Body */}
             <div className="p-6">
-              <p className="text-gray-800 mb-6">{selectedPengeluaran.catatan}</p>
+              <p className="mb-6 text-gray-800">{selectedPengeluaran.catatan}</p>
 
               {(() => {
                 const tanggal =
@@ -588,14 +586,14 @@ function Pengeluaran() {
 
                 if (!tanggal) {
                   return (
-                    <p className="text-right text-gray-500 text-sm">
+                    <p className="text-sm text-right text-gray-500">
                       Tanggal tidak tersedia
                     </p>
                   );
                 }
 
                 return (
-                  <p className="text-right text-gray-600 text-sm">
+                  <p className="text-sm text-right text-gray-600">
                     {tanggal.toLocaleDateString("en-US", {
                       month: "short",
                       day: "2-digit",
