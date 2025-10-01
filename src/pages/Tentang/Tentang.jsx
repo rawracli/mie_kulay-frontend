@@ -38,7 +38,7 @@ function Tentang() {
       </div>
 
       {/* Kolom 2 (Gambar menumpuk) */}
-      <div className="flex-1 relative h-[500px] items-center justify-center max-xmd:ml-[30px] ">
+      <div className="flex-1 relative h-[500px] items-center justify-center max-xmd:ml-[80px] max-sm:ml-[0px] ">
         {/* Gambar 1 */}
         <img
           src={Toko}
