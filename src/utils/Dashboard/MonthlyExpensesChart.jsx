@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   BarChart,
   Bar,
@@ -9,8 +10,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { formatShort } from "../priceFormat";
 
 export default function MonthlyExpensesChart() {
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -49,13 +52,13 @@ export default function MonthlyExpensesChart() {
   return (
     <div className="w-full h-full">
       <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-        Pengeluaran bulanan
+        Jumlah Pengeluaran Berdasarkan Bulan
       </h2>
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
         width="100%"
-        height={180}
-        className="pr-[34px] mt-[16px]"
+        height={isMobile ? 282 : 175}
+        className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
       >
         <BarChart data={data}>
           <CartesianGrid
@@ -63,15 +66,9 @@ export default function MonthlyExpensesChart() {
             strokeDasharray={8}
             vertical={false}
           />
-          <XAxis dataKey="month" textAnchor="end" interval={0} />
+          <XAxis dataKey="month" tick={{ fontSize: isMobile ? 12 : 15 }} />
           <YAxis
-            tickFormatter={(value) =>
-              new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-              }).format(value)
-            }
+            tickFormatter={(value) => `Rp. ${formatShort(value)}`}
             tick={{ fontSize: 10 }}
           />
           <Tooltip

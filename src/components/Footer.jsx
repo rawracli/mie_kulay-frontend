@@ -17,17 +17,21 @@ function Footer() {
   pt-[20px] sm:pt-[28px] lg:pt-[66px] 
   pb-[24px]"
       >
-        <div className="flex flex-row flex-1 pt-3.5 items-center lg:items-start">
-          <div className="hidden sm:block pt-[17px]">
+        <div className="flex flex-col lg:flex-row flex-1 pt-3.5">
+          {/* Logo - hidden on mobile, show on lg+ */}
+          <div className="hidden lg:block pt-[17px]">
             <img src={Logo} alt="logo" className="w-[175px]" />
           </div>
 
-          <div className="flex flex-col sm:pl-19 flex-1 gap-9 lg:pl-[100px]">
-            <div className="sm:w-49 sm:hidden pt-[24px]">
+          <div className="flex flex-col lg:flex-row lg:pl-[100px] flex-1 gap-9 lg:gap-[133px]">
+            {/* Logo Mobile */}
+            <div className="lg:hidden pt-[24px]">
               <img src={Logo} alt="logo" className="w-45" />
             </div>
-            <nav className="flex lg:justify-center flex-1 gap-[133px]">
-              <div className="">
+
+            {/* Navigasi Section */}
+            <nav className="flex flex-col lg:flex-row justify-center flex-1 gap-9 lg:gap-[133px]">
+              <div>
                 <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Navigasi
                 </h2>
@@ -35,7 +39,6 @@ function Footer() {
                   <li>
                     <Link
                       to="/"
-                      className=""
                       onClick={() => {
                         window.scrollTo(0, 0);
                       }}
@@ -46,7 +49,6 @@ function Footer() {
                   <li>
                     <Link
                       to="/tentang"
-                      className=""
                       onClick={() => {
                         window.scrollTo(0, 0);
                       }}
@@ -57,7 +59,6 @@ function Footer() {
                   <li>
                     <Link
                       to="/menu"
-                      className=""
                       onClick={() => {
                         window.scrollTo(0, 0);
                       }}
@@ -68,7 +69,6 @@ function Footer() {
                   <li>
                     <Link
                       to="/kontak"
-                      className=""
                       onClick={() => {
                         window.scrollTo(0, 0);
                       }}
@@ -78,11 +78,13 @@ function Footer() {
                   </li>
                 </ul>
               </div>
+
+              {/* Informasi Section - Show on lg+ */}
               <div className="hidden lg:block w-[290px]">
-                <h2 className="font-boogaloo text-[36px] leading-7 mb-[18px]">
+                <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Informasi
                 </h2>
-                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
                   <div className="flex gap-[19.5px]">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
                     <p>0838 - 6993 - 1820</p>
@@ -92,22 +94,23 @@ function Footer() {
                     <p>ayuuaulia01@gmail.com</p>
                   </div>
                   <div className="flex gap-[19.5px] items-start">
-                    <img src={Maps} alt="" className=" pt-[5px]" />
+                    <img src={Maps} alt="" className="pt-[5px]" />
                     <p>
                       3WHG+P4G, Jl. Masjid, Gunungparang, Kec. Cikole, Kota
                       Sukabumi, Jawa Barat 43111
                     </p>
                   </div>
-                  {/* Pemesanan online */}
                 </ul>
               </div>
             </nav>
-            <nav className="hidden md:block lg:hidden">
-              <div className="">
-                <h2 className="font-boogaloo text-[36px] leading-7 mb-2.5">
+
+            {/* Informasi Section - Show on mobile/tablet */}
+            <nav className="lg:hidden max-w-100">
+              <div>
+                <h2 className="font-boogaloo text-[36px] leading-7 mb-[22px]">
                   Informasi
                 </h2>
-                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-[#DBDBDB]">
+                <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
                   <div className="flex gap-[19.5px]">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
                     <p>0838 - 6993 - 1820</p>
@@ -117,33 +120,23 @@ function Footer() {
                     <p>ayuuaulia01@gmail.com</p>
                   </div>
                   <div className="flex gap-[19.5px] items-start">
-                    <img src={Maps} alt="" className=" pt-[5px]" />
-                    <p>
+                    <img src={Maps} alt="" className="pt-[5px] translate-x-[2px]" />
+                    <p className="text-left">
                       3WHG+P4G, Jl. Masjid, Gunungparang, Kec. Cikole, Kota
                       Sukabumi, Jawa Barat 43111
                     </p>
                   </div>
-                  {/* Pemesanan online */}
                 </ul>
               </div>
-            </nav>
-            <div className="md:hidden max-w-90 sm:w-50 lg:ml-10">
-              <h2 className="font-bold text-[1.35rem] leading-7">Lokasi</h2>
-              <address>
-                <p className="text-base sm:text-[0.75rem] leading-5 sm:leading-[0.885rem] pt-3.5 text-[#DBDBDB]">
-                  Perumahan Prima Mulia Residen (Blok B3, No 19) , Jalan Nagrak,
-                  Lebak Muncang, Cikujang, Kec. Gunung Guruh, Kabupaten
-                  Sukabumi, Jawa Barat 43156
-                </p>
-              </address>
-            </div>
+            </nav> 
           </div>
 
-          <div className="hidden md:block w-fit lg:ml-15">
+          {/* Pemesanan Online & Copyright */}
+          <div className="w-full mt-8 lg:w-fit lg:ml-15 lg:mt-0">
             <h2 className="font-boogaloo text-[36px] pb-[21px] leading-7">
               Pemesanan Online
             </h2>
-            <div className="gap-[13px] flex flex-col pl-[4px]">
+            <div className="gap-[13px] flex lg:flex-col pl-[4px]">
               <a
                 href=""
                 className="bg-white transition-all duration-75 shadow-[2px_3px_0px_rgba(255,255,255,0.7)] active:shadow-[0px_0px_0px_rgba(255,255,255,0.7)] active:translate-x-[2px] active:translate-y-[3px] cursor-pointer rounded-[10px] flex items-center justify-center h-[49px] w-[125px]"
@@ -157,7 +150,7 @@ function Footer() {
                 <img src={Grab} alt="Grab" className="w-[110px] h-[20px]" />
               </a>
             </div>
-            <p className="font-baloo-2 pt-[12px] text-[18px]">
+            <p className="font-baloo-2 pt-[37px] lg:pt-[12px] text-[18px] max-lg:text-center">
               © Copyright 2025 <span className="font-bold">Mie Kulay</span>. All
               Rights Reserved
             </p>

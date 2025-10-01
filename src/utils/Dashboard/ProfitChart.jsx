@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -12,8 +12,9 @@ import axios from "axios";
 import { useMediaQuery } from "react-responsive";
 import { formatShort } from "../priceFormat";
 
-export default function MonthlyEarningsChart() {
+export default function ProfitChart() {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const isTabletBig = useMediaQuery({ query: "(max-width: 1024px)" });
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -51,16 +52,16 @@ export default function MonthlyEarningsChart() {
 
   return (
     <div className="w-full h-full">
-      <h2 className="text-[14px] font-semibold pt-[6px] pl-[19px] pb-[9px]">
-        Jumlah Pendapatan Berdasarkan Bulan
-      </h2>
+      <div className="pt-[6px] pl-[19px] pb-[9px] font-semibold">
+        <h2 className="text-[14px]">Jumlah Keuntungan Berdasarkan Bulan</h2>
+      </div>
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
         width="100%"
-        height={isMobile ? 282 : 175}
+        height={isMobile ? 250 : isTabletBig ? 200 : 285}
         className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
       >
-        <BarChart data={data}>
+        <LineChart data={data}>
           <CartesianGrid
             stroke="#959595"
             strokeDasharray={8}
@@ -80,8 +81,14 @@ export default function MonthlyEarningsChart() {
               }).format(value)
             }
           />
-          <Bar dataKey="income" fill="#FFB300" />
-        </BarChart>
+          <Line
+            dataKey="income"
+            stroke="#FFB300"
+            strokeWidth={2}
+            dot={{ fill: "#FFB300", strokeWidth: 2, r: 4 }}
+            activeDot={{ r: 6, fill: "#FFB300" }}
+          />
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );

@@ -37,5 +37,19 @@ const createMenu = async (formData) => {
   return await response.json();
 };
 
+const updateMenu = async (id, data) => {
+  const res = await fetch(`${API_URL}/menu/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": await gctks(),
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Gagal update menu");
+  return await res.json();
+};
 
-export { getMenu, createMenu };
+
+export { getMenu, createMenu, updateMenu };
