@@ -161,6 +161,7 @@ export default function HeroSection() {
             src={bubuk}
             alt="bubuk"
             className="absolute left-1/2 -translate-x-1/2 bottom-45 sm:bottom-85 md:bottom-70 -z-10 xmd:hidden object-center max-xmd:w-full max-sm:min-w-[500px] max-sm:max-w-[500px] max-md:min-w-[758.27px] max-xmd:max-w-[800.27px]  max-w-none"
+            data-aos="zoom-in-up" data-aos-duration="1000"
           />
         </div>
 
@@ -241,27 +242,31 @@ export default function HeroSection() {
                 src={Mie2}
                 alt="mie"
                 className="absolute max-sm:w-[230.82px] max-md:w-[300.82px] max-xmd:w-[350.11px] max-sm:right-[21.97px] max-xmd:right-[50px] right-[10px] max-sm:bottom-[111px] bottom-[182px] -rotate-[4.93deg]"
-                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="50" data-aos-anchor-placement="top-bottom"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="200" data-aos-anchor-placement="top-bottom"
               />
               <img
                 src={Minum}
                 alt="minum"
                 className="absolute max-sm:w-[101.21px] max-md:w-[130px] max-xmd:w-[132.29px] max-sm:right-[253.89px] max-md:right-[350px] max-md:-rotate-[14.46deg] max-sm:bottom-[183.13px] max-xmd:bottom-[260px] max-xmd:right-[474.82px] right-[410px] bottom-[401px] -rotate-[8.87deg]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="100" data-aos-anchor-placement="top-bottom"
               />
               <img
                 src={Mie3}
                 alt="mie"
                 className="absolute max-sm:w-[97.47px] max-xmd:w-[120.29px] max-md:right-[60px] max-sm:right-[29px] max-xmd:right-[80px] right-[375px] max-sm:bottom-[14px] bottom-[37px] rotate-[13.42deg]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="300" data-aos-anchor-placement="top-bottom"
               />
               <img
                 src={Sosis}
                 alt="sosis"
                 className="absolute max-sm:w-[111.97px] max-xmd:w-[148.85px] max-sm:right-[230.74px] max-sm:bottom-[24.28px] max-md:right-[230px] max-xmd:bottom-[70px] max-xmd:right-[513.29px] right-[6.5px] bottom-[490px] rotate-[21.45deg]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="100" data-aos-anchor-placement="top-bottom"
               />
               <img
                 src={Cabe}
                 alt="cabe"
                 className="absolute max-sm:w-[195.38px] max-md:w-[230.38px] max-md:-rotate-[12.46deg] max-md:-right-[50px] -right-[125px] bottom-[107.44px] sm:bottom-[180px] -rotate-[21.34deg]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="225" data-aos-anchor-placement="top-bottom"
               />
             </>
           </div>
