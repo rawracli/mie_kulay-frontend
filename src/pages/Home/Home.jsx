@@ -301,7 +301,7 @@ export default function HeroSection() {
           </div>
         </div>
         {/* CAROUSEL VIDEO */}
-        <div className="relative flex h-screen max-h-[800px]">
+        <div className="relative flex min-h-[800px] md:min-h-[760px] max-h-[800px]">
           <div className="flex-1 bg-[#FFB300]">
             <h2 className="text-[40px] md:text-[60px] font-boogaloo text-end mr-[12px] pt-[57px]">
               Seputar
