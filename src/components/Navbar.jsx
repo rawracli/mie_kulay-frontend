@@ -120,17 +120,6 @@ function Navbar() {
               </p>
             </NavLink>
           ))}
-          <div className="pt-4">
-            <a
-              href="https://wa.me/6281333330073"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-center bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white transition-all py-3 px-5 rounded-lg transform hover:scale-105 duration-200"
-              onClick={() => setIsOpen(false)}
-            >
-              Pesan Sekarang
-            </a>
-          </div>
         </div>
         {/* Overlay Background */}
         {isOpen && (
