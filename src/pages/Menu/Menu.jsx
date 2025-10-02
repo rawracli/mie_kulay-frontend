@@ -6,7 +6,6 @@ import FilterMenu from "../../assets/Menu/FilterMenu.jpg";
 import useScrollBehaviour from "../../hooks/useScrollBehaviour";
 import { getMenu } from "../../controllers/Menu";
 
-
 function MenuPage() {
   // menampilkan dari action
   const [showSecond, setShowSecond] = useState(false);
@@ -258,38 +257,39 @@ function MenuPage() {
           </div>
         </div>
 
-        {/* Menu per kategori */}
+        {/* Menu per kategori - DIUBAH MENJADI FLEX RESPONSIVE */}
         <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] pl-[81px] max-lg:pl-[10px] mt-[30px]">
           {shownCategories.map((cat, index) => (
             <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
               <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
                 {cat}
               </h2>
-              <div className="grid grid-cols-3 md:grid-cols-3 max-sm:grid-cols-3 gap-6 max-sm:gap-3 justify-items-center">
+              {/* GANTI GRID DENGAN FLEX DAN FLEX-WRAP */}
+              <div className="flex flex-wrap justify-center gap-6 max-sm:gap-3 sm:justify-start">
                 {menuData
                   .filter((item) => item.category === cat)
                   .map((item) => (
                     <div
-                    key={item.id}
-                    className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-full max-w-[220px] bg-white max-sm:w-[105px] max-sm:h-[128px]"
-                  >
-                    {/* Konten Card */}
-                    <div className="relative z-10">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[69px]"
-                      />
-                      <div className="flex flex-col justify-between h-auto p-2">
-                        <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[14px]">
-                          {item.name}
-                        </h3>
-                        <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[14px] max-sm:mt-1">
-                          Rp.{item.price}
-                        </p>
+                      key={item.id}
+                      className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden bg-white flex-shrink-0 w-full max-w-[220px] max-sm:w-[105px] max-sm:h-[128px]"
+                    >
+                      {/* Konten Card */}
+                      <div className="relative z-10">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[69px]"
+                        />
+                        <div className="flex flex-col justify-between h-auto p-2">
+                          <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[14px] line-clamp-2">
+                            {item.name}
+                          </h3>
+                          <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[14px] max-sm:mt-1">
+                            Rp.{item.price}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
               </div>
             </div>
