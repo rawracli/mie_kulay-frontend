@@ -246,7 +246,7 @@ function MenuPage() {
           </div>
         )}
 
-        <div className="z-10 flex flex-col">
+        <div className="z-10 flex flex-col" data-aos="fade-right" data-aos-duration="1000">
           <div
             className={`sticky transition-all duration-300 ${
               isVisible ? "top-25" : "-top-[1px]"
@@ -282,7 +282,7 @@ function MenuPage() {
         <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] max-sm:pr-0 pl-[81px] max-lg:pl-[10px] mt-[30px]">
           {shownCategories.map((cat, index) => (
             <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
-              <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
+              <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo" data-aos="fade-up" data-aos-duration="1000">
                 {cat}
               </h2>
               {/* GANTI GRID DENGAN FLEX DAN FLEX-WRAP */}
@@ -293,6 +293,7 @@ function MenuPage() {
                     <div
                       key={item.id}
                       className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden bg-white flex-shrink-0 w-full max-w-[220px] max-sm:w-[105px] max-sm:h-[128px]"
+                      data-aos="fade-up" data-aos-duration="1200"
                     >
                       {/* Konten Card */}
                       <div className="relative z-10">
