@@ -205,10 +205,9 @@ function MenuPage() {
         {createZigzagElements()}
 
         {!showSecond && (
-          <div className="hidden max-lg:block pr-7 pl-7">
-            <div className="flex flex-row items-center w-full gap-6">
+          <div className="hidden pl-3 max-lg:block pr-7">
+            <div className="flex flex-row items-center w-full gap-6" onClick={() => setShowSecond(true)}>
               <img
-                onClick={() => setShowSecond(true)}
                 src={FilterMenu}
                 alt="FilterMenu"
                 className="w-5 h-5"
