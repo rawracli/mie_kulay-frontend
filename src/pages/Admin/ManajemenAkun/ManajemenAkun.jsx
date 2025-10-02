@@ -120,7 +120,7 @@ function ManajemenAkun() {
   }, [currentPage, totalPages]);
 
   return (
-    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] max-sm:px-0 pb-[0.5rem] max-sm:pb-0 max-sm:w-full">
+    <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] max-sm:min-h-0 w-full px-[0.75rem] max-sm:px-0 pb-[0.5rem] max-sm:pb-0 max-sm:w-full">
       <div className="flex items-center justify-end py-[13px]">
         <button
           onClick={() => setIsAddOpen(true)}
@@ -132,7 +132,7 @@ function ManajemenAkun() {
           </p>
         </button>
       </div>
-      <div className="pt-[38px] w-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:w-[394px] max-sm:h-[696px]">
+      <div className="pt-[38px] w-full h-full bg-white shadow-[0px_2px_6px_rgba(156,156,156,0.25)] rounded-[5px] max-sm:rounded-[0px] pb-[1rem] px-[1rem] max-sm:max-w-full ">
         <div className="flex gap-[0.9375rem] w-full">
           <div className="flex-1 pb-[1.375rem] space-y-[0.9375rem]">
             {/* search & filter */}
@@ -175,8 +175,8 @@ function ManajemenAkun() {
               </div>
             </div>
             {/* data table */}
-            <div className="h-full overflow-x-auto">
-              <div className="overflow-x-auto max-sm:w-[360px] ">
+            <div className="grid h-full">
+              <div className="overflow-x-auto">
                 <table className="w-full font-semibold border-collapse border border-[#959595] max-sm:min-w-[661px]">
                   <thead className="top-0">
                     <tr className="bg-[#FFB300] h-[49px]">
@@ -231,7 +231,7 @@ function ManajemenAkun() {
                       <tr>
                         <td
                           colSpan="6"
-                          className="text-center py-3 text-gray-500 italic"
+                          className="py-3 italic text-center text-gray-500"
                         >
                           Tidak ada data
                         </td>
