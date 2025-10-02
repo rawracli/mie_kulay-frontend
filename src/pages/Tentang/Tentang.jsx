@@ -24,7 +24,7 @@ function Tentang() {
       {/* Container utama */}
     <div className="max-w-6xl mx-auto flex flex-row max-xmd:flex-col-reverse px-6 py-12 gap-6 relative mt-[10px]">
       {/* Kolom 1 (Teks) */}
-      <div className="flex-1  relative max-xmd:mt-[400px] max-sm:mt-0">
+      <div className="flex-1  relative max-xmd:mt-[400px] max-md:mt-20 max-sm:mt-0">
         <h3 className="text-[49px] font-boogaloo relative z-10  max-sm:text-[40px] max-xmd:text-[60px] mt-[43px] max-xmd:text-center">
           Cerita di Balik Kedai Mie Kulay
         </h3>
@@ -38,7 +38,7 @@ function Tentang() {
       </div>
 
       {/* Kolom 2 (Gambar menumpuk) */}
-      <div className="flex-1 relative h-[500px] items-center justify-center max-xmd:ml-[80px] max-sm:ml-[0px] ">
+      <div className="flex-1 relative h-[500px] items-center justify-center max-xmd:ml-[80px] max-lg:ml-[100px]  max-sm:ml-[0px] ">
         {/* Gambar 1 */}
         <img
           src={Toko}
