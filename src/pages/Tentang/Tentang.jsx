@@ -96,7 +96,7 @@ function Tentang() {
       </div>
 
       {/* Keunggulan */}
-      <div className="relative max-w-6xl mx-auto px-[51px] py-12 max-sm:py-0 max-xmd:py-0 text-center ml-[170px] max-sm:ml-0 max-xmd:ml-0  mr-[130px] max-sm:mr-0 max-xmd:mr-0 ">
+      <div className="relative mx-auto px-[51px] py-12 max-sm:py-0 max-xmd:py-0 text-center ml-[170px] max-sm:ml-0 max-xmd:ml-0  mr-[130px] max-sm:mr-0 max-xmd:mr-0 ">
         <h3 className="text-[60px] max-sm:text-[35px] max-xmd:text-[60px] font-boogaloo mb-10 max-sm:mb-[50px] max-sm:xmd-[50px]">
           Keunggulan <span className="text-[#FFB300]">Mie Kulay</span>
         </h3>
@@ -109,7 +109,7 @@ function Tentang() {
 
 
           {/* Card wrapper */}
-          <div className="relative z-10 flex gap-6 mb-[50px] max-sm:flex-col max-xmd:flex-col max-sm:items-center max-xmd:items-center">
+          <div className="relative z-10 flex items-center justify-center gap-6 mb-[50px] max-sm:flex-col max-xmd:flex-col max-sm:items-center max-xmd:items-center">
             {/* Card 1 */}
             <div className="bg-[#FFB300] p-6 rounded-lg w-[268px] h-[330px] text-center flex flex-col items-center">
               <img src={Vector} alt="Harga Murah" className="w-[102px] h-[100px] mb-4" />
