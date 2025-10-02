@@ -26,14 +26,14 @@ function Login() {
   };
 
   return (
-    <div className="flex max-md:flex-col h-screen">
+    <div className="flex h-screen max-md:flex-col">
       {/* Logo di kiri atas */}
       <div className="absolute top-6 left-6">
         <img src={logo} alt="Logo" className="w-[59px] h-[59px] mt-[0.10px]" />
       </div>
 
       {/* Kolom kiri: Form Login */}
-      <div className="flex flex-1 max-sm:items-start items-center justify-center bg-white">
+      <div className="flex items-center justify-center flex-1 bg-white max-sm:items-start">
         <form
           onSubmit={handleSubmit}
           className="shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.75)] p-10 max-sm:p-0 rounded-md lg:w-[503px] lg:h-[547px] max-sm:w-[323px] max-sm:h-[405px] max-sm:mt-[107px] max-sm:ml-[33px] max-sm:mr-[33px] max-sm:z-10 max-md:z-10 bg-white"
@@ -41,7 +41,7 @@ function Login() {
           <h2 className="text-[32px] max-sm:text-[24px] font-semibold text-center mb-6 mt-[2.50rem] max-sm:mt-[40px]">
             Login
           </h2>
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          {error && <p className="mb-4 text-center text-red-500">{error}</p>}
 
           {/* Email */}
           <div className="mb-4">
@@ -77,7 +77,7 @@ function Login() {
             type="submit"
             disabled={loading}
           >
-            <h3 className="text-center-2xl font-semibold">
+            <h3 className="font-semibold text-center-2xl">
               {loading ? "Loading..." : "Login"}
             </h3>
           </button>

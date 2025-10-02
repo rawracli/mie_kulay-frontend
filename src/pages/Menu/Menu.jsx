@@ -6,17 +6,125 @@ import FilterMenu from "../../assets/Menu/FilterMenu.jpg";
 import useScrollBehaviour from "../../hooks/useScrollBehaviour";
 import { getMenu } from "../../controllers/Menu";
 
-// Data menu
 
 function MenuPage() {
   // menampilkan dari action
   const [showSecond, setShowSecond] = useState(false);
   // ubah dari array → string (satu kategori saja)
-  const [menuData, setMenuData] = useState([]);
+  const [menuData, setMenuData] = useState([
+    {
+      id: 1,
+      name: "Es Kopi Susu",
+      price: 15000,
+      category: "Minuman",
+      image: Eskopi,
+    },
+    {
+      id: 1,
+      name: "Es Kopi Susu",
+      price: 15000,
+      category: "Minuman",
+      image: Eskopi,
+    },
+    {
+      id: 1,
+      name: "Es Kopi Susu",
+      price: 15000,
+      category: "Minuman",
+      image: Eskopi,
+    },
+    {
+      id: 1,
+      name: "Es Kopi Susu",
+      price: 15000,
+      category: "Minuman",
+      image: Eskopi,
+    },
+    {
+      id: 2,
+      name: "Teh Manis Dingin",
+      price: 10000,
+      category: "Minuman",
+      image: "https://via.placeholder.com/220x155.png?text=Teh+Manis",
+    },
+    {
+      id: 3,
+      name: "Mie Ayam Pangsit",
+      price: 20000,
+      category: "Makanan",
+      image: "https://via.placeholder.com/220x155.png?text=Mie+Ayam",
+    },
+    {
+      id: 4,
+      name: "Nasi Goreng Spesial",
+      price: 25000,
+      category: "Makanan",
+      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
+    },
+    {
+      id: 4,
+      name: "Nasi Goreng Spesial",
+      price: 25000,
+      category: "Makanan",
+      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
+    },
+    {
+      id: 4,
+      name: "Nasi Goreng Spesial",
+      price: 25000,
+      category: "Makanan",
+      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
+    },
+    {
+      id: 4,
+      name: "Nasi Goreng Spesial",
+      price: 25000,
+      category: "Makanan",
+      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
+    },
+    {
+      id: 5,
+      name: "Pisang Goreng",
+      price: 12000,
+      category: "Cemilan",
+      image: "https://via.placeholder.com/220x155.png?text=Pisang+Goreng",
+    },
+    {
+      id: 6,
+      name: "Roti Bakar Cokelat",
+      price: 18000,
+      category: "Cemilan",
+      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
+    },
+    {
+      id: 6,
+      name: "Roti Bakar Cokelat",
+      price: 18000,
+      category: "Cemilan",
+      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
+    },
+    {
+      id: 6,
+      name: "Roti Bakar Cokelat",
+      price: 18000,
+      category: "Cemilan",
+      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
+    },
+    {
+      id: 6,
+      name: "Roti Bakar Cokelat",
+      price: 18000,
+      category: "Cemilan",
+      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
+    },
+  ]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [containerHeight, setContainerHeight] = useState(0);
   const { isVisible } = useScrollBehaviour();
   const containerRef = useRef(null);
+
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -193,31 +301,35 @@ function MenuPage() {
               <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
                 {cat}
               </h2>
-              <div className="grid grid-cols-2 max-[350px]:grid-cols-1 md:grid-cols-3 gap-6 justify-items-center">
+              <div className="grid grid-cols-2 max-[350px]:grid-cols-1 md:grid-cols-3 max-sm:grid-cols-3 gap-6 max-sm:gap-3 justify-items-center">
                 {menuData
                   .filter((item) => item.category === cat)
                   .map((item) => (
                     <div
-                      key={item.id}
-                      className="relative rounded-lg shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-full max-w-[220px] bg-white"
-                    >
-                      {/* Konten Card */}
-                      <div className="relative z-10">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="pointer-events-none select-none w-full h-[155px] object-cover"
-                        />
-                        <div className="p-2 flex flex-col h-auto justify-between">
-                          <h3 className="font-bold text-[27px] font-boogaloo">
-                            {item.name}
-                          </h3>
-                          <p className="mt-4 text-black text-[25px] text-start font-baloo-2">
-                            Rp.{item.price}
-                          </p>
-                        </div>
+                    key={item.id}
+                    className="
+                      relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] 
+                      overflow-hidden w-full max-w-[220px] bg-white
+                      max-sm:w-[105px] max-sm:h-[128px]
+                    "
+                  >
+                    {/* Konten Card */}
+                    <div className="relative z-10">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[60px]"
+                      />
+                      <div className="p-2 flex flex-col h-auto justify-between">
+                        <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[12px]">
+                          {item.name}
+                        </h3>
+                        <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[10px] max-sm:mt-1">
+                          Rp.{item.price}
+                        </p>
                       </div>
                     </div>
+                  </div>
                   ))}
               </div>
             </div>
