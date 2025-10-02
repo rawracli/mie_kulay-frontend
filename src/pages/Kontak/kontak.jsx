@@ -1,5 +1,4 @@
 import React from "react";
-import "animate.css";
 import { useState } from "react";
 import Hero from "../../components/Hero";
 
@@ -34,7 +33,8 @@ function Kontak() {
         <div className="max-w mx-auto flex flex-col md:flex-row gap-[22px]">
           {/* Form Section */}
           <div
-            className={`animate__animated animate__slideInLeft flex-2 ${cardStyle} ${cardPadding} h-[436px]`}
+            className={`flex-2 ${cardStyle} ${cardPadding} h-[436px]`}
+            data-aos="fade-up" data-aos-duration="2000"
           >
             <h2 className="text-[26px] sm:text-[32px] font-bold mb-4 font-boogaloo md:text-nowrap">
               Kirimkan Pertanyaan Mu
@@ -78,7 +78,8 @@ function Kontak() {
 
           {/* Contact Info Section */}
           <div
-            className={`animate__animated animate__slideInRight flex-[1.5] ${cardStyle} pt-[26px] h-[436px]`}
+            className={`flex-[1.5] ${cardStyle} pt-[26px] h-[436px]`}
+            data-aos="fade-up" data-aos-duration="2000"
           >
             <div className="px-[28px] sm:px-[38px]">
               <h2 className="text-[26px] sm:text-[32px] font-bold mb-2 font-boogaloo">
@@ -112,7 +113,7 @@ function Kontak() {
         </div>
 
         {/* Map Section */}
-        <div className="max-w mx-auto mt-[16px] h-full animate_animated animate_FadeIn">
+        <div className="max-w mx-auto mt-[16px] h-full" data-aos="fade-up" data-aos-duration="2000">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.7483069258947!2d106.92046307900273!3d-6.920663449868827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e684900058502c9%3A0xf601489b114677c5!2sKULAY!5e0!3m2!1sid!2sid!4v1757152455741!5m2!1sid!2sid"
             style={{ border: 0 }}
