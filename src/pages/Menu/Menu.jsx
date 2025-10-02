@@ -320,8 +320,6 @@ function MenuPage() {
               </div>
             </div>
           </div>
-          </div>
-          </div>
         )}
 
         <div className="z-10 flex flex-col">
