@@ -79,6 +79,27 @@ function MenuPage() {
     category: "Minuman",
     image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
   },
+  {
+    id: 10,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+  {
+    id: 11,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+  {
+    id: 12,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
 ]);
 
   const [selectedCategory, setSelectedCategory] = useState("");
