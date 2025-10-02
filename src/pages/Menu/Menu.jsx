@@ -286,7 +286,7 @@ function MenuPage() {
                 {cat}
               </h2>
               {/* GANTI GRID DENGAN FLEX DAN FLEX-WRAP */}
-              <div className="flex flex-wrap justify-center gap-6 max-sm:gap-3 sm:justify-start">
+              <div className="flex flex-wrap justify-start gap-6 max-sm:gap-3">
                 {menuData
                   .filter((item) => item.category === cat)
                   .map((item) => (
