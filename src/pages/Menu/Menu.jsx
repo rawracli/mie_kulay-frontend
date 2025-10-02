@@ -295,8 +295,6 @@ function MenuPage() {
         )}
 
         {showSecond && (
-          <div className="z-10 hidden w-full max-lg:block pr-7 pl-7">
-            <div className="flex flex-col items-start w-full h-auto pt-1 pb-3 pl-3 pr-3 bg-white rounded shadow">
           <div className="hidden w-full max-lg:block pr-7 pl-7 z-z0">
             <div className="flex flex-col items-start w-full h-auto pt-1 pb-3 pl-3 pr-3 bg-white rounded shadow">
               <h1
@@ -336,7 +334,7 @@ function MenuPage() {
               Filter
             </h2>
             {/* Filter */}
-            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
+            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
               <p className="font-semibold mb-2 font-baloo-2 text-[28px]">
                 Kategori
               </p>
