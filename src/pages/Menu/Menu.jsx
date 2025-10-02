@@ -153,7 +153,7 @@ function MenuPage() {
         <div
           key={i}
           aria-hidden
-          className="pointer-events-none absolute z-0"
+          className="absolute z-0 pointer-events-none"
           style={{
             backgroundImage: `url(${Bg})`,
             backgroundRepeat: "no-repeat",
@@ -175,7 +175,7 @@ function MenuPage() {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       <Hero text={"Menu Kami"} />
       <div
         className="flex max-lg:flex-col p-[13px] pl-[20px] relative"
@@ -186,7 +186,7 @@ function MenuPage() {
 
         {!showSecond && (
           <div className="hidden max-lg:block pr-7 pl-7">
-            <div className="w-full flex flex-row gap-6 items-center">
+            <div className="flex flex-row items-center w-full gap-6">
               <img
                 onClick={() => setShowSecond(true)}
                 src={FilterMenu}
@@ -199,22 +199,22 @@ function MenuPage() {
         )}
 
         {showSecond && (
-          <div className="w-full hidden max-lg:block pr-7 pl-7 z-z0">
-            <div className="w-full h-auto bg-white flex flex-col pr-3 pl-3 pb-3 pt-1 items-start rounded shadow">
+          <div className="hidden w-full max-lg:block pr-7 pl-7 z-z0">
+            <div className="flex flex-col items-start w-full h-auto pt-1 pb-3 pl-3 pr-3 bg-white rounded shadow">
               <h1
                 className="w-full font-bold text-[19px] font-boogaloo text-right"
                 onClick={() => setShowSecond(false)}
               >
                 X
               </h1>
-              <div className="flex flex-wrap gap-3 items-center">
+              <div className="flex flex-wrap items-center gap-3">
                 {categories.map((cat) => (
                   <div key={cat} className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={selectedCategory.includes(cat)}
                       onChange={() => handleCategoryChange(cat)}
-                      className="w-5 h-5 accent-gray-700 rounded-full"
+                      className="w-5 h-5 rounded-full accent-gray-700"
                     />
                     <h1 className="font-bold text-[27px] font-boogaloo">
                       {cat}
@@ -226,7 +226,7 @@ function MenuPage() {
           </div>
         )}
 
-        <div className="flex flex-col z-10">
+        <div className="z-10 flex flex-col">
           <div
             className={`sticky transition-all duration-300 ${
               isVisible ? "top-25" : "-top-[1px]"
@@ -236,7 +236,7 @@ function MenuPage() {
               Filter
             </h2>
             {/* Filter */}
-            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
+            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
               <p className="font-semibold mb-2 font-baloo-2 text-[28px]">
                 Kategori
               </p>
@@ -284,7 +284,7 @@ function MenuPage() {
                         alt={item.name}
                         className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[69px]"
                       />
-                      <div className="p-2 flex flex-col h-auto justify-between">
+                      <div className="flex flex-col justify-between h-auto p-2">
                         <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[14px]">
                           {item.name}
                         </h3>
