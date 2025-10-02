@@ -111,7 +111,7 @@ export default function HeroSection() {
       <div className="overflow-x-hidden">
         {/* HERO SECTION */}
         <div className="relative max-sm:min-h-[702px] max-xmd:min-h-[1080px] xmd:min-h-[600px] flex max-xmd:flex-col">
-          <div className="z-10 max-xmd:mt-[100px] flex flex-col justify-center max-xmd:items-center mx-auto xmd:ml-[70px] max-sm:w-full max-xmd:w-4/5 xmd:w-1/2 gap-[10px] -translate-y-5">
+          <div className="z-10 max-xmd:mt-[100px] flex flex-col justify-center max-xmd:items-center mx-auto xmd:ml-[70px] max-sm:w-full max-xmd:w-4/5 xmd:w-1/2 gap-[10px] -translate-y-5" data-aos="fade-up" data-aos-duration="2000">
             <h1 className="font-boogaloo text-[35px] sm:text-[50px] md:text-[62px] xmd:text-[70px] text-center xmd:text-left">
               MIE KULAY SUKABUMI
             </h1>
@@ -136,21 +136,25 @@ export default function HeroSection() {
               src={Papan}
               alt="Papan"
               className="absolute max-sm:size-[243px] max-xmd:max-w-[379.39px] max-xmd:h-[382.31px] max-xmd:-translate-x-1/2 max-xmd:left-[46%] xmd:-right-[475px] max-sm:mt-[100px] max-xmd:mt-[160px] xmd:-top-[60px] -rotate-[137.9deg] xmd:-rotate-[38.03deg]"
+              data-aos="zoom-in-up" data-aos-duration="1300" data-aos-delay="50"
             />
             <img
               src={Pangsit}
               alt="Pangsit"
               className="absolute max-sm:size-[68px] max-xmd:-translate-x-1/2 max-xmd:left-[calc(50%-13.7rem)] max-sm:left-[calc(50%-9.4rem)] max-sm:mt-[90px] max-xmd:mt-[127px] max-xmd:z-10 max-xmd:size-[100px] xmd:right-[27px] xmd:top-[31px]"
+              data-aos="zoom-in-up" data-aos-duration="2000" data-aos-delay="600"
             />
             <img
               src={Mie}
               alt="Mie"
               className="absolute max-sm:max-w-[300px] max-xmd:max-w-[470px] xmd:right-[23px] xmd:top-[90px] max-xmd:-translate-x-1/2 max-xmd:left-[47.5%] max-sm:mt-[80px] max-xmd:mt-[130px] "
+              data-aos="zoom-in-up" data-aos-duration="2000" data-aos-delay="400"
             />
             <img
               src={Bumbu}
               alt="Bumbu"
               className="max-xmd:scale-x-[-1] absolute max-xmd:-translate-x-1/2 max-sm:left-[calc(50%+5.8rem)] max-xmd:left-[calc(50%+7.6rem)] max-sm:mt-[50px] max-xmd:mt-[63px] xmd:-right-[10px] xmd:top-[173.68px] rotate-[313.61deg] max-sm:w-[50.07px] max-xmd:w-[81.96px] xmd:rotate-[22.45deg]"
+              data-aos="zoom-in-up" data-aos-duration="2000" data-aos-delay="800"
             />
           </div>
           <img
@@ -166,8 +170,9 @@ export default function HeroSection() {
             src={SelamatDatang}
             alt="Selamat Datang"
             className="w-[1016px] my-0 px-2 md:px-10"
+            data-aos="fade-up" data-aos-duration="2000"
           />
-          <h2 className="font-chewy text-[clamp(0px,8vw,80px)] text-[#FFB300] -translate-y-4 sm:-translate-y-6 md:-translate-y-8 xmd:-translate-y-10">
+          <h2 className="font-chewy text-[clamp(0px,8vw,80px)] text-[#FFB300] -translate-y-4 sm:-translate-y-6 md:-translate-y-8 xmd:-translate-y-10" data-aos="fade-up" data-aos-duration="2000">
             DI MIE KULAY
           </h2>
         </div>
@@ -180,15 +185,17 @@ export default function HeroSection() {
                 src={isTablet ? RestoLebar : Resto}
                 alt="Restoran"
                 className="absolute right-0 xmd:left-[70.72px] max-sm:h-[150.28px] max-md:h-[220px] rotate-[3.07deg] xmd:-rotate-[11.16deg] border-x-[10.9px] border-y-[10.2px] sm:border-x-[20.9px] sm:border-y-[21.2px] md:border-x-[24.9px] md:border-y-[27.2px] border-[#D72629]"
+                data-aos="fade-up" data-aos-duration="2000"
               />
               <img
                 src={Talk}
                 alt="Talk"
                 className="absolute right-35 sm:right-50 md:right-60 xmd:left-[208.71px] max-sm:h-[160.28px] max-md:h-[230px] translate-y-[70px] sm:translate-y-[109px] md:translate-y-[155px] -rotate-[5.46deg] xmd:-rotate-[6.96deg] border-x-[10.9px] border-y-[10.2px] sm:border-x-[18.24px] sm:border-y-[17.32px] border-[#1554B4]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="200"
               />
             </div>
           </div>
-          <div className="z-10 flex flex-col justify-center w-[98%] sm:w-[86%] lg:w-[45%] xmd:w-[45%] gap-[30px] mb-[67px] xmd:mb-10">
+          <div data-aos="fade-up" data-aos-duration="2000" className="z-10 flex flex-col justify-center w-[98%] sm:w-[86%] lg:w-[45%] xmd:w-[45%] gap-[30px] mb-[67px] xmd:mb-10">
             <h2 className="font-boogaloo max-sm:text-[40px] lg:text-nowrap sm:text-[50px] md:text-[65.15px] xmd:text-[60px] leading-[50px] sm:leading-[60px] md:leading-[80px] xmd:leading-[68px]">
               <span className="text-[#FFB300]">Rasa</span> yang Menyatukan{" "}
               <span className="text-[#DC3538] block">Setiap Momen</span>
@@ -212,7 +219,7 @@ export default function HeroSection() {
             />
           </div>
           <div className="bg-[#FFB300] relative max-xmd:flex-col flex items-center max-sm:max-h-[650px] max-sm:min-h-[650px] max-md:max-h-[700px] max-md:min-h-[700px] md:min-h-[800px] md:max-h-[800px] xmd:max-h-[634px] xmd:min-h-[634px]">
-            <div className="z-10 flex flex-col max-xmd:text-center justify-center xmd:ml-[79px] max-xmd:px-5 xmd:w-1/2 pt-10">
+            <div data-aos="fade-up" data-aos-duration="2000" className="z-10 flex flex-col max-xmd:text-center justify-center xmd:ml-[79px] max-xmd:px-5 xmd:w-1/2 pt-10">
               <h2 className="font-boogaloo text-[40px] md:text-[60px] pb-[20px] max-md:leading-10 pt-5">
                 Saatnya Menjelajah Rasa
               </h2>
@@ -228,11 +235,13 @@ export default function HeroSection() {
                 src={Saus}
                 alt="saus"
                 className="absolute max-sm:w-[400px] max-sm:h-[332px] max-md:w-[580px] max-sm:min-w-[200px] max-md:h-[442px] max-xmd:w-[642.11px] max-xmd:h-[532.95px] max-sm:-bottom-6 max-xmd:-bottom-10 -bottom-5 right-0 max-xmd:-rotate-[5.51deg]"
+                data-aos="fade-up-left" data-aos-duration="1400"
               />
               <img
                 src={Mie2}
                 alt="mie"
                 className="absolute max-sm:w-[230.82px] max-md:w-[300.82px] max-xmd:w-[350.11px] max-sm:right-[21.97px] max-xmd:right-[50px] right-[10px] max-sm:bottom-[111px] bottom-[182px] -rotate-[4.93deg]"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="50" data-aos-anchor-placement="top-bottom"
               />
               <img
                 src={Minum}
@@ -270,12 +279,13 @@ export default function HeroSection() {
               src={allMenu}
               alt="ALL MENU CUMAN 5000 AJA !!"
               className="w-[1082px] max-md:px-1"
+              data-aos="fade-up" data-aos-duration="2000"
             />
             <Menu />
           </div>
           {/* MAP SECTION */}
           <div className="relative min-h-1/2">
-            <div className="flex items-center justify-center pt-[70px] md:pt-[125px] flex-wrap">
+            <div className="flex items-center justify-center pt-[70px] md:pt-[125px] flex-wrap" data-aos="fade-up" data-aos-duration="2000">
               <h2 className="font-boogaloo text-center text-[40px] md:text-[60px] md:text-nowrap max-sm:leading-none">
                 Apa Kata Mereka tentang
               </h2>
@@ -295,15 +305,16 @@ export default function HeroSection() {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                data-aos="fade-up" data-aos-duration="2000" data-aos-delay="50"
               ></iframe>
-              <img src={Tangan} alt="" className="max-xmd:hidden xl:hidden" />
+              <img src={Tangan} alt="" className="max-xmd:hidden xl:hidden" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="100"/>
             </div>
           </div>
         </div>
         {/* CAROUSEL VIDEO */}
         <div className="relative flex min-h-[730px] md:min-h-[760px] max-h-[800px]">
           <div className="flex-1 bg-[#FFB300]">
-            <h2 className="text-[40px] md:text-[60px] font-boogaloo text-end mr-[12px] pt-[57px]">
+            <h2 className="text-[40px] md:text-[60px] font-boogaloo text-end mr-[12px] pt-[57px]" data-aos="fade-up" data-aos-duration="2000">
               Seputar
             </h2>
           </div>
@@ -312,9 +323,10 @@ export default function HeroSection() {
               src={MieKulay2}
               alt="Mie Kulay"
               className="w-[140px] md:w-[200px] ml-[9px] md:ml-[12px] mt-[15px] md:mt-[20px] pt-[57px]"
+              data-aos="fade-up" data-aos-duration="2000" data-aos-delay="50"
             />
           </div>
-          <div className="flex justify-center absolute w-[1112px] bottom-[50px] py-3 xmd:bottom-[100px] right-1/2 translate-x-1/2">
+          <div className="flex justify-center absolute w-[1112px] bottom-[50px] py-3 xmd:bottom-[100px] right-1/2 translate-x-1/2" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="100">
             <Carousel
               items={items}
               containerWidth={

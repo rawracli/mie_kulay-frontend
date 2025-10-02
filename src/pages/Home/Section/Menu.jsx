@@ -17,6 +17,7 @@ function Menu() {
   return (
     <div
       className="flex items-center justify-center overflow-hidden"
+      data-aos-delay="50" data-aos="fade-up" data-aos-duration="2000"
       ref={emblaRef}
     >
       <div className="flex">
