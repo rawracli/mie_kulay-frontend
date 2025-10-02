@@ -265,17 +265,13 @@ function MenuPage() {
               <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
                 {cat}
               </h2>
-              <div className="grid grid-cols-2 max-[350px]:grid-cols-1 md:grid-cols-3 max-sm:grid-cols-3 gap-6 max-sm:gap-3 justify-items-center">
+              <div className="grid grid-cols-3 md:grid-cols-3 max-sm:grid-cols-3 gap-6 max-sm:gap-3 justify-items-center">
                 {menuData
                   .filter((item) => item.category === cat)
                   .map((item) => (
                     <div
                     key={item.id}
-                    className="
-                      relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] 
-                      overflow-hidden w-full max-w-[220px] bg-white
-                      max-sm:w-[105px] max-sm:h-[128px]
-                    "
+                    className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden w-full max-w-[220px] bg-white max-sm:w-[105px] max-sm:h-[128px]"
                   >
                     {/* Konten Card */}
                     <div className="relative z-10">
