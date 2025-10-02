@@ -279,7 +279,7 @@ function MenuPage() {
         </div>
 
         {/* Menu per kategori - DIUBAH MENJADI FLEX RESPONSIVE */}
-        <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] pl-[81px] max-lg:pl-[10px] mt-[30px]">
+        <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] max-sm:pr-0 pl-[81px] max-lg:pl-[10px] mt-[30px]">
           {shownCategories.map((cat, index) => (
             <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
               <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
