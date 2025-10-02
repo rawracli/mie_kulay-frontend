@@ -6,118 +6,102 @@ import FilterMenu from "../../assets/Menu/FilterMenu.jpg";
 import useScrollBehaviour from "../../hooks/useScrollBehaviour";
 import { getMenu } from "../../controllers/Menu";
 
-
 function MenuPage() {
   // menampilkan dari action
   const [showSecond, setShowSecond] = useState(false);
   // ubah dari array → string (satu kategori saja)
   const [menuData, setMenuData] = useState([
-    {
-      id: 1,
-      name: "Es Kopi Susu",
-      price: 15000,
-      category: "Minuman",
-      image: Eskopi,
-    },
-    {
-      id: 1,
-      name: "Es Kopi Susu",
-      price: 15000,
-      category: "Minuman",
-      image: Eskopi,
-    },
-    {
-      id: 1,
-      name: "Es Kopi Susu",
-      price: 15000,
-      category: "Minuman",
-      image: Eskopi,
-    },
-    {
-      id: 1,
-      name: "Es Kopi Susu",
-      price: 15000,
-      category: "Minuman",
-      image: Eskopi,
-    },
-    {
-      id: 2,
-      name: "Teh Manis Dingin",
-      price: 10000,
-      category: "Minuman",
-      image: "https://via.placeholder.com/220x155.png?text=Teh+Manis",
-    },
-    {
-      id: 3,
-      name: "Mie Ayam Pangsit",
-      price: 20000,
-      category: "Makanan",
-      image: "https://via.placeholder.com/220x155.png?text=Mie+Ayam",
-    },
-    {
-      id: 4,
-      name: "Nasi Goreng Spesial",
-      price: 25000,
-      category: "Makanan",
-      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
-    },
-    {
-      id: 4,
-      name: "Nasi Goreng Spesial",
-      price: 25000,
-      category: "Makanan",
-      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
-    },
-    {
-      id: 4,
-      name: "Nasi Goreng Spesial",
-      price: 25000,
-      category: "Makanan",
-      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
-    },
-    {
-      id: 4,
-      name: "Nasi Goreng Spesial",
-      price: 25000,
-      category: "Makanan",
-      image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
-    },
-    {
-      id: 5,
-      name: "Pisang Goreng",
-      price: 12000,
-      category: "Cemilan",
-      image: "https://via.placeholder.com/220x155.png?text=Pisang+Goreng",
-    },
-    {
-      id: 6,
-      name: "Roti Bakar Cokelat",
-      price: 18000,
-      category: "Cemilan",
-      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
-    },
-    {
-      id: 6,
-      name: "Roti Bakar Cokelat",
-      price: 18000,
-      category: "Cemilan",
-      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
-    },
-    {
-      id: 6,
-      name: "Roti Bakar Cokelat",
-      price: 18000,
-      category: "Cemilan",
-      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
-    },
-    {
-      id: 6,
-      name: "Roti Bakar Cokelat",
-      price: 18000,
-      category: "Cemilan",
-      image: "https://via.placeholder.com/220x155.png?text=Roti+Bakar",
-    },
-  ]);
+  // ==================== Makanan ====================
+  {
+    id: 1,
+    name: "Mie Ayam Pangsit",
+    price: 20000,
+    category: "Makanan",
+    image: "https://via.placeholder.com/220x155.png?text=Mie+Ayam",
+  },
+  {
+    id: 2,
+    name: "Nasi Goreng Spesial",
+    price: 25000,
+    category: "Makanan",
+    image: "https://via.placeholder.com/220x155.png?text=Nasi+Goreng",
+  },
+  {
+    id: 3,
+    name: "Pisang Goreng",
+    price: 12000,
+    category: "Makanan",
+    image: "https://via.placeholder.com/220x155.png?text=Pisang+Goreng",
+  },
+
+  // ==================== Topping ====================
+  {
+    id: 4,
+    name: "Telur Ceplok",
+    price: 5000,
+    category: "Topping",
+    image: "https://via.placeholder.com/220x155.png?text=Telur+Ceplok",
+  },
+  {
+    id: 5,
+    name: "Kerupuk",
+    price: 3000,
+    category: "Topping",
+    image: "https://via.placeholder.com/220x155.png?text=Kerupuk",
+  },
+  {
+    id: 6,
+    name: "Keju Parut",
+    price: 6000,
+    category: "Topping",
+    image: "https://via.placeholder.com/220x155.png?text=Keju+Parut",
+  },
+
+  // ==================== Minuman ====================
+  {
+    id: 7,
+    name: "Es Kopi Susu",
+    price: 15000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Kopi+Susu",
+  },
+  {
+    id: 8,
+    name: "Teh Manis Dingin",
+    price: 10000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Teh+Manis",
+  },
+  {
+    id: 9,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+  {
+    id: 10,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+  {
+    id: 11,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+  {
+    id: 12,
+    name: "Es Jeruk",
+    price: 12000,
+    category: "Minuman",
+    image: "https://via.placeholder.com/220x155.png?text=Es+Jeruk",
+  },
+]);
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [containerHeight, setContainerHeight] = useState(0);
   const { isVisible } = useScrollBehaviour();
@@ -189,7 +173,7 @@ function MenuPage() {
         <div
           key={i}
           aria-hidden
-          className="pointer-events-none absolute z-0"
+          className="absolute z-0 pointer-events-none"
           style={{
             backgroundImage: `url(${Bg})`,
             backgroundRepeat: "no-repeat",
@@ -201,7 +185,7 @@ function MenuPage() {
             right: isLeft ? "auto" : "0px",
             transform: isLeft ? "none" : `translateX(calc(100% - ${width}px))`,
             top: `${i * tileHeight}px`,
-            opacity: 0.09,
+            opacity: 0.05,
           }}
         />
       );
@@ -211,7 +195,7 @@ function MenuPage() {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       <Hero text={"Menu Kami"} />
       <div
         className="flex max-lg:flex-col p-[13px] pl-[20px] relative"
@@ -222,35 +206,35 @@ function MenuPage() {
 
         {!showSecond && (
           <div className="hidden max-lg:block pr-7 pl-7">
-            <div className="w-full flex flex-row gap-6 items-center">
+            <div className="flex flex-row items-center w-full gap-6">
               <img
                 onClick={() => setShowSecond(true)}
                 src={FilterMenu}
                 alt="FilterMenu"
                 className="w-5 h-5"
               />
-              <h1 className="font-bold text-[36px] font-boogaloo">Filter</h1>
+              <h1 className="font-bold text-[36px] max-sm:text-[28px] font-boogaloo">Filter</h1>
             </div>
           </div>
         )}
 
         {showSecond && (
-          <div className="w-full hidden max-lg:block pr-7 pl-7 z-10">
-            <div className="w-full h-auto bg-white flex flex-col pr-3 pl-3 pb-3 pt-1 items-start rounded shadow">
+          <div className="hidden w-full max-lg:block pr-7 pl-7 z-z0">
+            <div className="flex flex-col items-start w-full h-auto pt-1 pb-3 pl-3 pr-3 bg-white rounded shadow">
               <h1
                 className="w-full font-bold text-[19px] font-boogaloo text-right"
                 onClick={() => setShowSecond(false)}
               >
                 X
               </h1>
-              <div className="flex flex-wrap gap-3 items-center">
+              <div className="flex flex-wrap items-center gap-3">
                 {categories.map((cat) => (
                   <div key={cat} className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={selectedCategory.includes(cat)}
                       onChange={() => handleCategoryChange(cat)}
-                      className="w-5 h-5 accent-gray-700 rounded-full"
+                      className="w-5 h-5 rounded-full accent-gray-700"
                     />
                     <h1 className="font-bold text-[27px] font-boogaloo">
                       {cat}
@@ -262,7 +246,7 @@ function MenuPage() {
           </div>
         )}
 
-        <div className="flex flex-col z-10">
+        <div className="z-10 flex flex-col">
           <div
             className={`sticky transition-all duration-300 ${
               isVisible ? "top-25" : "-top-[1px]"
@@ -272,7 +256,7 @@ function MenuPage() {
               Filter
             </h2>
             {/* Filter */}
-            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
+            <div className="w-[241px] max-xl:w-[200px] h-auto max-lg:hidden bg-white shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] rounded-lg p-4 text text-[28px] ml-[48px] mt-[13px]">
               <p className="font-semibold mb-2 font-baloo-2 text-[28px]">
                 Kategori
               </p>
@@ -294,42 +278,39 @@ function MenuPage() {
           </div>
         </div>
 
-        {/* Menu per kategori */}
-        <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] pl-[81px] max-lg:pl-[10px] mt-[30px]">
+        {/* Menu per kategori - DIUBAH MENJADI FLEX RESPONSIVE */}
+        <div className="flex-1 space-y-10 pr-[211px] max-2xl:pr-[180px] max-xl:pr-[100px] max-lg:pr-[10px] max-sm:pr-0 pl-[81px] max-lg:pl-[10px] mt-[30px]">
           {shownCategories.map((cat, index) => (
             <div key={cat} className={index !== 0 ? "pt-[3px]" : ""}>
               <h2 className="text-2xl sm:text-3xl md:text-[36px] font-bold mb-4 font-boogaloo">
                 {cat}
               </h2>
-              <div className="grid grid-cols-2 max-[350px]:grid-cols-1 md:grid-cols-3 max-sm:grid-cols-3 gap-6 max-sm:gap-3 justify-items-center">
+              {/* GANTI GRID DENGAN FLEX DAN FLEX-WRAP */}
+              <div className="flex flex-wrap justify-start gap-6 max-sm:gap-3">
                 {menuData
                   .filter((item) => item.category === cat)
                   .map((item) => (
                     <div
-                    key={item.id}
-                    className="
-                      relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] 
-                      overflow-hidden w-full max-w-[220px] bg-white
-                      max-sm:w-[105px] max-sm:h-[128px]
-                    "
-                  >
-                    {/* Konten Card */}
-                    <div className="relative z-10">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[60px]"
-                      />
-                      <div className="p-2 flex flex-col h-auto justify-between">
-                        <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[12px]">
-                          {item.name}
-                        </h3>
-                        <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[10px] max-sm:mt-1">
-                          Rp.{item.price}
-                        </p>
+                      key={item.id}
+                      className="relative shadow-[0px_2px_19.3px_rgba(0,0,0,0.25)] overflow-hidden bg-white flex-shrink-0 w-full max-w-[220px] max-sm:w-[105px] max-sm:h-[128px]"
+                    >
+                      {/* Konten Card */}
+                      <div className="relative z-10">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[69px]"
+                        />
+                        <div className="flex flex-col justify-between h-auto p-2">
+                          <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[14px] line-clamp-2">
+                            {item.name}
+                          </h3>
+                          <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[14px] max-sm:mt-1">
+                            Rp.{item.price}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ))}
               </div>
             </div>
