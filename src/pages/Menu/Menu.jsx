@@ -201,7 +201,7 @@ function MenuPage() {
             right: isLeft ? "auto" : "0px",
             transform: isLeft ? "none" : `translateX(calc(100% - ${width}px))`,
             top: `${i * tileHeight}px`,
-            opacity: 0.09,
+            opacity: 0.05,
           }}
         />
       );
@@ -229,13 +229,13 @@ function MenuPage() {
                 alt="FilterMenu"
                 className="w-5 h-5"
               />
-              <h1 className="font-bold text-[36px] font-boogaloo">Filter</h1>
+              <h1 className="font-bold text-[36px] max-sm:text-[28px] font-boogaloo">Filter</h1>
             </div>
           </div>
         )}
 
         {showSecond && (
-          <div className="w-full hidden max-lg:block pr-7 pl-7 z-10">
+          <div className="w-full hidden max-lg:block pr-7 pl-7 z-z0">
             <div className="w-full h-auto bg-white flex flex-col pr-3 pl-3 pb-3 pt-1 items-start rounded shadow">
               <h1
                 className="w-full font-bold text-[19px] font-boogaloo text-right"
@@ -318,13 +318,13 @@ function MenuPage() {
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[60px]"
+                        className="pointer-events-none select-none w-full h-[155px] object-cover max-sm:h-[69px]"
                       />
                       <div className="p-2 flex flex-col h-auto justify-between">
-                        <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[12px]">
+                        <h3 className="font-bold text-[27px] font-boogaloo max-sm:text-[14px]">
                           {item.name}
                         </h3>
-                        <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[10px] max-sm:mt-1">
+                        <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[14px] max-sm:mt-1">
                           Rp.{item.price}
                         </p>
                       </div>
