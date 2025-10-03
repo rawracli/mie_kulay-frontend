@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
+function BahanDropdown({ bahanList, addBahan, onDropdownClick, onNewBahan }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
@@ -35,12 +35,17 @@ function BahanDropdown({ bahanList, addBahan, onDropdownClick }) {
   //! Tambahin category & opsi
   const handleAddCustom = () => {
     if (!newNama.trim() || !newHarga || !newOpsi) return;
-    addBahan({
+    const newBahan = {
       id: Date.now(),
       nama_bahan: newNama,
-      harga: Number(newHarga),
+      harga_beli: Number(newHarga),
       tipe: newOpsi.replace(/\s+/g, "_").toLowerCase(),
-    });
+      isNew: true, // <-- properti biasa
+    };
+
+    addBahan(newBahan, { isNew: true });
+    if (onNewBahan) onNewBahan(newBahan);
+
     setNewNama("");
     setNewHarga("");
     setSearch("");

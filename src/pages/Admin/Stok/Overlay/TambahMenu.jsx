@@ -201,6 +201,7 @@ function TambahMenu({ onClose, onAdd }) {
                 bahanList={bahanList}
                 addBahan={addBahan}
                 onDropdownClick={scrollToBottom}
+                onNewBahan={(bahan) => setBahanList((prev) => [...prev, bahan])}
               />
             </div>
             <div className="overflow-y-auto max-h-48">
