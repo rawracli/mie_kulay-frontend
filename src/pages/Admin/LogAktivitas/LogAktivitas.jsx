@@ -3,58 +3,7 @@ import { getAktivitas } from "../../../controllers/Aktivitas";
 import { useMediaQuery } from "react-responsive";
 
 function LogAktivitas() {
-
-  //dummy data (field baru: category)
-  const [logsData, setLogsData] = useState([
-    {
-      id: 1,
-      user: "Rafli",
-      action: "Membuat",
-      category: "Akun",
-      detail: "Menambahkan akun admin baru dengan nama 'Putri'.",
-      date: "2025-09-20T10:15:00",
-    },
-    {
-      id: 2,
-      user: "Putri",
-      action: "Mengubah",
-      category: "Stok",
-      detail: "Mengedit data stok barang 'Beras Premium'.",
-      date: "2025-09-21T14:30:00",
-    },
-    {
-      id: 3,
-      user: "Admin",
-      action: "Menghapus",
-      category: "Pemesanan",
-      detail: "Menghapus data transaksi pemesanan #INV-20250910.",
-      date: "2025-09-22T09:45:00",
-    },
-    {
-      id: 4,
-      user: "Rafli",
-      action: "Menambah",
-      category: "Pengeluaran",
-      detail: "Menambahkan pengeluaran baru kategori 'Listrik'.",
-      date: "2025-09-23T08:20:00",
-    },
-    {
-      id: 5,
-      user: "Putri",
-      action: "Membuat",
-      category: "Pemesanan",
-      detail: "Mendaftarkan pesanan pengguna staf gudang.",
-      date: "2025-09-23T16:40:00",
-    },
-    {
-      id: 6,
-      user: "Admin",
-      action: "Mengubah",
-      category: "Role",
-      detail: "Mengubah role pengguna 'Rafli' menjadi Super Admin.",
-      date: "2025-09-24T11:10:00",
-    },
-  ]);
+  const [logsData, setLogsData] = useState([]);
   const [filterType, setFilterType] = useState("All");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterDate, setFilterDate] = useState("");
@@ -68,14 +17,20 @@ function LogAktivitas() {
   const [highlightedRow, setHighlightedRow] = useState(null);
 
   // data dropdown
-  const dropdownAction = [...new Set(logsData.map(log => log.action))];
-  const dropdownCategory = [...new Set(logsData.map(log => log.category))];
+  const dropdownAction = ["Menambah", "Menghapus", "Mengubah"];
+  const dropdownCategory = [...new Set(logsData.map((log) => log.category))];
 
   // Filter + Search
   const filteredLogs = useMemo(() => {
     return logsData.filter((log) => {
-      const matchType = filterType === "All" || log.action == filterType;
-      const matchCategory = filterCategory === "All" || log.category == filterCategory;
+      const lowerAction = log.action.toLowerCase();
+      const matchType =
+        filterType === "All" ||
+        (filterType === "Menambah" && lowerAction.includes("menambah")) ||
+        (filterType === "Menghapus" && lowerAction.includes("menghapus")) ||
+        (filterType === "Mengubah" && lowerAction.includes("mengubah"));
+      const matchCategory =
+        filterCategory === "All" || log.category == filterCategory;
       console.log(log.category, filterCategory, matchCategory);
       const matchDate =
         !filterDate || log.date.startsWith(filterDate.split("T")[0]);
@@ -115,6 +70,7 @@ function LogAktivitas() {
           id: item.id,
           user: item.user?.name || "Unknown",
           action: item.action || "-",
+          category: item.table_name || "-",
           detail: item.aktivitas ?? "Data ini tidak memerlukan aktivitas",
           date: item.created_at,
         }));
@@ -238,18 +194,6 @@ function LogAktivitas() {
           <div className="flex items-center">
             <div className="grid grid-cols-2 gap-1 w-full sm:w-[164px] xl:w-[220px]">
               <select
-                value={filterType}
-                onChange={(e) => {
-                  setFilterType(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="bg-gray-100 border border-gray-300 p-1 rounded-l-[5px] rounded-r-none h-[35px] max-md:text-[14px] text-center"
-              >
-                <option value="All">All</option>
-                {dropdownAction.map((val, idx)=>(
-                <option key={idx} value={val}>{val}</option>))}
-              </select>
-              <select
                 value={filterCategory}
                 onChange={(e) => {
                   setFilterCategory(e.target.value);
@@ -258,8 +202,26 @@ function LogAktivitas() {
                 className="bg-gray-100 border border-gray-300 p-1 rounded-r-[5px] rounded-l-none h-[35px] max-md:text-[14px] text-center"
               >
                 <option value="All">All</option>
-                {dropdownCategory.map((val, idx)=>(
-                <option key={idx} value={val}>{val}</option>))}
+                {dropdownCategory.map((val, idx) => (
+                  <option key={idx} value={val}>
+                    {val}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={filterType}
+                onChange={(e) => {
+                  setFilterType(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="bg-gray-100 border border-gray-300 p-1 rounded-l-[5px] rounded-r-none h-[35px] max-md:text-[14px] text-center"
+              >
+                <option value="All">All</option>
+                {dropdownAction.map((val, idx) => (
+                  <option key={idx} value={val}>
+                    {val}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -295,10 +257,10 @@ function LogAktivitas() {
               <tr className="bg-[#FFB300] text-center h-[47px]">
                 <th className="p-2 border border-gray-400 w-[17.77%]">User</th>
                 <th className="p-2 border border-gray-400 w-[50%] md:w-[35.34%]">
-                  Aktivitas
+                  Aksi
                 </th>
                 <th className="p-2 border border-gray-400 w-[15%] md:w-[25.30%]">
-                  Aksi
+                  Aktivitas
                 </th>
                 <th className="p-2 border border-gray-400 w-[24.10%]">
                   Tanggal
