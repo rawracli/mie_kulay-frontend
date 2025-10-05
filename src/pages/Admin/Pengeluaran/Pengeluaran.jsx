@@ -14,36 +14,7 @@ import {
 
 function Pengeluaran() {
   
-  const [dataPengeluaran, setDataPengeluaran] = useState([
-    {
-      id: 1,
-      pengeluaran: 50000,
-      catatan: "Beli alat kebersihan",
-      tanggal: "2025-09-20",
-      created_at: "2025-09-20T10:30:00",
-    },
-    {
-      id: 2,
-      pengeluaran: 120000,
-      catatan: "Bayar listrik",
-      tanggal: "2025-09-21",
-      created_at: "2025-09-21T14:15:00",
-    },
-    {
-      id: 3,
-      pengeluaran: 75000,
-      catatan: "Beli kertas & tinta printer",
-      tanggal: "2025-09-22",
-      created_at: "2025-09-22T09:45:00",
-    },
-    {
-      id: 4,
-      pengeluaran: 25000,
-      catatan: "Air minum galon",
-      tanggal: "2025-09-23",
-      created_at: "2025-09-23T11:00:00",
-    },
-  ]);
+  const [dataPengeluaran, setDataPengeluaran] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(10);

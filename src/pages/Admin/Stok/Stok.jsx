@@ -24,57 +24,8 @@ import { getCategories } from "../../../controllers/Category";
 function Stok() {
   // toggle bahan atau menu
   const [viewMode, setViewMode] = useState("bahan");
-
-  // Data Bahan (dummy)
   const [stockTable, setStockTable] = useState([]);
-
-  // Data Menu (dummy)
-  // Data Menu (dummy)
-  const [menuData, setMenuData] = useState([
-    {
-      id: 1,
-      nama: "Nasi Goreng Spesial",
-      kategori_id: 1,
-      kategori: "Makanan",
-      harga: 25000,
-      image: ExampleImage, // sementara pakai gambar import ExampleImage
-      bahan: [
-        { id: 1, nama: "Nasi", harga: 5000 },
-        { id: 2, nama: "Telur", harga: 3000 },
-        { id: 3, nama: "Ayam", harga: 10000 },
-      ],
-    },
-    {
-      id: 2,
-      nama: "Es Teh Manis",
-      kategori_id: 2,
-      kategori: "Minuman",
-      harga: 8000,
-      image: ExampleImage,
-      bahan: [
-        { id: 4, nama: "Teh", harga: 2000 },
-        { id: 5, nama: "Gula", harga: 1000 },
-        { id: 6, nama: "Es Batu", harga: 500 },
-      ],
-    },
-    {
-      id: 3,
-      nama: "Mie Ayam Bakso",
-      kategori_id: 1,
-      kategori: "Makanan",
-      harga: 20000,
-      image: ExampleImage,
-      bahan: [
-        { id: 7, nama: "Mie", harga: 4000 },
-        { id: 8, nama: "Bakso", harga: 6000 },
-        { id: 9, nama: "Ayam", harga: 8000 },
-        { id: 10, nama: "Ayam", harga: 8000 },
-        { id: 11, nama: "Ayam", harga: 8000 },
-        { id: 12, nama: "Ayam", harga: 8000 },
-        { id: 13, nama: "Ayam", harga: 8000 },
-      ],
-    },
-  ]);
+  const [menuData, setMenuData] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
