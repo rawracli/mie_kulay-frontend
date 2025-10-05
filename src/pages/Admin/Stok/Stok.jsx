@@ -16,6 +16,7 @@ import {
   getBahan,
   updateBahan,
   hapusBahan,
+  tambahbahanMenu,
   tambahBahan,
 } from "../../../controllers/Bahan";
 import { getMenu, updateMenu } from "../../../controllers/Menu";
@@ -395,6 +396,7 @@ function Stok() {
               id: b.id,
               nama: b.nama_bahan,
               harga: b.harga_beli,
+              jumlah: b.pivot?.jumlah,
             })) ?? "Maaf, menu ini belum memiliki bahan",
         }));
 
@@ -872,6 +874,8 @@ function Stok() {
               {!isTablet && (
                 <EditMenuBahan
                   editMenuForm={editMenuForm}
+                  selectedMenu={selectedMenu}
+                  setEditMenuForm={setEditMenuForm}
                   handleAddBahan={handleAddBahan}
                   handleBahanDelete={handleBahanDelete}
                   handleNewBahanChange={handleNewBahanChange}
@@ -905,6 +909,8 @@ function Stok() {
                 </button>
                 <EditMenuBahan
                   editMenuForm={editMenuForm}
+                  selectedMenu={selectedMenu}
+                  setEditMenuForm={setEditMenuForm}
                   handleAddBahan={handleAddBahan}
                   handleBahanDelete={handleBahanDelete}
                   handleNewBahanChange={handleNewBahanChange}
@@ -941,6 +947,8 @@ function Stok() {
 
 function EditMenuBahan({
   editMenuForm,
+  selectedMenu,
+  setEditMenuForm,
   handleBahanDelete,
   // newBahan,
   handleNewBahanChange,
@@ -961,12 +969,43 @@ function EditMenuBahan({
   };
 
   // Fungsi untuk handle tambah bahan custom dari dropdown
-  const handleCustomBahan = (customBahan) => {
-    // Langsung tambahkan bahan custom ke menu tanpa perlu API call terpisah
-    // karena handleAddBahan akan memanggil API
-    handleNewBahanChange("nama", customBahan.nama_bahan);
-    handleNewBahanChange("harga", customBahan.harga);
-    setShowDropdown(false);
+
+  // Fungsi untuk handle tambah bahan custom dari dropdown
+  const handleCustomBahan = async (customBahan) => {
+    try {
+      console.log("Data dari dropdown:", customBahan);
+
+      // Panggil API untuk buat bahan + langsung attach ke menu
+      const response = await tambahbahanMenu({
+        nama_bahan: customBahan.nama_bahan,
+        jumlah: customBahan.jumlah,
+        harga_beli: customBahan.harga,
+        tipe: customBahan.tipe,
+        menu_id: selectedMenu.id,
+      });
+
+      console.log("Response dari API:", response);
+
+      // Update state editMenuForm dengan bahan baru (TANPA reload)
+      setEditMenuForm((prev) => ({
+        ...prev,
+        bahan: [
+          ...prev.bahan,
+          {
+            id: response.id,
+            nama: response.nama_bahan,
+            harga: response.harga_beli,
+            jumlah: response.jumlah,
+          },
+        ],
+      }));
+
+      setShowDropdown(false);
+      alert("Bahan berhasil ditambahkan!");
+    } catch (error) {
+      console.error("Error menambah bahan:", error);
+      alert("Gagal menambah bahan: " + error.message);
+    }
   };
 
   return (
@@ -979,28 +1018,35 @@ function EditMenuBahan({
         {editMenuForm.bahan.length > 0 ? (
           editMenuForm.bahan.map((bahan, idx) => (
             <div key={idx}>
-              <div className="flex pl-[10px] pr-[17px] items-center justify-between h-[45px]">
-                <h5 className="font-semibold">{bahan.nama}</h5>
-                <div className="flex items-center gap-[41px]">
-                  <h6 className="text-start">
-                    Rp. {bahan.harga.toLocaleString("id-ID")}
-                  </h6>
-                  {/* BTN HAPUS BAHAN */}
-                  <svg
-                    onClick={() => handleBahanDelete(bahan.id)}
-                    className="cursor-pointer"
-                    width="14"
-                    height="16"
-                    viewBox="0 0 14 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M1 14.5C1 14.8978 1.15804 15.2794 1.43934 15.5607C1.72064 15.842 2.10218 16 2.5 16H11.5C11.8978 16 12.2794 15.842 12.5607 15.5607C12.842 15.2794 13 14.8978 13 14.5V4.00001H1V14.5ZM9.5 6.50001C9.5 6.3674 9.55268 6.24022 9.64645 6.14645C9.74021 6.05268 9.86739 6.00001 10 6.00001C10.1326 6.00001 10.2598 6.05268 10.3536 6.14645C10.4473 6.24022 10.5 6.3674 10.5 6.50001V13.5C10.5 13.6326 10.4473 13.7598 10.3536 13.8536C10.2598 13.9473 10.1326 14 10 14C9.86739 14 9.74021 13.9473 9.64645 13.8536C9.55268 13.7598 9.5 13.6326 9.5 13.5V6.50001ZM6.5 6.50001C6.5 6.3674 6.55268 6.24022 6.64645 6.14645C6.74021 6.05268 6.86739 6.00001 7 6.00001C7.13261 6.00001 7.25979 6.05268 7.35355 6.14645C7.44732 6.24022 7.5 6.3674 7.5 6.50001V13.5C7.5 13.6326 7.44732 13.7598 7.35355 13.8536C7.25979 13.9473 7.13261 14 7 14C6.86739 14 6.74021 13.9473 6.64645 13.8536C6.55268 13.7598 6.5 13.6326 6.5 13.5V6.50001ZM3.5 6.50001C3.5 6.3674 3.55268 6.24022 3.64645 6.14645C3.74021 6.05268 3.86739 6.00001 4 6.00001C4.13261 6.00001 4.25979 6.05268 4.35355 6.14645C4.44732 6.24022 4.5 6.3674 4.5 6.50001V13.5C4.5 13.6326 4.44732 13.7598 4.35355 13.8536C4.25979 13.9473 4.13261 14 4 14C3.86739 14 3.74021 13.9473 3.64645 13.8536C3.55268 13.7598 3.5 13.6326 3.5 13.5V6.50001ZM13.5 1.00001H9.75L9.45625 0.41563C9.39402 0.290697 9.29817 0.185606 9.17947 0.11218C9.06078 0.0387537 8.92395 -9.46239e-05 8.78438 5.47897e-06H5.2125C5.07324 -0.00052985 4.93665 0.0381736 4.81838 0.111682C4.7001 0.18519 4.60492 0.290529 4.54375 0.41563L4.25 1.00001H0.5C0.367392 1.00001 0.240215 1.05268 0.146447 1.14645C0.0526784 1.24022 0 1.3674 0 1.50001L0 2.50001C0 2.63261 0.0526784 2.75979 0.146447 2.85356C0.240215 2.94733 0.367392 3.00001 0.5 3.00001H13.5C13.6326 3.00001 13.7598 2.94733 13.8536 2.85356C13.9473 2.75979 14 2.63261 14 2.50001V1.50001C14 1.3674 13.9473 1.24022 13.8536 1.14645C13.7598 1.05268 13.6326 1.00001 13.5 1.00001Z"
-                      fill="#EC0000"
-                    />
-                  </svg>
-                </div>
+              <div className="flex items-center h-[45px] px-[10px]">
+                {/* Nama: fleksibel */}
+                <h5 className="font-semibold flex-1 truncate">{bahan.nama}</h5>
+
+                {/* Harga: lebar tetap */}
+                <h6 className="w-24 text-right">
+                  Rp. {bahan.harga.toLocaleString("id-ID")}
+                </h6>
+
+                {/* Jumlah: lebar tetap */}
+                <p className="w-10 text-right text-xs text-gray-500">
+                  {bahan.jumlah}
+                </p>
+
+                {/* Tombol hapus */}
+                <svg
+                  onClick={() => handleBahanDelete(bahan.id)}
+                  className="cursor-pointer ml-2"
+                  width="14"
+                  height="16"
+                  viewBox="0 0 14 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 14.5C1 14.8978 1.15804 15.2794 1.43934 15.5607C1.72064 15.842 2.10218 16 2.5 16H11.5C11.8978 16 12.2794 15.842 12.5607 15.5607C12.842 15.2794 13 14.8978 13 14.5V4.00001H1V14.5ZM9.5 6.50001C9.5 6.3674 9.55268 6.24022 9.64645 6.14645C9.74021 6.05268 9.86739 6.00001 10 6.00001C10.1326 6.00001 10.2598 6.05268 10.3536 6.14645C10.4473 6.24022 10.5 6.3674 10.5 6.50001V13.5C10.5 13.6326 10.4473 13.7598 10.3536 13.8536C10.2598 13.9473 10.1326 14 10 14C9.86739 14 9.74021 13.9473 9.64645 13.8536C9.55268 13.7598 9.5 13.6326 9.5 13.5V6.50001ZM6.5 6.50001C6.5 6.3674 6.55268 6.24022 6.64645 6.14645C6.74021 6.05268 6.86739 6.00001 7 6.00001C7.13261 6.00001 7.25979 6.05268 7.35355 6.14645C7.44732 6.24022 7.5 6.3674 7.5 6.50001V13.5C7.5 13.6326 7.44732 13.7598 7.35355 13.8536C7.25979 13.9473 7.13261 14 7 14C6.86739 14 6.74021 13.9473 6.64645 13.8536C6.55268 13.7598 6.5 13.6326 6.5 13.5V6.50001ZM3.5 6.50001C3.5 6.3674 3.55268 6.24022 3.64645 6.14645C3.74021 6.05268 3.86739 6.00001 4 6.00001C4.13261 6.00001 4.25979 6.05268 4.35355 6.14645C4.44732 6.24022 4.5 6.3674 4.5 6.50001V13.5C4.5 13.6326 4.44732 13.7598 4.35355 13.8536C4.25979 13.9473 4.13261 14 4 14C3.86739 14 3.74021 13.9473 3.64645 13.8536C3.55268 13.7598 3.5 13.6326 3.5 13.5V6.50001ZM13.5 1.00001H9.75L9.45625 0.41563C9.39402 0.290697 9.29817 0.185606 9.17947 0.11218C9.06078 0.0387537 8.92395 -9.46239e-05 8.78438 5.47897e-06H5.2125C5.07324 -0.00052985 4.93665 0.0381736 4.81838 0.111682C4.7001 0.18519 4.60492 0.290529 4.54375 0.41563L4.25 1.00001H0.5C0.367392 1.00001 0.240215 1.05268 0.146447 1.14645C0.0526784 1.24022 0 1.3674 0 1.50001L0 2.50001C0 2.63261 0.0526784 2.75979 0.146447 2.85356C0.240215 2.94733 0.367392 3.00001 0.5 3.00001H13.5C13.6326 3.00001 13.7598 2.94733 13.8536 2.85356C13.9473 2.75979 14 2.63261 14 2.50001V1.50001C14 1.3674 13.9473 1.24022 13.8536 1.14645C13.7598 1.05268 13.6326 1.00001 13.5 1.00001Z"
+                    fill="#EC0000"
+                  />
+                </svg>
               </div>
               <hr className="w-full h-[0.5px] text-[#737373]" />
             </div>
@@ -1058,14 +1104,15 @@ function BahanDropdownEdit({
   const [open, setOpen] = useState(true); // Selalu terbuka karena dipicu oleh input
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
+  const [newJumlah, setNewJumlah] = useState("");
   const [newHarga, setNewHarga] = useState("");
   const [newOpsi, setNewOpsi] = useState("");
   const dropdownRef = useRef(null);
 
   const opsiList = [
-    { id: 1, nama: "bahan mentah" },
-    { id: 2, nama: "bahan baku" },
-    { id: 3, nama: "bahan lengkap" },
+    { id: 1, nama: "bahan_mentah", label: "Bahan Mentah" },
+    { id: 2, nama: "bahan_baku", label: "Bahan Baku" },
+    { id: 3, nama: "bahan_lengkap", label: "Bahan Lengkap" },
   ];
 
   // Gabungan dengan dummy data fallback
@@ -1095,12 +1142,16 @@ function BahanDropdownEdit({
     const customBahan = {
       id: Date.now(),
       nama_bahan: newNama,
+      jumlah: Number(newJumlah),
       harga: Number(newHarga),
+      tipe: newOpsi,
     };
 
     onCustomBahan(customBahan);
     setNewNama("");
+    setNewJumlah("");
     setNewHarga("");
+    setNewOpsi("");
     setSearch("");
   };
 
@@ -1123,12 +1174,19 @@ function BahanDropdownEdit({
               />
               <input
                 type="number"
-                placeholder="Harga"
-                value={newHarga}
-                onChange={(e) => setNewHarga(e.target.value)}
+                value={newJumlah}
+                onChange={(e) => setNewJumlah(e.target.value)}
+                placeholder="Jumlah"
                 className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
               />
             </div>
+            <input
+              type="number"
+              placeholder="Harga"
+              value={newHarga}
+              onChange={(e) => setNewHarga(e.target.value)}
+              className="flex-1 w-full px-2 py-1 text-xs bg-white border rounded focus:outline-none"
+            />
             <select
               value={newOpsi}
               onChange={(e) => setNewOpsi(e.target.value)}
@@ -1137,7 +1195,7 @@ function BahanDropdownEdit({
               <option value="">Pilih Opsi</option>
               {opsiList.map((opsi) => (
                 <option key={opsi.id} value={opsi.nama}>
-                  {opsi.nama}
+                  {opsi.label}
                 </option>
               ))}
             </select>
