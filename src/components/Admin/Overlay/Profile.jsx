@@ -1,8 +1,21 @@
 import React, { useState, useRef } from "react";
-import { updateProfile } from "../../../controllers/AuthController";
+import { logout, updateProfile } from "../../../controllers/AuthController";
 import ProfilePicture from "../../../assets/Admin/profile.svg";
+import { useNavigate } from "react-router-dom";
 
 function Show({ userData, setIsEdit, editResponse }) {
+    let navigate = useNavigate();
+    const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/")
+      
+    } catch (err) {
+      console.error('Logout failed:', err);
+      alert('Gagal logout: ' + err.message);
+    }
+  };
+  console.log(userData);
   return (
     <div className="pt-[10px] pl-[19px] pr-[12px] flex-1 flex flex-col pb-[33px] border-[#959595] border-[0.5px]">
       <div className="">
@@ -22,12 +35,21 @@ function Show({ userData, setIsEdit, editResponse }) {
       {editResponse && (
         <p className="text-green-600 self-center">{editResponse}</p>
       )}
+      <div className="flex justify-end items-center mt-[45px] gap-3">
+
       <button
         onClick={() => setIsEdit(true)}
-        className="text-white cursor-pointer w-[115px] h-[37px] rounded-[10px] mt-[45px] self-end bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501]"
+        className="text-white cursor-pointer w-[115px] h-[37px] rounded-[10px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501]"
       >
         Edit
       </button>
+      <button
+        onClick={handleLogout}
+        className="text-white cursor-pointer w-[115px] h-[37px] rounded-[10px] bg-red-500 hover:bg-red-400 active:bg-red-600"
+      >
+        LogOut
+      </button>
+      </div>
     </div>
   );
 }
@@ -156,7 +178,7 @@ function Profile({ userData, setUserData }) {
         <div
           className="size-full flex items-end bg-[#D9D9D9] relative"
           style={{
-            backgroundImage: userData.avatar
+            backgroundImage: userData?.avatar
               ? `url(${import.meta.env.VITE_API_URL_IMAGE}/storage/${
                   userData.avatar
                 })`
@@ -165,7 +187,7 @@ function Profile({ userData, setUserData }) {
             backgroundPosition: "center",
           }}
         >
-          {!userData.avatar && (
+          {!userData?.avatar && (
             <svg
               className="mx-auto"
               width="171"
