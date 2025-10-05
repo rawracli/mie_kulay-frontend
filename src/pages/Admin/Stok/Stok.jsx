@@ -178,8 +178,8 @@ function Stok() {
     const current = stockTable.find((item) => item.id === id);
     const amount = 500;
     if (!current) return;
-    if (current.stok > 0) {
-      if (current.stok < amount) {
+    if (current.harga_beli > 0) {
+      if (current.harga_beli < amount) {
         handleUpdateStok(id, 0);
       } else {
         handleUpdateStok(id, current.harga_beli - 500);
