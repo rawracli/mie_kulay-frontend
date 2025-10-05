@@ -77,34 +77,6 @@ const getUsers = async () => {
   return await response.json();
 };
 
-const logout = async () => {
-  try {
-    const response = await fetch(`${API_URL}/logout`, {
-      method: 'POST',
-      headers: {
-        "Accept": "application/json",
-        "X-XSRF-TOKEN": await gctks(),
-      },
-      credentials: 'include',
-    });
-    
-    const result = await response.json();
-    
-    if (!response.ok) {
-      // Tampilkan error detail dari server
-      console.error('Logout failed:', response.status, result);
-      throw new Error(result.message || `Gagal logout: ${response.status}`);
-    }
-    
-    Cookies.remove('token');
-    Cookies.remove('XSRF-TOKEN');
-    return result;
-  } catch (err) {
-    console.error('Logout error:', err);
-    throw err;
-  }
-};
-
 const updateProfile = async (formData) => {
   const response = await fetch(`${API_URL}/updateProfile`, {
     method: 'POST',
@@ -141,4 +113,4 @@ const deleteUser = async (id) => {
   return result;
 };
 
-export { loginUser, registerUser, getCurrentUser, getUsers, updateProfile, deleteUser, logout };
+export { loginUser, registerUser, getCurrentUser, getUsers, updateProfile, deleteUser };
