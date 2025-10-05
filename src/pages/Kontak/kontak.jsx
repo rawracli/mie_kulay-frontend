@@ -10,7 +10,7 @@ function Kontak() {
     e.preventDefault();
 
     // nomor tujuan (gunakan format internasional tanpa +)
-    const nomorWA = "6288219612691";
+    const nomorWA = "6281279966066";
 
     // format pesan
     const text = `Halo, saya ${nama}.%0A${pesan}`;
@@ -95,7 +95,7 @@ function Kontak() {
             <ul className="space-y-9 py-5 px-[38px] sm:px-[43px] max-sm:[&>li]:text-[15px] [&>li]:font-baloo-2">
               <li className={`${contactItemStyle} pt-7`}>
                 <PhoneIcon />
-                <span>0838 - 6993 - 1820</span>
+                <span>0812 - 7996 - 6066</span>
               </li>
               <li className={contactItemStyle}>
                 <EmailIcon />

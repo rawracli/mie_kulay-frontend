@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./home.css";
 import { Link } from "react-router-dom";
 import Papan from "../../assets/User/papan.png";
 import Mie from "../../assets/User/mie.png";
@@ -101,9 +100,7 @@ export default function HeroSection() {
       )}
     </div>
   ));
-  const isDesktopBig = useMediaQuery({ query: "(max-width: 1280px)" });
   const isTablet = useMediaQuery({ query: "(max-width: 1195px)" });
-  const isTabletSmall = useMediaQuery({ query: "(max-width: 768px)" });
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
   return (
