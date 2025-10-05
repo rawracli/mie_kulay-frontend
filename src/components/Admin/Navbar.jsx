@@ -24,11 +24,10 @@ function Navbar({ setIsOpen }) {
   }, []);
 
   const pathResult = pathname
-  .replace(/^\/admin\/?/, "") // buang "/admin" di depan
-  .split("-")
-  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(" ");
-
+    .replace(/^\/admin\/?/, "") // buang "/admin" di depan
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
   return (
     <div className="h-[92px] flex justify-between items-center shadow-[0px_5px_10.8px_rgba(168,168,168,0.25)]">
@@ -73,32 +72,35 @@ function Navbar({ setIsOpen }) {
           {pathResult}
         </h2>
       )}
-      <div className="flex gap-[18px] pr-[31.92px] items-center">
-        <p>{userData?.name}</p>
-        <button
-          onClick={() => setIsProfileOpen((prev) => !prev)}
-          className="flex gap-[18px]"
-        >
-          <img
-            src={
-              userData?.avatar
-                ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
-                    userData.avatar
-                  }`
-                : ProfilePicture
-            }
-            alt="profile"
-            className="mb-[5px] w-[40px] h-[40px] rounded-full object-cover"
-          />
-          <img
-            src={Arrow}
-            alt="arrow"
-            className={`cursor-pointer transition ${
-              isProfileOpen && "rotate-180"
-            }`}
-          />
-        </button>
-      </div>
+      {userData && (
+        <div className="flex gap-[18px] pr-[31.92px] items-center">
+          <p>{userData?.name}</p>
+          <button
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+            className="flex gap-[18px]"
+          >
+            <img
+              src={
+                userData?.avatar
+                  ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
+                      userData.avatar
+                    }`
+                  : ProfilePicture
+              }
+              alt="profile"
+              className="mb-[5px] w-[40px] h-[40px] rounded-full object-cover"
+            />
+            <img
+              src={Arrow}
+              alt="arrow"
+              className={`cursor-pointer transition ${
+                isProfileOpen && "rotate-180"
+              }`}
+            />
+          </button>
+        </div>
+      )}
+
       <div
         onClick={() => {
           setIsProfileOpen(false);
