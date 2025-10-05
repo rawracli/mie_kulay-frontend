@@ -14,6 +14,25 @@ const getBahan = async () => {
   return await response.json();
 };
 
+const tambahbahanMenu = async (data) => {
+  const res = await fetch(`${API_URL}/tambah/bahan`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "X-XSRF-TOKEN": await gctks(),
+    },
+    credentials: "include",
+    body: JSON.stringify(data)
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message);
+  }
+  return await res.json();
+};
+
 const tambahBahan = async (data) => {
   const res = await fetch(`${API_URL}/tambah/bahan/langsung`, {
     method: "POST",
@@ -69,5 +88,5 @@ const hapusBahan = async (id) => {
   return response.json();
 };
 
-export { getBahan, tambahBahan, updateBahan, hapusBahan };
+export { getBahan, tambahbahanMenu, tambahBahan, updateBahan, hapusBahan };
 

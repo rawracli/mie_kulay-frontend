@@ -10,6 +10,10 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Fungsi untuk user gagal login
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -20,6 +24,35 @@ function Login() {
       window.location.href = "/admin";
     } catch (err) {
       setError(err.message);
+      setLoginFailed(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Masukkan email terlebih dahulu");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/password/forgot",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+      alert(data.message || "Link reset password telah dikirim ke email kamu");
+      setShowForgotPassword(false);
+      setLoginFailed(false);
+    } catch (err) {
+      setError("Gagal mengirim reset password");
     } finally {
       setLoading(false);
     }
@@ -58,27 +91,66 @@ function Login() {
           </div>
 
           {/* Password */}
-          <div className="mb-6">
-            <label className="block mb-1 font-light mt-5 ml-[0.75rem] max-sm:ml-[23px]">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Masukkan kata sandi..."
-              className="w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 ml-[0.75rem] max-sm:ml-[23px]"
-            />
-          </div>
+          {!showForgotPassword && (
+            <div className="mb-6">
+              <label className="block mb-1 font-light mt-5 ml-[0.75rem] max-sm:ml-[23px]">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Masukkan kata sandi..."
+                className="w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 ml-[0.75rem] max-sm:ml-[23px]"
+              />
+            </div>
+          )}
+
+          {showForgotPassword && (
+            <div className="flex flex-row gap-1 justify-center">
+              <button
+                type="button"
+                className="mt-4"
+                onClick={() => setShowForgotPassword(false)}
+              >
+                Kembali ke
+              </button>
+              <button
+                type="button"
+                className="text-[#FFBA00] mt-4"
+                onClick={() => setShowForgotPassword(false)}
+              >
+                Login
+              </button>
+            </div>
+          )}
+
+          {loginFailed && !showForgotPassword && (
+            <div className="flex flex-row gap-1 justify-center">
+              <p>Lupa kata sandi?</p>
+              <button
+                type="button"
+                className="text-[#FFBA00]"
+                onClick={() => setShowForgotPassword(true)}
+              >
+                Klik disini
+              </button>
+            </div>
+          )}
 
           {/* Tombol Login */}
           <button
-            className="w-[400px] max-sm:w-[279px] h-[57px] max-sm:h-[40.82px] bg-[#FFBA00] text-black font-bold rounded-full hover:bg-yellow-500 transition mt-[2.65rem] max-sm:mt-[20px] ml-[0.70rem] max-sm:ml-[23px]"
-            type="submit"
+            className="w-[400px] max-sm:w-[279px] h-[57px] max-sm:h-[40.82px] bg-[#FFBA00] text-black font-bold rounded-full hover:bg-yellow-500 transition mt-3 max-sm:mt-[20px] ml-[0.70rem] max-sm:ml-[23px]"
+            type={showForgotPassword ? "button" : "submit"}
+            onClick={showForgotPassword ? handleForgotPassword : null}
             disabled={loading}
           >
             <h3 className="font-semibold text-center-2xl">
-              {loading ? "Loading..." : "Login"}
+              {showForgotPassword
+                ? "Kirim Reset Password"
+                : loading
+                ? "Loading..."
+                : "Login"}
             </h3>
           </button>
         </form>
