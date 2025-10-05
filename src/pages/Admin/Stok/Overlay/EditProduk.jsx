@@ -17,7 +17,7 @@ function EditProduk({
 
     const payload = {
       nama_bahan: formData.get("produk"),
-      harga_beli: formData.get("harga_beli"),
+      harga_beli: parseInt(formData.get("harga_beli")),
       tipe: formData.get("tipe"),
     };
 
@@ -56,7 +56,7 @@ function EditProduk({
         >
           <img src={Close} alt="X" />
         </div>
-        <h2 className="font-semibold text-2xl">Edit Produk</h2>
+        <h2 className="font-semibold text-2xl">Edit Bahan</h2>
 
         <form
           onSubmit={onSubmit}
