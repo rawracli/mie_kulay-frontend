@@ -645,7 +645,7 @@ function Stok() {
                             {item.nama}
                           </h4>
                           <h4 className="text-sm font-semibold font-baloo-2 self-start pl-[8px] pb-[4px]">
-                            Rp. {item.harga.toLocaleString("id-ID")}
+                            Rp. {item.harga}
                           </h4>
                         </div>
                       </div>
