@@ -85,10 +85,10 @@ function Footer() {
                   Informasi
                 </h2>
                 <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
-                  <div className="flex gap-[19.5px]">
+                  <a className="flex gap-[19.5px]" href="https://wa.me/6281279966066" target="_blank" rel="noreferrer">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
-                    <p>0838 - 6993 - 1820</p>
-                  </div>
+                    <p>0812 - 7996 - 6066</p>
+                  </a>
                   <div className="flex gap-[19.5px]">
                     <img src={Email} alt="Email" className="w-[25px]" />
                     <p>ayuuaulia01@gmail.com</p>
