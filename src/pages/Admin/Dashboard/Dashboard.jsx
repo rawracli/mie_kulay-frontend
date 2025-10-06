@@ -10,8 +10,11 @@ import { getPemesanan } from "../../../controllers/Pemesanan.js";
 import ProfitChart from "../../../utils/Dashboard/ProfitChart.jsx";
 import { formatShort } from "../../../utils/priceFormat";
 import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext.jsx";
 
 function Dashboard() {
+  const { user } = useAuth();
+
   // Helper: buat array halaman dengan titik-titik
   const getPages = (totalPages, currentPage) => {
     const delta = 2; // jumlah halaman sekitar current
@@ -104,6 +107,7 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchAnalisis = async () => {
+      if (!user.role === "Owner" || !user.role === "owner") return;
       try {
         const tahun = Number(tahunInput) || new Date().getFullYear();
         const { data } = await axios.get(
@@ -132,7 +136,7 @@ function Dashboard() {
     };
 
     fetchAnalisis();
-  }, [tahunInput]);
+  }, [tahunInput, user]);
 
   // Pagination
   const [entriesPerPage, setEntriesPerPage] = useState(4);
@@ -169,6 +173,9 @@ function Dashboard() {
 
   return (
     <div className="bg-[#EDF0F2] w-full  min-h-[calc(100vh-92px)] flex flex-col items-center sm:pl-[11px] sm:pr-[20px]">
+      
+        {(user.role === "Owner" || user.role === "owner") && (
+
       <div className="w-full max-sm:px-[9px]">
         {/* Filter logs by tahun */}
         <div className="flex items-center justify-end my-[10px] self-end">
@@ -211,7 +218,6 @@ function Dashboard() {
             </select>
           </div>
         </div>
-
         {/* Analytics Data */}
         <div className="flex rounded-[10px] h-full w-full  justify-center max-sm:flex-col max-sm:items-center max-sm:gap-2">
           {/* Information Priority */}
@@ -291,6 +297,7 @@ function Dashboard() {
           <ProfitChart />
         </div>
       </div>
+        )}
 
       {/* Detail Pemesanan */}
 
@@ -398,11 +405,15 @@ function Dashboard() {
                         <td className="text-center h-[33px] border border-[#959595]">
                           {t.tanggal.toLocaleDateString("id-ID")}
                         </td>
-                        <td className="text-center h-[33px] border border-[#959595]">{t.id}</td>
+                        <td className="text-center h-[33px] border border-[#959595]">
+                          {t.id}
+                        </td>
                         <td className="text-center h-[33px] border border-[#959595]">
                           Rp. {t.total.toLocaleString("id-ID")}
                         </td>
-                        <td className="text-center h-[33px] border border-[#959595]">{t.metode}</td>
+                        <td className="text-center h-[33px] border border-[#959595]">
+                          {t.metode}
+                        </td>
                         <td className="text-center h-[33px] border border-[#959595]">
                           <button
                             onClick={() => setSelectedTransaction(t)}

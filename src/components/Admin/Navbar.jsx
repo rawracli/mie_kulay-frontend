@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ProfilePicture from "../../assets/Admin/profile.svg";
 import Arrow from "../../assets/Admin/arrow.svg";
 import { Link, useLocation } from "react-router-dom";
 import Profile from "./Overlay/Profile";
-import { getCurrentUser } from "../../controllers/AuthController";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Navbar({ setIsOpen }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const { user, setUser } = useAuth();
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        setUserData(user);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const pathResult = pathname
     .replace(/^\/admin\/?/, "") // buang "/admin" di depan
@@ -52,7 +39,7 @@ function Navbar({ setIsOpen }) {
           {pathname === "/admin" ? (
             <h2>
               Selamat Datang,{" "}
-              <span className="text-nowrap">{userData?.name || ""} 👋</span>
+              <span className="text-nowrap">{user?.name || ""} 👋</span>
             </h2>
           ) : (
             <h2 className="max-sm:text-center max-sm:hidden">
@@ -72,18 +59,18 @@ function Navbar({ setIsOpen }) {
           {pathResult}
         </h2>
       )}
-      {userData && (
+      {user && (
         <div className="flex gap-[18px] pr-[31.92px] items-center">
-          <p>{userData?.name}</p>
+          <p>{user?.name}</p>
           <button
             onClick={() => setIsProfileOpen((prev) => !prev)}
             className="flex gap-[18px]"
           >
             <img
               src={
-                userData?.avatar
+                user?.avatar
                   ? `${import.meta.env.VITE_API_URL_IMAGE}/storage/${
-                      userData.avatar
+                      user.avatar
                     }`
                   : ProfilePicture
               }
@@ -110,7 +97,7 @@ function Navbar({ setIsOpen }) {
         } fixed inset-0 h-full w-full`}
       ></div>
       {isProfileOpen && (
-        <Profile userData={userData} setUserData={setUserData} />
+        <Profile userData={user} setUserData={setUser} />
       )}
     </div>
   );

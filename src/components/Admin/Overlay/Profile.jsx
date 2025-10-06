@@ -52,7 +52,7 @@ function Edit({ userData, setUserData, setIsEdit, setEditResponse }) {
     }
   };
   return (
-    <div className="border-[#959595] border-[0.5px] flex-1">
+    <div className="border-[#959595] border-[0.5px] flex-1  overflow-y-auto max-h-[450px]">
       {alertMessage && <p className="text-red-700 ml-2 mt-2">{alertMessage}</p>}
       <form
         onSubmit={onSubmit}

@@ -1,26 +1,16 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import LoadingPage from "../components/LoadingPage";
-import { getCurrentUser } from "../controllers/AuthController";
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isLoading, isAuthenticated, checkAuth } = useAuth();
 
-  useEffect(() => {
-    const verifyAuth = async () => {
-      try {
-        await getCurrentUser(); 
-        setIsAuthenticated(true);
-      } catch (err) {
-        console.error('Auth check failed:', err);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    verifyAuth();
+   useEffect(() => {
+    // Hanya refresh jika belum authenticated
+    if (!isAuthenticated && !isLoading) {
+      checkAuth(true);
+    }
   }, []);
 
   if (isLoading) {

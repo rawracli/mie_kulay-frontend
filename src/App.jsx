@@ -14,6 +14,7 @@ import Pengeluaran from "./pages/Admin/Pengeluaran/Pengeluaran";
 import Menu from "./pages/Menu/Menu";
 import Tentang from "./pages/Tentang/Tentang";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
@@ -27,9 +28,11 @@ function App() {
         </Route>
         <Route
           element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         >
           <Route path="admin">
