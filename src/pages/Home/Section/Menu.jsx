@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
-import Photo from "../../../assets/Home/talk.png";
-const image = [Photo, Photo, Photo, Photo, Photo, Photo, Photo, Photo];
+import { getMenu } from "../../../controllers/Menu";
 
 function Menu() {
+  const [image, setImage] = useState([]);
   const [emblaRef] = useEmblaCarousel({ loop: true }, [
     AutoScroll({
       playOnInit: true,
@@ -14,10 +14,35 @@ function Menu() {
       speed: 1,
     }),
   ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMenu();
+        // mapping field agar sesuai dengan struktur di frontend
+        const mapped = data.map((item) => [
+          `${import.meta.env.VITE_API_URL_IMAGE}/storage/${item.gambar}`,
+        ]);
+        if (mapped.length < 12) {
+          const originalLength = mapped.length;
+          for (let i = 0; mapped.length < 12; i++) {
+            mapped.push(mapped[i % originalLength]);
+          }
+        }
+
+        setImage(mapped);
+      } catch (error) {
+        console.error("Gagal load menu:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div
       className="flex items-center justify-center overflow-hidden"
-      data-aos-delay="50" data-aos="fade-up" data-aos-duration="2000"
+      data-aos-delay="50"
+      data-aos="fade-up"
+      data-aos-duration="2000"
       ref={emblaRef}
     >
       <div className="flex">
