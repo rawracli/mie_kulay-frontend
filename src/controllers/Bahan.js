@@ -107,5 +107,37 @@ const hapusBahan = async (id) => {
   return response.json();
 };
 
-export { getBahan, tambahbahanMenu, tambahBahan, updateBahan, hapusBahan };
+// pivot bahan menu
+const handlePivotDelete = async (menuId, bahanId) => {
+  try {
+    const token = await gctks();
+
+    const res = await fetch(`${API_URL}/delete-pivot`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-XSRF-TOKEN": token,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        menu_id: menuId,
+        bahan_id: bahanId,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Gagal hapus pivot");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("Gagal hapus pivot:", err);
+    throw err;
+  }
+};
+
+
+export { getBahan, tambahbahanMenu, tambahBahan, updateBahan, hapusBahan, handlePivotDelete };
 

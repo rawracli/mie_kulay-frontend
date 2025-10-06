@@ -18,6 +18,7 @@ import {
   hapusBahan,
   tambahbahanMenu,
   tambahBahan,
+  handlePivotDelete,
 } from "../../../controllers/Bahan";
 import { getMenu, updateMenu } from "../../../controllers/Menu";
 import { getCategories } from "../../../controllers/Category";
@@ -912,7 +913,7 @@ function Stok() {
                   selectedMenu={selectedMenu}
                   setEditMenuForm={setEditMenuForm}
                   handleAddBahan={handleAddBahan}
-                  handleBahanDelete={handleBahanDelete}
+                  // handleBahanDelete={handleBahanDelete}
                   handleNewBahanChange={handleNewBahanChange}
                   newBahan={newBahan}
                 />
@@ -949,7 +950,7 @@ function EditMenuBahan({
   editMenuForm,
   selectedMenu,
   setEditMenuForm,
-  handleBahanDelete,
+  // handleBahanDelete,
   // newBahan,
   // handleNewBahanChange,
   // handleAddBahan,
@@ -1025,6 +1026,24 @@ function EditMenuBahan({
     }
   };
 
+  const handleDeletePivot = async (menuId, bahanId) => {
+    try {
+      await handlePivotDelete(menuId, bahanId);
+
+      // Update state agar bahan langsung hilang dari list
+      setEditMenuForm((prev) => ({
+        ...prev,
+        bahan: prev.bahan.filter((b) => b.id !== bahanId),
+      }));
+
+      console.log("Pivot berhasil dihapus");
+      return true;
+    } catch (err) {
+      console.error("Gagal hapus pivot:", err);
+      throw err;
+    }
+  };
+
   return (
     <div className="flex flex-col max-md:w-full">
       <h4 className="text-[24px] max-md:pt-[21px] max-md:pl-[16px] font-semibold pb-[10px] max-md:w-full">
@@ -1051,7 +1070,7 @@ function EditMenuBahan({
 
                 {/* Tombol hapus */}
                 <svg
-                  onClick={() => handleBahanDelete(bahan.id)}
+                  onClick={() => handleDeletePivot(selectedMenu.id, bahan.id)}
                   className="cursor-pointer ml-2"
                   width="14"
                   height="16"
