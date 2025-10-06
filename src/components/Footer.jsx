@@ -85,10 +85,10 @@ function Footer() {
                   Informasi
                 </h2>
                 <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
-                  <div className="flex gap-[19.5px]">
+                  <a className="flex gap-[19.5px]" href="https://wa.me/6281279966066" target="_blank" rel="noreferrer">
                     <img src={Phone} alt="Phone" className="w-[24px]" />
-                    <p>0838 - 6993 - 1820</p>
-                  </div>
+                    <p>0812 - 7996 - 6066</p>
+                  </a>
                   <div className="flex gap-[19.5px]">
                     <img src={Email} alt="Email" className="w-[25px]" />
                     <p>ayuuaulia01@gmail.com</p>
@@ -111,14 +111,18 @@ function Footer() {
                   Informasi
                 </h2>
                 <ul className="space-y-[20px] font-baloo-2 text-[18px] text-white">
-                  <div className="flex gap-[19.5px]">
+                  <div className="flex gap-[19.5px] cursor-pointer" onClick={() => window.open("https://wa.me/6281279966066", "_blank")}>
                     <img src={Phone} alt="Phone" className="w-[24px]" />
-                    <p>0838 - 6993 - 1820</p>
+                    <p>0812 - 7996 - 6066</p>
                   </div>
-                  <div className="flex gap-[19.5px]">
+                  <div
+                    className="flex gap-[19.5px] cursor-pointer"
+                    onClick={() => window.location.href = "mailto:ayuuaulia01@gmail.com"}
+                  >
                     <img src={Email} alt="Email" className="w-[25px]" />
                     <p>ayuuaulia01@gmail.com</p>
                   </div>
+
                   <div className="flex gap-[19.5px] items-start">
                     <img src={Maps} alt="" className="pt-[5px] translate-x-[2px]" />
                     <p className="text-left">
@@ -138,13 +142,17 @@ function Footer() {
             </h2>
             <div className="gap-[13px] flex lg:flex-col pl-[4px]">
               <a
-                href=""
+                href="https://gofood.link/a/yZvXkxA"
+                target="_blank" 
+                rel="noopener noreferrer"
                 className="bg-white transition-all duration-75 shadow-[2px_3px_0px_rgba(255,255,255,0.7)] active:shadow-[0px_0px_0px_rgba(255,255,255,0.7)] active:translate-x-[2px] active:translate-y-[3px] cursor-pointer rounded-[10px] flex items-center justify-center h-[49px] w-[125px]"
               >
                 <img src={Gofood} alt="Gofood" className="w-[109px] h-[22px]" />
               </a>
               <a
-                href=""
+                href="https://r.grab.com/g/6-20251002_174247_b4788cbfb2d74e05935b3fa2aa519930_MEXMPS-6-C6XCTU3YVJE2HE"
+                target="_blank" 
+                rel="noopener noreferrer"
                 className="bg-white transition-all duration-75 shadow-[2px_3px_0px_rgba(255,255,255,0.7)] active:shadow-[0px_0px_0px_rgba(255,255,255,0.7)] active:translate-x-[2px] active:translate-y-[3px] cursor-pointer rounded-[10px] flex items-center justify-center h-[49px] w-[125px]"
               >
                 <img src={Grab} alt="Grab" className="w-[110px] h-[20px]" />
