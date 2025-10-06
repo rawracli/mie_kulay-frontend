@@ -112,7 +112,7 @@ function TambahMenu({ onClose, onAdd }) {
 
   return (
     <div
-      className={`fixed top-[33.3%] sm:top-[36%] md:top-1/2 md:-translate-y-[calc(50%-1rem)] translate-x-1/2 right-1/2 md:right-[calc(50%-13rem)] lg:right-[calc(50%-15rem)] flex md:h-[577px] z-50`}
+      className={`fixed top-1/2 md:top-1/2 md:-translate-y-[calc(50%-1rem)] right-1/2 translate-x-1/2 -translate-y-1/2 md:right-[calc(50%-13rem)] lg:right-[calc(50%-15rem)] flex h-[450px] md:h-[577px] z-50`}
     >
       <div className="bg-white max-md:border p-[11px] md:pl-[27px] md:pr-[32px] md:pb-[24px] md:pt-[28px] flex flex-col w-[317px] lg:w-[416px] rounded-[5px] shadow-[0px_2px_6px_rgba(156,156,156,0.25)] relative">
         <div
@@ -204,7 +204,7 @@ function TambahMenu({ onClose, onAdd }) {
                 onNewBahan={(bahan) => setBahanList((prev) => [...prev, bahan])}
               />
             </div>
-            <div className="overflow-y-auto max-h-48">
+            <div className="overflow-y-auto sm:max-h-48">
               {selectedBahan.map((b, idx) => (
                 <div
                   key={b.bahan_id || b.id}
@@ -236,7 +236,7 @@ function TambahMenu({ onClose, onAdd }) {
 
           <button
             type="submit"
-            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
+            className="self-end w-[111px] h-[31px] bg-[#FFB300] hover:bg-[#F1A900] active:bg-[#D59501] text-white max-md:mt-2 text-[15px] rounded-[5px] cursor-pointer leading-[31px]"
           >
             Simpan
           </button>

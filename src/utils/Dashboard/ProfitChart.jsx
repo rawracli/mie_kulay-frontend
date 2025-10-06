@@ -58,7 +58,7 @@ export default function ProfitChart() {
       <hr className="text-[#959595] mx-[8px]" />
       <ResponsiveContainer
         width="100%"
-        height={isMobile ? 250 : isTabletBig ? 200 : 285}
+        height={isMobile ? 280 : isTabletBig ? 230 : 320}
         className="pr-[8px] md:pr-[25px] mt-[16px] w-full max-sm:h-[650px]"
       >
         <LineChart data={data}>
