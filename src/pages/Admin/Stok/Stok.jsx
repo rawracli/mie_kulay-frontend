@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
+import ReactDOM from "react-dom";
 import Pencil from "../../../assets/Admin/pencil.svg";
 import Sampah from "../../../assets/Admin/sampah.svg";
 import PlusGreen from "../../../assets/Admin/plusGreen.svg";
@@ -1137,7 +1138,7 @@ function BahanDropdownEdit({
   onCustomBahan,
   onClose,
 }) {
-  const [open, setOpen] = useState(true); // Selalu terbuka karena dipicu oleh input
+  const [open, setOpen] = useState(true);
   const [search, setSearch] = useState("");
   const [newNama, setNewNama] = useState("");
   const [newJumlah, setNewJumlah] = useState("");
@@ -1145,15 +1146,14 @@ function BahanDropdownEdit({
   const [newOpsi, setNewOpsi] = useState("");
   const dropdownRef = useRef(null);
   const [jumlahBahan, setJumlahBahan] = useState();
+  const [hoveredPrice, setHoveredPrice] = useState(null);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   const opsiList = [
     { id: 1, nama: "bahan_mentah", label: "Bahan Mentah" },
     { id: 2, nama: "bahan_baku", label: "Bahan Baku" },
     { id: 3, nama: "bahan_lengkap", label: "Bahan Lengkap" },
   ];
-
-  // Gabungan dengan dummy data fallback
-  const combinedBahanList = bahanList;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -1166,7 +1166,7 @@ function BahanDropdownEdit({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  const filtered = combinedBahanList.filter((b) =>
+  const filtered = bahanList.filter((b) =>
     b.nama_bahan.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -1243,29 +1243,35 @@ function BahanDropdownEdit({
           </div>
 
           {/* List bahan */}
-          <div className="overflow-y-auto divide-y divide-gray-200 max-h-32">
+          <div className="relative overflow-y-auto divide-y divide-gray-200 max-h-32">
             {filtered.length > 0 ? (
               filtered.map((b) => {
                 return (
                   <div
                     key={b.id}
                     className="flex justify-between items-center px-3 py-2 hover:bg-[#F4DC8C]"
+                    onMouseEnter={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setHoveredPrice(b.harga_beli);
+                      setTooltipPos({
+                        x: rect.left + rect.width / 2,
+                        y: rect.top, // bisa + window.scrollY kalau butuh
+                      });
+                    }}
+                    onMouseLeave={() => setHoveredPrice(null)}
                   >
-                    <span className="font-medium">{b.nama_bahan}</span>
-                    <span>
-                      Rp{b.harga_beli?.toLocaleString("id-ID") || "0"}
+                    <span className="font-medium text-[14px]">
+                      {b.nama_bahan}
                     </span>
 
-                    {/* Input jumlah */}
                     <input
                       type="number"
                       min={1}
                       value={jumlahBahan}
                       onChange={(e) => setJumlahBahan(Number(e.target.value))}
-                      className="w-14 text-xs text-right border rounded px-1"
+                      className="w-14 ml-auto text-xs text-right border rounded px-1"
                     />
 
-                    {/* Tombol attach */}
                     <button
                       onClick={() =>
                         onBahanSelect({ ...b, jumlah: jumlahBahan })
@@ -1282,6 +1288,21 @@ function BahanDropdownEdit({
                 Tidak ada bahan ditemukan
               </div>
             )}
+
+            {hoveredPrice &&
+              ReactDOM.createPortal(
+                <span
+                  className="fixed bg-black text-white text-[12px] px-2 py-1 rounded shadow-lg z-[9999] pointer-events-none"
+                  style={{
+                    top: tooltipPos.y,
+                    left: tooltipPos.x,
+                    transform: "translate(-50%, -100%)",
+                  }}
+                >
+                  Rp{hoveredPrice.toLocaleString("id-ID")}
+                </span>,
+                document.body
+              )}
           </div>
         </div>
       )}
