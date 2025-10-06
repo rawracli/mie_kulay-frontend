@@ -370,18 +370,7 @@ function Dashboard() {
         <div className="relative border grid border-[#959595] flex-1">
           {/* Container untuk scroll */}
           <div className="relative overflow-x-auto">
-            <div className="w-full min-w-[550px]">
-              {/* Grid lines - perlu disesuaikan dengan lebar tabel */}
-              <div
-                className={`absolute inset-0 w-full grid lg:grid-cols-[13%_11.9%_27.1%_31.1%] grid-cols-[14.30%_12.8%_29.4%_33.7%] pointer-events-none ${
-                  transactionsData.length === 0 && "invisible"
-                }`}
-                style={{ minWidth: "550px" }} // Sesuaikan dengan min-width tabel
-              >
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="border-r border-[#959595]"></div>
-                ))}
-              </div>
+            <div className="w-full min-w-[650px]">
               {/* Tabel dengan min-width */}
               <table className="w-full border-collapse">
                 <thead className="border border-[#959595] bg-[#FFB300] text-left h-[28px]">
@@ -395,7 +384,7 @@ function Dashboard() {
                     ].map((value, index) => (
                       <th
                         key={index}
-                        className="text-center font-semibold py-[6px] text-nowrap"
+                        className="text-center font-semibold py-[6px] text-nowrap border border-[#959595]"
                       >
                         {value}
                       </th>
@@ -406,15 +395,15 @@ function Dashboard() {
                   {paginatedData.length > 0 ? (
                     paginatedData.map((t) => (
                       <tr key={t.id} className="even:bg-gray-200">
-                        <td className="text-center h-[33px]">
+                        <td className="text-center h-[33px] border border-[#959595]">
                           {t.tanggal.toLocaleDateString("id-ID")}
                         </td>
-                        <td className="text-center h-[33px]">{t.id}</td>
-                        <td className="text-center h-[33px]">
+                        <td className="text-center h-[33px] border border-[#959595]">{t.id}</td>
+                        <td className="text-center h-[33px] border border-[#959595]">
                           Rp. {t.total.toLocaleString("id-ID")}
                         </td>
-                        <td className="text-center h-[33px]">{t.metode}</td>
-                        <td className="text-center h-[33px]">
+                        <td className="text-center h-[33px] border border-[#959595]">{t.metode}</td>
+                        <td className="text-center h-[33px] border border-[#959595]">
                           <button
                             onClick={() => setSelectedTransaction(t)}
                             className="lg:bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-[12px] cursor-pointer h-[25px]"
