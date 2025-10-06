@@ -1263,14 +1263,19 @@ function BahanDropdownEdit({
                     <span className="font-medium text-[14px]">
                       {b.nama_bahan}
                     </span>
+                    <div className="ml-auto">
+                      <span className="text-[14px] pr-3 md:hidden">
+                        Rp{b.harga_beli.toLocaleString("id-ID")}
+                      </span>
 
-                    <input
-                      type="number"
-                      min={1}
-                      value={jumlahBahan}
-                      onChange={(e) => setJumlahBahan(Number(e.target.value))}
-                      className="w-14 ml-auto text-xs text-right border rounded px-1"
-                    />
+                      <input
+                        type="number"
+                        min={1}
+                        value={jumlahBahan}
+                        onChange={(e) => setJumlahBahan(Number(e.target.value))}
+                        className="w-14 text-xs text-right border rounded px-1"
+                      />
+                    </div>
 
                     <button
                       onClick={() =>
@@ -1290,6 +1295,7 @@ function BahanDropdownEdit({
             )}
 
             {hoveredPrice &&
+              window.innerWidth >= 768 &&
               ReactDOM.createPortal(
                 <span
                   className="fixed bg-black text-white text-[12px] px-2 py-1 rounded shadow-lg z-[9999] pointer-events-none"
