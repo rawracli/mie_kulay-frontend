@@ -33,6 +33,25 @@ const tambahbahanMenu = async (data) => {
   return await res.json();
 };
 
+// const attachBahanMenu = async ( bahan_id, menu_id, jumlah ) => {
+//   const res = await fetch(`${API_URL}/attach/bahan`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Accept": "application/json",
+//       "X-XSRF-TOKEN": await gctks(),
+//     },
+//     credentials: "include",
+//     body: JSON.stringify({ bahan_id, menu_id, jumlah }),
+//   });
+
+//   if (!res.ok) {
+//     const err = await res.json();
+//     throw new Error(err.message);
+//   }
+//   return await res.json();
+// }
+
 const tambahBahan = async (data) => {
   const res = await fetch(`${API_URL}/tambah/bahan/langsung`, {
     method: "POST",

@@ -951,7 +951,7 @@ function EditMenuBahan({
   setEditMenuForm,
   handleBahanDelete,
   // newBahan,
-  handleNewBahanChange,
+  // handleNewBahanChange,
   // handleAddBahan,
 }) {
   const [bahanList, setBahanList] = useState([]);
@@ -962,31 +962,48 @@ function EditMenuBahan({
   }, []);
 
   // Fungsi untuk handle pemilihan bahan dari dropdown
-  const handleBahanSelect = (bahan) => {
-    handleNewBahanChange("nama", bahan.nama_bahan);
-    handleNewBahanChange("harga", bahan.harga || bahan.harga_beli || 0);
-    setShowDropdown(false);
+  // Pilih bahan lama → attach
+  const handleBahanSelect = async (bahan) => {
+    try {
+      await tambahbahanMenu({
+        menu_id: selectedMenu.id,
+        bahan_id: bahan.id,
+        jumlah: bahan.jumlah, // ambil dari input
+      });
+
+      setEditMenuForm((prev) => ({
+        ...prev,
+        bahan: [
+          ...prev.bahan,
+          {
+            id: bahan.id,
+            nama: bahan.nama_bahan,
+            harga: bahan.harga || bahan.harga_beli || 0,
+            jumlah: bahan.jumlah,
+          },
+        ],
+      }));
+
+      setShowDropdown(false);
+    } catch (err) {
+      console.error("Gagal attach bahan:", err);
+    }
   };
 
   // Fungsi untuk handle tambah bahan custom dari dropdown
 
   // Fungsi untuk handle tambah bahan custom dari dropdown
+  // Tambah bahan baru → create + attach
   const handleCustomBahan = async (customBahan) => {
     try {
-      console.log("Data dari dropdown:", customBahan);
-
-      // Panggil API untuk buat bahan + langsung attach ke menu
       const response = await tambahbahanMenu({
+        menu_id: selectedMenu.id,
         nama_bahan: customBahan.nama_bahan,
-        jumlah: customBahan.jumlah,
         harga_beli: customBahan.harga,
         tipe: customBahan.tipe,
-        menu_id: selectedMenu.id,
+        jumlah: customBahan.jumlah,
       });
 
-      console.log("Response dari API:", response);
-
-      // Update state editMenuForm dengan bahan baru (TANPA reload)
       setEditMenuForm((prev) => ({
         ...prev,
         bahan: [
@@ -1001,9 +1018,9 @@ function EditMenuBahan({
       }));
 
       setShowDropdown(false);
-      alert("Bahan berhasil ditambahkan!");
+      alert("Bahan baru berhasil ditambahkan!");
     } catch (error) {
-      console.error("Error menambah bahan:", error);
+      console.error("Gagal menambah bahan:", error);
       alert("Gagal menambah bahan: " + error.message);
     }
   };
@@ -1108,6 +1125,7 @@ function BahanDropdownEdit({
   const [newHarga, setNewHarga] = useState("");
   const [newOpsi, setNewOpsi] = useState("");
   const dropdownRef = useRef(null);
+  const [jumlahBahan, setJumlahBahan] = useState();
 
   const opsiList = [
     { id: 1, nama: "bahan_mentah", label: "Bahan Mentah" },
@@ -1116,10 +1134,7 @@ function BahanDropdownEdit({
   ];
 
   // Gabungan dengan dummy data fallback
-  const combinedBahanList =
-    bahanList && bahanList.length > 0
-      ? bahanList
-      : [{ id: 1, nama_bahan: "Wortel", harga: 10000, opsi: "bahan mentah" }];
+  const combinedBahanList = bahanList;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -1211,16 +1226,38 @@ function BahanDropdownEdit({
           {/* List bahan */}
           <div className="overflow-y-auto divide-y divide-gray-200 max-h-32">
             {filtered.length > 0 ? (
-              filtered.map((b) => (
-                <div
-                  key={b.id}
-                  onClick={() => onBahanSelect(b)}
-                  className="flex justify-between px-3 py-2 text-sm cursor-pointer hover:bg-[#F4DC8C]"
-                >
-                  <span className="font-medium">{b.nama_bahan}</span>
-                  <span>Rp{b.harga?.toLocaleString("id-ID") || "0"}</span>
-                </div>
-              ))
+              filtered.map((b) => {
+                return (
+                  <div
+                    key={b.id}
+                    className="flex justify-between items-center px-3 py-2 hover:bg-[#F4DC8C]"
+                  >
+                    <span className="font-medium">{b.nama_bahan}</span>
+                    <span>
+                      Rp{b.harga_beli?.toLocaleString("id-ID") || "0"}
+                    </span>
+
+                    {/* Input jumlah */}
+                    <input
+                      type="number"
+                      min={1}
+                      value={jumlahBahan}
+                      onChange={(e) => setJumlahBahan(Number(e.target.value))}
+                      className="w-14 text-xs text-right border rounded px-1"
+                    />
+
+                    {/* Tombol attach */}
+                    <button
+                      onClick={() =>
+                        onBahanSelect({ ...b, jumlah: jumlahBahan })
+                      }
+                      className="ml-2 px-2 py-0.5 text-xs bg-[#44962D] text-white rounded"
+                    >
+                      Tambah
+                    </button>
+                  </div>
+                );
+              })
             ) : (
               <div className="px-3 py-2 text-sm text-center text-gray-500">
                 Tidak ada bahan ditemukan
