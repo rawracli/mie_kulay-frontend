@@ -215,7 +215,7 @@ function MenuPage() {
                             {item.name}
                           </h3>
                           <p className="mt-4 text-black text-[25px] text-start font-baloo-2 max-sm:text-[14px] max-sm:mt-1">
-                            Rp.{item.price}
+                            Rp. {item.price.toLocaleString("ID", "id")}
                           </p>
                         </div>
                       </div>
