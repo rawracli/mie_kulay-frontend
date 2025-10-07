@@ -123,18 +123,20 @@ function Login() {
           {error && <p className="mb-4 text-center text-red-500">{error}</p>}
 
           {/* Email */}
-          <div className="mb-4">
-            <label className="block mb-1 font-light mt-[2.70rem] ml-[0.75rem] max-sm:ml-[23px] ">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Masukkan email..."
-              className=" w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFBA00] ml-[0.75rem] max-sm:ml-[23px]"
-            />
-          </div>
+          {!showForgotPassword && !resetSent && (
+            <div className="mb-4">
+              <label className="block mb-1 font-light mt-[2.70rem] ml-[0.75rem] max-sm:ml-[23px] ">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Masukkan email..."
+                className=" w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFBA00] ml-[0.75rem] max-sm:ml-[23px]"
+              />
+            </div>
+          )}
 
           {/* Password */}
           {!showForgotPassword && !resetSent && (
