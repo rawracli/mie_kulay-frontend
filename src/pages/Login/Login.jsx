@@ -67,7 +67,7 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        setResetSent(true); // Tampilkan pesan berhasil
+        // setResetSent(true); // Tampilkan pesan berhasil
         setError("");
       } else {
         setError(data.message || "Gagal mengirim reset password");
@@ -123,7 +123,7 @@ function Login() {
           {error && <p className="mb-4 text-center text-red-500">{error}</p>}
 
           {/* Email */}
-          {!showForgotPassword && !resetSent && (
+          {!resetSent && (
             <div className="mb-4">
               <label className="block mb-1 font-light mt-[2.70rem] ml-[0.75rem] max-sm:ml-[23px] ">
                 Email
