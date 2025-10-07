@@ -29,6 +29,7 @@ function Stok() {
   const [viewMode, setViewMode] = useState("bahan");
   const [stockTable, setStockTable] = useState([]);
   const [menuData, setMenuData] = useState([]);
+  const [menuReloadTrigger, setMenuReloadTrigger] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const stockData = useMemo(() => {
@@ -304,6 +305,7 @@ function Stok() {
       };
 
       const updated = await updateMenu(selectedMenu.id, payload);
+      setMenuReloadTrigger((prev) => prev + 1);
 
       setMenuData((prev) =>
         prev.map((menu) => (menu.id === selectedMenu.id ? updated : menu))
@@ -411,7 +413,7 @@ function Stok() {
     };
 
     fetchMenu();
-  }, []);
+  }, [menuReloadTrigger]);
 
   return (
     <div className="bg-[#EDF0F2] min-h-[calc(100vh-92px)] w-full px-[0.75rem] pb-[0.5rem] overflow-y-clip">
