@@ -62,11 +62,11 @@ function Tentang() {
       
       <div className="bg-[#FFB300] mt-[10px] h-[404px] max-sm:h-[163px] max-xmd:h-[323px] relative flex items-center px-10 overflow-visible">
       {/* Foto sebelah kiri */}
-      <div className="absolute left-0 mt-32 -translate-x-1/5 ml-23 max-sm:ml-7 max-xmd:ml-7 max-sm:mt-0 max-xmd:mt-0">
+      <div className="absolute left-0 -translate-x-1/5 ml-15 max-sm:ml-5 max-xmd:ml-7 mt-70 max-sm:mt-20 max-xmd:mt-80">
         <img
           src={Miesumpit}
           alt="Promo Mie"
-          className="h-[1142px] max-sm:h-[350px] max-xmd:h-[690px] object-contain" 
+          className="h-[700px] max-sm:h-[250px] max-xmd:h-[690px] object-contain" 
           data-aos="fade-up-right" data-aos-duration="2000"
         />
       </div>
