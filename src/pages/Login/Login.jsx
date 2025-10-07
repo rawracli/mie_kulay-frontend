@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import background from "../../assets/Login/login.png";
 import logo from "../../assets/Login/logo.png";
 import { loginUser } from "../../controllers/AuthController";
@@ -10,9 +10,27 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Fungsi untuk user gagal login
+  // Fungsi untuk user gagal login (memberikan email mereka)
   const [loginFailed, setLoginFailed] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  // Fungsi untuk reset password
+  const [resetSent, setResetSent] = useState(false);
+  const [token, setToken] = useState(""); // state token
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Ambil token & email dari URL jika ada
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = searchParams.get("token");
+    const emailFromUrl = searchParams.get("email");
+
+    if (tokenFromUrl && emailFromUrl) {
+      setResetSent(true);
+      setToken(tokenFromUrl);
+      setEmail(emailFromUrl);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,13 +66,41 @@ function Login() {
       );
 
       const data = await response.json();
-      alert(data.message || "Link reset password telah dikirim ke email kamu");
-      setShowForgotPassword(false);
-      setLoginFailed(false);
+      if (response.ok) {
+        setResetSent(true); // Tampilkan pesan berhasil
+        setError("");
+      } else {
+        setError(data.message || "Gagal mengirim reset password");
+      }
     } catch (err) {
       setError("Gagal mengirim reset password");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fungsi ubah password
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) return alert("Password tidak cocok");
+
+    const res = await fetch("http://127.0.0.1:8000/api/password/reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        password: newPassword,
+        password_confirmation: confirmPassword,
+        token,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      console.error(data.message); // Password berhasil direset
+      window.location.href = "/login"; // FE yang handle redirect
+    } else {
+      console.error(data.message); // Token invalid / expired
     }
   };
 
@@ -91,7 +137,7 @@ function Login() {
           </div>
 
           {/* Password */}
-          {!showForgotPassword && (
+          {!showForgotPassword && !resetSent && (
             <div className="mb-6">
               <label className="block mb-1 font-light mt-5 ml-[0.75rem] max-sm:ml-[23px]">
                 Password
@@ -101,6 +147,32 @@ function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan kata sandi..."
+                className="w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 ml-[0.75rem] max-sm:ml-[23px]"
+              />
+            </div>
+          )}
+          {/* Password Baru & Konfirmasi */}
+          {resetSent && (
+            <div className="mb-6">
+              <label className="block mb-1 font-light mt-5 ml-[0.75rem] max-sm:ml-[23px]">
+                Password Baru
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Masukkan password baru..."
+                className="w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 ml-[0.75rem] max-sm:ml-[23px]"
+              />
+
+              <label className="block mb-1 font-light mt-5 ml-[0.75rem] max-sm:ml-[23px]">
+                Konfirmasi Password
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Konfirmasi password baru..."
                 className="w-[400px] max-sm:w-[275px] h-[50px] max-sm:h-[40.82px] border border-gray-800 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 ml-[0.75rem] max-sm:ml-[23px]"
               />
             </div>
@@ -142,12 +214,20 @@ function Login() {
           <button
             className="w-[400px] max-sm:w-[279px] h-[57px] max-sm:h-[40.82px] bg-[#FFBA00] text-black font-bold rounded-full hover:bg-yellow-500 transition mt-3 max-sm:mt-[20px] ml-[0.70rem] max-sm:ml-[23px]"
             type={showForgotPassword ? "button" : "submit"}
-            onClick={showForgotPassword ? handleForgotPassword : null}
+            onClick={
+              resetSent
+                ? handleChangePassword
+                : showForgotPassword
+                ? handleForgotPassword
+                : handleSubmit
+            }
             disabled={loading}
           >
             <h3 className="font-semibold text-center-2xl">
-              {showForgotPassword
-                ? "Kirim Reset Password"
+              {resetSent
+                ? "Ubah Password" // tampilkan ini jika link telah ditekan
+                : showForgotPassword
+                ? "Kirim Reset Password" // tampilkan ini jika lupa kata sandi ditekan
                 : loading
                 ? "Loading..."
                 : "Login"}
