@@ -175,7 +175,7 @@ function TambahMenu({ onClose, onAdd }) {
               required
               value={nama}
               onChange={(e) => setNama(e.target.value)}
-              className="w-full mt-[5px] md:mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[38px] md:h-[50px] focus:outline-none"
+              className="block w-full mt-[5px] md:mt-[7px] pl-[13px] text-[15px] border border-[#7E7E7E] rounded-[4px] h-[38px] md:h-[50px] focus:outline-none"
             />
           </div>
 
