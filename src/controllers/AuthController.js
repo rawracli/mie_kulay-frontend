@@ -32,7 +32,7 @@ const loginUser = async (data) => {
         "X-XSRF-TOKEN": await gctks(),
       },
       body: JSON.stringify(data),
-      // credentials: 'include',
+      credentials: 'include',
     });
 
     const result = await response.json();
