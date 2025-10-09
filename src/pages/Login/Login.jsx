@@ -180,7 +180,7 @@ function Login() {
             </div>
           )}
 
-          {showForgotPassword && (
+          {showForgotPassword && !resetSent && (
             <div className="flex flex-row gap-1 justify-center">
               <button
                 type="button"
