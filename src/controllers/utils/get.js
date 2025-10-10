@@ -5,6 +5,7 @@ export const gctks = async () => {
   await fetch(`${getWEB}/sanctum/csrf-cookie`, {
     credentials: "include",
   });
-  const csrfToken = Cookies.get('XSRF-TOKEN');
+  // const csrfToken = Cookies.get('XSRF-TOKEN');
+  const csrfToken = '';
   return csrfToken;
 };
