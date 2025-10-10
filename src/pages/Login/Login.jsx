@@ -57,7 +57,7 @@ function Login() {
     try {
       setLoading(true);
       const response = await fetch(
-        "http://127.0.0.1:8000/api/password/forgot",
+        `${import.meta.env.VITE_API_URL}/password/forgot`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ function Login() {
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) return alert("Password tidak cocok");
 
-    const res = await fetch("http://127.0.0.1:8000/api/password/reset", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/password/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -180,7 +180,7 @@ function Login() {
             </div>
           )}
 
-          {showForgotPassword && (
+          {showForgotPassword && !resetSent && (
             <div className="flex flex-row gap-1 justify-center">
               <button
                 type="button"
