@@ -147,12 +147,22 @@ function Stok() {
     setFilterValue("all"); // reset filter saat ganti view
   };
 
+  const [statusEmpty, setStatusEmpty] = useState({});
   const handleEmpty = async (id) => {
+    // Tampilkan teks sementara
+    setStatusEmpty((prev) => ({ ...prev, [id]: "loading" }));
+
     try {
-      await processBahanRevenue();
-      // kalau mau update UI, tambahkan logic di sini
+      const result = await processBahanRevenue();
+
+      if (result.total_pendapatan > 0) {
+        setStatusEmpty((prev) => ({ ...prev, [id]: "success" }));
+      } else {
+        setStatusEmpty((prev) => ({ ...prev, [id]: "stopped" }));
+      }
     } catch (err) {
       console.error("Gagal memproses habis bahan:", err);
+      setStatusEmpty((prev) => ({ ...prev, [id]: "stopped" }));
     }
   };
 
@@ -603,10 +613,19 @@ function Stok() {
                                 {t.tipe === "bahan_lengkap" && (
                                   <button
                                     onClick={() => handleEmpty(t.id)}
-                                    className="flex-1 flex items-center justify-center bg-[#2ab415] hover:bg-[#2fa81c] active:bg-[#289317] h-full rounded-[5px] gap-1 cursor-pointer"
+                                    className={`flex-1 flex items-center justify-center h-full rounded-[5px] gap-1 cursor-pointer ${
+                                      statusEmpty[t.id] === "stopped"
+                                        ? "bg-red-500 text-white"
+                                        : "bg-[#2ab415] hover:bg-[#2fa81c] active:bg-[#289317] text-white"
+                                    }`}
                                   >
-                                    <img src={Pencil} alt="" />
-                                    <span className="max-lg:hidden">Habis</span>
+                                    {statusEmpty[t.id] === "loading"
+                                      ? "Memproses..."
+                                      : statusEmpty[t.id] === "success"
+                                      ? "Berhasil"
+                                      : statusEmpty[t.id] === "stopped"
+                                      ? "Terhenti"
+                                      : "Habis"}
                                   </button>
                                 )}
                                 <button
