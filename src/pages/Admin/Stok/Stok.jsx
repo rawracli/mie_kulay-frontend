@@ -590,6 +590,15 @@ function Stok() {
                             </td>
                             <td>
                               <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
+                                {t.tipe === "bahan_lengkap" && (
+                                  <button
+                                    onClick={() => setEditId(t.id)}
+                                    className="flex-1 flex items-center justify-center bg-[#2ab415] hover:bg-[#2fa81c] active:bg-[#289317] h-full rounded-[5px] gap-1 cursor-pointer"
+                                  >
+                                    <img src={Pencil} alt="" />
+                                    <span className="max-lg:hidden">Habis</span>
+                                  </button>
+                                )}
                                 <button
                                   onClick={() => setEditId(t.id)}
                                   className="flex-1 flex items-center justify-center bg-[#3578DC] hover:bg-[#1C66D4] active:bg-[#1554B4] h-full rounded-[5px] gap-1 cursor-pointer"
