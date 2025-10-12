@@ -138,6 +138,33 @@ const handlePivotDelete = async (menuId, bahanId) => {
   }
 };
 
+// memproses hasil pendapatan jika bertipe bahan_lengkap
+const processBahanRevenue = async () => {
+  try {
+    const token = await gctks();
 
-export { getBahan, tambahbahanMenu, tambahBahan, updateBahan, hapusBahan, handlePivotDelete };
+    const res = await fetch(`${API_URL}/pendapatan/bahan/lengkap`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-XSRF-TOKEN": token,
+      },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Gagal memproses pendapatan");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("Gagal memproses pendapatan:", err);
+    throw err;
+  }
+};
+
+
+export { getBahan, tambahbahanMenu, tambahBahan, updateBahan, hapusBahan, handlePivotDelete, processBahanRevenue };
 

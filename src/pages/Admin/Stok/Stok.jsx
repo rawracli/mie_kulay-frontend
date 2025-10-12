@@ -20,6 +20,7 @@ import {
   tambahbahanMenu,
   tambahBahan,
   handlePivotDelete,
+  processBahanRevenue,
 } from "../../../controllers/Bahan";
 import { getMenu, updateMenu } from "../../../controllers/Menu";
 import { getCategories } from "../../../controllers/Category";
@@ -592,7 +593,7 @@ function Stok() {
                               <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
                                 {t.tipe === "bahan_lengkap" && (
                                   <button
-                                    onClick={() => setEditId(t.id)}
+                                    onClick={() => setStokId(t.id)}
                                     className="flex-1 flex items-center justify-center bg-[#2ab415] hover:bg-[#2fa81c] active:bg-[#289317] h-full rounded-[5px] gap-1 cursor-pointer"
                                   >
                                     <img src={Pencil} alt="" />
