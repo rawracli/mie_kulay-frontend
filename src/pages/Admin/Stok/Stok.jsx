@@ -147,6 +147,15 @@ function Stok() {
     setFilterValue("all"); // reset filter saat ganti view
   };
 
+  const handleEmpty = async (id) => {
+    try {
+      await processBahanRevenue();
+      // kalau mau update UI, tambahkan logic di sini
+    } catch (err) {
+      console.error("Gagal memproses habis bahan:", err);
+    }
+  };
+
   // Handlers for bahan
   const handleUpdateStok = async (id, newHarga) => {
     // update state lokal langsung
@@ -593,7 +602,7 @@ function Stok() {
                               <div className="flex items-center justify-center text-white text-[12px] font-semibold h-full gap-[4px] px-[6px] py-[6px]">
                                 {t.tipe === "bahan_lengkap" && (
                                   <button
-                                    onClick={() => setStokId(t.id)}
+                                    onClick={() => handleEmpty(t.id)}
                                     className="flex-1 flex items-center justify-center bg-[#2ab415] hover:bg-[#2fa81c] active:bg-[#289317] h-full rounded-[5px] gap-1 cursor-pointer"
                                   >
                                     <img src={Pencil} alt="" />
