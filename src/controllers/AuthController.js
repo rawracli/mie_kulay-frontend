@@ -56,9 +56,13 @@ const loginUser = async (data) => {
 
 const getCurrentUser = async () => {
   try {
+    const token = localStorage.getItem("token");
+    
     const response = await fetch(`${API_URL}/user`, {
-      headers: { "Accept": "application/json" },
-      credentials: "include",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) throw new Error('Gagal mengambil data user');
@@ -69,8 +73,6 @@ const getCurrentUser = async () => {
     throw err;
   }
 };
-
-
 
 const getUsers = async () => {
   const response = await fetch(`${API_URL}/users`, {
