@@ -29,7 +29,6 @@ const loginUser = async (data) => {
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-XSRF-TOKEN": await gctks(),
       },
       body: JSON.stringify(data),
       credentials: 'include',
@@ -38,12 +37,22 @@ const loginUser = async (data) => {
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || 'Login gagal');
 
+    // SIMPAN TOKEN DAN USER KE LOCALSTORAGE (kalau ada)
+    if (result.token) {
+      localStorage.setItem('token', result.token);
+    }
+
+    if (result.user) {
+      localStorage.setItem('user', JSON.stringify(result.user));
+    }
+
     return result;
   } catch (err) {
     console.error('Login error:', err.message);
     throw err;
   }
 };
+
 
 const getCurrentUser = async () => {
   try {
