@@ -5,7 +5,6 @@ const getPemesanan = async () => {
     headers: {
       "Accept": "application/json",
     },
-    credentials: "include",
   });
 
   if (!res.ok) throw new Error("Gagal fetch pesanan");

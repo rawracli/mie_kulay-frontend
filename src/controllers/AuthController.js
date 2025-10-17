@@ -103,8 +103,6 @@ const updateProfile = async (formData) => {
   return result;
 };
 
-
-
 const deleteUser = async (id) => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("User belum login");
