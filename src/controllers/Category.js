@@ -1,5 +1,10 @@
 const API_URL = import.meta.env.VITE_API_URL;
-import { gctks } from "./utils/get";
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+  return token;
+};
 
 // Ambil semua kategori
 const getCategories = async () => {
@@ -7,7 +12,6 @@ const getCategories = async () => {
     headers: {
       "Accept": "application/json",
     },
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -19,15 +23,15 @@ const getCategories = async () => {
 };
 
 const addCategory = async (jenis_hidangan) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/category`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({ jenis_hidangan }),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -39,13 +43,13 @@ const addCategory = async (jenis_hidangan) => {
 };
 
 const deleteCategory = async (id) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/category/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -58,15 +62,15 @@ const deleteCategory = async (id) => {
 
 
 const updateCategory = async (id, jenis_hidangan) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/category/${id}`, {
     method: "PUT",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({ jenis_hidangan }),
-    credentials: "include",
   });
 
   if (!response.ok) {
