@@ -1,10 +1,15 @@
 const API_URL = import.meta.env.VITE_API_URL;
-import { gctks } from "./utils/get";
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+  return token;
+};
 
 const getBahan = async () => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/bahan`, {
-    headers: { "Accept": "application/json" },
-    credentials: "include",
+    headers: { "Accept": "application/json", "Authorization": `Bearer ${token}` },
   });
 
   if (!response.ok) {
@@ -15,14 +20,14 @@ const getBahan = async () => {
 };
 
 const tambahbahanMenu = async (data) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/tambah/bahan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
     body: JSON.stringify(data)
   });
 
@@ -53,14 +58,14 @@ const tambahbahanMenu = async (data) => {
 // }
 
 const tambahBahan = async (data) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/tambah/bahan/langsung`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
     body: JSON.stringify(data)
   });
 
@@ -72,15 +77,15 @@ const tambahBahan = async (data) => {
 };
 
 const updateBahan = async (id, payload) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/edit/bahan/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -91,13 +96,13 @@ const updateBahan = async (id, payload) => {
 };
 
 const hapusBahan = async (id) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/hapus/bahan/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -110,16 +115,15 @@ const hapusBahan = async (id) => {
 // pivot bahan menu
 const handlePivotDelete = async (menuId, bahanId) => {
   try {
-    const token = await gctks();
+    const token = getToken();
 
     const res = await fetch(`${API_URL}/delete-pivot`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-XSRF-TOKEN": token,
+        "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
       body: JSON.stringify({
         menu_id: menuId,
         bahan_id: bahanId,
@@ -141,16 +145,15 @@ const handlePivotDelete = async (menuId, bahanId) => {
 // memproses hasil pendapatan jika bertipe bahan_lengkap
 const processBahanRevenue = async () => {
   try {
-    const token = await gctks();
+    const token = getToken();
 
     const res = await fetch(`${API_URL}/pendapatan/bahan/lengkap`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-XSRF-TOKEN": token,
+        "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
     });
 
     if (!res.ok) {
