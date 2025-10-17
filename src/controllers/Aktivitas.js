@@ -5,7 +5,6 @@ const getAktivitas = async () => {
     headers: {
       "Accept": "application/json",
     },
-    credentials: "include",
   });
 
   if (!response.ok) {
