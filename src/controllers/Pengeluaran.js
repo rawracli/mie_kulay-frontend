@@ -1,13 +1,18 @@
 const API_URL = import.meta.env.VITE_API_URL;
-import { gctks } from "./utils/get";
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+  return token;
+};
 
 const getPengeluaran = async () => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/pengeluaran`, {
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
   });
 
   if (!res.ok) throw new Error("Gagal fetch pengeluaran");
@@ -17,14 +22,14 @@ const getPengeluaran = async () => {
 };
 
 const tambahPengeluaran = async (payload) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/pengeluaran`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
-    credentials: "include",
   });
 
   if (!res.ok) {
@@ -37,15 +42,15 @@ const tambahPengeluaran = async (payload) => {
 };
 
 const updatePengeluaran = async (id, pengeluaran, catatan) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/pengeluaran/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({ pengeluaran, catatan }),
-    credentials: "include",
   });
 
   if (!res.ok) {
@@ -57,14 +62,14 @@ const updatePengeluaran = async (id, pengeluaran, catatan) => {
 };
 
 const hapusPengeluaran = async (id) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/pengeluaran/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
   });
 
   return await res.json();
