@@ -1,5 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+  return token;
+};
+
 const getMenu = async () => {
   const response = await fetch(`${API_URL}/menu`, {
     headers: {
@@ -14,18 +20,15 @@ const getMenu = async () => {
   return await response.json();
 };
 
-import Cookies from "js-cookie";
-import { gctks } from "./utils/get";
-
 const createMenu = async (formData) => {
+  const token = getToken();
   const response = await fetch(`${API_URL}/menu`, {
     method: "POST",
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`
     },
     body: formData,
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -37,14 +40,14 @@ const createMenu = async (formData) => {
 };
 
 const updateMenu = async (id, data) => {
+  const token = getToken();
   const res = await fetch(`${API_URL}/menu/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify(data),
-    credentials: "include",
   });
   if (!res.ok) throw new Error("Gagal update menu");
   return await res.json();
