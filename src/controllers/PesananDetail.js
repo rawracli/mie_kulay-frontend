@@ -1,14 +1,19 @@
 const API_URL = import.meta.env.VITE_API_URL;
-import { gctks } from "./utils/get";
+
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+  return token;
+};
 
 const getPesananDetail = async () => {
+  const token = getToken();
     const response = await fetch(`${API_URL}/pesanan_detail`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "X-XSRF-TOKEN": await gctks(),
+        "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
     });
 
     const result = await response.json();
@@ -17,15 +22,15 @@ const getPesananDetail = async () => {
 };
 
 const addPesananDetail = async (pesananData) => {
+  const token = getToken();
     const response = await fetch(`${API_URL}/pesanan_detail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-XSRF-TOKEN": await gctks(),
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(pesananData),
-      credentials: "include",
     });
 
     const result = await response.json();

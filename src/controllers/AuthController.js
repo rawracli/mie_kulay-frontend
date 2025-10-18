@@ -20,8 +20,6 @@ const registerUser = async (data) => {
 import Cookies from 'js-cookie';
 const API_URL = `${import.meta.env.VITE_API_URL}`;
 
-import { gctks } from './utils/get';
-
 const loginUser = async (data) => {
   try {
     const response = await fetch(`${API_URL}/login`, {
@@ -31,7 +29,6 @@ const loginUser = async (data) => {
         "Accept": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: 'include',
     });
 
     const result = await response.json();
@@ -89,14 +86,16 @@ const getUsers = async () => {
 };
 
 const updateProfile = async (formData) => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+
   const response = await fetch(`${API_URL}/updateProfile`, {
     method: 'POST',
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
     body: formData,
-    credentials: "include",
   });
 
   const result = await response.json();
@@ -104,15 +103,16 @@ const updateProfile = async (formData) => {
   return result;
 };
 
-
 const deleteUser = async (id) => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("User belum login");
+
   const response = await fetch(`${API_URL}/deleteUser/${id}`, {
     method: "DELETE",
     headers: {
       "Accept": "application/json",
-      "X-XSRF-TOKEN": await gctks(),
+      "Authorization": `Bearer ${token}`,
     },
-    credentials: "include",
   });
 
   const result = await response.json();
