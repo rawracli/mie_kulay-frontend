@@ -8,6 +8,7 @@ const getToken = () => {
 
 const getPemesanan = async () => {
   const token = getToken();
+  console.log(token)
   const res = await fetch(`${API_URL}/pesanan`, {
     headers: {
       "Accept": "application/json",
