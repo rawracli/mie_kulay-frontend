@@ -287,7 +287,7 @@ function Pengeluaran() {
                       Id
                     </th>
                     <th className="border border-[#959595] text-center w-[18.20%]">
-                      Jumlah
+                      Harga
                     </th>
                     <th className="border border-[#959595] text-center w-[16.39%]">
                       Catatan

@@ -101,7 +101,7 @@ function TambahPengeluaran({
           className="mt-[41px] h-full space-y-[12px] flex flex-col"
         >
           <div>
-            <label htmlFor="Jumlah">Jumlah</label>
+            <label htmlFor="Jumlah">Harga</label>
             <input
               type="number"
               name="jumlah"
